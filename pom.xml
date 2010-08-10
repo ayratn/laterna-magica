@@ -4,9 +4,12 @@
   <artifactId>LaternaMagica</artifactId>
   <version>0.0.1-SNAPSHOT</version>
   <name>LaternaMagica</name>
+  <description>An implementation of the Magic Trading Card Game, featuring Rules Enforcement, playing against human and computer, multiplayer games and more.</description>
   <url>http://code.google.com/p/laterna-magica/</url>
   <scm>
-  	<url>http://code.google.com/p/laterna-magica/LaternaMagica/</url>
+  	<connection>scm:svn:http://code.google.com/p/laterna-magica/trunk/LaternaMagica/</connection>
+  	<developerConnection>scm:svn:https://code.google.com/p/laterna-magica/trunk/LaternaMagica/</developerConnection>
+  	<url>http://code.google.com/p/laterna-magica/source/browse/#svn/trunk/LaternaMagica/</url>
   </scm>
   <build>
     <plugins>
