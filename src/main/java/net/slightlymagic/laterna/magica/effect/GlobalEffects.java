@@ -13,7 +13,6 @@ import net.slightlymagic.laterna.magica.GameContent;
 import net.slightlymagic.laterna.magica.MagicObject;
 import net.slightlymagic.laterna.magica.effect.characteristic.CharacteristicEffect;
 
-
 import com.google.common.base.Predicate;
 
 

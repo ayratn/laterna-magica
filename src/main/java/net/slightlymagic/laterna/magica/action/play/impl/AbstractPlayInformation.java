@@ -23,7 +23,6 @@ import net.slightlymagic.laterna.magica.impl.AbstractGameContent;
 import net.slightlymagic.laterna.magica.zone.Zone;
 
 
-
 /**
  * The class AbstractPlayInformation. This class implements a play information that works for spells/abilities
  * without any choices or targets but with effect and cost.

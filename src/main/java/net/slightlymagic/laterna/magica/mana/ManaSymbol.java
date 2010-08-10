@@ -14,7 +14,6 @@ import java.util.Set;
 import net.slightlymagic.laterna.magica.characteristics.MagicColor;
 
 
-
 /**
  * The class ManaSymbol. A mana symbol can be used as a part of a cost, or to specify the type or ammount of mana
  * created by an effect. Different types of symbols are:

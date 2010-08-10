@@ -15,7 +15,6 @@ import net.slightlymagic.laterna.magica.GameContent;
 import net.slightlymagic.laterna.magica.edit.Edit;
 
 
-
 /**
  * The class EditablePropertyChangeSupport.
  * 

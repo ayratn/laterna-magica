@@ -13,7 +13,6 @@ import net.slightlymagic.laterna.magica.MagicObject;
 import net.slightlymagic.laterna.magica.characteristic.CardCharacteristics;
 
 
-
 /**
  * The class CardObject.
  * 

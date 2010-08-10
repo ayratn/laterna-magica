@@ -19,7 +19,6 @@ import net.slightlymagic.laterna.magica.cards.text.CostParsers.CostParser;
 import net.slightlymagic.laterna.magica.effects.SacrificePermanentEvent;
 import net.slightlymagic.laterna.magica.util.FactoryFunction;
 
-
 import com.google.common.base.Function;
 
 

@@ -17,7 +17,6 @@ import java.util.List;
 import java.util.ListIterator;
 import java.util.NoSuchElementException;
 
-
 import net.slightlymagic.laterna.magica.Game;
 import net.slightlymagic.laterna.magica.impl.AbstractGameContent;
 

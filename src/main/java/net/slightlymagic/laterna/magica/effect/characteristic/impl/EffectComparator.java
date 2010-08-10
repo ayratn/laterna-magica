@@ -14,7 +14,6 @@ import java.util.Comparator;
 import net.slightlymagic.laterna.magica.effect.ContinuousEffect;
 
 
-
 /**
  * A comparator that sorts effects by the layer they are applied in.
  * 

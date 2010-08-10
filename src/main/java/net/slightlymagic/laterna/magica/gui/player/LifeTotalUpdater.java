@@ -15,7 +15,6 @@ import javax.swing.JLabel;
 import net.slightlymagic.laterna.magica.player.LifeTotal;
 
 
-
 /**
  * The class LifeTotalUpdater.
  * 

@@ -35,7 +35,6 @@ import net.slightlymagic.laterna.magica.impl.MagicObjectImpl;
 import net.slightlymagic.laterna.magica.impl.MoveCardEvent;
 import net.slightlymagic.laterna.magica.zone.Zone.Zones;
 
-
 import com.google.common.base.Function;
 import com.google.common.base.Predicate;
 import com.google.common.collect.Lists;

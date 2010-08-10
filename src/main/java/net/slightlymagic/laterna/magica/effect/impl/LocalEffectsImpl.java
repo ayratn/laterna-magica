@@ -19,7 +19,6 @@ import net.slightlymagic.laterna.magica.impl.AbstractGameContent;
 import net.slightlymagic.laterna.magica.util.MagicaCollections;
 
 
-
 /**
  * The class LocalEffectsImpl.
  * 

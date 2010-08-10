@@ -27,7 +27,6 @@ import net.slightlymagic.laterna.magica.edit.property.EditablePropertyChangeSupp
 import net.slightlymagic.laterna.magica.impl.MagicObjectImpl;
 
 
-
 /**
  * The class AbilityObjectImpl.
  * 

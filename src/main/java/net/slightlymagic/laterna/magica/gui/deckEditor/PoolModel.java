@@ -18,7 +18,6 @@ import net.slightlymagic.laterna.magica.LaternaMagica;
 import net.slightlymagic.laterna.magica.card.CardTemplate;
 import net.slightlymagic.laterna.magica.card.Printing;
 
-
 import com.google.common.base.Function;
 import com.google.common.collect.Collections2;
 

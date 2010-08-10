@@ -38,7 +38,6 @@ import net.slightlymagic.laterna.magica.gui.util.SymbolTextCreator;
 import net.slightlymagic.laterna.magica.zone.Zone.Zones;
 
 
-
 /**
  * The class CardDetail.
  * 

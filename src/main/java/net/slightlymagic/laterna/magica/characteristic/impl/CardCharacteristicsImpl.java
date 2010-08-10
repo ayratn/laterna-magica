@@ -33,7 +33,6 @@ import net.slightlymagic.laterna.magica.effect.characteristic.abs.AbstractTypeCh
 import net.slightlymagic.laterna.magica.mana.ManaSequence;
 
 
-
 /**
  * The class CardCharacteristicsImpl.
  * 

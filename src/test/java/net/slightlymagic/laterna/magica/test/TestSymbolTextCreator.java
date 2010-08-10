@@ -16,7 +16,6 @@ import net.slightlymagic.laterna.magica.LaternaMagica;
 import net.slightlymagic.laterna.magica.gui.util.SymbolTextCreator;
 
 
-
 /**
  * The class TestSymbolTextCreator.
  * 

@@ -12,7 +12,6 @@ import java.beans.PropertyChangeListener;
 import net.slightlymagic.laterna.magica.event.LifeListener;
 
 
-
 /**
  * The class LifeTotal.
  * 

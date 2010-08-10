@@ -26,7 +26,6 @@ import net.slightlymagic.laterna.magica.characteristics.SuperType;
 import net.slightlymagic.laterna.magica.mana.ManaSequence;
 import net.slightlymagic.laterna.magica.mana.impl.ManaSequenceImpl;
 
-
 import com.google.common.base.Function;
 import com.google.common.base.Predicate;
 

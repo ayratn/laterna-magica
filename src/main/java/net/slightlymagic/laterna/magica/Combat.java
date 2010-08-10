@@ -14,7 +14,6 @@ import java.util.Set;
 import net.slightlymagic.laterna.magica.player.Player;
 
 
-
 /**
  * The class Combat.
  * 

@@ -12,7 +12,6 @@ import java.util.Map;
 import net.slightlymagic.laterna.magica.MagicObject;
 import net.slightlymagic.laterna.magica.effect.ContinuousEffect;
 
-
 import com.google.common.base.Predicate;
 
 

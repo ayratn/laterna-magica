@@ -24,7 +24,6 @@ import java.util.regex.Pattern;
 
 import javax.imageio.ImageIO;
 
-
 import net.slightlymagic.laterna.magica.card.CardObject;
 import net.slightlymagic.laterna.magica.card.CardTemplate;
 import net.slightlymagic.laterna.magica.card.Printing;

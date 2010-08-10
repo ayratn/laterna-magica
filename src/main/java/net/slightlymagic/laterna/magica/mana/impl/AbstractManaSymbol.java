@@ -15,7 +15,6 @@ import net.slightlymagic.laterna.magica.characteristics.MagicColor;
 import net.slightlymagic.laterna.magica.mana.ManaSymbol;
 
 
-
 /**
  * The class AbstractManaSymbol. All methods, except {@link #getType()}, which stays abstract, throw
  * {@link IllegalStateException}s. Only those of interest have to be overwritten.

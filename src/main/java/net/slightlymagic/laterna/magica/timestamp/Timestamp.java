@@ -21,7 +21,6 @@ import net.slightlymagic.laterna.magica.event.TimestampListener;
 import net.slightlymagic.laterna.magica.impl.AbstractGameContent;
 import net.slightlymagic.laterna.magica.util.ExtendedListenerList;
 
-
 import com.google.common.collect.Iterators;
 import com.google.common.collect.PeekingIterator;
 

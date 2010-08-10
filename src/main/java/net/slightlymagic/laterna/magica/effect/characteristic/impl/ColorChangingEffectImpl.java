@@ -18,7 +18,6 @@ import net.slightlymagic.laterna.magica.characteristics.MagicColor;
 import net.slightlymagic.laterna.magica.effect.characteristic.abs.AbstractColorChangingEffect;
 
 
-
 /**
  * The class ColorChangingEffectImpl.
  * 

@@ -19,7 +19,6 @@ import net.slightlymagic.laterna.magica.mana.ManaSequence;
 import net.slightlymagic.laterna.magica.mana.ManaSymbol;
 
 
-
 /**
  * The class ManaSequenceImpl.
  * 

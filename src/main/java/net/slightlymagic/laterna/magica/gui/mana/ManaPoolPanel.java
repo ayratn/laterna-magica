@@ -23,7 +23,6 @@ import net.slightlymagic.laterna.magica.mana.ManaPool;
 import net.slightlymagic.laterna.magica.mana.impl.ManaPoolEvent;
 
 
-
 /**
  * The class ManaPoolPanel.
  * 

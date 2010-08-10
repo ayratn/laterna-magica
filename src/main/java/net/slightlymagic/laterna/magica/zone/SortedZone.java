@@ -12,7 +12,6 @@ import java.util.List;
 import net.slightlymagic.laterna.magica.MagicObject;
 
 
-
 /**
  * The class SortedZone.
  * 

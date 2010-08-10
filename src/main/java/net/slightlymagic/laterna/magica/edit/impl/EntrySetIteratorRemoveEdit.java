@@ -14,7 +14,6 @@ import java.util.Map.Entry;
 import net.slightlymagic.laterna.magica.Game;
 
 
-
 /**
  * The class EntrySetIteratorRemoveEdit.
  * 

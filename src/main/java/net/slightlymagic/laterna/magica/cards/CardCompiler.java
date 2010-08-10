@@ -14,7 +14,6 @@ import java.util.List;
 import net.slightlymagic.laterna.magica.card.CardTemplate;
 
 
-
 /**
  * The class CardCompiler. A card compiler transforms data from an input stream into a {@link CardTemplate} object
  * to be used by Laterna Magica.

@@ -22,7 +22,6 @@ import net.slightlymagic.laterna.magica.player.Player;
 import net.slightlymagic.laterna.magica.zone.Zone;
 
 
-
 /**
  * The class MagicObject.
  * 

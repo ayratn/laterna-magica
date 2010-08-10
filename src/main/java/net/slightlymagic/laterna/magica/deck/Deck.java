@@ -12,7 +12,6 @@ import java.util.Map;
 import net.slightlymagic.laterna.magica.card.Printing;
 
 
-
 /**
  * <p>
  * The class Deck. A deck is the container for multiple sets of cards, every one having a distinct meaning.

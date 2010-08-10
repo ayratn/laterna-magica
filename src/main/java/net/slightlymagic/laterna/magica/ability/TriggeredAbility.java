@@ -7,8 +7,6 @@
 package net.slightlymagic.laterna.magica.ability;
 
 
-
-
 /**
  * The class TriggeredAbility.
  * 

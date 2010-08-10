@@ -22,7 +22,6 @@ import net.slightlymagic.laterna.magica.player.Player;
 import net.slightlymagic.laterna.magica.util.ExtendedListenerList;
 
 
-
 /**
  * The class LifeTotalImpl. The life total is NOT initialized to 20 upon construction.
  * 

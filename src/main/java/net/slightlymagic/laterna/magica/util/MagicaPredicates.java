@@ -22,7 +22,6 @@ import net.slightlymagic.laterna.magica.characteristics.SuperType;
 import net.slightlymagic.laterna.magica.player.Player;
 import net.slightlymagic.laterna.magica.zone.Zone;
 
-
 import com.google.common.base.Function;
 import com.google.common.base.Predicate;
 import com.google.common.base.Predicates;

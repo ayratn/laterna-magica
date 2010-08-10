@@ -21,7 +21,6 @@ import net.slightlymagic.laterna.magica.mana.impl.ManaFactoryImpl;
 import net.slightlymagic.laterna.magica.util.FactoryFunction;
 import net.slightlymagic.laterna.magica.util.MagicaUtils;
 
-
 import com.google.common.base.Function;
 
 

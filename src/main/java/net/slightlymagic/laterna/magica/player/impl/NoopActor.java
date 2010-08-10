@@ -18,7 +18,6 @@ import net.slightlymagic.laterna.magica.mana.ManaSequence;
 import net.slightlymagic.laterna.magica.player.Player;
 
 
-
 /**
  * The class NoopActor. An actor that always passes priority and makes default choices.
  * 

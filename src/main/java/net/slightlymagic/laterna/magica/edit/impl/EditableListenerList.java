@@ -14,7 +14,6 @@ import net.slightlymagic.laterna.magica.GameContent;
 import net.slightlymagic.laterna.magica.util.ExtendedListenerList;
 
 
-
 /**
  * The class EditableListenerList.
  * 

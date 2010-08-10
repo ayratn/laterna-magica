@@ -20,7 +20,6 @@ import java.util.List;
 import java.util.zip.ZipEntry;
 import java.util.zip.ZipOutputStream;
 
-
 import net.slightlymagic.laterna.magica.card.CardTemplate;
 
 import org.slf4j.Logger;

@@ -13,7 +13,6 @@ import net.slightlymagic.laterna.magica.characteristics.Expansion;
 import net.slightlymagic.laterna.magica.characteristics.Rarity;
 
 
-
 /**
  * The class Printing.
  * 

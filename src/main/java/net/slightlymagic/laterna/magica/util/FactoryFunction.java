@@ -13,7 +13,6 @@ import java.lang.reflect.Modifier;
 
 import net.slightlymagic.laterna.magica.action.play.CastAction;
 
-
 import com.google.common.base.Function;
 
 

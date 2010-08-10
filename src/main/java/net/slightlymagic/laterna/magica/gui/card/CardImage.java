@@ -18,7 +18,6 @@ import net.slightlymagic.laterna.magica.characteristic.CharacteristicSnapshot;
 import net.slightlymagic.laterna.magica.gui.util.ImageCache;
 
 
-
 /**
  * The class CardImage.
  * 

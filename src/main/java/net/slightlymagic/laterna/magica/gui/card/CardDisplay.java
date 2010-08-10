@@ -12,7 +12,6 @@ import java.util.Observable;
 import net.slightlymagic.laterna.magica.characteristic.CharacteristicSnapshot;
 
 
-
 /**
  * The class CardDisplay. A card display shows information from a {@link CharacteristicSnapshot} and will therefore
  * usually {@link Observable observe} it.

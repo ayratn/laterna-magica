@@ -19,7 +19,6 @@ import net.slightlymagic.laterna.magica.mana.ManaSequence;
 import net.slightlymagic.laterna.magica.player.Player;
 
 
-
 /**
  * The class ManaCostInformation.
  * 

@@ -93,8 +93,7 @@ import net.slightlymagic.laterna.magica.mana.ManaSequence;
  */
 public interface ObjectCharacteristics extends GameContent {
     /**
-     * Returns the property change s used by all {@link Characteristic}s in this
-     * {@link ObjectCharacteristics}.
+     * Returns the property change s used by all {@link Characteristic}s in this {@link ObjectCharacteristics}.
      */
     public EditablePropertyChangeSupport getPropertyChangeSupport();
     

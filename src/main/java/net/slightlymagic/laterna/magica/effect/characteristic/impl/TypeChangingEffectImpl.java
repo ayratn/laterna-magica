@@ -18,7 +18,6 @@ import net.slightlymagic.laterna.magica.characteristics.CardType;
 import net.slightlymagic.laterna.magica.effect.characteristic.abs.AbstractTypeChangingEffect;
 
 
-
 /**
  * The class PTChangingEffectImpl.
  * 

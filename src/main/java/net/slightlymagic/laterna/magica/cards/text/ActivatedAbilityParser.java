@@ -13,7 +13,6 @@ import java.util.List;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-
 import net.slightlymagic.laterna.magica.ability.ActivatedAbility;
 import net.slightlymagic.laterna.magica.ability.impl.ActivatedAbilityImpl;
 import net.slightlymagic.laterna.magica.action.play.ActivateAction;

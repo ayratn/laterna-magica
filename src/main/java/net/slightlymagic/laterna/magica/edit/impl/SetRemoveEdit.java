@@ -13,7 +13,6 @@ import net.slightlymagic.laterna.magica.Game;
 import net.slightlymagic.laterna.magica.edit.Edit;
 
 
-
 /**
  * The class SetRemoveEdit.
  * 

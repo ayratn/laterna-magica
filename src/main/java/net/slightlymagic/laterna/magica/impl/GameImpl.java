@@ -39,7 +39,6 @@ import net.slightlymagic.laterna.magica.zone.Zone.Zones;
 import net.slightlymagic.laterna.magica.zone.impl.ZoneImpl;
 
 
-
 /**
  * The class GameImpl.
  * 

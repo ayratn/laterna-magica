@@ -7,7 +7,6 @@
 package net.slightlymagic.laterna.magica.characteristic.impl;
 
 
-
 import net.slightlymagic.laterna.magica.Game;
 import net.slightlymagic.laterna.magica.characteristic.OverridingCharacteristic;
 import net.slightlymagic.laterna.magica.characteristics.Characteristics;

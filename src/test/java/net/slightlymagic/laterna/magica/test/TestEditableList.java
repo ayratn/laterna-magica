@@ -16,7 +16,6 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.ListIterator;
 
-
 import net.slightlymagic.laterna.magica.Game;
 import net.slightlymagic.laterna.magica.edit.Edit;
 import net.slightlymagic.laterna.magica.impl.GameImpl;

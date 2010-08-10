@@ -24,7 +24,6 @@ import net.slightlymagic.laterna.magica.zone.Zone;
 import net.slightlymagic.laterna.magica.zone.Zone.Zones;
 
 
-
 /**
  * <p>
  * The class Game. This class represents a game of magic.

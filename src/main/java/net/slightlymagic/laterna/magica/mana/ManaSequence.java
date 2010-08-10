@@ -14,7 +14,6 @@ import java.util.Set;
 import net.slightlymagic.laterna.magica.characteristics.MagicColor;
 
 
-
 /**
  * The class ManaSequence. A mana sequence consists of one or more mana symbols, and may be used in costs or mana
  * producing effects. The ammount of the mana symbols add up. Variable symbols of the same name have the same

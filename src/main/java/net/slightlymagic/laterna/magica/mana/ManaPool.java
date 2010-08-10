@@ -16,7 +16,6 @@ import net.slightlymagic.laterna.magica.mana.impl.ManaPoolEvent;
 import net.slightlymagic.laterna.magica.player.Player;
 
 
-
 /**
  * The class ManaPool.
  * 

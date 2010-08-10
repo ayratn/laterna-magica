@@ -26,7 +26,6 @@ import net.slightlymagic.laterna.magica.event.StepChangedListener;
 import net.slightlymagic.laterna.magica.player.Player;
 
 
-
 /**
  * The class PhaseStructure. The phase structure manages the flow of phases, steps and priority through a single
  * turn. Because this class implements the concept of priority, it has a close connection to the stack.

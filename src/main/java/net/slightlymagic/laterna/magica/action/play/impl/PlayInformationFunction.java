@@ -16,7 +16,6 @@ import java.util.List;
 import net.slightlymagic.laterna.magica.action.play.PlayAction;
 import net.slightlymagic.laterna.magica.action.play.PlayInformation;
 
-
 import com.google.common.base.Function;
 
 

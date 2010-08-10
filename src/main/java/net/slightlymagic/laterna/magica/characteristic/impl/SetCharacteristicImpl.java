@@ -12,7 +12,6 @@ import static java.lang.String.*;
 import java.util.HashSet;
 import java.util.Set;
 
-
 import net.slightlymagic.laterna.magica.Game;
 import net.slightlymagic.laterna.magica.characteristic.SetCharacteristic;
 import net.slightlymagic.laterna.magica.characteristic.CharacteristicSnapshot.SetCharacteristicSnapshot;

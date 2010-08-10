@@ -12,7 +12,6 @@ import java.util.EventListener;
 import net.slightlymagic.laterna.magica.card.impl.PermanentStateChangedEvent;
 
 
-
 /**
  * The class PermanentStateChangedListener.
  * 

@@ -14,7 +14,6 @@ import net.slightlymagic.laterna.magica.GameContent;
 import net.slightlymagic.laterna.magica.event.PermanentStateChangedListener;
 
 
-
 /**
  * <p>
  * The class State. The physical state of a permanent, consisting the four boolean properties tapped, flipped, face

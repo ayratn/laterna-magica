@@ -37,7 +37,6 @@ import net.slightlymagic.laterna.magica.util.MagicaCollections;
 import net.slightlymagic.laterna.magica.zone.Zone;
 import net.slightlymagic.laterna.magica.zone.Zone.Zones;
 
-
 import com.google.common.collect.Iterators;
 import com.google.common.collect.PeekingIterator;
 

@@ -9,7 +9,6 @@ package net.slightlymagic.laterna.magica.test;
 
 import java.io.IOException;
 
-
 import net.slightlymagic.laterna.magica.LaternaMagica;
 import net.slightlymagic.laterna.magica.card.CardTemplate;
 import net.slightlymagic.laterna.magica.cards.AllCards;

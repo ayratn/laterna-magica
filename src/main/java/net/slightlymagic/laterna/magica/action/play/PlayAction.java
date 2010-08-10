@@ -21,7 +21,6 @@ import net.slightlymagic.laterna.magica.player.Player;
 import net.slightlymagic.laterna.magica.turnStructure.PhaseStructure;
 
 
-
 /**
  * The class PlayAction. A play action is an action a player can begin by himself when he has priority, for example
  * playing a spell or ability, or taking one of the special actions

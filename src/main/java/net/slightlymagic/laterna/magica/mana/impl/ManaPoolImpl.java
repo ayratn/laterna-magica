@@ -23,7 +23,6 @@ import net.slightlymagic.laterna.magica.util.ExtendedListenerList;
 import net.slightlymagic.laterna.magica.util.MagicaCollections;
 
 
-
 /**
  * The class ManaPoolImpl.
  * 

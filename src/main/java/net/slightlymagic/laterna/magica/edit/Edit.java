@@ -15,7 +15,6 @@ import net.slightlymagic.laterna.magica.Game;
 import net.slightlymagic.laterna.magica.impl.AbstractGameContent;
 
 
-
 /**
  * The class Edit. An edit is a decision a player can make. Edits can be undone.
  * 

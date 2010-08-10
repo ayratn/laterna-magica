@@ -23,7 +23,6 @@ import net.slightlymagic.laterna.magica.deck.Deck;
 import net.slightlymagic.laterna.magica.deck.Deck.DeckType;
 
 
-
 /**
  * The class DeckModel. A deck model contains a specific number of every printing.
  * 

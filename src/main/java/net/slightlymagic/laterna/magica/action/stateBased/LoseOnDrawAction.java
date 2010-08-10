@@ -10,7 +10,6 @@ package net.slightlymagic.laterna.magica.action.stateBased;
 import java.util.HashSet;
 import java.util.Set;
 
-
 import net.slightlymagic.laterna.magica.Game;
 import net.slightlymagic.laterna.magica.action.AbstractGameAction;
 import net.slightlymagic.laterna.magica.event.DrawListener;

@@ -11,7 +11,6 @@ import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
 
-
 import net.slightlymagic.laterna.magica.Game;
 
 import org.slf4j.Logger;

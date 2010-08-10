@@ -18,7 +18,6 @@ import net.slightlymagic.laterna.magica.characteristics.SubType;
 import net.slightlymagic.laterna.magica.effect.characteristic.abs.AbstractSubTypeChangingEffect;
 
 
-
 /**
  * The class SubTypeChangingEffectImpl.
  * 

@@ -9,7 +9,6 @@ package net.slightlymagic.laterna.magica.cards.text;
 
 import java.util.List;
 
-
 import net.slightlymagic.laterna.magica.action.play.PlayAction;
 import net.slightlymagic.laterna.magica.action.play.PlayInformation;
 import net.slightlymagic.laterna.magica.cards.InvalidCardException;

@@ -26,7 +26,6 @@ import net.slightlymagic.laterna.magica.effects.DestroyPermanentEvent;
 import net.slightlymagic.laterna.magica.util.FactoryFunction;
 import net.slightlymagic.laterna.magica.util.MagicaPredicates;
 
-
 import com.google.common.base.Function;
 import com.google.common.base.Predicate;
 

@@ -18,7 +18,6 @@ import net.slightlymagic.laterna.magica.ability.Ability;
 import net.slightlymagic.laterna.magica.effect.characteristic.abs.AbstractAbilityChangingEffect;
 
 
-
 /**
  * The class AbilityChangingEffectImpl.
  * 

@@ -12,7 +12,6 @@ import java.beans.PropertyChangeSupport;
 import net.slightlymagic.laterna.magica.util.ListenableCollections.ListListener;
 
 
-
 /**
  * The class PropertyChangeListListener.
  * 

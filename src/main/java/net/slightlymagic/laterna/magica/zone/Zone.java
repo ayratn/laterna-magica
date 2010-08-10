@@ -21,7 +21,6 @@ import net.slightlymagic.laterna.magica.event.MoveCardListener;
 import net.slightlymagic.laterna.magica.player.Player;
 
 
-
 /**
  * The class Zone.
  * 

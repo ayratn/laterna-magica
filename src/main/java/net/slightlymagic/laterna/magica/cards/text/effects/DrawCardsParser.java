@@ -14,7 +14,6 @@ import java.io.Serializable;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-
 import net.slightlymagic.laterna.magica.action.AbstractGameAction;
 import net.slightlymagic.laterna.magica.action.GameAction;
 import net.slightlymagic.laterna.magica.action.play.PlayAction;

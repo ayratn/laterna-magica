@@ -19,7 +19,6 @@ import net.slightlymagic.laterna.magica.mana.impl.ColoredManaSymbol;
 import net.slightlymagic.laterna.magica.mana.impl.VariableManaSymbol;
 
 
-
 /**
  * The class ManaSymbolLabel.
  * 

@@ -14,7 +14,6 @@ import net.slightlymagic.laterna.magica.event.ActiveChangedListener;
 import net.slightlymagic.laterna.magica.player.Player;
 
 
-
 /**
  * The class TurnStructure. This class is responsible for making progress in a single turn, and to ensure the
  * correct turn order of players in the game.

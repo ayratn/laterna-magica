@@ -35,7 +35,6 @@ import net.slightlymagic.laterna.magica.mana.impl.ManaSequenceImpl;
 import net.slightlymagic.laterna.magica.player.Player;
 import net.slightlymagic.laterna.magica.player.impl.AbstractActor;
 
-
 import com.google.common.base.Predicate;
 
 

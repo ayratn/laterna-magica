@@ -7,7 +7,6 @@
 package net.slightlymagic.laterna.magica.impl;
 
 
-
 import net.slightlymagic.laterna.magica.Game;
 import net.slightlymagic.laterna.magica.action.play.PlayAction;
 import net.slightlymagic.laterna.magica.turnStructure.PhaseStructure;

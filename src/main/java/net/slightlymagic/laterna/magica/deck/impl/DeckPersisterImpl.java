@@ -29,7 +29,6 @@ import net.slightlymagic.laterna.magica.deck.DeckPersister;
 import net.slightlymagic.laterna.magica.deck.Deck.DeckType;
 
 
-
 /**
  * The class DeckPersisterImpl.
  * 
@@ -64,7 +63,8 @@ public class DeckPersisterImpl implements DeckPersister {
     /**
      * {@inheritDoc}
      * 
-     * @see net.slightlymagic.laterna.magica.deck.DeckPersister#writeDeck(net.slightlymagic.laterna.magica.deck.Deck, java.io.OutputStream)
+     * @see net.slightlymagic.laterna.magica.deck.DeckPersister#writeDeck(net.slightlymagic.laterna.magica.deck.Deck,
+     *      java.io.OutputStream)
      */
     public void writeDeck(Deck d, OutputStream os) throws IOException {
         BufferedWriter w = new BufferedWriter(new OutputStreamWriter(os));

@@ -16,7 +16,6 @@ import net.slightlymagic.laterna.magica.impl.AbstractGameContent;
 import net.slightlymagic.laterna.magica.util.MagicaCollections;
 
 
-
 /**
  * The class ReplacementEngine. The replacement engine makes sure that a replaceable event is executed in the right
  * manner, i.e. replaced if necessary.

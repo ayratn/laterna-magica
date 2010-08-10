@@ -23,7 +23,6 @@ import net.slightlymagic.laterna.magica.card.CardObject;
 import net.slightlymagic.laterna.magica.edit.CompoundEdit;
 import net.slightlymagic.laterna.magica.effects.DestroyPermanentEvent;
 
-
 import com.google.common.base.Predicate;
 
 

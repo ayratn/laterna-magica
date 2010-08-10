@@ -19,7 +19,6 @@ import net.slightlymagic.laterna.magica.effect.characteristic.CharacteristicEffe
 import net.slightlymagic.laterna.magica.impl.AbstractGameContent;
 import net.slightlymagic.laterna.magica.util.MagicaCollections;
 
-
 import com.google.common.base.Predicate;
 
 

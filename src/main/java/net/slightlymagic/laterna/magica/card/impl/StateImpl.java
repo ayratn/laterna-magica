@@ -21,7 +21,6 @@ import net.slightlymagic.laterna.magica.impl.AbstractGameContent;
 import net.slightlymagic.laterna.magica.util.ExtendedListenerList;
 
 
-
 /**
  * The class StateImpl.
  * 

@@ -12,7 +12,6 @@ import java.util.EventListener;
 import net.slightlymagic.laterna.magica.impl.MoveCardEvent;
 
 
-
 /**
  * The class MoveCardListener. Listens for {@link MoveCardEvent}s. A listener is informed of every event at most
  * once. For example, if the listener is registered to the leaving and the entering zone, it is still only informed

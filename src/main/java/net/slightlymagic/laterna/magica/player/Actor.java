@@ -18,7 +18,6 @@ import net.slightlymagic.laterna.magica.mana.Mana;
 import net.slightlymagic.laterna.magica.mana.ManaSequence;
 
 
-
 /**
  * The interface Actor is the "controller" whereas Player is the model. An actor defines the behavior of the player
  * and may use any strategy, for example a GUI for user input, a remotely connected actor, or an AI algorithm.

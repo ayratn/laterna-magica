@@ -18,7 +18,6 @@ import net.slightlymagic.laterna.magica.characteristics.SuperType;
 import net.slightlymagic.laterna.magica.deck.Deck;
 import net.slightlymagic.laterna.magica.deck.Deck.DeckType;
 
-
 import com.google.common.base.Predicate;
 
 

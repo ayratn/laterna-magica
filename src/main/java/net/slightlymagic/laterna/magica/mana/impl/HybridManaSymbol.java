@@ -21,7 +21,6 @@ import net.slightlymagic.laterna.magica.characteristics.MagicColor;
 import net.slightlymagic.laterna.magica.mana.ManaSymbol;
 
 
-
 /**
  * The class HybridManaSymbol.
  * 

@@ -26,7 +26,6 @@ import net.slightlymagic.laterna.magica.mana.impl.ManaFactoryImpl;
 import net.slightlymagic.laterna.magica.mana.impl.NumeralManaSymbol;
 
 
-
 /**
  * The class ManaSymbolChooser.
  * 

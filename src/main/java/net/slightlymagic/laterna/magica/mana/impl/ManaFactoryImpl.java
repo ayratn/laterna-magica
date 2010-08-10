@@ -20,7 +20,6 @@ import net.slightlymagic.laterna.magica.mana.ManaSequence;
 import net.slightlymagic.laterna.magica.mana.ManaSymbol;
 
 
-
 /**
  * The class ManaFactoryImpl. This class uses a notation using braces. For example, the "one mana" symbol is "{1}",
  * the "white-blue hybrid symbol" is "{W/U}". A mana sequence containing both is "{1}{W/U}".

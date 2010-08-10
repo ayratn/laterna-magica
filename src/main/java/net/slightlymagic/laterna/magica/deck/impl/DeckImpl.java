@@ -14,7 +14,6 @@ import net.slightlymagic.laterna.magica.card.Printing;
 import net.slightlymagic.laterna.magica.deck.Deck;
 
 
-
 /**
  * The class DeckImpl.
  * 

@@ -15,7 +15,6 @@ import net.slightlymagic.laterna.magica.GameContent;
 import net.slightlymagic.laterna.magica.edit.Edit;
 
 
-
 /**
  * The class MagicaRandom is a subclass of {@link Random} that duplicates its instance variables and some of its
  * methods (namely {@link #setSeed(long)}, {@link #next(int)} and {@link #nextGaussian()}) to delegate all work to

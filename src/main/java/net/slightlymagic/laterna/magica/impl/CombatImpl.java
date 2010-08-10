@@ -30,7 +30,6 @@ import net.slightlymagic.laterna.magica.MagicObject;
 import net.slightlymagic.laterna.magica.edit.CompoundEdit;
 import net.slightlymagic.laterna.magica.player.Player;
 
-
 import com.google.common.base.Predicate;
 import com.google.common.base.Supplier;
 

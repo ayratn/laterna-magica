@@ -16,7 +16,6 @@ import javax.swing.JTable;
 import net.slightlymagic.laterna.magica.LaternaMagica;
 
 
-
 /**
  * The class DeckEditorPanel.
  * 

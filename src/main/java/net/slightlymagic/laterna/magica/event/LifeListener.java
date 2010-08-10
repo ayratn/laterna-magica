@@ -12,7 +12,6 @@ import java.util.EventListener;
 import net.slightlymagic.laterna.magica.player.impl.LifeEvent;
 
 
-
 /**
  * The class LifeListener. Life listeners may be registered to life totals to track changes.
  * 

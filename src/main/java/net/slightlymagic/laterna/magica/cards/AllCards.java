@@ -26,7 +26,6 @@ import net.slightlymagic.laterna.magica.cards.CompileHandler.LogHandler;
 import net.slightlymagic.laterna.magica.cards.CompileHandler.ZipHandler;
 
 
-
 /**
  * The class AllCards is responsible for getting card templates for individual card names.
  * 

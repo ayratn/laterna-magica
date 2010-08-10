@@ -23,7 +23,6 @@ import net.slightlymagic.laterna.magica.turnStructure.TurnStructure;
 import net.slightlymagic.laterna.magica.util.MagicaCollections;
 
 
-
 /**
  * The class TurnStructureImpl.
  * 

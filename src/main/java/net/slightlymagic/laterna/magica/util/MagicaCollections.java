@@ -35,7 +35,6 @@ import net.slightlymagic.laterna.magica.edit.impl.SetIteratorRemoveEdit;
 import net.slightlymagic.laterna.magica.edit.impl.SetRemoveEdit;
 
 
-
 /**
  * The class MagicaCollections. This class provides utility functions to implement collections that encapsulate
  * modifications id {@link Edit}s.

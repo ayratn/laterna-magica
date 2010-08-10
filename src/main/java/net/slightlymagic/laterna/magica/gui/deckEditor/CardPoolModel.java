@@ -12,7 +12,6 @@ import javax.swing.table.TableModel;
 import net.slightlymagic.laterna.magica.card.Printing;
 
 
-
 /**
  * The class CardPoolModel.
  * 

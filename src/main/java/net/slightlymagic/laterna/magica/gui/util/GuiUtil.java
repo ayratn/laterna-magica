@@ -36,7 +36,6 @@ import net.slightlymagic.laterna.magica.player.Actor;
 import net.slightlymagic.laterna.magica.player.Player;
 
 
-
 /**
  * The class GuiUtil. This class provides utilities for the gui.
  * 
@@ -168,7 +167,7 @@ public class GuiUtil {
         }
     }
     
-    private static final ActionListener  cardListener     = new CardListener();
+    private static final ActionListener   cardListener      = new CardListener();
     public static final CardMouseListener cardMouseListener = new CardMouseListener();
     
     /**

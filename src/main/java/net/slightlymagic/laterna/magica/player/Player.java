@@ -19,7 +19,6 @@ import net.slightlymagic.laterna.magica.zone.Zone;
 import net.slightlymagic.laterna.magica.zone.Zone.Zones;
 
 
-
 /**
  * The class Player.
  * 

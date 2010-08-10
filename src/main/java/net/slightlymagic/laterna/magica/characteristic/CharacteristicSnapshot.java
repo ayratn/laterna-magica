@@ -24,7 +24,6 @@ import net.slightlymagic.laterna.magica.characteristics.SuperType;
 import net.slightlymagic.laterna.magica.mana.ManaSequence;
 
 
-
 /**
  * The class CharacteristicSnapshot. Characteristic snapshots are meant to store a {@link ObjectCharacteristics}'s
  * values at a single point in time, without updates afterwards. This is often better in performance than getting

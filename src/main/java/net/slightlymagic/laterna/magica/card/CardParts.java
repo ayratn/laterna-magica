@@ -22,7 +22,6 @@ import net.slightlymagic.laterna.magica.characteristics.SuperType;
 import net.slightlymagic.laterna.magica.mana.ManaSequence;
 
 
-
 /**
  * <p>
  * The class CardParts. CardParts represents the unmodifiable data that

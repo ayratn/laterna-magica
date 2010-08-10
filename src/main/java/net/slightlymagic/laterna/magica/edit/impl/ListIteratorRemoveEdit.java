@@ -13,7 +13,6 @@ import java.util.ListIterator;
 import net.slightlymagic.laterna.magica.Game;
 
 
-
 /**
  * The class ListIteratorRemoveEdit.
  * 

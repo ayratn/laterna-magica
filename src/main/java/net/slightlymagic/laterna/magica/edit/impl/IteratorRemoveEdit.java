@@ -13,7 +13,6 @@ import net.slightlymagic.laterna.magica.Game;
 import net.slightlymagic.laterna.magica.edit.Edit;
 
 
-
 /**
  * The class IteratorRemoveEdit. This edit is used to implement an undoable {@link Iterator#remove()} operation.
  * Since an iterator itself can't add elements, and also the {@link Iterator#next()} method can't be undone, there

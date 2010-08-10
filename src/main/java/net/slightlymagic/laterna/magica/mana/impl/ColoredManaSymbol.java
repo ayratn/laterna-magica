@@ -15,7 +15,6 @@ import java.util.Set;
 import net.slightlymagic.laterna.magica.characteristics.MagicColor;
 
 
-
 /**
  * The class ColoredManaSymbol.
  * 

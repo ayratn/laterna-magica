@@ -18,7 +18,6 @@ import net.slightlymagic.laterna.magica.characteristics.SuperType;
 import net.slightlymagic.laterna.magica.effect.characteristic.abs.AbstractSuperTypeChangingEffect;
 
 
-
 /**
  * The class SuperTypeChangingEffectImpl.
  * 

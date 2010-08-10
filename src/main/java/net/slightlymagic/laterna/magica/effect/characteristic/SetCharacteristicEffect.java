@@ -12,7 +12,6 @@ import java.util.Set;
 import net.slightlymagic.laterna.magica.characteristic.SetCharacteristic;
 
 
-
 /**
  * The class SetCharacteristicEffect. A set-characteristic effect can work in four different ways, described in
  * {@link SetCharacteristic}.

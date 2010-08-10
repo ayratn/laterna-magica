@@ -12,7 +12,6 @@ import java.util.EventListener;
 import net.slightlymagic.laterna.magica.mana.impl.ManaPoolEvent;
 
 
-
 /**
  * The class ManaPoolListener.
  * 

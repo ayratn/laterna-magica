@@ -13,7 +13,6 @@ import java.util.Set;
 import net.slightlymagic.laterna.magica.Game;
 
 
-
 /**
  * The class SetIteratorRemoveEdit.
  * 

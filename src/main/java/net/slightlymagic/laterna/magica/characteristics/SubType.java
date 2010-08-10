@@ -16,7 +16,6 @@ import java.util.Map;
 
 import net.slightlymagic.laterna.magica.characteristic.SetCharacteristic;
 
-
 import com.google.common.base.Function;
 import com.google.common.collect.MapMaker;
 

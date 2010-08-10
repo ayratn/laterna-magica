@@ -16,7 +16,6 @@ import javax.swing.JButton;
 import net.slightlymagic.laterna.magica.characteristic.CharacteristicSnapshot;
 
 
-
 /**
  * The class CardTextButton.
  * 

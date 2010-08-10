@@ -17,7 +17,6 @@ import net.slightlymagic.laterna.magica.card.State.StateType;
 import net.slightlymagic.laterna.magica.player.Player;
 
 
-
 /**
  * The class UntapAction.
  * 
