@@ -67,7 +67,7 @@ public class TextCardCompiler implements CardCompiler {
     
     private static final Pattern                  set                = Pattern.compile("(\\w+) (land|common|uncommon|rare|mythic) (\\d+)");
     
-    private static final String                   LINE_HANDLER_CLASS = "/net.slightlymagic.laterna/res/cards/uncompiled/text/lines/class";
+    private static final String                   LINE_HANDLER_CLASS = "/laterna/res/cards/uncompiled/text/lines/class";
     private static final Map<String, LineHandler> lineHandlers;
     
     static {

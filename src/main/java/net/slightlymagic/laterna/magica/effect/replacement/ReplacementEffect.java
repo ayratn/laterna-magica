@@ -7,7 +7,6 @@
 package net.slightlymagic.laterna.magica.effect.replacement;
 
 
-import net.slightlymagic.laterna.magica.edit.Edit;
 
 
 /**
@@ -43,7 +42,8 @@ public interface ReplacementEffect {
     public ReplacementType getType();
     
     /**
-     * Returns if the effect should be applied to the event. If true, {@link #replace(Edit)} may be called.
+     * Returns if the effect should be applied to the event. If true, {@link #replace(ReplaceableEvent)} may be
+     * called.
      */
     public boolean apply(ReplaceableEvent e);
     

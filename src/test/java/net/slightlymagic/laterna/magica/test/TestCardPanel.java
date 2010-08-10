@@ -42,6 +42,7 @@ import net.slightlymagic.laterna.magica.player.impl.PlayerImpl;
 import org.jdesktop.swingx.JXMultiSplitPane;
 import org.jdesktop.swingx.MultiSplitLayout;
 import org.jdesktop.swingx.MultiSplitLayout.Node;
+import org.junit.Ignore;
 
 
 /**
@@ -50,6 +51,7 @@ import org.jdesktop.swingx.MultiSplitLayout.Node;
  * @version V0.0 24.03.2010
  * @author Clemens Koza
  */
+@Ignore
 public class TestCardPanel {
     public static void main(String[] args) throws Exception {
         LaternaMagica.init();

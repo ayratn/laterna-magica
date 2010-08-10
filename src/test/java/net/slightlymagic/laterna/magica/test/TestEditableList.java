@@ -10,6 +10,7 @@ package net.slightlymagic.laterna.magica.test;
 import static java.util.Arrays.*;
 import static org.junit.Assert.*;
 
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.LinkedList;
@@ -17,6 +18,7 @@ import java.util.List;
 import java.util.ListIterator;
 
 import net.slightlymagic.laterna.magica.Game;
+import net.slightlymagic.laterna.magica.LaternaMagica;
 import net.slightlymagic.laterna.magica.edit.Edit;
 import net.slightlymagic.laterna.magica.impl.GameImpl;
 import net.slightlymagic.laterna.magica.util.MagicaCollections;
@@ -38,6 +40,14 @@ public class TestEditableList {
     private static final List<String> ref4 = ref0;
     private static final List<String> ref5 = asList("c");
     private static final List<String> ref6 = asList("c", "b", "a");
+    
+    static {
+        try {
+            LaternaMagica.init();
+        } catch(IOException ex) {
+            throw new ExceptionInInitializerError(ex);
+        }
+    }
     
     @Test
     public void testRandomAccessList() {

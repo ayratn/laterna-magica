@@ -25,7 +25,7 @@ public interface CardCompiler {
     /**
      * Creates a card template from the given input stream. The returned template must not be null.
      * 
-     * @param handler A handler the compiler can post warnings to. guaranteed to be non-null.
+     * @param handlers A list of handlers the compiler should post warnings to. guaranteed to be non-null.
      * 
      * @throws IOException If an error occurred reading the stream
      * @throws InvalidCardException If the stream does not specify a parseable card template.

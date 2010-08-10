@@ -33,7 +33,7 @@ import net.slightlymagic.laterna.magica.cards.CompileHandler.ZipHandler;
  * @author Clemens Koza
  */
 public class AllCards {
-    private static final String             COMPILED        = "/net.slightlymagic.laterna/res/cards/compiled";
+    private static final String             COMPILED        = "/laterna/res/cards/compiled";
     
     private final Map<String, CardTemplate> templates       = new HashMap<String, CardTemplate>();
     private final Map<Integer, Printing>    printings       = new HashMap<Integer, Printing>();

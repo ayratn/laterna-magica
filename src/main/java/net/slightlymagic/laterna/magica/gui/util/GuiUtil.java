@@ -81,11 +81,9 @@ public class GuiUtil {
     }
     
     /**
-     * Returns one of the actions from {@link #getActions(CardObject)}, chosen by a graphical dialog. Returns null
-     * immediately if there are no actions avaliable, and the first if there's only one. Otherwise, will never
-     * return null.
-     * 
-     * @see #getActions(CardObject)
+     * Returns one of the actions from {@link #getActions(Player, MagicObject)}, chosen by a graphical dialog.
+     * Returns null immediately if there are no actions avaliable, and the first if there's only one. Otherwise,
+     * will never return null.
      */
     public static PlayAction getAction(Player player, MagicObject card) {
         List<PlayAction> actions = getActions(player, card);
@@ -103,10 +101,8 @@ public class GuiUtil {
     }
     
     /**
-     * Returns one of the actions from {@link #getActions(CardObject)}, chosen by a graphical dialog, or null.
-     * Returns null immediately if there are no actions avaliable, and the first if there's only one.
-     * 
-     * @see #getActions(CardObject)
+     * Returns one of the actions from {@link #getActions(Player, MagicObject)}, chosen by a graphical dialog, or
+     * null. Returns null immediately if there are no actions avaliable, and the first if there's only one.
      */
     public static PlayAction getActionOptional(Player player, MagicObject card) {
         List<PlayAction> actions = getActions(player, card);

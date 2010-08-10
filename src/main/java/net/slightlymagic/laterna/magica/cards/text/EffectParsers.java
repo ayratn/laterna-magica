@@ -31,7 +31,7 @@ import com.google.common.base.Function;
 public class EffectParsers {
     private static final Logger             log          = LoggerFactory.getLogger(EffectParsers.class);
     
-    private static final String             PARSER_CLASS = "/net.slightlymagic.laterna/res/cards/uncompiled/text/effects/class";
+    private static final String             PARSER_CLASS = "/laterna/res/cards/uncompiled/text/effects/class";
     private static final List<EffectParser> effectParsers;
     
     static {

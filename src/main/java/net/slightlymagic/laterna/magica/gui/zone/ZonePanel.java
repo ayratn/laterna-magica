@@ -25,7 +25,6 @@ import javax.swing.JComponent;
 import javax.swing.JPanel;
 
 import net.slightlymagic.laterna.magica.MagicObject;
-import net.slightlymagic.laterna.magica.card.CardObject;
 import net.slightlymagic.laterna.magica.gui.util.GuiUtil;
 import net.slightlymagic.laterna.magica.player.Player;
 import net.slightlymagic.laterna.magica.util.MagicaUtils;
@@ -108,7 +107,7 @@ public class ZonePanel extends JPanel {
     /**
      * Called when a card is added to the zone. If you is not null, a controller change listener is added to the
      * card. If the card is controlled by that player, or you is null, the card is
-     * {@link #showCard(CardObject, int) shown}.
+     * {@link #showCard(MagicObject, int) shown}.
      */
     protected void addCard(MagicObject card, int index) {
         if(you != null) {
@@ -122,7 +121,7 @@ public class ZonePanel extends JPanel {
     /**
      * Called when a card is removed from the zone. If you is not null, the controller change listener is removed
      * from the card. If the card is controlled by that player, or you is null, the card is
-     * {@link #hideCard(CardObject) hidden}.
+     * {@link #hideCard(MagicObject) hidden}.
      */
     protected void removeCard(MagicObject card) {
         if(you != null) {

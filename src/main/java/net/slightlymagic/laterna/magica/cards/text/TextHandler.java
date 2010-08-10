@@ -24,7 +24,7 @@ import org.slf4j.LoggerFactory;
 public class TextHandler implements LineHandler {
     private static final Logger              log          = LoggerFactory.getLogger(TextHandler.class);
     
-    private static final String              PARSER_CLASS = "/net.slightlymagic.laterna/res/cards/uncompiled/text/abilities/class";
+    private static final String              PARSER_CLASS = "/laterna/res/cards/uncompiled/text/abilities/class";
     private static final List<AbilityParser> abilityParsers;
     
     static {

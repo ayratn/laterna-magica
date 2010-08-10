@@ -16,6 +16,8 @@ import net.slightlymagic.laterna.magica.player.Player;
 import net.slightlymagic.laterna.magica.player.impl.LifeEvent;
 import net.slightlymagic.laterna.magica.player.impl.PlayerImpl;
 
+import org.junit.Ignore;
+
 
 /**
  * The class TestReplacementEffects.
@@ -23,6 +25,7 @@ import net.slightlymagic.laterna.magica.player.impl.PlayerImpl;
  * @version V0.0 24.03.2010
  * @author Clemens Koza
  */
+@Ignore
 public class TestReplacementEffects {
     public static void main(String[] args) {
         Game g = new GameImpl();

@@ -11,8 +11,6 @@ import java.io.Serializable;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Modifier;
 
-import net.slightlymagic.laterna.magica.action.play.CastAction;
-
 import com.google.common.base.Function;
 
 
@@ -73,10 +71,13 @@ public class FactoryFunction<C, F, T> implements Function<F, T>, Serializable {
     }
     
     /**
-     * @param clazz The class to construct objects of
+     * @param c The static configuration class
+     * @param config The static configuration object
+     * @param f The dynamic configuration class
+     * @param t The class to construct objects of
      * 
      * @throws SecurityException if {@link Class#getConstructor(Class...)} throws it
-     * @throws IllegalArgumentException if a constroctor for a {@link CastAction} parameter doesn't exist
+     * @throws IllegalArgumentException if a constructor doesn't exist
      */
     public FactoryFunction(Class<C> c, C config, Class<F> f, Class<T> t) throws SecurityException {
         try {

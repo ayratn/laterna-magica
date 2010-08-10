@@ -65,20 +65,20 @@ public final class ImageCache {
     
     public URI getSymbolURI(String symbol) {
         if("{T}".equals(symbol) || "{Q}".equals(symbol)) {
-            File f = PROPS().getFile("/net.slightlymagic.laterna/res/pics/symbols");
+            File f = PROPS().getFile("/laterna/res/pics/symbols");
             f = new File(f, symbol.substring(1, 2) + ".png");
             return f.toURI();
         } else return getSymbolURI(ManaFactoryImpl.INSTANCE.parseSymbol(symbol));
     }
     
     public URI getSymbolURI(MagicColor c) {
-        File f = PROPS().getFile("/net.slightlymagic.laterna/res/pics/symbols");
+        File f = PROPS().getFile("/laterna/res/pics/symbols");
         f = new File(f, (c == null? 'X':c.getShortChar()) + ".png");
         return f.toURI();
     }
     
     public URI getSymbolURI(ManaSymbol s) {
-        File f = PROPS().getFile("/net.slightlymagic.laterna/res/pics/symbols");
+        File f = PROPS().getFile("/laterna/res/pics/symbols");
         f = new File(f, s.toString().replaceAll("[{}/]", "") + ".png");
         return f.toURI();
     }
@@ -108,7 +108,7 @@ public final class ImageCache {
     }
     
     public URI getCardURI(int multiverseID) {
-        File f = PROPS().getFile("/net.slightlymagic.laterna/res/pics/cards");
+        File f = PROPS().getFile("/laterna/res/pics/cards");
         f = new File(f, multiverseID + ".jpg");
         return f.toURI();
     }

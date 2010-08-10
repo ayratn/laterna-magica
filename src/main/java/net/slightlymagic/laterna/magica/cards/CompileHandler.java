@@ -44,7 +44,6 @@ public interface CompileHandler {
     /**
      * Handles an exception thrown by the {@link CardCompiler}.
      * 
-     * @param f The file being parsed
      * @param detail A message object characterizing the warning
      */
     public void handleWarn(Object detail);
@@ -52,22 +51,22 @@ public interface CompileHandler {
     /**
      * Handles an annotation reported by the {@link CardCompiler}.
      * 
-     * @param f The file being parsed
-     * @param detail A message object characterizing the warning
+     * @param key The annotation's name
+     * @param value The annotation's value
      */
     public void handleAnnotation(String key, String value);
     
     /**
      * Handles a successfully parsed card
      * 
-     * @param f The file being parsed
+     * @param card The parsed {@link CardTemplate}
      */
     public void handleSuccess(CardTemplate card);
     
     /**
      * Handles an exception thrown by the {@link CardCompiler}.
      * 
-     * @param f The file being parsed
+     * @param ex Exception The exception thrown
      */
     public void handleFail(Exception ex);
     

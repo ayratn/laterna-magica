@@ -61,9 +61,8 @@ public abstract class PlayAction extends AbstractGameAction {
     }
     
     /**
-     * Returns if it is currently legal to take this action. It may be illegal for several reasons. To make it
-     * easier for subclasses to override this, it is splitted into {@link #isLegalTiming()} and
-     * {@link #isLegalState()}. Subclasses are encouraged to do the same for more specific checks.
+     * Returns if it is currently legal to take this action. This implementation delegates to
+     * {@link MagicObject#isLegal(PlayAction)}.
      */
     public boolean isLegal() {
         return getObject().isLegal(this);

@@ -30,6 +30,8 @@ import net.slightlymagic.laterna.magica.impl.GameImpl;
 import net.slightlymagic.laterna.magica.mana.ManaSequence;
 import net.slightlymagic.laterna.magica.mana.impl.ManaFactoryImpl;
 
+import org.junit.Ignore;
+
 import com.google.common.base.Predicate;
 
 
@@ -39,6 +41,7 @@ import com.google.common.base.Predicate;
  * @version V0.0 24.03.2010
  * @author Clemens Koza
  */
+@Ignore
 public class TestCharacteristicEffects {
     public static void main(String[] args) throws Exception {
         LaternaMagica.init();

@@ -39,8 +39,8 @@ import org.slf4j.LoggerFactory;
 public class CompileAll {
     static final Logger                    log             = LoggerFactory.getLogger(CompileAll.class);
     
-    private static final String            COMPILER_CLASS  = "/net.slightlymagic.laterna/res/cards/uncompiled/([^/]+)/class";
-    private static final String            UNCOMPILED_PATH = "/net.slightlymagic.laterna/res/cards/uncompiled/%s/path";
+    private static final String            COMPILER_CLASS  = "/laterna/res/cards/uncompiled/([^/]+)/class";
+    private static final String            UNCOMPILED_PATH = "/laterna/res/cards/uncompiled/%s/path";
     
     static final Map<String, CardCompiler> compilers;
     

@@ -10,11 +10,13 @@ package net.slightlymagic.laterna.magica.test;
 import static java.util.Arrays.*;
 import static org.junit.Assert.*;
 
+import java.io.IOException;
 import java.util.HashSet;
 import java.util.Iterator;
 import java.util.Set;
 
 import net.slightlymagic.laterna.magica.Game;
+import net.slightlymagic.laterna.magica.LaternaMagica;
 import net.slightlymagic.laterna.magica.edit.Edit;
 import net.slightlymagic.laterna.magica.impl.GameImpl;
 import net.slightlymagic.laterna.magica.util.MagicaCollections;
@@ -34,6 +36,14 @@ public class TestEditableSet {
     private static final Set<String> ref2 = new HashSet<String>(asList("a", "b"));
     private static final Set<String> ref3 = ref1;
     private static final Set<String> ref4 = ref0;
+    
+    static {
+        try {
+            LaternaMagica.init();
+        } catch(IOException ex) {
+            throw new ExceptionInInitializerError(ex);
+        }
+    }
     
     @Test
     public void testSet() {

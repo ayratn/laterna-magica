@@ -31,7 +31,7 @@ import com.google.common.base.Function;
 public class CostParsers {
     private static final Logger           log          = LoggerFactory.getLogger(CostParsers.class);
     
-    private static final String           PARSER_CLASS = "/net.slightlymagic.laterna/res/cards/uncompiled/text/costs/class";
+    private static final String           PARSER_CLASS = "/laterna/res/cards/uncompiled/text/costs/class";
     private static final List<CostParser> costParsers;
     
     static {

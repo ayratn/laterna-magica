@@ -30,23 +30,21 @@ public class LaternaMagica {
     private static PropertyTree PROPS;
     private static AllCards     CARDS;
     
-    /**
-     * Sets the configuration properties specified in {@link Utils}, and then calls {@link Utils#init()}.
-     */
     public static void init() throws IOException {
         Configurator c = new Configurator().configure().execute();
         
         PROPS = c.getConfigurator(PropertyTreeConfigurator.class).getTree();
         CARDS = new AllCards();
         
-        boolean compile = PROPS().getBoolean("/net.slightlymagic.laterna/res/cards/compileOnStart", false);
+        boolean compile = PROPS().getBoolean("/laterna/res/cards/compileOnStart", false);
         if(!compile) {
             try {
                 log.info("Loading...");
                 CARDS.load();
             } catch(Exception ex) {
                 log.error("Error loading compiled cards; cards were not completely loaded.\n"
-                        + "LaternaMagica will now try to recreate the cards.", ex);
+                        + "LaternaMagica will now try to recreate the cards.\n"
+                        + "Below is the reason why loading failed", ex);
                 compile = true;
             }
         }
