@@ -1,0 +1,14 @@
+@date	2010-07-30
+@author	Silly Freak
+
+@set	FEM common 1899
+@set	FEM common 1900
+@set	FEM common 1901
+@set	FEM common 1902
+@set	5ED common 3955
+@set	6ED common 16432
+
+name	Vodalian Soldiers
+cost	{1}{U}
+type	creature - merfolk soldier
+pt		1 / 2

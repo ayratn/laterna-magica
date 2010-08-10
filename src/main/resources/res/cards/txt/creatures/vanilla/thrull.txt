@@ -1,0 +1,8 @@
+@date	2010-07-30
+@author	Silly Freak
+
+@set	DVD common 197261
+
+name	Thrull
+type	creature - thrull
+pt		0 / 1

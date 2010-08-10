@@ -1,0 +1,10 @@
+@date	2010-07-30
+@author	Silly Freak
+
+@set	M10 common 193750
+@set	M11 common 208283
+
+name	Silvercoat Lion
+cost	{1}{W}
+type	creature - cat
+pt		2 / 2

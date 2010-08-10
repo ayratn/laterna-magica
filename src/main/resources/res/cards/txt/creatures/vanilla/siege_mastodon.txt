@@ -1,0 +1,10 @@
+@date	2010-07-30
+@author	Silly Freak
+
+@set	M10 common 193931
+@set	M11 common 208293
+
+name	Siege Mastodon
+cost	{4}{W}
+type	creature - elephant
+pt		3 / 5

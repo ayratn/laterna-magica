@@ -1,0 +1,10 @@
+@date	2010-07-30
+@author	Silly Freak
+
+@set	VIS common 3600
+
+name	Phyrexian Walker
+cost	{0}
+type	artifact
+type	creature - construct
+pt		0 / 3

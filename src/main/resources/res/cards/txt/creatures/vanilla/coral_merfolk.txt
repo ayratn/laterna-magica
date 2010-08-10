@@ -1,0 +1,11 @@
+@date	2010-07-30
+@author	Silly Freak
+
+@set	USG common 5613
+@set	7ED common 26844
+@set	M10 common 193749
+
+name	Coral Merfolk
+cost	{1}{U}
+type	creature - merfolk
+pt		2 / 1

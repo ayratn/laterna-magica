@@ -1,0 +1,11 @@
+@date	2010-07-30
+@author	Silly Freak
+
+@set	MRD common 48438
+@set	9ED common 82968
+@set	10E common 129631
+
+name	Lumengrid Warden
+cost	{1}{U}
+type	creature - human wizard
+pt		1 / 3

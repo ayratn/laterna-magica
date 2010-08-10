@@ -1,0 +1,9 @@
+@date	2010-07-30
+@author	Silly Freak
+
+@set	P02 common 6613
+
+name	Bear Cub
+cost	{1}{G}
+type	creature - bear
+pt		2 / 2

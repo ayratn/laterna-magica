@@ -1,0 +1,10 @@
+@date	2010-07-30
+@author	Silly Freak
+
+@set	P02 common 6627
+@set	S99 common 21077
+
+name	Barbtooth Wurm
+cost	{5}{G}
+type	creature - wurm
+pt		6 / 4

@@ -1,0 +1,9 @@
+@date	2010-07-30
+@author	Silly Freak
+
+@set	WWK common 194681
+
+name	Goblin Roughrider
+cost	{2}{R}
+type	creature - goblin knight
+pt		3 / 2

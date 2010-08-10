@@ -1,0 +1,10 @@
+@date	2010-07-28
+
+@set	LEA rare 281
+@set	LEB rare 578
+@set	2ED rare 880
+@set	3ED rare 1378
+@set	ME3 rare 201402
+
+name	Plateau
+type	land - mountain plains

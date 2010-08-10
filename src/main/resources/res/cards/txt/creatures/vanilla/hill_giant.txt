@@ -1,0 +1,19 @@
+@date	2010-07-30
+@author	Silly Freak
+
+@set	LEA common 205
+@set	LEB common 500
+@set	2ED common 802
+@set	3ED common 1299
+@set	4ED common 2284
+@set	5ED common 4060
+@set	POR common 4344
+@set	7ED common 25680
+@set	8ED common 45348
+@set	9ED common 83120
+@set	10E common 129591
+
+name	Hill Giant
+cost	{3}{R}
+type	creature - giant
+pt		3 / 3

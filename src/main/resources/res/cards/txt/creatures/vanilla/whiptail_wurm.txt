@@ -1,0 +1,10 @@
+@date	2010-07-30
+@author	Silly Freak
+
+@set	POR uncommon 4324
+@set	S99 uncommon 20230
+
+name	Whiptail Wurm
+cost	{6}{G}
+type	creature - wurm
+pt		8 / 5

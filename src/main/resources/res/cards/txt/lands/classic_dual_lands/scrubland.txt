@@ -1,0 +1,10 @@
+@date	2010-07-28
+
+@set	LEA rare 283
+@set	LEB rare 580
+@set	2ED rare 882
+@set	3ED rare 1380
+@set	ME3 rare 201403
+
+name	Scrubland
+type	land - plains swamp

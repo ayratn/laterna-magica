@@ -1,0 +1,10 @@
+@date	2010-07-30
+@author	Silly Freak
+
+@set	CHK common 50487
+@set	9ED common 82943
+
+name	Order of the Sacred Bell
+cost	{3}{G}
+type	creature - human monk
+pt		4 / 3

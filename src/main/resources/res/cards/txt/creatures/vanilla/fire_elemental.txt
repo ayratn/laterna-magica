@@ -1,0 +1,16 @@
+@date	2010-07-30
+@author	Silly Freak
+
+@set	LEA uncommon 196
+@set	LEB uncommon 491
+@set	2ED uncommon 793
+@set	3ED uncommon 1290
+@set	4ED uncommon 2274
+@set	6ED uncommon 15419
+@set	7ED uncommon 15813
+@set	S99 uncommon 20198
+
+name	Fire Elemental
+cost	{3}{R}{R}
+type	creature - elemental
+pt		5 / 4

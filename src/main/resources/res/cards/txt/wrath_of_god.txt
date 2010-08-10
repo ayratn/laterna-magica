@@ -1,0 +1,21 @@
+@date	2010-07-30
+@author	Silly Freak
+
+@set	LEA rare 276
+@set	LEB rare 572
+@set	2ED rare 874
+@set	3ED rare 1372
+@set	4ED rare 2373
+@set	5ED rare 4166
+@set	POR rare 4408
+@set	7ED rare 11581
+@set	6ED rare 14498
+@set	BRB rare 21180
+@set	8ED rare 45222
+@set	9ED rare 83339
+@set	10E rare 129808
+
+name	Wrath of God
+cost	{2}{W}{W}
+type	sorcery
+text	Destroy all creatures. They can't be regenerated.

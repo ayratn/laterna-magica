@@ -1,0 +1,13 @@
+@date	2010-07-30
+@author	Silly Freak
+
+@set	S99 rare 20188
+@set	S00 rare 25463
+@set	7ED rare 29322
+@set	8ED rare 47789
+@set	9ED rare 94911
+
+name	Vizzerdrix
+cost	{6}{U}
+type	creature - rabbit beast
+pt		6 / 6

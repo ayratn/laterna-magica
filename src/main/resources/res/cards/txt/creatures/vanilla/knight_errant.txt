@@ -1,0 +1,12 @@
+@date	2010-07-30
+@author	Silly Freak
+
+@set	POR common 4388
+@set	7ED common 13099
+@set	S99 common 20397
+@set	S00 common 25450
+
+name	Knight Errant
+cost	{1}{W}
+type	creature - human knight
+pt		2 / 2

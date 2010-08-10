@@ -1,0 +1,10 @@
+@date	2010-07-28
+
+@set	LEA rare 286
+@set	LEB rare 583
+@set	2ED rare 885
+@set	3ED rare 1383
+@set	ME2 rare 184751
+
+name	Tundra
+type	land - plains island

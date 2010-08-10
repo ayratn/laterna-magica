@@ -1,0 +1,12 @@
+@date	2010-07-30
+@author	Silly Freak
+
+@set	ULG common 12946
+@set	7ED common 25628
+@set	8ED common 45292
+@set	9ED common 83102
+
+name	Giant Cockroach
+cost	{3}{B}
+type	creature - insect
+pt		4 / 2

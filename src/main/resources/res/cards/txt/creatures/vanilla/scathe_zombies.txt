@@ -1,0 +1,21 @@
+@date	2010-07-30
+@author	Silly Freak
+
+@set	LEA common 81
+@set	LEB common 376
+@set	2ED common 678
+@set	3ED common 1177
+@set	4ED common 2125
+@set	5ED common 3875
+@set	6ED common 16627
+@set	S99 common 21093
+@set	S00 common 25487
+@set	7ED common 27588
+@set	8ED common 45294
+@set	9ED common 83247
+@set	10E common 129718
+
+name	Scathe Zombies
+cost	{2}{B}
+type	creature - zombie
+pt		2 / 2

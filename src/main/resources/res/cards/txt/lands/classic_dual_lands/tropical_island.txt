@@ -1,0 +1,10 @@
+@date	2010-07-28
+
+@set	LEA rare 285
+@set	LEB rare 582
+@set	2ED rare 884
+@set	3ED rare 1382
+@set	ME3 rare 201405
+
+name	Tropical Island
+type	land - forest island

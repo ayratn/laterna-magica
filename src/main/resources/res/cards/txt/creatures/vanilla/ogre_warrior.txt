@@ -1,0 +1,11 @@
+@date	2010-07-30
+@author	Silly Freak
+
+@set	P02 common 6597
+@set	S99 common 21070
+@set	S00 common 25476
+
+name	Ogre Warrior
+cost	{3}{R}
+type	creature - ogre warrior
+pt		3 / 3

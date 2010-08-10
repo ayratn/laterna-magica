@@ -1,0 +1,15 @@
+@date	2010-07-30
+@author	Silly Freak
+
+@set	LEA uncommon 192
+@set	LEB uncommon 487
+@set	2ED uncommon 789
+@set	3ED uncommon 1287
+@set	4ED uncommon 2271
+@set	S99 uncommon 20199
+@set	10E uncommon 129554
+
+name	Earth Elemental
+cost	{3}{R}{R}
+type	creature - elemental
+pt		4 / 5

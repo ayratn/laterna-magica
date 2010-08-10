@@ -1,0 +1,10 @@
+@date	2010-07-28
+
+@set	ICE land 2770
+@set	CSP common 121130
+@set	ME2 land 184813
+
+name	Snow-Covered Island
+super	basic snow
+type	land - island
+text	U

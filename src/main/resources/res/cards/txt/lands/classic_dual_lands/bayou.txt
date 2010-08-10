@@ -1,0 +1,10 @@
+@date	2010-07-28
+
+@set	LEA rare 280
+@set	LEB rare 577
+@set	2ED rare 879
+@set	3ED rare 1377
+@set	ME3 rare 201400
+
+name	Bayou
+type	land - swamp forest

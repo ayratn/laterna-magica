@@ -1,0 +1,7 @@
+<project name="TreeProperties" default="distribute">
+ <target name="distribute">
+  <copy todir="${basedir}/dist">
+   <fileset dir="${basedir}/target" includes="*.jar"/>
+  </copy>
+ </target>
+</project>

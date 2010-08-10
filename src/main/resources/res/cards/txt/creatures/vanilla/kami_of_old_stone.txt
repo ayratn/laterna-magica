@@ -1,0 +1,10 @@
+@date	2010-07-30
+@author	Silly Freak
+
+@set	CHK uncommon 79236
+@set	9ED uncommon 83461
+
+name	Kami of Old Stone
+cost	{3}{W}
+type	creature - spirit
+pt		1 / 7

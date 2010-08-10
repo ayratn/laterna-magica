@@ -1,0 +1,14 @@
+@date	2010-07-30
+@author	Silly Freak
+
+@set	ICE common 2586
+@set	5ED common 4005
+@set	6ED common 16452
+@set	BRB common 21174
+@set	BTD common 27260
+@set	9ED common 83272
+
+name	Scaled Wurm
+cost	{7}{G}
+type	creature - wurm
+pt		7 / 6

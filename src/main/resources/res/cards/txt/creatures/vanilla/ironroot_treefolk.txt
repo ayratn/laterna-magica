@@ -1,0 +1,14 @@
+@date	2010-07-30
+@author	Silly Freak
+
+@set	LEA common 159
+@set	LEB common 454
+@set	2ED common 756
+@set	3ED common 1253
+@set	4ED common 2220
+@set	5ED common 3988
+
+name	Ironroot Treefolk
+cost	{4}{G}
+type	creature - treefolk
+pt		3 / 5

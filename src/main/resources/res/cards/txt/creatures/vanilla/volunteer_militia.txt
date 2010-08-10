@@ -1,0 +1,10 @@
+@date	2010-07-30
+@author	Silly Freak
+
+@set	P02 common 6491
+@set	PTK common 10483
+
+name	Volunteer Militia
+cost	{W}
+type	creature - human soldier
+pt		1 / 2

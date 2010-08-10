@@ -1,0 +1,10 @@
+@date	2010-07-30
+@author	Silly Freak
+
+@set	S99 uncommon 21072
+@set	8ED uncommon 49056
+
+name	Silverback Ape
+cost	{3}{G}{G}
+type	creature - ape
+pt		5 / 5

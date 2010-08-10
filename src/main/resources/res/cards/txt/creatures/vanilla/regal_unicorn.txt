@@ -1,0 +1,10 @@
+@date	2010-07-30
+@author	Silly Freak
+
+@set	POR common 4390
+@set	6ED common 14473
+
+name	Regal Unicorn
+cost	{2}{W}
+type	creature - unicorn
+pt		2 / 3

@@ -1,0 +1,12 @@
+@date	2010-07-30
+@author	Silly Freak
+
+@set	LEG uncommon 1691
+@set	CHR uncommon 2882
+@set	ME3 common 205870
+
+name	Tobias Andrion
+cost	{3}{W}{U}
+super	legendary
+type	creature - human advisor
+pt		4 / 4

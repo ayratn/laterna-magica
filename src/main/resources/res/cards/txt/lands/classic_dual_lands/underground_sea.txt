@@ -1,0 +1,10 @@
+@date	2010-07-28
+
+@set	LEA rare 287
+@set	LEB rare 584
+@set	2ED rare 886
+@set	3ED rare 1384
+@set	ME2 rare 184752
+
+name	Underground Sea
+type	land - island swamp

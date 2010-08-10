@@ -1,0 +1,10 @@
+@date	2010-07-30
+@author	Silly Freak
+
+@set	HML common 3000
+@set	HML common 3001
+
+name	Dwarven Trader
+cost	{R}
+type	creature - dwarf
+pt		1 / 1

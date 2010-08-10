@@ -1,0 +1,9 @@
+@date	2010-07-30
+@author	Silly Freak
+
+@set	ZEN common 190395
+
+name	Pillarfield Ox
+cost	{3}{W}
+type	creature - ox
+pt		2 / 4

@@ -1,0 +1,10 @@
+@date	2010-07-30
+@author	Silly Freak
+
+@set	M10 common 189888
+@set	M11 common 207337
+
+name	Runeclaw Bear
+cost	{1}{G}
+type	creature - bear
+pt		2 / 2

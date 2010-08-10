@@ -1,0 +1,12 @@
+@date	2010-07-29
+
+@set	ONS rare 39932
+@set	10E rare 106426
+
+name	Arcanis the Omnipotent
+cost	{3}{U}{U}{U}
+super	legendary
+type	creature - wizard
+pt		3 / 4
+text	{T}: Draw 3 cards.
+text	{2}{U}{U}: Return ~ to its owner's hand.

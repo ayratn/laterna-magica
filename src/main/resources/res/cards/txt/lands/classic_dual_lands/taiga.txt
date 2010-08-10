@@ -1,0 +1,10 @@
+@date	2010-07-28
+
+@set	LEA rare 284
+@set	LEB rare 581
+@set	2ED rare 883
+@set	3ED rare 1381
+@set	ME2 rare 184750
+
+name	Taiga
+type	land - mountain forest

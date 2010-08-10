@@ -1,0 +1,19 @@
+@date	2010-07-30
+@author	Silly Freak
+
+@set	LEA common 114
+@set	LEB common 409
+@set	2ED common 711
+@set	3ED common 1210
+@set	4ED common 2169
+@set	5ED common 3925
+@set	POR common 4267
+@set	7ED common 10810
+@set	6ED common 11400
+@set	S99 common 21080
+@set	S00 common 25458
+
+name	Merfolk of the Pearl Trident
+cost	{U}
+type	creature - merfolk
+pt		1 / 1

@@ -1,0 +1,10 @@
+@date	2010-07-28
+
+@set	LEA rare 282
+@set	LEB rare 579
+@set	2ED rare 881
+@set	3ED rare 1379
+@set	ME2 rare 184749
+
+name	Savannah
+type	land - forest plains

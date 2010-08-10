@@ -1,0 +1,14 @@
+@date	2010-07-30
+@author	Silly Freak
+
+@set	LEA common 261
+@set	LEB common 557
+@set	2ED common 859
+@set	3ED common 1356
+@set	4ED common 2354
+@set	5ED common 4147
+
+name	Pearled Unicorn
+cost	{2}{W}
+type	creature - unicorn
+pt		2 / 2

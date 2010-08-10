@@ -1,0 +1,12 @@
+@date	2010-07-30
+@author	Silly Freak
+
+@set	ALL common 3132
+@set	ALL common 3133
+@set	POR common 4296
+@set	ME2 common 184691
+
+name	Elvish Ranger
+cost	{2}{G}
+type	creature - elf
+pt		4 / 1

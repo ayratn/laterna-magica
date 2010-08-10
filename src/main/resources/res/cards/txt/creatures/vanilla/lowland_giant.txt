@@ -1,0 +1,10 @@
+@date	2010-07-30
+@author	Silly Freak
+
+@set	TMP common 4829
+@set	BTD common 27257
+
+name	Lowland Giant
+cost	{2}{R}{R}
+type	creature - giant
+pt		4 / 3

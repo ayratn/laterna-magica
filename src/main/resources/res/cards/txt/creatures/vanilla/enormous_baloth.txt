@@ -1,0 +1,13 @@
+@date	2010-07-30
+@author	Silly Freak
+
+@set	LGN uncommon 44500
+@set	8ED uncommon 47787
+@set	9ED uncommon 83075
+@set	10E uncommon 135263
+@set	M10 uncommon 189882
+
+name	Enormous Baloth
+cost	{6}{G}
+type	creature - beast
+pt		7 / 7

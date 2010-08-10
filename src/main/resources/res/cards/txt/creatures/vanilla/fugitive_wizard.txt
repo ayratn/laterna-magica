@@ -1,0 +1,12 @@
+@date	2010-07-30
+@author	Silly Freak
+
+@set	LGN common 42160
+@set	8ED common 45225
+@set	9ED common 83096
+@set	10E common 134762
+
+name	Fugitive Wizard
+cost	{U}
+type	creature - human wizard
+pt		1 / 1

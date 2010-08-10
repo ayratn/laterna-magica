@@ -1,0 +1,9 @@
+@date	2010-07-30
+@author	Silly Freak
+
+@set	POR common 4316
+
+name	Rowan Treefolk
+cost	{3}{G}
+type	creature - treefolk
+pt		3 / 4

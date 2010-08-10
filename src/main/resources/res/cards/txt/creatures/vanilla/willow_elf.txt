@@ -1,0 +1,10 @@
+@date	2010-07-30
+@author	Silly Freak
+
+@set	S99 common 21051
+@set	S00 common 25484
+
+name	Willow Elf
+cost	{G}
+type	creature - elf
+pt		1 / 1

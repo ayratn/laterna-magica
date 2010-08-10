@@ -1,0 +1,10 @@
+@date	2010-07-30
+@author	Silly Freak
+
+@set	LEG common 1535
+@set	8ED common 45411
+
+name	Moss Monster
+cost	{3}{G}{G}
+type	creature - elemental
+pt		3 / 6

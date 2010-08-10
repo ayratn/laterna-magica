@@ -1,0 +1,9 @@
+@date	2010-07-30
+@author	Silly Freak
+
+@set	PTK common 10600
+
+name	Wu Infantry
+cost	{1}{U}
+type	creature - human soldier
+pt		2 / 1

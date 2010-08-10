@@ -1,0 +1,10 @@
+@date	2010-07-28
+
+@set	ICE land 2774
+@set	CSP common 121267
+@set	ME2 land 184815
+
+name	Snow-Covered Plains
+super	basic snow
+type	land - plains
+text	W

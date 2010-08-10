@@ -1,0 +1,11 @@
+@date	2010-07-30
+@author	Silly Freak
+
+@set	VIS common 3672
+@set	POR common 9845
+@set	6ED common 16453
+
+name	Panther Warriors
+cost	{4}{G}
+type	creature - cat warrior
+pt		6 / 3

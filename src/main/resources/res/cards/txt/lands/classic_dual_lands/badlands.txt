@@ -1,0 +1,10 @@
+@date	2010-07-28
+
+@set	LEA rare 279
+@set	LEB rare 576
+@set	2ED rare 878
+@set	3ED rare 1376
+@set	ME2 rare 184748
+
+name	Badlands
+type	land - swamp mountain

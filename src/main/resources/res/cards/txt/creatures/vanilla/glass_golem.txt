@@ -1,0 +1,10 @@
+@date	2010-07-30
+@author	Silly Freak
+
+@set	RAV uncommon 83719
+
+name	Glass Golem
+cost	{5}
+type	artifact
+type	creature - golem
+pt		6 / 2

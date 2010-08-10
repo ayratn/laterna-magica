@@ -1,0 +1,11 @@
+@date	2010-07-30
+@author	Silly Freak
+
+@set	MIR common 3471
+@set	6ED common 12974
+@set	BTD common 27265
+
+name	Viashino Warrior
+cost	{3}{R}
+type	creature - viashino warrior
+pt		4 / 2

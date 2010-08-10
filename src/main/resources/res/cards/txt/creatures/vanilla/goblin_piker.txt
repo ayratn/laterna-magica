@@ -1,0 +1,13 @@
+@date	2010-07-30
+@author	Silly Freak
+
+@set	P02 common 6582
+@set	9ED common 82957
+@set	10E common 129580
+@set	M10 common 191074
+@set	M11 common 205052
+
+name	Goblin Piker
+cost	{1}{R}
+type	creature - goblin warrior
+pt		2 / 1

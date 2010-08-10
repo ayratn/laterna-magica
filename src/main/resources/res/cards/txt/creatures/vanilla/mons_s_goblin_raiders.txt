@@ -1,0 +1,16 @@
+@date	2010-07-30
+@author	Silly Freak
+
+@set	LEA common 212
+@set	LEB common 507
+@set	2ED common 809
+@set	3ED common 1308
+@set	4ED common 2296
+@set	5ED common 4072
+@set	S99 rare 21065
+@set	S00 common 25491
+
+name	Mons's Goblin Raiders
+cost	{R}
+type	creature - goblin
+pt		1 / 1

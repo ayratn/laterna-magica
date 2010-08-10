@@ -1,0 +1,13 @@
+@date	2010-07-30
+@author	Silly Freak
+
+@set	7ED common 15780
+@set	S99 common 21021
+@set	S00 common 25455
+@set	8ED common 47784
+@set	9ED common 83064
+
+name	Eager Cadet
+cost	{W}
+type	creature - human soldier
+pt		1 / 1

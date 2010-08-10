@@ -1,0 +1,10 @@
+@date	2010-07-28
+
+@set	ICE land 2749
+@set	CSP common 121192
+@set	ME2 land 184812
+
+name	Snow-Covered Forest
+super	basic snow
+type	land - forest
+text	G

@@ -1,0 +1,12 @@
+@date	2010-07-30
+@author	Silly Freak
+
+@set	ONS common 39712
+@set	8ED common 45173
+@set	9ED common 83107
+@set	ROE common 193557
+
+name	Glory Seeker
+cost	{1}{W}
+type	creature - human soldier
+pt		2 / 2

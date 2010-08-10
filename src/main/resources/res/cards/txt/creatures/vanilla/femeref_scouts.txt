@@ -1,0 +1,9 @@
+@date	2010-07-30
+@author	Silly Freak
+
+@set	MIR common 3494
+
+name	Femeref Scouts
+cost	{2}{W}
+type	creature - human scout
+pt		1 / 4

@@ -1,0 +1,13 @@
+@date	2010-07-30
+@author	Silly Freak
+
+@set	TMP common 4794
+@set	7ED common 13048
+@set	6ED common 14675
+@set	8ED common 45406
+@set	9ED common 83303
+
+name	Trained Armodon
+cost	{1}{G}{G}
+type	creature - elephant
+pt		3 / 3

@@ -1,0 +1,13 @@
+@date	2010-07-30
+@author	Silly Freak
+
+@set	ICE common 2608
+@set	6ED common 16445
+@set	7ED common 25673
+@set	8ED common 45345
+@set	9ED common 83001
+
+name	Balduvian Barbarians
+cost	{1}{R}{R}
+type	creature - human barbarian
+pt		3 / 2

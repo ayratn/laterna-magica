@@ -1,0 +1,10 @@
+@date	2010-07-30
+@author	Silly Freak
+
+@set	RAV uncommon 83625
+@set	TBA uncommon 220551
+
+name	Watchwolf
+cost	{G}{W}
+type	creature - wolf
+pt		3 / 3

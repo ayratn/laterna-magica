@@ -1,0 +1,10 @@
+@date	2010-07-30
+@author	Silly Freak
+
+@set	CHK rare 79217
+
+name	Isamaru, Hound of Konda
+cost	{W}
+super	legendary
+type	creature - hound
+pt		2 / 2

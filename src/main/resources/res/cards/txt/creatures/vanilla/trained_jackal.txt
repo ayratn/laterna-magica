@@ -1,0 +1,9 @@
+@date	2010-07-30
+@author	Silly Freak
+
+@set	PTK common 10571
+
+name	Trained Jackal
+cost	{G}
+type	creature - hound
+pt		1 / 2

@@ -1,0 +1,12 @@
+@date	2010-07-30
+@author	Silly Freak
+
+@set	P02 common 6636
+@set	S99 common 21052
+@set	8ED common 45409
+@set	9ED common 83188
+
+name	Norwood Ranger
+cost	{G}
+type	creature - elf scout
+pt		1 / 2

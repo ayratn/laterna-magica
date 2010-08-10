@@ -1,0 +1,12 @@
+@date	2010-07-30
+@author	Silly Freak
+
+@set	ONS common 39927
+@set	9ED common 83451
+@set	MOR common 153003
+@set	EVG common 158136
+
+name	Elvish Warrior
+cost	{G}{G}
+type	creature - elf warrior
+pt		2 / 3

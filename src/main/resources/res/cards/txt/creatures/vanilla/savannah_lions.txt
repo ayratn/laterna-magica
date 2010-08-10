@@ -1,0 +1,15 @@
+@date	2010-07-30
+@author	Silly Freak
+
+@set	LEA rare 269
+@set	LEB rare 565
+@set	2ED rare 867
+@set	3ED rare 1365
+@set	4ED rare 2363
+@set	8ED rare 45207
+@set	9ED rare 83246
+
+name	Savannah Lions
+cost	{W}
+type	creature - cat
+pt		2 / 1

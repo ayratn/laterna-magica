@@ -1,0 +1,10 @@
+@date	2010-07-28
+
+@set	ICE land 2742
+@set	CSP common 121256
+@set	ME2 land 184816
+
+name	Snow-Covered Swamp
+super	basic snow
+type	land - swamp
+text	B

@@ -1,0 +1,10 @@
+@date	2010-07-30
+@author	Silly Freak
+
+@set	M10 uncommon 189902
+@set	M11 uncommon 208291
+
+name	Elite Vanguard
+cost	{W}
+type	creature - human soldier
+pt		2 / 1

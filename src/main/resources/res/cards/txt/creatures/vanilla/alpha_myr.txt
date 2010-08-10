@@ -1,0 +1,10 @@
+@date	2010-07-30
+@author	Silly Freak
+
+@set	MRD common 49045
+
+name	Alpha Myr
+cost	{2}
+type	artifact
+type	creature - myr
+pt		2 / 1

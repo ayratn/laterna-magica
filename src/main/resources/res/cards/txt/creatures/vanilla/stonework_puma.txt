@@ -1,0 +1,10 @@
+@date	2010-07-30
+@author	Silly Freak
+
+@set	ZEN common 190397
+
+name	Stonework Puma
+cost	{3}
+type	artifact
+type	creature - cat ally
+pt		2 / 2

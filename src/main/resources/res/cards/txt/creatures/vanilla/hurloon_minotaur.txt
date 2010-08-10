@@ -1,0 +1,15 @@
+@date	2010-07-30
+@author	Silly Freak
+
+@set	LEA common 206
+@set	LEB common 501
+@set	2ED common 803
+@set	3ED common 1300
+@set	4ED common 2285
+@set	5ED common 4061
+@set	ME3 common 201401
+
+name	Hurloon Minotaur
+cost	{1}{R}{R}
+type	creature - minotaur
+pt		2 / 3
