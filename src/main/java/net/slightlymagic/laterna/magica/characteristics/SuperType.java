@@ -19,19 +19,23 @@ import java.util.regex.Pattern;
  */
 public enum SuperType {
     /**
-     * {@magic.ruleRef 204.4c CR 204.4c}
+     * {@magic.ruleRef 20100716/R2044c}
      */
     BASIC,
     /**
-     * {@magic.ruleRef 204.4d CR 204.4d}, {@magic.ruleRef 704.5k CR 704.5k}
+     * {@magic.ruleRef 20100716/R2044d}, {@magic.ruleRef 20100716/R7045k}
      */
     LEGENDARY,
     /**
-     * {@magic.ruleRef 204.4e CR 204.4e}
+     * {@magic.ruleRef 20100716/R2044g}, {@magic.ruleRef 20100716/R7045v}
+     */
+    ONGOING,
+    /**
+     * {@magic.ruleRef 20100716/R2044f}
      */
     SNOW,
     /**
-     * {@magic.ruleRef 204.4f CR 204.4f}, {@magic.ruleRef 704.5m CR 704.5m}
+     * {@magic.ruleRef 20100716/R2044e}, {@magic.ruleRef 20100716/R7045m}
      */
     WORLD;
     

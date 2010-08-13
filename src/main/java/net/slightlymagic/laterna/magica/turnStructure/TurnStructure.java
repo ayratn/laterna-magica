@@ -15,15 +15,7 @@ import net.slightlymagic.laterna.magica.player.Player;
 
 
 /**
- * The class TurnStructure. This class is responsible for making progress in a single turn, and to ensure the
- * correct turn order of players in the game.
- * 
- * <p>
- * {@magic.ruleRef 500.1 CR 500.1} A turn consists of five phases, in this order: beginning,
- * precombat main, combat, postcombat main, and ending. Each of these phases takes place every turn, even if
- * nothing happens during the phase. The beginning, combat, and ending phases are further broken down into steps,
- * which proceed in order.
- * </p>
+ * The class TurnStructure. This class is responsible to ensure the correct turn order of players in the game.
  * 
  * @version V0.0 05.09.2009
  * @author Clemens Koza

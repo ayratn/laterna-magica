@@ -23,7 +23,7 @@ import org.slf4j.LoggerFactory;
 
 
 /**
- * The class LoseOnDrawAction. This class implements {@magic.ruleRef 704.5b CR 704.5b}: If a player
+ * The class LoseOnDrawAction. This class implements {@magic.ruleRef 20100716/R7045b}: If a player
  * attempted to draw a card from an empty library since the last time state-based actions were checked, he or she
  * loses the game.
  * 

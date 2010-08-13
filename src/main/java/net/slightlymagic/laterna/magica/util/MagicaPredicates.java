@@ -208,7 +208,7 @@ public final class MagicaPredicates {
     
     /**
      * The class CardPredicate. This class performs a match operation on a card based on a
-     * {@link ObjectCharacteristics} predicate, as specified in {@magic.ruleRef 708.6 CR 708.6}.
+     * {@link ObjectCharacteristics} predicate, as specified in {@magic.ruleRef 20100716/R7086}.
      * 
      * @version V1.0 10.10.2009
      * @author Clemens Koza

@@ -32,7 +32,7 @@ import net.slightlymagic.laterna.magica.mana.ManaSequence;
  * </ul>
  * </p>
  * <p>
- * See rule {@magic.ruleRef 200.1}.
+ * See rule {@magic.ruleRef 20100716/R2001}.
  * </p>
  * 
  * <p>

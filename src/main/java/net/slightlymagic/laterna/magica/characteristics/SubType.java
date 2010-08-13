@@ -23,7 +23,7 @@ import com.google.common.collect.MapMaker;
 /**
  * <p>
  * The class Subtype. Though subtypes are, according to the comprehensive rules ({@magic.ruleRef
- * 204.3 CR 204.3}), a closed set of values, that set is very huge and has no meaning to the game other than that
+ * 20100716/R2043}), a closed set of values, that set is very huge and has no meaning to the game other than that
  * it exists: There are no specific rules bound to the subtypes (other than the basic land types and Aura, more on
  * that later). Therefore it's more practical to make that set <i>open</i> by lazily creating subtypes for any
  * requested combination of type and subtype name.
@@ -40,7 +40,7 @@ import com.google.common.collect.MapMaker;
  * <li>
  * The basic land types
  * <p>
- * {@magic.ruleRef 305.6 305.6} The basic land types are Plains, Island, Swamp, Mountain, and
+ * {@magic.ruleRef 20100716/R3056} The basic land types are Plains, Island, Swamp, Mountain, and
  * Forest. If an object uses the words “basic land type,” it’s referring to one of these subtypes. A basic land
  * type implies an intrinsic ability to produce colored mana. (See rule 605, “Mana Abilities.”) An object with a
  * basic land type is treated as if its text box included “{T}: Add [mana symbol] to your mana pool,” even if the
@@ -48,9 +48,9 @@ import com.google.common.collect.MapMaker;
  * Swamps, black; Mountains, red; and Forests, green.
  * </p>
  * <p>
- * {@magic.ruleRef 305.7 305.7} If an effect changes a land’s subtype to one or more of the basic
- * land types, the land no longer has its old land type. It loses all abilities generated from its rules text and
- * its old land types, and it gains the appropriate mana ability for each new basic land type. Note that this
+ * {@magic.ruleRef 20100716/R3057} If an effect changes a land’s subtype to one or more of the
+ * basic land types, the land no longer has its old land type. It loses all abilities generated from its rules text
+ * and its old land types, and it gains the appropriate mana ability for each new basic land type. Note that this
  * doesn’t remove any abilities that were granted to the land by other effects. Changing a land’s subtype doesn’t
  * add or remove any card types (such as creature) or supertypes (such as basic, legendary, and snow) the land may
  * have. If a land gains one or more land types in addition to its own, it keeps its land types and rules text, and
@@ -60,34 +60,34 @@ import com.google.common.collect.MapMaker;
  * <li>
  * Aura
  * <p>
- * {@magic.ruleRef 303.4a 303.4a} An Aura spell requires a target, which is restricted by its
+ * {@magic.ruleRef 20100716/R3034a} An Aura spell requires a target, which is restricted by its
  * enchant ability.
  * </p>
  * <p>
- * {@magic.ruleRef 303.4f 303.4f} If an Aura is entering the battlefield under a player’s control
+ * {@magic.ruleRef 20100716/R3034f} If an Aura is entering the battlefield under a player’s control
  * by any means other than by resolving as an Aura spell, and the effect putting it onto the battlefield doesn’t
  * specify the object or player the Aura will enchant, that player chooses what it will enchant as the Aura enters
  * the battlefield. The player must choose a legal object or player according to the Aura’s enchant ability and any
  * other applicable effects.
  * </p>
  * <p>
- * {@magic.ruleRef 303.4g 303.4g} If an Aura is entering the battlefield and there is no legal
+ * {@magic.ruleRef 20100716/R3034g} If an Aura is entering the battlefield and there is no legal
  * object or player for it to enchant, the Aura remains in its current zone, unless that zone is the stack. In that
  * case, the Aura is put into its owner’s graveyard instead of entering the battlefield.
  * </p>
  * <p>
- * {@magic.ruleRef 303.4h 303.4h} If an effect attempts to attach an Aura on the battlefield to an
- * object or player, that object or player must be able to be enchanted by it. If the object or player can’t be,
+ * {@magic.ruleRef 20100716/R3034h} If an effect attempts to attach an Aura on the battlefield to
+ * an object or player, that object or player must be able to be enchanted by it. If the object or player can’t be,
  * the Aura doesn’t move.
  * </p>
  * <p>
- * {@magic.ruleRef 702.5a 702.5a} Enchant is a static ability, written “Enchant [object or
+ * {@magic.ruleRef 20100716/R7025a} Enchant is a static ability, written “Enchant [object or
  * player].” The enchant ability restricts what an Aura spell can target and what an Aura can enchant.
  * </p>
  * <p>
- * {@magic.ruleRef 702.5c 702.5c} If an Aura has multiple instances of enchant, all of them apply.
- * The Aura’s target must follow the restrictions from all the instances of enchant. The Aura can enchant only
- * objects or players that match all of its enchant abilities.
+ * {@magic.ruleRef 20100716/R7025c} If an Aura has multiple instances of enchant, all of them
+ * apply. The Aura’s target must follow the restrictions from all the instances of enchant. The Aura can enchant
+ * only objects or players that match all of its enchant abilities.
  * </p>
  * </li>
  * 

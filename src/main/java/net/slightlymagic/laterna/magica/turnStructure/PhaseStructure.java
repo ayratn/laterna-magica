@@ -55,7 +55,8 @@ import net.slightlymagic.laterna.magica.player.Player;
  * <li>When all players pass priority in succession, one of the following happens:
  * <ul>
  * <li>If the stack is nonempty, the topmost element of the stack resolves</li>
- * <li>If the stack is empty, the current phase or step ends, causing turn based actions to happen</li>
+ * <li>If the stack is empty, the current phase or step ends, causing turn based actions to happen. See
+ * {@magic.ruleRef 20100716/R5002}</li>
  * </ul>
  * </li>
  * </ul>
@@ -65,27 +66,27 @@ import net.slightlymagic.laterna.magica.player.Player;
  */
 public interface PhaseStructure extends GameContent {
     /**
-     * The phases of a turn. See {@magic.ruleRef 500.1 CR 500.1}.
+     * The phases of a turn. See {@magic.ruleRef 20100716/R5001}.
      */
     public static enum Phase {
         /**
-         * {@magic.ruleRef 501 CR 501}
+         * {@magic.ruleRef 20100716/R501}
          */
         BEGINNING(BEGINNING_UNTAP, BEGINNING_UPKEEP, BEGINNING_DRAW),
         /**
-         * {@magic.ruleRef 505 CR 505}
+         * {@magic.ruleRef 20100716/R505}
          */
         MAIN1(MAIN),
         /**
-         * {@magic.ruleRef 506 CR 506}
+         * {@magic.ruleRef 20100716/R506}
          */
         COMBAT(COMBAT_BEGINNING, COMBAT_ATTACKERS, COMBAT_BLOCKERS, COMBAT_DAMAGE, COMBAT_END),
         /**
-         * {@magic.ruleRef 505 CR 505}
+         * {@magic.ruleRef 20100716/R505}
          */
         MAIN2(MAIN),
         /**
-         * {@magic.ruleRef 512 CR 512}
+         * {@magic.ruleRef 20100716/R512}
          */
         ENDING(ENDING_END, ENDING_CLEANUP);
         
@@ -124,16 +125,49 @@ public interface PhaseStructure extends GameContent {
      * consist of the same main step.
      */
     public static enum Step {
+        /**
+         * {@magic.ruleRef 20100716/R502}
+         */
         BEGINNING_UNTAP(false, PHASING, UNTAP),
+        /**
+         * {@magic.ruleRef 20100716/R503}
+         */
         BEGINNING_UPKEEP,
+        /**
+         * {@magic.ruleRef 20100716/R504}
+         */
         BEGINNING_DRAW(DRAW),
+        /**
+         * {@magic.ruleRef 20100716/R505}
+         */
         MAIN,
+        /**
+         * {@magic.ruleRef 20100716/R507}
+         */
         COMBAT_BEGINNING(DEFENDER),
+        /**
+         * {@magic.ruleRef 20100716/R508}
+         */
         COMBAT_ATTACKERS(ATTACKERS),
+        /**
+         * {@magic.ruleRef 20100716/R509}
+         */
         COMBAT_BLOCKERS(BLOCKERS, BLOCKER_ORDER, ATTACKER_ORDER),
+        /**
+         * {@magic.ruleRef 20100716/R510}
+         */
         COMBAT_DAMAGE(DAMAGE_ASSIGNMENT, DAMAGE_DEALING),
+        /**
+         * {@magic.ruleRef 20100716/R511}
+         */
         COMBAT_END,
+        /**
+         * {@magic.ruleRef 20100716/R513}
+         */
         ENDING_END,
+        /**
+         * {@magic.ruleRef 20100716/R514}
+         */
         //TODO not getting priority during cleanup is conditional
         ENDING_CLEANUP(false, HAND_LIMIT, WEAR_OFF);
         

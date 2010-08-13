@@ -27,7 +27,7 @@ import com.google.common.collect.PeekingIterator;
 
 /**
  * The class Timestamp. Timestamps are used to determine the applying order of continuous effects in the same
- * layer. For details, see {@magic.ruleRef 612.6 CR 612.6}. For no object with a timestamp, the
+ * layer. For details, see {@magic.ruleRef 20100716/R6136}. For no object with a timestamp, the
  * timestamp has to stay the same. Additionally, a timestamp value is unique in a game.
  * 
  * @version V0.0 12.07.2009

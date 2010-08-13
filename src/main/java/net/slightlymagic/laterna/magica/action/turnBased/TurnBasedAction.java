@@ -18,59 +18,63 @@ import net.slightlymagic.laterna.magica.action.GameAction;
  */
 public interface TurnBasedAction extends GameAction {
     /**
-     * The turn based actions, as defined in {@magic.ruleRef 703 CR 703}.
+     * The turn based actions, as defined in {@magic.ruleRef 20100716/R7034}.
      */
     public static enum Type {
         /**
-         * {@magic.ruleRef 703.4a CR 703.4a}
+         * {@magic.ruleRef 20100716/R7034a}
          */
         PHASING,
         /**
-         * {@magic.ruleRef 703.4b CR 703.4b}
+         * {@magic.ruleRef 20100716/R7034b}
          */
         UNTAP,
         /**
-         * {@magic.ruleRef 703.4c CR 703.4c}
+         * {@magic.ruleRef 20100716/R7034c}
          */
         DRAW,
         /**
-         * {@magic.ruleRef 703.4d CR 703.4d}
+         * {@magic.ruleRef 20100716/R7034d}
+         */
+        SCHEME,
+        /**
+         * {@magic.ruleRef 20100716/R7034e}
          */
         DEFENDER,
         /**
-         * {@magic.ruleRef 703.4e CR 703.4e}
+         * {@magic.ruleRef 20100716/R7034f}
          */
         ATTACKERS,
         /**
-         * {@magic.ruleRef 703.4f CR 703.4f}
+         * {@magic.ruleRef 20100716/R7034g}
          */
         BLOCKERS,
         /**
-         * {@magic.ruleRef 703.4g CR 703.4g}
+         * {@magic.ruleRef 20100716/R7034h}
          */
         BLOCKER_ORDER,
         /**
-         * {@magic.ruleRef 703.4h CR 703.4h}
+         * {@magic.ruleRef 20100716/R7034i}
          */
         ATTACKER_ORDER,
         /**
-         * {@magic.ruleRef 703.4i CR 703.4i}
+         * {@magic.ruleRef 20100716/R7034j}
          */
         DAMAGE_ASSIGNMENT,
         /**
-         * {@magic.ruleRef 703.4j CR 703.4j}
+         * {@magic.ruleRef 20100716/R7034k}
          */
         DAMAGE_DEALING,
         /**
-         * {@magic.ruleRef 703.4k CR 703.4k}
+         * {@magic.ruleRef 20100716/R7034m}
          */
         HAND_LIMIT,
         /**
-         * {@magic.ruleRef 703.4m CR 703.4m}
+         * {@magic.ruleRef 20100716/R7034n}
          */
         WEAR_OFF,
         /**
-         * {@magic.ruleRef 703.4n CR 703.4n}
+         * {@magic.ruleRef 20100716/R7034p}
          */
         EMPTY_POOLS;
     }

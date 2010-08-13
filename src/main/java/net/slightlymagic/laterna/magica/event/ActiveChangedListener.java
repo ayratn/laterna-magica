@@ -24,5 +24,5 @@ public interface ActiveChangedListener extends EventListener {
     /**
      * Marker interface for engine-internal listeners. engine-internal listeners are notified before non-internals.
      */
-    public interface Internal extends DrawListener {}
+    public interface Internal extends ActiveChangedListener {}
 }

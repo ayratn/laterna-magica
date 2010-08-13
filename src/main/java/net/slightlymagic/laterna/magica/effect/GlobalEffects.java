@@ -21,8 +21,8 @@ import com.google.common.base.Predicate;
  * continuous effects. <i>Active</i> is defined as
  * 
  * <p>
- * {@magic.ruleRef 610.3b} The effect applies at all times that the permanent generating it is on
- * the battlefield or the object generating it is in the appropriate zone.
+ * {@magic.ruleRef 20100716/R6113b} The effect applies at all times that the permanent generating
+ * it is on the battlefield or the object generating it is in the appropriate zone.
  * </p>
  * 
  * Static abilities make sure that their effects are in the global effects as long as the ability's card is in the

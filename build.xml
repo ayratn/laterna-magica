@@ -1,4 +1,4 @@
-<project name="TreeProperties" default="distribute">
+<project name="LaternaMagica" default="distribute">
  <target name="distribute">
   <copy todir="${basedir}/dist">
    <fileset dir="${basedir}/target" includes="*.jar"/>

@@ -53,15 +53,15 @@ public interface CardTemplate extends Serializable {
         NORMAL,
         /**
          * <p>
-         * A split card (see {@magic.ruleRef 708 CR 708}). While on the stack, a split card has
+         * A split card (see {@magic.ruleRef 20100716/R708}). While on the stack, a split card has
          * only the set of characteristics that was played. Otherwise, it has both.
          * </p>
          */
         SPLIT,
         /**
          * <p>
-         * A flip card (see {@magic.ruleRef 709 CR 709}). The first set of characteristics is used
-         * normally. However, while on the battlefield and flipped, the alternative characteristic is used.
+         * A flip card (see {@magic.ruleRef 20100716/R709}). The first set of characteristics is
+         * used normally. However, while on the battlefield and flipped, the alternative characteristic is used.
          * </p>
          */
         FLIP;

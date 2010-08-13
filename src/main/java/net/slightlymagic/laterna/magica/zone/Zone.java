@@ -35,35 +35,35 @@ public interface Zone extends GameContent {
     
     public static enum Zones {
         /**
-         * {@magic.ruleRef 407 CR 407}
+         * {@magic.ruleRef 20100716/R407}
          */
         ANTE,
         /**
-         * {@magic.ruleRef 403 CR 403}
+         * {@magic.ruleRef 20100716/R403}
          */
         BATTLEFIELD,
         /**
-         * 
+         * {@magic.ruleRef 20100716/R408}
          */
         COMMAND,
         /**
-         * {@magic.ruleRef 406 CR 406}
+         * {@magic.ruleRef 20100716/R406}
          */
         EXILE,
         /**
-         * {@magic.ruleRef 404 CR 404}
+         * {@magic.ruleRef 20100716/R404}
          */
         GRAVEYARD,
         /**
-         * {@magic.ruleRef 402 CR 402}
+         * {@magic.ruleRef 20100716/R402}
          */
         HAND,
         /**
-         * {@magic.ruleRef 401 CR 401}
+         * {@magic.ruleRef 20100716/R401}
          */
         LIBRARY,
         /**
-         * {@magic.ruleRef 405 CR 405}
+         * {@magic.ruleRef 20100716/R405}
          */
         STACK;
         

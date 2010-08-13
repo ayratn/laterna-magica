@@ -7,8 +7,6 @@
 package net.slightlymagic.laterna.magica.effect.replacement;
 
 
-
-
 /**
  * The class ReplacementEffect. A replacement effect replaces applicable events by new ones.
  * 
@@ -23,11 +21,11 @@ public interface ReplacementEffect {
      */
     public static enum ReplacementType {
         /**
-         * Type for a self-replacement effect. See {@magic.ruleRef 614.14 CR 614.14}
+         * Type for a self-replacement effect. See {@magic.ruleRef 20100716/R61414}
          */
         SELF,
         /**
-         * Type for a replacement effect that changes under whose control a permanent would come into play
+         * Type for a replacement effect that changes under whose control a permanent would enter the battlefield
          */
         CONTROLLER,
         /**

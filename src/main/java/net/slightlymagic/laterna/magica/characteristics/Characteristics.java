@@ -13,7 +13,7 @@ import java.util.regex.Pattern;
 
 /**
  * <p>
- * The class Characteristics. {@magic.ruleRef 109.3 CR 109.3}
+ * The class Characteristics. {@magic.ruleRef 20100716/R1093}
  * </p>
  * 
  * @version V0.0 07.09.2009

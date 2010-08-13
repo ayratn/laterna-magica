@@ -26,7 +26,7 @@ import net.slightlymagic.laterna.magica.event.PermanentStateChangedListener;
 public interface State extends GameContent {
     /**
      * <p>
-     * The four status categories, specified in {@magic.ruleRef 110.6 CR 110.6}
+     * The four status categories, specified in {@magic.ruleRef 20100716/R1106}
      * </p>
      */
     public static enum StateType {

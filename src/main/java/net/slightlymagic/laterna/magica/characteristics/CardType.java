@@ -21,37 +21,49 @@ import java.util.regex.Pattern;
  */
 public enum CardType {
     /**
-     * {@magic.ruleRef 301 CR 301}
+     * {@magic.ruleRef 20100716/R301}
      */
     ARTIFACT,
     /**
-     * {@magic.ruleRef 302 CR 302}
+     * {@magic.ruleRef 20100716/R302}
      */
     CREATURE,
     /**
-     * {@magic.ruleRef 303 CR 303}
+     * {@magic.ruleRef 20100716/R303}
      */
     ENCHANTMENT,
     /**
-     * {@magic.ruleRef 304 CR 304}
+     * {@magic.ruleRef 20100716/R304}
      */
     INSTANT,
     /**
-     * {@magic.ruleRef 305 CR 305}
+     * {@magic.ruleRef 20100716/R305}
      */
     LAND,
     /**
-     * {@magic.ruleRef 306 CR 306}
+     * {@magic.ruleRef 20100716/R306}
      */
     PLANESWALKER,
     /**
-     * {@magic.ruleRef 307 CR 307}
+     * {@magic.ruleRef 20100716/R307}
      */
     SORCERY,
     /**
-     * {@magic.ruleRef 308 CR 308}
+     * {@magic.ruleRef 20100716/R308}
      */
-    TRIBAL;
+    TRIBAL,
+    /**
+     * {@magic.ruleRef 20100716/R309}
+     */
+    PLANE,
+    /**
+     * {@magic.ruleRef 20100716/R310}
+     */
+    VANGUARD,
+    /**
+     * {@magic.ruleRef 20100716/R311}
+     */
+    SCHEME;
     
     private final String name;
     
