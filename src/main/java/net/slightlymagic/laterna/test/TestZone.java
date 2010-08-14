@@ -4,7 +4,7 @@
  * Created on 30.03.2010
  */
 
-package net.slightlymagic.laterna.magica.test;
+package net.slightlymagic.laterna.test;
 
 
 import net.slightlymagic.laterna.magica.Game;
@@ -16,8 +16,6 @@ import net.slightlymagic.laterna.magica.impl.GameImpl;
 import net.slightlymagic.laterna.magica.player.Player;
 import net.slightlymagic.laterna.magica.player.impl.PlayerImpl;
 
-import org.junit.Ignore;
-
 
 /**
  * The class TestZone.
@@ -25,7 +23,6 @@ import org.junit.Ignore;
  * @version V0.0 30.03.2010
  * @author Clemens Koza
  */
-@Ignore
 public class TestZone {
     public static void main(String[] args) throws Exception {
         LaternaMagica.init();

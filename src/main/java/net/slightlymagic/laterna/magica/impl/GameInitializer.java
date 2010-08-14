@@ -30,7 +30,7 @@ import net.slightlymagic.laterna.magica.zone.Zone.Zones;
  */
 public class GameInitializer implements GameStartListener.Internal {
     public void gameStarted(final Game game) {
-        game.getTurnStructure().addActiveChangedListener(new ActiveChangedListener() {
+        game.getTurnStructure().addActiveChangedListener(new ActiveChangedListener.Internal() {
             public void nextActive(Player oldActive, Player newActive) {
                 //reset land drops at the end of each turn
                 for(Player p:game.getPlayers())

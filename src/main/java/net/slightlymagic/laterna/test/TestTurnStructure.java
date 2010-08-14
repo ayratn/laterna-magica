@@ -4,7 +4,7 @@
  * Created on 24.03.2010
  */
 
-package net.slightlymagic.laterna.magica.test;
+package net.slightlymagic.laterna.test;
 
 
 import net.slightlymagic.laterna.magica.Game;
@@ -17,8 +17,6 @@ import net.slightlymagic.laterna.magica.impl.GameImpl;
 import net.slightlymagic.laterna.magica.player.Player;
 import net.slightlymagic.laterna.magica.player.impl.PlayerImpl;
 
-import org.junit.Ignore;
-
 
 /**
  * The class TestTurnStructure.
@@ -26,7 +24,6 @@ import org.junit.Ignore;
  * @version V0.0 24.03.2010
  * @author Clemens Koza
  */
-@Ignore
 public class TestTurnStructure {
     public static void main(String[] args) throws Exception {
         LaternaMagica.init();

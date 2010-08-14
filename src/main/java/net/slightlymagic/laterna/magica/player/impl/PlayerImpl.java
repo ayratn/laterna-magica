@@ -7,6 +7,9 @@
 package net.slightlymagic.laterna.magica.player.impl;
 
 
+import static net.slightlymagic.laterna.magica.zone.Zone.Zones.*;
+
+import java.util.EnumMap;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
@@ -60,8 +63,7 @@ public class PlayerImpl extends AbstractGameContent implements Player {
     
     private Map<String, EditableCounter>  counters;
     
-    private Zone                          hand;
-    private SortedZone                    graveyard, library;
+    private Map<Zones, Zone>              zones;
     
     public PlayerImpl(Game game, String name) {
         super(game);
@@ -76,9 +78,9 @@ public class PlayerImpl extends AbstractGameContent implements Player {
         
         counters = MagicaCollections.editableMap(getGame(), new HashMap<String, EditableCounter>());
         
-        graveyard = new ZoneImpl(getGame(), Zones.GRAVEYARD, this);
-        hand = new ZoneImpl(getGame(), Zones.HAND, this);
-        library = new ZoneImpl(getGame(), Zones.LIBRARY, this);
+        zones = new EnumMap<Zone.Zones, Zone>(Zones.class);
+        for(Zones z:new Zones[] {GRAVEYARD, HAND, LIBRARY})
+            zones.put(z, new ZoneImpl(getGame(), z, this));
         
         e.end();
     }
@@ -115,38 +117,21 @@ public class PlayerImpl extends AbstractGameContent implements Player {
     }
     
     public Zone getZone(Zones type) {
-        switch(type) {
-            case ANTE:
-                return getGame().getAnte();
-            case BATTLEFIELD:
-                return getGame().getBattlefield();
-            case COMMAND:
-                return getGame().getAnte();
-            case EXILE:
-                return getGame().getExile();
-            case GRAVEYARD:
-                return getGraveyard();
-            case HAND:
-                return getHand();
-            case LIBRARY:
-                return getLibrary();
-            case STACK:
-                return getGame().getStack();
-            default:
-                throw new IllegalArgumentException("type == " + type);
-        }
+        Zone z = zones.get(type);
+        if(z == null) return getGame().getZone(type);
+        else return z;
     }
     
     public SortedZone getGraveyard() {
-        return graveyard;
+        return (SortedZone) getZone(GRAVEYARD);
     }
     
     public Zone getHand() {
-        return hand;
+        return getZone(HAND);
     }
     
     public SortedZone getLibrary() {
-        return library;
+        return (SortedZone) getZone(LIBRARY);
     }
     
     public EditableCounter getCounter(String name) {

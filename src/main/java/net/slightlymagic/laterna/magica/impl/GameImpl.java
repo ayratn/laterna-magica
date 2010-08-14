@@ -7,7 +7,10 @@
 package net.slightlymagic.laterna.magica.impl;
 
 
+import static net.slightlymagic.laterna.magica.zone.Zone.Zones.*;
+
 import java.util.ArrayList;
+import java.util.EnumMap;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
@@ -59,8 +62,7 @@ public class GameImpl implements Game {
     
     private Map<String, EditableCounter> counters;
     
-    private Zone                         ante, battlefield, exile;
-    private SortedZone                   stack;
+    private Map<Zones, Zone>             zones;
     
     public GameImpl() {
         gameState = new GameState(this);
@@ -75,10 +77,9 @@ public class GameImpl implements Game {
         players = MagicaCollections.editableList(this, new ArrayList<Player>());
         counters = MagicaCollections.editableMap(this, new HashMap<String, EditableCounter>());
         
-        ante = new ZoneImpl(this, Zones.ANTE);
-        battlefield = new ZoneImpl(this, Zones.BATTLEFIELD);
-        exile = new ZoneImpl(this, Zones.EXILE);
-        stack = new ZoneImpl(this, Zones.STACK);
+        zones = new EnumMap<Zone.Zones, Zone>(Zones.class);
+        for(Zones z:new Zones[] {ANTE, BATTLEFIELD, COMMAND, EXILE, STACK})
+            zones.put(z, new ZoneImpl(this, z));
         
         addGameStartListener(new GameInitializer());
         edit.end();
@@ -121,34 +122,29 @@ public class GameImpl implements Game {
     }
     
     public Zone getAnte() {
-        return ante;
+        return zones.get(ANTE);
     }
     
     public Zone getBattlefield() {
-        return battlefield;
+        return getZone(ANTE);
+    }
+    
+    public Zone getCommand() {
+        return getZone(COMMAND);
     }
     
     public Zone getExile() {
-        return exile;
+        return getZone(EXILE);
     }
     
     public SortedZone getStack() {
-        return stack;
+        return (SortedZone) getZone(STACK);
     }
     
     public Zone getZone(Zones type) {
-        switch(type) {
-            case ANTE:
-                return getAnte();
-            case BATTLEFIELD:
-                return getBattlefield();
-            case EXILE:
-                return getExile();
-            case STACK:
-                return getStack();
-            default:
-                throw new IllegalArgumentException("zone == " + type);
-        }
+        Zone z = zones.get(type);
+        if(z == null) throw new IllegalArgumentException("type == " + z);
+        else return z;
     }
     
     public EditableCounter getCounter(String name) {

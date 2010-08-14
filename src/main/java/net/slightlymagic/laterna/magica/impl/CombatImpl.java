@@ -28,6 +28,7 @@ import net.slightlymagic.laterna.magica.Combat;
 import net.slightlymagic.laterna.magica.Game;
 import net.slightlymagic.laterna.magica.MagicObject;
 import net.slightlymagic.laterna.magica.edit.CompoundEdit;
+import net.slightlymagic.laterna.magica.edit.property.EditableProperty;
 import net.slightlymagic.laterna.magica.player.Player;
 
 import com.google.common.base.Predicate;
@@ -180,11 +181,14 @@ public class CombatImpl extends AbstractGameContent implements Combat {
     
     
     private class AttackerImpl implements Attacker {
-        private MagicObject       attacker;
-        private boolean           removedFromCombat;
-        private List<BlockerImpl> blockers = editableList(getGame(), new ArrayList<BlockerImpl>());
-        private List<BlockerImpl> view     = unmodifiableList(blockers);
-        private AbstractDefender  defender;
+        private MagicObject                        attacker;
+        private EditableProperty<Boolean>          removedFromCombat = new EditableProperty<Boolean>(getGame(),
+                                                                             null, "removedFromCombat", false);
+        private List<BlockerImpl>                  blockers          = editableList(getGame(),
+                                                                             new ArrayList<BlockerImpl>());
+        private List<BlockerImpl>                  view              = unmodifiableList(blockers);
+        private EditableProperty<AbstractDefender> defender          = new EditableProperty<AbstractDefender>(
+                                                                             getGame(), null, "defender");
         
         public AttackerImpl(MagicObject attacker) {
             setAttacker(attacker);
@@ -226,35 +230,38 @@ public class CombatImpl extends AbstractGameContent implements Combat {
         }
         
         private void setRemovedFromCombat(boolean removedFromCombat) {
-            this.removedFromCombat = removedFromCombat;
+            this.removedFromCombat.setValue(removedFromCombat);
         }
         
         public boolean isRemovedFromCombat() {
-            return removedFromCombat;
+            return removedFromCombat.getValue();
         }
         
         private void setDefender(AbstractDefender defender) {
-            if(this.defender != null) this.defender.attackers.remove(this);
-            this.defender = defender;
-            if(this.defender != null) this.defender.attackers.add(this);
+            AbstractDefender old = this.defender.getValue();
+            if(old != null) old.attackers.remove(this);
+            this.defender.setValue(defender);
+            if(defender != null) defender.attackers.add(this);
         }
         
         public Defender getDefender() {
-            return defender;
+            return defender.getValue();
         }
     }
     
     private class BlockerImpl implements Blocker {
-        private MagicObject        blocker;
-        private boolean            removedFromCombat;
-        private List<AttackerImpl> attackers = editableList(getGame(), new ArrayList<AttackerImpl>());
-        private List<AttackerImpl> view      = unmodifiableList(attackers);
+        private MagicObject               blocker;
+        private EditableProperty<Boolean> removedFromCombat = new EditableProperty<Boolean>(getGame(), null,
+                                                                    "removedFromCombat", false);
+        private List<AttackerImpl>        attackers         = editableList(getGame(),
+                                                                    new ArrayList<AttackerImpl>());
+        private List<AttackerImpl>        view              = unmodifiableList(attackers);
         
         public BlockerImpl(MagicObject blocker) {
             setBlocker(blocker);
         }
         
-        public void setBlocker(MagicObject blocker) {
+        private void setBlocker(MagicObject blocker) {
             this.blocker = blocker;
         }
         
@@ -290,18 +297,19 @@ public class CombatImpl extends AbstractGameContent implements Combat {
         }
         
         private void setRemovedFromCombat(boolean removedFromCombat) {
-            this.removedFromCombat = removedFromCombat;
+            this.removedFromCombat.setValue(removedFromCombat);
         }
         
         public boolean isRemovedFromCombat() {
-            return removedFromCombat;
+            return removedFromCombat.getValue();
         }
     }
     
     private abstract class AbstractDefender implements Defender {
-        private boolean           removedFromCombat;
-        private Set<AttackerImpl> attackers = editableSet(getGame(), new HashSet<AttackerImpl>());
-        private Set<AttackerImpl> view      = unmodifiableSet(attackers);
+        private EditableProperty<Boolean> removedFromCombat = new EditableProperty<Boolean>(getGame(), null,
+                                                                    "removedFromCombat", false);
+        private Set<AttackerImpl>         attackers         = editableSet(getGame(), new HashSet<AttackerImpl>());
+        private Set<AttackerImpl>         view              = unmodifiableSet(attackers);
         
         public MagicObject getDefendingPlaneswalker() {
             return null;
@@ -318,11 +326,11 @@ public class CombatImpl extends AbstractGameContent implements Combat {
         }
         
         private void setRemovedFromCombat(boolean removedFromCombat) {
-            this.removedFromCombat = removedFromCombat;
+            this.removedFromCombat.setValue(removedFromCombat);
         }
         
         public boolean isRemovedFromCombat() {
-            return removedFromCombat;
+            return removedFromCombat.getValue();
         }
     }
     
@@ -368,6 +376,10 @@ public class CombatImpl extends AbstractGameContent implements Combat {
         }
     }
     
+    /**
+     * Checks if both list contain the same elements. If they do, the order of {@code to} is changed to that of
+     * {@code from} by clearing and adding
+     */
     private static <T> void order(List<T> to, List<T> from) {
         if(!new HashSet<T>(to).equals(new HashSet<T>(from))) throw new IllegalArgumentException();
         synchronized(to) {

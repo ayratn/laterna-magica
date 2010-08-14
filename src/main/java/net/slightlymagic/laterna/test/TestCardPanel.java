@@ -4,7 +4,7 @@
  * Created on 24.03.2010
  */
 
-package net.slightlymagic.laterna.magica.test;
+package net.slightlymagic.laterna.test;
 
 
 import static java.lang.String.*;
@@ -42,7 +42,6 @@ import net.slightlymagic.laterna.magica.player.impl.PlayerImpl;
 import org.jdesktop.swingx.JXMultiSplitPane;
 import org.jdesktop.swingx.MultiSplitLayout;
 import org.jdesktop.swingx.MultiSplitLayout.Node;
-import org.junit.Ignore;
 
 
 /**
@@ -51,7 +50,6 @@ import org.junit.Ignore;
  * @version V0.0 24.03.2010
  * @author Clemens Koza
  */
-@Ignore
 public class TestCardPanel {
     public static void main(String[] args) throws Exception {
         LaternaMagica.init();

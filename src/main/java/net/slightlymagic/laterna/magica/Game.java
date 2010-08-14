@@ -123,6 +123,15 @@ public interface Game extends Cloneable {
     
     /**
      * <p>
+     * Returns the game's command zone
+     * </p>
+     * 
+     * @see Zones#COMMAND
+     */
+    public Zone getCommand();
+    
+    /**
+     * <p>
      * Returns the game's exile zone
      * </p>
      * 

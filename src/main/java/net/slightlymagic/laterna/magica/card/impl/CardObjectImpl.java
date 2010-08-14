@@ -35,6 +35,9 @@ import net.slightlymagic.laterna.magica.impl.MagicObjectImpl;
 import net.slightlymagic.laterna.magica.impl.MoveCardEvent;
 import net.slightlymagic.laterna.magica.zone.Zone.Zones;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import com.google.common.base.Function;
 import com.google.common.base.Predicate;
 import com.google.common.collect.Lists;
@@ -47,6 +50,8 @@ import com.google.common.collect.Lists;
  * @author Clemens Koza
  */
 public class CardObjectImpl extends MagicObjectImpl implements CardObject {
+    private static final Logger                 log         = LoggerFactory.getLogger(CardObjectImpl.class);
+    
     private static final Predicate<MagicObject> isPermanent = isIn(ofInstance(BATTLEFIELD));
     
     private List<CardCharacteristics>           characteristics, activeCharacteristics, activeCharacteristicsView;
@@ -73,7 +78,8 @@ public class CardObjectImpl extends MagicObjectImpl implements CardObject {
         addMoveCardListener(new MoveCard());
         
         List<Printing> printings = template.getPrintings();
-        if(printings.contains(printing)) this.printing = printing;
+        if(printings.isEmpty()) log.warn(template + ": No printings available");
+        else if(printings.contains(printing)) this.printing = printing;
         else this.printing = printings.get((int) (Math.random() * printings.size()));
         
         for(CardParts part:getTemplate().getCardParts())

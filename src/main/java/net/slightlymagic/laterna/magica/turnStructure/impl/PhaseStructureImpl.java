@@ -22,8 +22,8 @@ import net.slightlymagic.laterna.magica.action.stateBased.StateBasedAction;
 import net.slightlymagic.laterna.magica.action.turnBased.DrawAction;
 import net.slightlymagic.laterna.magica.action.turnBased.EmptyPoolsAction;
 import net.slightlymagic.laterna.magica.action.turnBased.TurnBasedAction;
-import net.slightlymagic.laterna.magica.action.turnBased.UntapAction;
 import net.slightlymagic.laterna.magica.action.turnBased.TurnBasedAction.Type;
+import net.slightlymagic.laterna.magica.action.turnBased.UntapAction;
 import net.slightlymagic.laterna.magica.edit.CompoundEdit;
 import net.slightlymagic.laterna.magica.edit.impl.EditableListenerList;
 import net.slightlymagic.laterna.magica.edit.property.EditableProperty;
@@ -32,6 +32,7 @@ import net.slightlymagic.laterna.magica.event.PhaseChangedListener;
 import net.slightlymagic.laterna.magica.event.PriorChangedListener;
 import net.slightlymagic.laterna.magica.event.StepChangedListener;
 import net.slightlymagic.laterna.magica.impl.AbstractGameContent;
+import net.slightlymagic.laterna.magica.impl.CombatImpl;
 import net.slightlymagic.laterna.magica.player.Player;
 import net.slightlymagic.laterna.magica.turnStructure.PhaseStructure;
 import net.slightlymagic.laterna.magica.zone.SortedZone;
@@ -75,7 +76,7 @@ public class PhaseStructureImpl extends AbstractGameContent implements PhaseStru
     private Map<Type, TurnBasedAction>      turnBasedActions;
     private Set<StateBasedAction>           stateBasedActions;
     
-    private Combat                          combat;
+    private EditableProperty<Combat>        combat;
     
     public PhaseStructureImpl(Game game) {
         super(game);
@@ -151,7 +152,7 @@ public class PhaseStructureImpl extends AbstractGameContent implements PhaseStru
     }
     
     public Combat getCombat() {
-        return combat;
+        return combat.getValue();
     }
     
     /**
@@ -301,6 +302,9 @@ public class PhaseStructureImpl extends AbstractGameContent implements PhaseStru
     }
     
     private void fireNextPhase(Phase oldPhase, Phase newPhase) {
+        if(newPhase == Phase.COMBAT) combat.setValue(new CombatImpl(getGame()));
+        else combat.setValue(null);
+        
         for(Iterator<PhaseChangedListener> it = getPhaseChangedListeners(); it.hasNext();)
             it.next().nextPhase(oldPhase, newPhase);
     }

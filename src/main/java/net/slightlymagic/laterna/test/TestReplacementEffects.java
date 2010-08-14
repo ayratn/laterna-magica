@@ -4,7 +4,7 @@
  * Created on 24.03.2010
  */
 
-package net.slightlymagic.laterna.magica.test;
+package net.slightlymagic.laterna.test;
 
 
 import net.slightlymagic.laterna.magica.Game;
@@ -16,8 +16,6 @@ import net.slightlymagic.laterna.magica.player.Player;
 import net.slightlymagic.laterna.magica.player.impl.LifeEvent;
 import net.slightlymagic.laterna.magica.player.impl.PlayerImpl;
 
-import org.junit.Ignore;
-
 
 /**
  * The class TestReplacementEffects.
@@ -25,7 +23,6 @@ import org.junit.Ignore;
  * @version V0.0 24.03.2010
  * @author Clemens Koza
  */
-@Ignore
 public class TestReplacementEffects {
     public static void main(String[] args) {
         Game g = new GameImpl();

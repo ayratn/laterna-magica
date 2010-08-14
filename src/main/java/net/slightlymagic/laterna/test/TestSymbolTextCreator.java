@@ -4,7 +4,7 @@
  * Created on 11.04.2010
  */
 
-package net.slightlymagic.laterna.magica.test;
+package net.slightlymagic.laterna.test;
 
 
 import javax.swing.BoxLayout;
@@ -15,8 +15,6 @@ import javax.swing.text.StyledDocument;
 import net.slightlymagic.laterna.magica.LaternaMagica;
 import net.slightlymagic.laterna.magica.gui.util.SymbolTextCreator;
 
-import org.junit.Ignore;
-
 
 /**
  * The class TestSymbolTextCreator.
@@ -24,7 +22,6 @@ import org.junit.Ignore;
  * @version V0.0 11.04.2010
  * @author Clemens Koza
  */
-@Ignore
 public class TestSymbolTextCreator {
     public static void main(String[] args) throws Exception {
         LaternaMagica.init();
