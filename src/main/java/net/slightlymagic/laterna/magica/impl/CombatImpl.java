@@ -52,10 +52,8 @@ public class CombatImpl extends AbstractGameContent implements Combat {
     private final Predicate<MagicObject> legalBlocker  = and(isIn(ofInstance(BATTLEFIELD)), card(has(CREATURE)),
                                                                not(controller(activePlayer)));
     
-    @SuppressWarnings("unchecked")
     private final Predicate<MagicObject> legalDefPw    = and(isIn(ofInstance(BATTLEFIELD)),
-                                                               card(has(PLANESWALKER)),
-                                                               not(controller(activePlayer)));
+                                                               card(has(PLANESWALKER)));
     
     //TODO consider teams
     private final Predicate<Player>      legalDefPl    = not(equalTo(activePlayer.get()));
@@ -137,14 +135,12 @@ public class CombatImpl extends AbstractGameContent implements Combat {
     //Defenders
     
     public AbstractDefender getDefender(MagicObject defender) {
-        if(!legalDefPw.apply(defender)) throw new IllegalArgumentException();
         AbstractDefender d = defenders.get(defender);
         if(d == null) defenders.put(defender, d = new PlaneswalkerDefenderImpl(defender));
         return d;
     }
     
     public AbstractDefender getDefender(Player defender) {
-        if(!legalDefPl.apply(defender)) throw new IllegalArgumentException();
         AbstractDefender d = defenders.get(defender);
         if(d == null) defenders.put(defender, d = new PlayerDefenderImpl(defender));
         return d;
@@ -155,7 +151,7 @@ public class CombatImpl extends AbstractGameContent implements Combat {
         for(Player p:getGame().getPlayers())
             if(legalDefPl.apply(p)) getDefender(p);
         for(MagicObject o:getGame().getBattlefield().getCards())
-            if(legalDefPw.apply(o)) getDefender(o);
+            if(legalDefPw.apply(o) && legalDefPl.apply(o.getController())) getDefender(o);
         return defendersView.values();
     }
     
@@ -195,6 +191,7 @@ public class CombatImpl extends AbstractGameContent implements Combat {
         }
         
         private void setAttacker(MagicObject attacker) {
+            if(!legalAttacker.apply(attacker)) throw new IllegalArgumentException();
             this.attacker = attacker;
         }
         
@@ -262,6 +259,7 @@ public class CombatImpl extends AbstractGameContent implements Combat {
         }
         
         private void setBlocker(MagicObject blocker) {
+            if(!legalBlocker.apply(blocker)) throw new IllegalArgumentException();
             this.blocker = blocker;
         }
         
@@ -342,6 +340,7 @@ public class CombatImpl extends AbstractGameContent implements Combat {
         }
         
         private void setDefendingPlaneswalker(MagicObject defender) {
+            if(!legalDefPw.apply(defender) || !legalDefPl.apply(defender.getController())) throw new IllegalArgumentException();
             this.defender = defender;
         }
         
@@ -363,6 +362,7 @@ public class CombatImpl extends AbstractGameContent implements Combat {
         }
         
         private void setDefendingPlayer(Player defender) {
+            if(!legalDefPl.apply(defender)) throw new IllegalArgumentException();
             this.defender = defender;
         }
         
