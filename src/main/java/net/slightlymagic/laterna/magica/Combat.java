@@ -1,7 +1,7 @@
 /**
  * Combat.java
  * 
- * Created on 13.07.2010
+ * Created on 15.08.2010
  */
 
 package net.slightlymagic.laterna.magica;
@@ -9,7 +9,7 @@ package net.slightlymagic.laterna.magica;
 
 import java.util.Collection;
 import java.util.List;
-import java.util.Set;
+import java.util.Map;
 
 import net.slightlymagic.laterna.magica.player.Player;
 
@@ -17,10 +17,101 @@ import net.slightlymagic.laterna.magica.player.Player;
 /**
  * The class Combat.
  * 
- * @version V0.0 13.07.2010
+ * @version V0.0 15.08.2010
  * @author Clemens Koza
  */
-public interface Combat extends GameContent {
+public interface Combat {
+    public static interface Attacker {
+        /**
+         * Returns the attacking creature represented by this attack.
+         */
+        public MagicObject getAttacker();
+        
+        /**
+         * Returns the blockers blocking this attacker in an unmodifiable list.
+         * 
+         * After determining damage assignment orders, the ordering of the list is relevant.
+         */
+        public Map<? extends Blocker, ? extends BlockAssignment> getBlockers();
+        
+        /**
+         * Sets this attacker's damage assignment order. The contents of the parameter list must be the same
+         * objects as the stored blockers. Otherwise, an {@link IllegalArgumentException} is thrown.
+         */
+        public void setDamageAssignmentOrder(List<? extends Blocker> blockers);
+        
+        /**
+         * Returns if this attacker was removed from combat
+         */
+        public boolean isRemovedFromCombat();
+        
+        public Defender getDefender();
+    }
+    
+    public static interface Blocker {
+        /**
+         * Returns the blocking creature represented by this attack.
+         */
+        public MagicObject getBlocker();
+        
+        /**
+         * Returns the atackers blocked by this attacker in an unmodifiable list.
+         * 
+         * After determining damage assignment orders, the ordering of the list is relevant.
+         */
+        public Map<? extends Attacker, ? extends BlockAssignment> getAttackers();
+        
+        /**
+         * Sets this blocker's damage assignment order. The contents of the parameter list must be the same objects
+         * as the stored attackers. Otherwise, an {@link IllegalArgumentException} is thrown.
+         */
+        public void setDamageAssignmentOrder(List<? extends Attacker> attackers);
+        
+        /**
+         * Returns if this blocker was removed from combat
+         */
+        public boolean isRemovedFromCombat();
+    }
+    
+    public static interface Defender {
+        /**
+         * Returns either the defending player or the defending planeswarker's controller.
+         */
+        public Player getPlayer();
+        
+        /**
+         * Returns the attackers attacking this defender
+         */
+        public Map<? extends Attacker, ? extends AttackAssignment> getAttackers();
+        
+        /**
+         * Returns if this blocker was removed from combat
+         */
+        public boolean isRemovedFromCombat();
+    }
+    
+    public static interface PlayerDefender {
+        /**
+         * Returns the defending player, or null if this defender represents a planeswalker.
+         */
+        public Player getDefendingPlayer();
+    }
+    
+    public static interface PlaneswalkerDefender {
+        /**
+         * Returns the defending planeswalker, or null if this defender represents a player.
+         */
+        public MagicObject getDefendingPlaneswalker();
+    }
+    
+    public static interface AttackAssignment {
+
+    }
+    
+    public static interface BlockAssignment {
+
+    }
+    
     //Attackers
     
     /**
@@ -31,7 +122,7 @@ public interface Combat extends GameContent {
     /**
      * Assigns a creature to attack a given defender.
      */
-    public void assignAttacker(Attacker attacker, Defender defender);
+    public AttackAssignment assignAttacker(Attacker attacker, Defender defender);
     
     /**
      * Returns the {@link Attacker} representation of the specified creature, or {@code null} if the creature is
@@ -63,7 +154,7 @@ public interface Combat extends GameContent {
      * 
      * This method may be called multiple time to assign a blocker to block multiple attackers.
      */
-    public void assignBlocker(Blocker blocker, Attacker attacker);
+    public BlockAssignment assignBlocker(Blocker blocker, Attacker attacker);
     
     /**
      * Returns the {@link Blocker} representation of the specified creature, or {@code null} if the creature is not
@@ -92,14 +183,14 @@ public interface Combat extends GameContent {
      * @throws IllegalArgumentException If the parameter is not a planeswalker permanent controlled by a defending
      *             player
      */
-    public Defender getDefender(MagicObject defender);
+    public PlaneswalkerDefender getDefender(MagicObject defender);
     
     /**
      * Returns the {@link Defender} representation of the specified player, even if the player is not attacked.
      * 
      * @throws IllegalArgumentException If the parameter is not a defending player
      */
-    public Defender getDefender(Player defender);
+    public PlayerDefender getDefender(Player defender);
     
     /**
      * Returns all defending players and planeswalkers.
@@ -119,83 +210,4 @@ public interface Combat extends GameContent {
      * Returns the list of defending players
      */
     public List<Player> getDefendingPlayers();
-    
-    public static interface Attacker {
-        /**
-         * Returns the attacking creature represented by this attack.
-         */
-        public MagicObject getAttacker();
-        
-        /**
-         * Returns the blockers blocking this attacker in an unmodifiable list.
-         * 
-         * After determining damage assignment orders, the ordering of the list is relevant.
-         */
-        public List<? extends Blocker> getBlockers();
-        
-        /**
-         * Sets this attacker's damage assignment order. The contents of the parameter list must be the same
-         * objects as the stored blockers. Otherwise, an {@link IllegalArgumentException} is thrown.
-         */
-        public void setDamageAssignmentOrder(List<? extends Blocker> blockers);
-        
-        /**
-         * Returns if this attacker was removed from combat
-         */
-        public boolean isRemovedFromCombat();
-        
-        public Defender getDefender();
-    }
-    
-    public static interface Blocker {
-        /**
-         * Returns the blocking creature represented by this attack.
-         */
-        public MagicObject getBlocker();
-        
-        /**
-         * Returns the atackers blocked by this attacker in an unmodifiable list.
-         * 
-         * After determining damage assignment orders, the ordering of the list is relevant.
-         */
-        public List<? extends Attacker> getAttackers();
-        
-        /**
-         * Sets this blocker's damage assignment order. The contents of the parameter list must be the same objects
-         * as the stored attackers. Otherwise, an {@link IllegalArgumentException} is thrown.
-         */
-        public void setDamageAssignmentOrder(List<? extends Attacker> attackers);
-        
-        /**
-         * Returns if this blocker was removed from combat
-         */
-        public boolean isRemovedFromCombat();
-    }
-    
-    public static interface Defender {
-        /**
-         * Returns the defending planeswalker, or null if this defender represents a player.
-         */
-        public MagicObject getDefendingPlaneswalker();
-        
-        /**
-         * Returns the defending player, or null if this defender represents a planeswalker.
-         */
-        public Player getDefendingPlayer();
-        
-        /**
-         * Returns either the defending player or the defending planeswarker's controller.
-         */
-        public Player getPlayer();
-        
-        /**
-         * Returns the atackers attacking this defender
-         */
-        public Set<? extends Attacker> getAttackers();
-        
-        /**
-         * Returns if this blocker was removed from combat
-         */
-        public boolean isRemovedFromCombat();
-    }
 }

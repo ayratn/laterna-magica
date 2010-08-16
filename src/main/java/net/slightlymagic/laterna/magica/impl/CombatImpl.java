@@ -1,7 +1,7 @@
 /**
  * CombatImpl.java
  * 
- * Created on 14.07.2010
+ * Created on 16.08.2010
  */
 
 package net.slightlymagic.laterna.magica.impl;
@@ -14,31 +14,37 @@ import static net.slightlymagic.laterna.magica.characteristics.CardType.*;
 import static net.slightlymagic.laterna.magica.util.MagicaCollections.*;
 import static net.slightlymagic.laterna.magica.util.MagicaPredicates.*;
 import static net.slightlymagic.laterna.magica.util.MagicaSuppliers.*;
+import static net.slightlymagic.laterna.magica.util.relational.Relations.*;
 import static net.slightlymagic.laterna.magica.zone.Zone.Zones.*;
 
+import java.util.AbstractMap;
+import java.util.AbstractSet;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashMap;
-import java.util.HashSet;
+import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
-import net.slightlymagic.laterna.magica.Combat;
 import net.slightlymagic.laterna.magica.Game;
 import net.slightlymagic.laterna.magica.MagicObject;
-import net.slightlymagic.laterna.magica.edit.CompoundEdit;
+import net.slightlymagic.laterna.magica.Combat;
 import net.slightlymagic.laterna.magica.edit.property.EditableProperty;
 import net.slightlymagic.laterna.magica.player.Player;
+import net.slightlymagic.laterna.magica.util.relational.ManySide;
+import net.slightlymagic.laterna.magica.util.relational.ManyToMany;
+import net.slightlymagic.laterna.magica.util.relational.OneSide;
 
 import com.google.common.base.Predicate;
 import com.google.common.base.Supplier;
+import com.google.common.collect.AbstractIterator;
 
 
 /**
  * The class CombatImpl.
  * 
- * @version V0.0 14.07.2010
+ * @version V0.0 16.08.2010
  * @author Clemens Koza
  */
 public class CombatImpl extends AbstractGameContent implements Combat {
@@ -52,15 +58,204 @@ public class CombatImpl extends AbstractGameContent implements Combat {
     private final Predicate<MagicObject> legalBlocker  = and(isIn(ofInstance(BATTLEFIELD)), card(has(CREATURE)),
                                                                not(controller(activePlayer)));
     
+
     private final Predicate<MagicObject> legalDefPw    = and(isIn(ofInstance(BATTLEFIELD)),
                                                                card(has(PLANESWALKER)));
     
     //TODO consider teams
     private final Predicate<Player>      legalDefPl    = not(equalTo(activePlayer.get()));
     
+    
+    private <T> EditableProperty<T> editable(String name, T value) {
+        return new EditableProperty<T>(getGame(), null, name, value);
+    }
+    
+    
+    private abstract class Combatant {
+        private EditableProperty<Boolean> removedFromCombat = editable("removedFromCombat", false);
+        
+        public void setRemovedFromCombat(boolean removedFromCombat) {
+            this.removedFromCombat.setValue(removedFromCombat);
+        }
+        
+        public boolean isRemovedFromCombat() {
+            return removedFromCombat.getValue();
+        }
+    }
+    
+    private class AttackerImpl extends Combatant implements Attacker {
+        private ManyToMany<AttackerImpl, BlockerImpl, BlockAssignmentImpl> attacker   = manyToMany(getGame(), this);
+        
+        private MagicObject                                                creature;
+        private ManySide<AttackerImpl, DefenderImpl>                       defender   = manySide(getGame(), this);
+        private EditableProperty<AttackAssignmentImpl>                     assignment = editable(
+                                                                                              "attackAssignment",
+                                                                                              null);
+        
+        public AttackerImpl(MagicObject creature) {
+            if(!legalAttacker.apply(creature)) throw new IllegalArgumentException();
+            this.creature = creature;
+        }
+        
+        public MagicObject getAttacker() {
+            return creature;
+        }
+        
+        public Map<? extends BlockerImpl, ? extends BlockAssignmentImpl> getBlockers() {
+            return attacker.getOtherSideValues();
+        }
+        
+        public DefenderImpl getDefender() {
+            return defender.getOneSideValue();
+        }
+        
+        public void setDamageAssignmentOrder(List<? extends Blocker> blockers) {}
+        
+        public AttackAssignmentImpl setDefender(DefenderImpl defender) {
+            this.defender.setOneSide(defender.defender);
+            AttackAssignmentImpl assignment = new AttackAssignmentImpl();
+            this.assignment.setValue(assignment);
+            return assignment;
+        }
+    }
+    
+    private class BlockerImpl extends Combatant implements Blocker {
+        private ManyToMany<BlockerImpl, AttackerImpl, BlockAssignmentImpl> blocker = manyToMany(getGame(), this);
+        
+        private MagicObject                                                creature;
+        
+        public BlockerImpl(MagicObject creature) {
+            if(!legalBlocker.apply(creature)) throw new IllegalArgumentException();
+            this.creature = creature;
+        }
+        
+        public MagicObject getBlocker() {
+            return creature;
+        }
+        
+        public Map<? extends AttackerImpl, ? extends BlockAssignmentImpl> getAttackers() {
+            return blocker.getOtherSideValues();
+        }
+        
+        public void setDamageAssignmentOrder(List<? extends Attacker> blockers) {}
+        
+        public BlockAssignmentImpl addAttacker(AttackerImpl attacker) {
+            BlockAssignmentImpl assignment = new BlockAssignmentImpl();
+            blocker.add(attacker.attacker, assignment);
+            return assignment;
+        }
+    }
+    
+    private abstract class DefenderImpl extends Combatant implements Defender {
+        private OneSide<DefenderImpl, AttackerImpl> defender = oneSide(getGame(), this);
+        
+        @Override
+        public Map<? extends AttackerImpl, ? extends AttackAssignmentImpl> getAttackers() {
+            return new AbstractMap<AttackerImpl, AttackAssignmentImpl>() {
+                private Set<Entry<AttackerImpl, AttackAssignmentImpl>> entrySet = new AbstractSet<Entry<AttackerImpl, AttackAssignmentImpl>>() {
+                                                                                    @Override
+                                                                                    public int size() {
+                                                                                        return defender.getManySideValues().size();
+                                                                                    }
+                                                                                    
+                                                                                    @Override
+                                                                                    public Iterator<Entry<AttackerImpl, AttackAssignmentImpl>> iterator() {
+                                                                                        return new AbstractIterator<Entry<AttackerImpl, AttackAssignmentImpl>>() {
+                                                                                            private Iterator<AttackerImpl> delegate = defender.getManySideValues().iterator();
+                                                                                            
+                                                                                            @Override
+                                                                                            protected Entry<AttackerImpl, AttackAssignmentImpl> computeNext() {
+                                                                                                if(!delegate.hasNext()) return endOfData();
+                                                                                                final AttackerImpl e = delegate.next();
+                                                                                                return new Entry<AttackerImpl, AttackAssignmentImpl>() {
+                                                                                                    public AttackerImpl getKey() {
+                                                                                                        return e;
+                                                                                                    }
+                                                                                                    
+                                                                                                    public AttackAssignmentImpl getValue() {
+                                                                                                        return e.assignment.getValue();
+                                                                                                    }
+                                                                                                    
+                                                                                                    public AttackAssignmentImpl setValue(AttackAssignmentImpl value) {
+                                                                                                        throw new UnsupportedOperationException();
+                                                                                                    }
+                                                                                                    
+                                                                                                    @Override
+                                                                                                    public int hashCode() {
+                                                                                                        Object key = getKey(), val = getValue();
+                                                                                                        return (key == null? 0:key.hashCode())
+                                                                                                                ^ (val == null? 0:val.hashCode());
+                                                                                                    }
+                                                                                                    
+                                                                                                    @Override
+                                                                                                    public boolean equals(Object o) {
+                                                                                                        if(!(o instanceof Entry)) return false;
+                                                                                                        Entry<?, ?> other = (Entry<?, ?>) o;
+                                                                                                        
+                                                                                                        Object key = getKey(), val = getValue();
+                                                                                                        if(key == null? other.getKey() != null:!key.equals(other.getKey())) return false;
+                                                                                                        if(val == null? other.getKey() != null:!val.equals(other.getKey())) return false;
+                                                                                                        return true;
+                                                                                                    }
+                                                                                                };
+                                                                                            }
+                                                                                        };
+                                                                                    };
+                                                                                };
+                
+                @Override
+                public Set<Entry<AttackerImpl, AttackAssignmentImpl>> entrySet() {
+                    return entrySet;
+                }
+            };
+        }
+    }
+    
+    private class PlayerDefenderImpl extends DefenderImpl implements PlayerDefender {
+        private Player defender;
+        
+        public PlayerDefenderImpl(Player defender) {
+            if(!legalDefPl.apply(defender)) throw new IllegalArgumentException();
+            this.defender = defender;
+        }
+        
+        @Override
+        public Player getDefendingPlayer() {
+            return defender;
+        }
+        
+        @Override
+        public Player getPlayer() {
+            return defender;
+        }
+    }
+    
+    private class PlaneswalkerDefenderImpl extends DefenderImpl implements PlaneswalkerDefender {
+        private MagicObject defender;
+        
+        public PlaneswalkerDefenderImpl(MagicObject defender) {
+            if(!legalDefPw.apply(defender)) throw new IllegalArgumentException();
+            this.defender = defender;
+        }
+        
+        @Override
+        public MagicObject getDefendingPlaneswalker() {
+            return defender;
+        }
+        
+        @Override
+        public Player getPlayer() {
+            return defender.getController();
+        }
+    }
+    
+    private class AttackAssignmentImpl implements AttackAssignment {}
+    
+    private class BlockAssignmentImpl implements BlockAssignment {}
+    
     private Map<MagicObject, AttackerImpl> attackers, attackersView;
     private Map<MagicObject, BlockerImpl>  blockers, blockersView;
-    private Map<Object, AbstractDefender>  defenders, defendersView;
+    private Map<Object, DefenderImpl>      defenders, defendersView;
     
     public CombatImpl(Game game) {
         super(game);
@@ -68,7 +263,7 @@ public class CombatImpl extends AbstractGameContent implements Combat {
         attackersView = unmodifiableMap(attackers);
         blockers = editableMap(getGame(), new HashMap<MagicObject, BlockerImpl>());
         blockersView = unmodifiableMap(blockers);
-        defenders = editableMap(getGame(), new HashMap<Object, AbstractDefender>());
+        defenders = editableMap(getGame(), new HashMap<Object, DefenderImpl>());
         defendersView = unmodifiableMap(defenders);
     }
     
@@ -82,9 +277,9 @@ public class CombatImpl extends AbstractGameContent implements Combat {
         return a;
     }
     
-    public void assignAttacker(Attacker attacker, Defender defender) {
+    public AttackAssignment assignAttacker(Attacker attacker, Defender defender) {
         if(!attackers.values().contains(attacker)) throw new IllegalStateException("Creature is not attacking");
-        ((AttackerImpl) attacker).setDefender((AbstractDefender) defender);
+        return ((AttackerImpl) attacker).setDefender((DefenderImpl) defender);
     }
     
     public AttackerImpl getAttacker(MagicObject attacker) {
@@ -112,9 +307,10 @@ public class CombatImpl extends AbstractGameContent implements Combat {
         return b;
     }
     
-    public void assignBlocker(Blocker blocker, Attacker attacker) {
-        if(!blockers.values().contains(blocker)) throw new IllegalStateException("Creature is not attacking");
-        ((BlockerImpl) blocker).addAttacker((AttackerImpl) attacker);
+    public BlockAssignment assignBlocker(Blocker blocker, Attacker attacker) {
+        if(!blockers.values().contains(blocker)) throw new IllegalStateException("Creature is not blocking");
+        if(!attackers.values().contains(attacker)) throw new IllegalStateException("Creature is not attacking");
+        return ((BlockerImpl) blocker).addAttacker((AttackerImpl) attacker);
     }
     
     public BlockerImpl getBlocker(MagicObject blocker) {
@@ -134,14 +330,16 @@ public class CombatImpl extends AbstractGameContent implements Combat {
     
     //Defenders
     
-    public AbstractDefender getDefender(MagicObject defender) {
-        AbstractDefender d = defenders.get(defender);
+    public PlaneswalkerDefender getDefender(MagicObject defender) {
+        if(!legalDefPw.apply(defender) || !legalDefPl.apply(defender.getController())) throw new IllegalArgumentException();
+        PlaneswalkerDefenderImpl d = (PlaneswalkerDefenderImpl) defenders.get(defender);
         if(d == null) defenders.put(defender, d = new PlaneswalkerDefenderImpl(defender));
         return d;
     }
     
-    public AbstractDefender getDefender(Player defender) {
-        AbstractDefender d = defenders.get(defender);
+    public PlayerDefender getDefender(Player defender) {
+        if(!legalDefPl.apply(defender)) throw new IllegalArgumentException();
+        PlayerDefenderImpl d = (PlayerDefenderImpl) defenders.get(defender);
         if(d == null) defenders.put(defender, d = new PlayerDefenderImpl(defender));
         return d;
     }
@@ -156,7 +354,7 @@ public class CombatImpl extends AbstractGameContent implements Combat {
     }
     
     public void removeFromCombat(Defender defender) {
-        ((AbstractDefender) defender).setRemovedFromCombat(true);
+        ((DefenderImpl) defender).setRemovedFromCombat(true);
     }
     
     //Defenders
@@ -173,218 +371,5 @@ public class CombatImpl extends AbstractGameContent implements Combat {
         List<Player> p = new ArrayList<Player>(getGame().getPlayers());
         p.remove(activePlayer.get());
         return p;
-    }
-    
-    
-    private class AttackerImpl implements Attacker {
-        private MagicObject                        attacker;
-        private EditableProperty<Boolean>          removedFromCombat = new EditableProperty<Boolean>(getGame(),
-                                                                             null, "removedFromCombat", false);
-        private List<BlockerImpl>                  blockers          = editableList(getGame(),
-                                                                             new ArrayList<BlockerImpl>());
-        private List<BlockerImpl>                  view              = unmodifiableList(blockers);
-        private EditableProperty<AbstractDefender> defender          = new EditableProperty<AbstractDefender>(
-                                                                             getGame(), null, "defender");
-        
-        public AttackerImpl(MagicObject attacker) {
-            setAttacker(attacker);
-        }
-        
-        private void setAttacker(MagicObject attacker) {
-            if(!legalAttacker.apply(attacker)) throw new IllegalArgumentException();
-            this.attacker = attacker;
-        }
-        
-        public MagicObject getAttacker() {
-            return attacker;
-        }
-        
-        private void addBlocker(BlockerImpl b) {
-            if(!b.attackers.contains(this)) {
-                CompoundEdit ed = new CompoundEdit(getGame(), true, "assign blocker");
-                b.attackers.add(this);
-                blockers.add(b);
-                ed.end();
-            }
-        }
-        
-        private void removeBlocker(BlockerImpl b) {
-            if(b.attackers.contains(this)) {
-                CompoundEdit ed = new CompoundEdit(getGame(), true, "remove blocker assignment");
-                b.attackers.remove(this);
-                blockers.remove(b);
-                ed.end();
-            }
-        }
-        
-        public List<BlockerImpl> getBlockers() {
-            return view;
-        }
-        
-        @SuppressWarnings("unchecked")
-        public void setDamageAssignmentOrder(List<? extends Blocker> blockers) {
-            order(this.blockers, (List<BlockerImpl>) blockers);
-        }
-        
-        private void setRemovedFromCombat(boolean removedFromCombat) {
-            this.removedFromCombat.setValue(removedFromCombat);
-        }
-        
-        public boolean isRemovedFromCombat() {
-            return removedFromCombat.getValue();
-        }
-        
-        private void setDefender(AbstractDefender defender) {
-            AbstractDefender old = this.defender.getValue();
-            if(old != null) old.attackers.remove(this);
-            this.defender.setValue(defender);
-            if(defender != null) defender.attackers.add(this);
-        }
-        
-        public Defender getDefender() {
-            return defender.getValue();
-        }
-    }
-    
-    private class BlockerImpl implements Blocker {
-        private MagicObject               blocker;
-        private EditableProperty<Boolean> removedFromCombat = new EditableProperty<Boolean>(getGame(), null,
-                                                                    "removedFromCombat", false);
-        private List<AttackerImpl>        attackers         = editableList(getGame(),
-                                                                    new ArrayList<AttackerImpl>());
-        private List<AttackerImpl>        view              = unmodifiableList(attackers);
-        
-        public BlockerImpl(MagicObject blocker) {
-            setBlocker(blocker);
-        }
-        
-        private void setBlocker(MagicObject blocker) {
-            if(!legalBlocker.apply(blocker)) throw new IllegalArgumentException();
-            this.blocker = blocker;
-        }
-        
-        public MagicObject getBlocker() {
-            return blocker;
-        }
-        
-        private void addAttacker(AttackerImpl a) {
-            if(!a.blockers.contains(this)) {
-                CompoundEdit ed = new CompoundEdit(getGame(), true, "assign blocker");
-                a.blockers.add(this);
-                attackers.add(a);
-                ed.end();
-            }
-        }
-        
-        private void removeAttacker(AttackerImpl a) {
-            if(a.blockers.contains(this)) {
-                CompoundEdit ed = new CompoundEdit(getGame(), true, "assign blocker");
-                a.blockers.remove(this);
-                attackers.remove(a);
-                ed.end();
-            }
-        }
-        
-        public List<AttackerImpl> getAttackers() {
-            return view;
-        }
-        
-        @SuppressWarnings("unchecked")
-        public void setDamageAssignmentOrder(List<? extends Attacker> attackers) {
-            order(this.attackers, (List<AttackerImpl>) attackers);
-        }
-        
-        private void setRemovedFromCombat(boolean removedFromCombat) {
-            this.removedFromCombat.setValue(removedFromCombat);
-        }
-        
-        public boolean isRemovedFromCombat() {
-            return removedFromCombat.getValue();
-        }
-    }
-    
-    private abstract class AbstractDefender implements Defender {
-        private EditableProperty<Boolean> removedFromCombat = new EditableProperty<Boolean>(getGame(), null,
-                                                                    "removedFromCombat", false);
-        private Set<AttackerImpl>         attackers         = editableSet(getGame(), new HashSet<AttackerImpl>());
-        private Set<AttackerImpl>         view              = unmodifiableSet(attackers);
-        
-        public MagicObject getDefendingPlaneswalker() {
-            return null;
-        }
-        
-        public Player getDefendingPlayer() {
-            return null;
-        }
-        
-        //adding removing attackers is done via Attacker.setDefender()
-        
-        public Set<AttackerImpl> getAttackers() {
-            return view;
-        }
-        
-        private void setRemovedFromCombat(boolean removedFromCombat) {
-            this.removedFromCombat.setValue(removedFromCombat);
-        }
-        
-        public boolean isRemovedFromCombat() {
-            return removedFromCombat.getValue();
-        }
-    }
-    
-    private class PlaneswalkerDefenderImpl extends AbstractDefender {
-        private MagicObject defender;
-        
-        public PlaneswalkerDefenderImpl(MagicObject defender) {
-            setDefendingPlaneswalker(defender);
-        }
-        
-        private void setDefendingPlaneswalker(MagicObject defender) {
-            if(!legalDefPw.apply(defender) || !legalDefPl.apply(defender.getController())) throw new IllegalArgumentException();
-            this.defender = defender;
-        }
-        
-        @Override
-        public MagicObject getDefendingPlaneswalker() {
-            return defender;
-        }
-        
-        public Player getPlayer() {
-            return getDefendingPlaneswalker().getController();
-        }
-    }
-    
-    private class PlayerDefenderImpl extends AbstractDefender {
-        private Player defender;
-        
-        public PlayerDefenderImpl(Player defender) {
-            setDefendingPlayer(defender);
-        }
-        
-        private void setDefendingPlayer(Player defender) {
-            if(!legalDefPl.apply(defender)) throw new IllegalArgumentException();
-            this.defender = defender;
-        }
-        
-        @Override
-        public Player getDefendingPlayer() {
-            return defender;
-        }
-        
-        public Player getPlayer() {
-            return getDefendingPlayer();
-        }
-    }
-    
-    /**
-     * Checks if both list contain the same elements. If they do, the order of {@code to} is changed to that of
-     * {@code from} by clearing and adding
-     */
-    private static <T> void order(List<T> to, List<T> from) {
-        if(!new HashSet<T>(to).equals(new HashSet<T>(from))) throw new IllegalArgumentException();
-        synchronized(to) {
-            to.clear();
-            to.addAll(from);
-        }
     }
 }
