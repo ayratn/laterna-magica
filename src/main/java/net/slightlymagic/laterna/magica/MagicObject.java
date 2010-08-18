@@ -11,9 +11,12 @@ import java.beans.PropertyChangeListener;
 import java.util.Iterator;
 import java.util.List;
 
+import net.slightlymagic.laterna.magica.ability.AbilityObject;
+import net.slightlymagic.laterna.magica.ability.NonStaticAbility;
 import net.slightlymagic.laterna.magica.action.play.PlayAction;
 import net.slightlymagic.laterna.magica.action.play.PlayInformation;
 import net.slightlymagic.laterna.magica.action.play.Playable;
+import net.slightlymagic.laterna.magica.card.CardObject;
 import net.slightlymagic.laterna.magica.characteristic.ObjectCharacteristics;
 import net.slightlymagic.laterna.magica.counter.Counter;
 import net.slightlymagic.laterna.magica.effect.LocalEffects;
@@ -23,7 +26,9 @@ import net.slightlymagic.laterna.magica.zone.Zone;
 
 
 /**
- * The class MagicObject.
+ * The class MagicObject. This class is the common superclass of all objects that can reside in a zone. Typical
+ * objects are {@link CardObject}s. Another type is {@link AbilityObject}; those can only exist on the stack and
+ * have additional properties about what {@link NonStaticAbility} they belong to.
  * 
  * @version V0.0 19.04.2010
  * @author Clemens Koza

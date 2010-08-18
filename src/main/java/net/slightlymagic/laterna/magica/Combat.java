@@ -11,6 +11,8 @@ import java.util.Collection;
 import java.util.List;
 import java.util.Map;
 
+import net.slightlymagic.laterna.magica.action.GameAction;
+import net.slightlymagic.laterna.magica.card.CardObject;
 import net.slightlymagic.laterna.magica.player.Player;
 
 
@@ -25,7 +27,7 @@ public interface Combat {
         /**
          * Returns the attacking creature represented by this attack.
          */
-        public MagicObject getAttacker();
+        public CardObject getAttacker();
         
         /**
          * Returns the blockers blocking this attacker in an unmodifiable list.
@@ -52,7 +54,7 @@ public interface Combat {
         /**
          * Returns the blocking creature represented by this attack.
          */
-        public MagicObject getBlocker();
+        public CardObject getBlocker();
         
         /**
          * Returns the atackers blocked by this attacker in an unmodifiable list.
@@ -101,7 +103,7 @@ public interface Combat {
         /**
          * Returns the defending planeswalker, or null if this defender represents a player.
          */
-        public MagicObject getDefendingPlaneswalker();
+        public CardObject getDefendingPlaneswalker();
     }
     
     public static interface AttackAssignment {
@@ -117,7 +119,7 @@ public interface Combat {
     /**
      * Declares a creature as an attacking creature
      */
-    public Attacker declareAttacker(MagicObject attackingCreature);
+    public Attacker declareAttacker(CardObject attackingCreature);
     
     /**
      * Assigns a creature to attack a given defender.
@@ -131,7 +133,7 @@ public interface Combat {
      * @throws IllegalArgumentException If the parameter is not a creature permanent controlled by the active
      *             player
      */
-    public Attacker getAttacker(MagicObject attacker);
+    public Attacker getAttacker(CardObject attacker);
     
     /**
      * Returns all declared attackers.
@@ -147,7 +149,7 @@ public interface Combat {
     /**
      * Declares a creature as a blocking creature
      */
-    public Blocker declareBlocker(MagicObject blockingCreature);
+    public Blocker declareBlocker(CardObject blockingCreature);
     
     /**
      * Assigns a creature to block a given attacker.
@@ -163,7 +165,7 @@ public interface Combat {
      * @throws IllegalArgumentException If the parameter is not a creature permanent controlled by a defending
      *             player
      */
-    public Blocker getBlocker(MagicObject blocker);
+    public Blocker getBlocker(CardObject blocker);
     
     /**
      * Returns all declared blockers.
@@ -183,7 +185,7 @@ public interface Combat {
      * @throws IllegalArgumentException If the parameter is not a planeswalker permanent controlled by a defending
      *             player
      */
-    public PlaneswalkerDefender getDefender(MagicObject defender);
+    public PlaneswalkerDefender getDefender(CardObject defender);
     
     /**
      * Returns the {@link Defender} representation of the specified player, even if the player is not attacked.
@@ -210,4 +212,26 @@ public interface Combat {
      * Returns the list of defending players
      */
     public List<Player> getDefendingPlayers();
+    
+    //Lifecycle
+    /* These methods implement the flow of the combat phase. More precisely, they will be called by turn based
+     * actions in the right order, where this class is primary for enforcing the rules and the Actor for making
+     * decisions. Both are mediated by the turn based actions.
+     */
+
+    /**
+     * Returns whether the assignment of attackers is legal. More precisely, this method checks {@magic.ruleRef
+     *  20100716/5081c} and {@magic.ruleRef 20100716/2081d}
+     */
+    public boolean isLegalAttackers();
+    
+    /**
+     * Taps all attacking creatures this method must respect Vigilance and other applicable effects.
+     */
+    public void tapAttackers();
+    
+    /**
+     * Returns the overall cost required for attacking.
+     */
+    public GameAction getAttackersCost();
 }

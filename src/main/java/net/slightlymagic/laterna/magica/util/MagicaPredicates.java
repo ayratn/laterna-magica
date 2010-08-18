@@ -14,6 +14,7 @@ import java.util.List;
 
 import net.slightlymagic.laterna.magica.MagicObject;
 import net.slightlymagic.laterna.magica.card.CardObject;
+import net.slightlymagic.laterna.magica.card.State.StateType;
 import net.slightlymagic.laterna.magica.characteristic.ObjectCharacteristics;
 import net.slightlymagic.laterna.magica.characteristics.CardType;
 import net.slightlymagic.laterna.magica.characteristics.MagicColor;
@@ -202,6 +203,17 @@ public final class MagicaPredicates {
             
             public boolean apply(MagicObject o) {
                 return o.getOwner() == owner.get();
+            }
+        };
+    }
+    
+    public static Predicate<MagicObject> is(final StateType state) {
+        return new SerializablePredicate<MagicObject>() {
+            private static final long serialVersionUID = 1159225048829581498L;
+            
+            public boolean apply(MagicObject o) {
+                return (o instanceof CardObject) && ((CardObject) o).getState() != null
+                        && ((CardObject) o).getState().getState(state);
             }
         };
     }
