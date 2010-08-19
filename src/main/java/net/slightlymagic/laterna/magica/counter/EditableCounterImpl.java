@@ -26,7 +26,7 @@ public class EditableCounterImpl extends AbstractGameContent implements Editable
     public EditableCounterImpl(Game game) {
         super(game);
         s = new EditablePropertyChangeSupport(getGame(), this);
-        count = new EditableProperty<Integer>(getGame(), s, "count");
+        count = new EditableProperty<Integer>(getGame(), s, "count", 0);
     }
     
     public int getCount() {
