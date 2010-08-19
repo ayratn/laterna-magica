@@ -12,6 +12,7 @@ import java.util.List;
 import java.util.Map;
 
 import net.slightlymagic.laterna.magica.action.GameAction;
+import net.slightlymagic.laterna.magica.action.turnBased.TurnBasedAction;
 import net.slightlymagic.laterna.magica.card.CardObject;
 import net.slightlymagic.laterna.magica.player.Player;
 
@@ -43,6 +44,11 @@ public interface Combat {
         public void setDamageAssignmentOrder(List<? extends Blocker> blockers);
         
         /**
+         * Returns this attacker's damage assignment order.
+         */
+        public List<? extends Blocker> getDamageAssignmentOrder();
+        
+        /**
          * Returns if this attacker was removed from combat
          */
         public boolean isRemovedFromCombat();
@@ -68,6 +74,11 @@ public interface Combat {
          * as the stored attackers. Otherwise, an {@link IllegalArgumentException} is thrown.
          */
         public void setDamageAssignmentOrder(List<? extends Attacker> attackers);
+        
+        /**
+         * Returns this blocker's damage assignment order.
+         */
+        public List<? extends Attacker> getDamageAssignmentOrder();
         
         /**
          * Returns if this blocker was removed from combat
@@ -107,11 +118,39 @@ public interface Combat {
     }
     
     public static interface AttackAssignment {
-
+        /**
+         * Sets the amount of damage assigned by the attacker
+         */
+        public void setAttackerAssignedDamage(int amount);
+        
+        /**
+         * Returns the amount of damage assigned by the attacker
+         * 
+         * @throws IllegalStateException if the attacker has not yet assigned damage
+         */
+        public int getAttackerAssignedDamage() throws IllegalStateException;
     }
     
     public static interface BlockAssignment {
-
+        /**
+         * Sets the amount of damage assigned by the attacker
+         */
+        public void setAttackerAssignedDamage(int amount);
+        
+        /**
+         * Returns the amount of damage assigned by the attacker
+         */
+        public int getAttackerAssignedDamage();
+        
+        /**
+         * Sets the amount of damage assigned by the blocker
+         */
+        public void setBlockerAssignedDamage(int amount);
+        
+        /**
+         * Returns the amount of damage assigned by the blocker
+         */
+        public int getBlockerAssignedDamage();
     }
     
     //Attackers
@@ -220,18 +259,99 @@ public interface Combat {
      */
 
     /**
-     * Returns whether the assignment of attackers is legal. More precisely, this method checks {@magic.ruleRef
-     *  20100716/5081c} and {@magic.ruleRef 20100716/2081d}
+     * Sets the currently executed turn based action. This value narrows down what modifications may be performed
+     * on the combat object.
      */
-    public boolean isLegalAttackers();
+    public void setAction(TurnBasedAction.Type action);
+    
+    //Declare Attackers Step
     
     /**
-     * Taps all attacking creatures this method must respect Vigilance and other applicable effects.
+     * Returns whether the assignment of attackers is legal. This method checks {@magic.ruleRef
+     * 20100716/5081c} and {@magic.ruleRef 20100716/2081d}. This method must behave correctly if
+     * there are multiple attacking players. Currently, the rules don't specify such a case (when a team attacks,
+     * it is handled as a single player, not the individual players).
      */
-    public void tapAttackers();
+    public boolean isLegalAttackers(Player attacker);
     
     /**
-     * Returns the overall cost required for attacking.
+     * Taps all attacking creatures. This method must respect Vigilance and other applicable effects. It implements
+     * {@magic.ruleRef 20100716/5081f}. This method must behave correctly if there are multiple
+     * attacking players. Currently, the rules don't specify such a case (when a team attacks, it is handled as a
+     * single player, not the individual players).
      */
-    public GameAction getAttackersCost();
+    public void tapAttackers(Player attacker);
+    
+    /**
+     * Returns the overall cost required for attacking. This method implements {@magic.ruleRef
+     * 20100716/5081g}. This method must behave correctly if there are multiple attacking players. Currently, the
+     * rules don't specify such a case (when a team attacks, it is handled as a single player, not the individual
+     * players).
+     */
+    public GameAction getAttackersCost(Player attacker);
+    
+    //Declare Blockers Step
+    
+    /**
+     * Returns whether the assignment of blockers is legal. This method checks {@magic.ruleRef
+     * 20100716/5091b} and {@magic.ruleRef 20100716/2091c}. This method works correctly in respect
+     * to {@magic.ruleRef 20100716/8024}.
+     */
+    public boolean isLegalBlockers(Player defender);
+    
+    /**
+     * Returns the overall cost required for blocking. This method implements {@magic.ruleRef
+     * 20100716/5091d}. This method works correctly in respect to {@magic.ruleRef 20100716/8024}.
+     */
+    public GameAction getBlockersCost(Player defender);
+    
+    /**
+     * Checks if the damage assignment order is legal. In particular, this checks if the assignment order was
+     * completely specified.
+     */
+    public boolean isLegalAttackersAssignmentOrder(Player attacker);
+    
+    /**
+     * Checks if the damage assignment order is legal. In particular, this checks if the assignment order was
+     * completely specified.
+     */
+    public boolean isLegalBlockersAssignmentOrder(Player defender);
+    
+    //Combat Damage Step
+    
+    /**
+     * Initializes the Combat for the current combat damage step.
+     */
+    public void startCombatDamageStep();
+    
+    /**
+     * Returns whether there are creatures with first- or double strike in combat and whether this is a first
+     * strike damage step.
+     */
+    public boolean isFirstStrikeDamageStep();
+    
+    /**
+     * Checks if the damage assignment is legal for the particular attacker. This check respects {@magic.ruleRef
+     *  20100716/5101}, taking previously assigned attackers into account, and also {@magic.ruleRef
+     *  20100716/5105}.
+     */
+    public boolean isLegalAttackerAssignment(Attacker attacker);
+    
+    /**
+     * Checks if the damage assignment is legal for the particular blocker. This check respects {@magic.ruleRef
+     *  20100716/5101}, taking previously assigned attackers into account, and also {@magic.ruleRef
+     *  20100716/5105}.
+     */
+    public boolean isLegalBlockerAssignment(Blocker blocker);
+    
+    /**
+     * Deals all damage to combatants. See {@magic.ruleRef 20100716/5102}.
+     */
+    public void dealDamage();
+    
+    /**
+     * Returns if another combat damage step should happen after this one. If so, this method will clear all
+     * assigned damage to be ready for the next step.
+     */
+    public boolean nextDamageStep();
 }

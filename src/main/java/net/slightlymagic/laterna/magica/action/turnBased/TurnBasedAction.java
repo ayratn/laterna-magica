@@ -44,19 +44,19 @@ public interface TurnBasedAction extends GameAction {
         /**
          * {@magic.ruleRef 20100716/R7034f}
          */
-        ATTACKERS,
+        DECLARE_ATTACKERS,
         /**
          * {@magic.ruleRef 20100716/R7034g}
          */
-        BLOCKERS,
+        DECLARE_BLOCKERS,
         /**
          * {@magic.ruleRef 20100716/R7034h}
          */
-        BLOCKER_ORDER,
+        ORDER_BLOCKERS,
         /**
          * {@magic.ruleRef 20100716/R7034i}
          */
-        ATTACKER_ORDER,
+        ORDER_ATTACKERS,
         /**
          * {@magic.ruleRef 20100716/R7034j}
          */

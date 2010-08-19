@@ -45,30 +45,6 @@
      </execution>
     </executions>
    </plugin>
-   <!--
-   <plugin>
-    <groupId>org.scala-tools</groupId>
-    <artifactId>maven-scala-plugin</artifactId>
-    <version>2.13.1</version>
-    <executions>
-     <execution>
-      <id>scala-compile-first</id>
-      <phase>process-resources</phase>
-      <goals>
-       <goal>add-source</goal>
-       <goal>compile</goal>
-      </goals>
-     </execution>
-     <execution>
-      <id>scala-test-compile</id>
-      <phase>process-test-resources</phase>
-      <goals>
-       <goal>testCompile</goal>
-      </goals>
-     </execution>
-    </executions>
-   </plugin>
-     -->
    <plugin>
     <groupId>org.apache.maven.plugins</groupId>
     <artifactId>maven-javadoc-plugin</artifactId>
@@ -84,6 +60,7 @@
       <artifactId>LaternaDoc</artifactId>
       <version>0.1.0</version>
      </tagletArtifact>
+     <overview>src/main/java/overview.html</overview>
     </configuration>
    </plugin>
   </plugins>

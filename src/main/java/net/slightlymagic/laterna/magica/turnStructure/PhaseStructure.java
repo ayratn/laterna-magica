@@ -148,11 +148,11 @@ public interface PhaseStructure extends GameContent {
         /**
          * {@magic.ruleRef 20100716/R508}
          */
-        COMBAT_ATTACKERS(ATTACKERS),
+        COMBAT_ATTACKERS(DECLARE_ATTACKERS),
         /**
          * {@magic.ruleRef 20100716/R509}
          */
-        COMBAT_BLOCKERS(BLOCKERS, BLOCKER_ORDER, ATTACKER_ORDER),
+        COMBAT_BLOCKERS(DECLARE_BLOCKERS, ORDER_BLOCKERS, ORDER_ATTACKERS),
         /**
          * {@magic.ruleRef 20100716/R510}
          */
