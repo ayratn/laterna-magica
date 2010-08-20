@@ -19,8 +19,15 @@ import net.slightlymagic.laterna.magica.MagicObject;
 import net.slightlymagic.laterna.magica.action.stateBased.LethalDamageAction;
 import net.slightlymagic.laterna.magica.action.stateBased.LoseOnDrawAction;
 import net.slightlymagic.laterna.magica.action.stateBased.StateBasedAction;
+import net.slightlymagic.laterna.magica.action.turnBased.DamageAssignmentAction;
+import net.slightlymagic.laterna.magica.action.turnBased.DamageDealingAction;
+import net.slightlymagic.laterna.magica.action.turnBased.DeclareAttackersAction;
+import net.slightlymagic.laterna.magica.action.turnBased.DeclareBlockersAction;
+import net.slightlymagic.laterna.magica.action.turnBased.DefenderAction;
 import net.slightlymagic.laterna.magica.action.turnBased.DrawAction;
 import net.slightlymagic.laterna.magica.action.turnBased.EmptyPoolsAction;
+import net.slightlymagic.laterna.magica.action.turnBased.OrderAttackersAction;
+import net.slightlymagic.laterna.magica.action.turnBased.OrderBlockersAction;
 import net.slightlymagic.laterna.magica.action.turnBased.TurnBasedAction;
 import net.slightlymagic.laterna.magica.action.turnBased.TurnBasedAction.Type;
 import net.slightlymagic.laterna.magica.action.turnBased.UntapAction;
@@ -89,9 +96,22 @@ public class PhaseStructureImpl extends AbstractGameContent implements PhaseStru
         
         //no need for editable, since it's only created once
         turnBasedActions = new EnumMap<Type, TurnBasedAction>(Type.class);
-        turnBasedActions.put(Type.DRAW, new DrawAction(getGame()));
-        turnBasedActions.put(Type.EMPTY_POOLS, new EmptyPoolsAction(getGame()));
+        turnBasedActions.put(Type.PHASING, null);
         turnBasedActions.put(Type.UNTAP, new UntapAction(getGame()));
+        turnBasedActions.put(Type.DRAW, new DrawAction(getGame()));
+        turnBasedActions.put(Type.SCHEME, null);
+        
+        turnBasedActions.put(Type.DEFENDER, new DefenderAction(getGame()));
+        turnBasedActions.put(Type.DECLARE_ATTACKERS, new DeclareAttackersAction(getGame()));
+        turnBasedActions.put(Type.DECLARE_BLOCKERS, new DeclareBlockersAction(getGame()));
+        turnBasedActions.put(Type.ORDER_BLOCKERS, new OrderBlockersAction(getGame()));
+        turnBasedActions.put(Type.ORDER_ATTACKERS, new OrderAttackersAction(getGame()));
+        turnBasedActions.put(Type.DAMAGE_ASSIGNMENT, new DamageAssignmentAction(getGame()));
+        turnBasedActions.put(Type.DAMAGE_DEALING, new DamageDealingAction(getGame()));
+        
+        turnBasedActions.put(Type.HAND_LIMIT, null);
+        turnBasedActions.put(Type.WEAR_OFF, null);
+        turnBasedActions.put(Type.EMPTY_POOLS, new EmptyPoolsAction(getGame()));
         
         //no need for editable, since it's only created once
         stateBasedActions = new HashSet<StateBasedAction>();
@@ -233,6 +253,7 @@ public class PhaseStructureImpl extends AbstractGameContent implements PhaseStru
             if(step.getValue().intValue() == -1) {
                 step.setValue(0);
             } else {
+                //TBAs at the end of the last step
                 for(TurnBasedAction.Type t:getStep().getEndActions()) {
                     TurnBasedAction action = turnBasedActions.get(t);
                     if(action != null) action.execute();
@@ -245,14 +266,16 @@ public class PhaseStructureImpl extends AbstractGameContent implements PhaseStru
                 nextPhase();
             }
             
+            //Inform listeners that the step has begone before notifying TBAs
+            Step newStep = getStep();
+            fireNextStep(oldStep, newStep);
+            
+            //TBAs at the beginning of the next step
             for(TurnBasedAction.Type t:getStep().getBeginningActions()) {
                 TurnBasedAction action = turnBasedActions.get(t);
                 if(action != null) action.execute();
                 else log.warn("Turn based Action " + t + " does not exist");
             }
-            
-            Step newStep = getStep();
-            fireNextStep(oldStep, newStep);
             
             e.end();
         } while(!getStep().isGetPriority());

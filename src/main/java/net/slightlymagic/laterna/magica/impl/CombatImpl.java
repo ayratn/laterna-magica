@@ -531,6 +531,14 @@ public class CombatImpl extends AbstractGameContent implements Combat {
                 + this.action);
     }
     
+    //Beginning step
+    
+    @Override
+    public void setDefendingPlayers(Set<Player> defenders) {
+        checkAction(TurnBasedAction.Type.DEFENDER);
+        //TODO implement
+    }
+    
     //Declare Attackers Step
     
     public boolean isLegalAttackers(Player attacker) {

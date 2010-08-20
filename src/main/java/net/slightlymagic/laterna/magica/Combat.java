@@ -10,6 +10,7 @@ package net.slightlymagic.laterna.magica;
 import java.util.Collection;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 
 import net.slightlymagic.laterna.magica.action.GameAction;
 import net.slightlymagic.laterna.magica.action.turnBased.TurnBasedAction;
@@ -263,6 +264,15 @@ public interface Combat {
      * on the combat object.
      */
     public void setAction(TurnBasedAction.Type action);
+    
+    //Beginning step
+    
+    /**
+     * Sets the defending players. This method will throw an {@link IllegalArgumentException} if the defenders are
+     * not valid, for example if the attacker or teammembers are contained, or the game variant restricts the set
+     * of defenders otherwise.
+     */
+    public void setDefendingPlayers(Set<Player> defenders);
     
     //Declare Attackers Step
     
