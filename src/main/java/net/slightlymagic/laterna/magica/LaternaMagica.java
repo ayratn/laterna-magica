@@ -8,6 +8,7 @@ package net.slightlymagic.laterna.magica;
 
 
 import java.io.IOException;
+import java.net.URL;
 
 import net.slightlymagic.laterna.magica.cards.AllCards;
 import net.slightlymagic.treeProperties.PropertyTree;
@@ -31,7 +32,10 @@ public class LaternaMagica {
     private static AllCards     CARDS;
     
     public static void init() throws IOException {
-        Configurator c = new Configurator().configure().execute();
+        URL url = LaternaMagica.class.getResource("/config.properties");
+        System.out.println("Configuring from Resource /config.properties");
+        System.out.println("Resolved to " + url);
+        Configurator c = new Configurator().configure(url).execute();
         
         PROPS = c.getConfigurator(PropertyTreeConfigurator.class).getTree();
         CARDS = new AllCards();

@@ -7,8 +7,14 @@
 package net.slightlymagic.laterna.magica.action.turnBased;
 
 
+import java.util.List;
+
+import net.slightlymagic.laterna.magica.Combat;
 import net.slightlymagic.laterna.magica.Game;
 import net.slightlymagic.laterna.magica.action.AbstractGameAction;
+import net.slightlymagic.laterna.magica.edit.CompoundEdit;
+import net.slightlymagic.laterna.magica.edit.Edit;
+import net.slightlymagic.laterna.magica.player.Player;
 
 
 /**
@@ -24,7 +30,22 @@ public class DeclareBlockersAction extends AbstractGameAction implements TurnBas
     
     @Override
     public boolean execute() {
-        //TODO implement
+        Combat combat = getGame().getCombat();
+        List<Player> defending = combat.getDefendingPlayers();
+        combat.setAction(Type.DECLARE_BLOCKERS);
+        
+        for(Player p:defending) {
+            Edit ref = getGame().getGameState().getCurrent();
+            do {
+                do {
+                    getGame().getGameState().stepTo(ref);
+                    CompoundEdit edit = new CompoundEdit(getGame(), true, "Choose blockers for " + p);
+                    p.getActor().declareBlockers();
+                    edit.end();
+                } while(!combat.isLegalBlockers(p));
+            } while(!combat.getBlockersCost(p).execute());
+        }
+        
         return true;
     }
 }

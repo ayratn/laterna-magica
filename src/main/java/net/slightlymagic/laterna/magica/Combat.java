@@ -89,7 +89,7 @@ public interface Combat {
     
     public static interface Defender {
         /**
-         * Returns either the defending player or the defending planeswarker's controller.
+         * Returns either the defending player or the defending planeswalker's controller.
          */
         public Player getPlayer();
         
@@ -106,19 +106,23 @@ public interface Combat {
     
     public static interface PlayerDefender {
         /**
-         * Returns the defending player, or null if this defender represents a planeswalker.
+         * Returns the defending player.
          */
         public Player getDefendingPlayer();
     }
     
     public static interface PlaneswalkerDefender {
         /**
-         * Returns the defending planeswalker, or null if this defender represents a player.
+         * Returns the defending planeswalker.
          */
         public CardObject getDefendingPlaneswalker();
     }
     
     public static interface AttackAssignment {
+        public Attacker getAttacker();
+        
+        public Defender getDefender();
+        
         /**
          * Sets the amount of damage assigned by the attacker
          */
@@ -133,6 +137,10 @@ public interface Combat {
     }
     
     public static interface BlockAssignment {
+        public Attacker getAttacker();
+        
+        public Blocker getBlocker();
+        
         /**
          * Sets the amount of damage assigned by the attacker
          */
@@ -259,11 +267,37 @@ public interface Combat {
      * decisions. Both are mediated by the turn based actions.
      */
 
+    //controls for what modifications are legal
+    
     /**
-     * Sets the currently executed turn based action. This value narrows down what modifications may be performed
-     * on the combat object.
+     * Sets the currently executed turn based action. Only modifications performed in that turn based actions are
+     * legal.
      */
     public void setAction(TurnBasedAction.Type action);
+    
+    /**
+     * Sets the player doing attacker assignment order. Only setting that player's attacker's damage assignment
+     * order is legal.
+     */
+    public void setAttackerAssignmentOrderPlayer(Player p);
+    
+    /**
+     * Sets the player doing blocker assignment order. Only setting that player's blocker's damage assignment order
+     * is legal.
+     */
+    public void setBlockerAssignmentOrderPlayer(Player p);
+    
+    /**
+     * Sets the attacker for which damage assignment is done. Only setting that attacker's damage assignment is
+     * legal.
+     */
+    public void setAttackerAssignmentAttacker(Attacker a);
+    
+    /**
+     * Sets the blocker for which damage assignment is done. Only setting that blocker's damage assignment is
+     * legal.
+     */
+    public void setBlockerAssignmentBlocker(Blocker b);
     
     //Beginning step
     

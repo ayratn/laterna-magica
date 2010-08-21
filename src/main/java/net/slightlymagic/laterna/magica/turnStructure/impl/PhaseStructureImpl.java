@@ -93,6 +93,7 @@ public class PhaseStructureImpl extends AbstractGameContent implements PhaseStru
         firstPassed = new EditableProperty<Integer>(getGame(), null, "firstPassed", 0);
         phase = new EditableProperty<Integer>(getGame(), null, "phase", -1);
         step = new EditableProperty<Integer>(getGame(), null, "step", -1);
+        combat = new EditableProperty<Combat>(getGame(), null, "combat");
         
         //no need for editable, since it's only created once
         turnBasedActions = new EnumMap<Type, TurnBasedAction>(Type.class);
@@ -290,7 +291,8 @@ public class PhaseStructureImpl extends AbstractGameContent implements PhaseStru
         Phase oldPhase = phase.getValue().intValue() == -1? null:getPhase();
         
         //Do this if the method is called "strangely"
-        if(step.getValue().intValue() != 0) step.setValue(0);
+        step.setValue(0);
+        
         phase.setValue((phase.getValue() + 1) % Phase.values().length);
         if(phase.getValue().intValue() == 0) {
             nextTurn();
@@ -308,7 +310,8 @@ public class PhaseStructureImpl extends AbstractGameContent implements PhaseStru
     private void nextTurn() {
         CompoundEdit e = new CompoundEdit(getGame(), true, "Advance to next turn");
         //Do this if the method is called "strangely"
-        if(step.getValue().intValue() != 0) step.setValue(0);
+        step.setValue(0);
+        
         if(phase.getValue().intValue() != 0) phase.setValue(0);
         getGame().getTurnStructure().nextTurn();
         e.end();

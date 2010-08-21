@@ -36,7 +36,7 @@ public class EditableProperty<T> extends AbstractGameContent {
     }
     
     public void setValue(T value) {
-        new SetValueEdit(value).execute();
+        if(this.value != value) new SetValueEdit(value).execute();
     }
     
     public T getValue() {

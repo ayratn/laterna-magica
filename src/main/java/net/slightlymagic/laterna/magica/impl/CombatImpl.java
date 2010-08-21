@@ -1,4 +1,4 @@
-/**ctivePlayer.g
+/**
  * CombatImpl.java
  * 
  * Created on 16.08.2010
@@ -35,6 +35,7 @@ import net.slightlymagic.laterna.magica.Game;
 import net.slightlymagic.laterna.magica.MagicObject;
 import net.slightlymagic.laterna.magica.action.GameAction;
 import net.slightlymagic.laterna.magica.action.turnBased.TurnBasedAction;
+import net.slightlymagic.laterna.magica.action.turnBased.TurnBasedAction.Type;
 import net.slightlymagic.laterna.magica.card.CardObject;
 import net.slightlymagic.laterna.magica.cost.impl.DummyCostFunction;
 import net.slightlymagic.laterna.magica.edit.property.EditableProperty;
@@ -43,6 +44,9 @@ import net.slightlymagic.laterna.magica.util.MagicaCollections;
 import net.slightlymagic.laterna.magica.util.relational.ManySide;
 import net.slightlymagic.laterna.magica.util.relational.ManyToMany;
 import net.slightlymagic.laterna.magica.util.relational.OneSide;
+
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import com.google.common.base.Predicate;
 import com.google.common.collect.AbstractIterator;
@@ -55,6 +59,8 @@ import com.google.common.collect.AbstractIterator;
  * @author Clemens Koza
  */
 public class CombatImpl extends AbstractGameContent implements Combat {
+    private static final Logger                 log              = LoggerFactory.getLogger(CombatImpl.class);
+    
     private static final Predicate<Player>      active           = new Predicate<Player>() {
                                                                      @Override
                                                                      public boolean apply(Player input) {
@@ -77,9 +83,6 @@ public class CombatImpl extends AbstractGameContent implements Combat {
     private final Predicate<CardObject>         legalBlocker     = and(untappedCreature,
                                                                          compose(legalDefPl, controller));
     
-
-    private TurnBasedAction.Type                action;
-    
     private <T> EditableProperty<T> editable(String name, T value) {
         return new EditableProperty<T>(getGame(), null, name, value);
     }
@@ -93,9 +96,12 @@ public class CombatImpl extends AbstractGameContent implements Combat {
     }
     
     private abstract class Combatant {
+        protected final Logger            log               = LoggerFactory.getLogger(getClass());
+        
         private EditableProperty<Boolean> removedFromCombat = editable("removedFromCombat", false);
         
         public void setRemovedFromCombat(boolean removedFromCombat) {
+            log.debug("Remove from combat: " + this + " --> " + removedFromCombat);
             this.removedFromCombat.setValue(removedFromCombat);
         }
         
@@ -133,6 +139,7 @@ public class CombatImpl extends AbstractGameContent implements Combat {
         protected void setOrder(List<? extends B> otherCreatures) {
             if(!equal(otherCreatures, getOtherCreatures().keySet())) throw new IllegalArgumentException(
                     "Damage assignment order must contain all creatures");
+            log.debug("Set DAO: " + this + " --> " + otherCreatures);
             order.setValue(unmodifiableList(new ArrayList<B>(otherCreatures)));
         }
         
@@ -170,16 +177,22 @@ public class CombatImpl extends AbstractGameContent implements Combat {
         
         @SuppressWarnings("unchecked")
         public void setDamageAssignmentOrder(List<? extends Blocker> blockers) {
-            checkAction(TurnBasedAction.Type.ORDER_BLOCKERS);
+            checkAttackerAssignmentOrderPlayer(getAttacker().getController());
             setOrder((List<? extends BlockerImpl>) blockers);
         }
         
         public AttackAssignmentImpl setDefender(DefenderImpl defender) {
             checkAction(TurnBasedAction.Type.DECLARE_ATTACKERS);
+            log.debug("Set defender: " + this + " --> " + defender);
             this.defender.setOneSide(defender.defender);
-            AttackAssignmentImpl assignment = new AttackAssignmentImpl();
+            AttackAssignmentImpl assignment = new AttackAssignmentImpl(this, defender);
             this.assignment.setValue(assignment);
             return assignment;
+        }
+        
+        @Override
+        public String toString() {
+            return "[Attacker " + getAttacker() + "]";
         }
     }
     
@@ -205,16 +218,22 @@ public class CombatImpl extends AbstractGameContent implements Combat {
         
         @SuppressWarnings("unchecked")
         public void setDamageAssignmentOrder(List<? extends Attacker> attackers) {
-            checkAction(TurnBasedAction.Type.ORDER_ATTACKERS);
+            checkBlockerAssignmentOrderPlayer(getBlocker().getController());
             setOrder((List<? extends AttackerImpl>) attackers);
         }
         
         public BlockAssignmentImpl addAttacker(AttackerImpl attacker) {
             checkAction(TurnBasedAction.Type.DECLARE_BLOCKERS);
+            log.debug("Add attacker: " + this + " --> " + attacker);
             if(attacker.getDefender().getPlayer() != getBlocker().getController()) throw new IllegalArgumentException();
-            BlockAssignmentImpl assignment = new BlockAssignmentImpl();
+            BlockAssignmentImpl assignment = new BlockAssignmentImpl(attacker, this);
             getCombatant().add(attacker.getCombatant(), assignment);
             return assignment;
+        }
+        
+        @Override
+        public String toString() {
+            return "[Blocker " + getBlocker() + "]";
         }
     }
     
@@ -304,6 +323,11 @@ public class CombatImpl extends AbstractGameContent implements Combat {
         public Player getPlayer() {
             return defender;
         }
+        
+        @Override
+        public String toString() {
+            return "[PlayerDefender " + getDefendingPlayer() + "]";
+        }
     }
     
     private class PlaneswalkerDefenderImpl extends DefenderImpl implements PlaneswalkerDefender {
@@ -323,59 +347,107 @@ public class CombatImpl extends AbstractGameContent implements Combat {
         public Player getPlayer() {
             return defender.getController();
         }
+        
+        @Override
+        public String toString() {
+            return "[PlaneswalkerDefender " + getDefendingPlaneswalker() + "]";
+        }
     }
     
     private class AttackAssignmentImpl implements AttackAssignment {
-        private EditableProperty<Integer> attacker = editable("attacker", null);
+        private AttackerImpl              attacker;
+        private DefenderImpl              defender;
+        
+        private EditableProperty<Integer> attackerDamage = editable("attackerDamage", null);
+        
+        public AttackAssignmentImpl(AttackerImpl attacker, DefenderImpl defender) {
+            this.attacker = attacker;
+            this.defender = defender;
+        }
+        
+        public AttackerImpl getAttacker() {
+            return attacker;
+        }
+        
+        public DefenderImpl getDefender() {
+            return defender;
+        }
         
         private void resetAttackerAssignedDamage() {
-            attacker.setValue(null);
+            attacker.log.debug("Resetting damage assignment: " + attacker);
+            attackerDamage.setValue(null);
         }
         
         @Override
         public void setAttackerAssignedDamage(int amount) {
-            attacker.setValue(amount);
+            checkAttackerAssignmentAttacker(getAttacker());
+            attacker.log.debug("Setting damage assignment: " + attacker + " --> " + amount);
+            attackerDamage.setValue(amount);
         }
         
         @Override
         public int getAttackerAssignedDamage() throws IllegalStateException {
-            if(attacker.getValue() == null) throw new IllegalStateException();
-            return attacker.getValue();
+            if(attackerDamage.getValue() == null) throw new IllegalStateException();
+            return attackerDamage.getValue();
         }
     }
     
     private class BlockAssignmentImpl implements BlockAssignment {
-        private EditableProperty<Integer> attacker = editable("attacker", null);
-        private EditableProperty<Integer> blocker  = editable("blocker", null);
+        private final Logger              log            = LoggerFactory.getLogger(getClass());
+        
+        private AttackerImpl              attacker;
+        private BlockerImpl               blocker;
+        
+        private EditableProperty<Integer> attackerDamage = editable("attackerDamage", null);
+        private EditableProperty<Integer> blockerDamage  = editable("blockerDamage", null);
+        
+        public BlockAssignmentImpl(AttackerImpl attacker, BlockerImpl blocker) {
+            this.attacker = attacker;
+            this.blocker = blocker;
+        }
+        
+        public AttackerImpl getAttacker() {
+            return attacker;
+        }
+        
+        public BlockerImpl getBlocker() {
+            return blocker;
+        }
         
         private void resetAttackerAssignedDamage() {
-            attacker.setValue(null);
+            attacker.log.debug("Resetting damage assignment: " + attacker);
+            attackerDamage.setValue(null);
         }
         
         @Override
         public void setAttackerAssignedDamage(int amount) {
-            attacker.setValue(amount);
+            checkAttackerAssignmentAttacker(getAttacker());
+            attacker.log.debug("Setting damage assignment: " + attacker + " --> " + amount);
+            attackerDamage.setValue(amount);
         }
         
         @Override
         public int getAttackerAssignedDamage() throws IllegalStateException {
-            if(attacker.getValue() == null) throw new IllegalStateException();
-            return attacker.getValue();
+            if(attackerDamage.getValue() == null) throw new IllegalStateException();
+            return attackerDamage.getValue();
         }
         
         private void resetBlockerAssignedDamage() {
-            blocker.setValue(null);
+            blocker.log.debug("Resetting damage assignment: " + blocker);
+            blockerDamage.setValue(null);
         }
         
         @Override
         public void setBlockerAssignedDamage(int amount) {
-            blocker.setValue(amount);
+            checkBlockerAssignmentBlocker(getBlocker());
+            blocker.log.debug("Setting damage assignment: " + blocker + " --> " + amount);
+            blockerDamage.setValue(amount);
         }
         
         @Override
         public int getBlockerAssignedDamage() throws IllegalStateException {
-            if(blocker.getValue() == null) throw new IllegalStateException();
-            return blocker.getValue();
+            if(blockerDamage.getValue() == null) throw new IllegalStateException();
+            return blockerDamage.getValue();
         }
     }
     
@@ -510,6 +582,13 @@ public class CombatImpl extends AbstractGameContent implements Combat {
      * decisions. Both are mediated by the turn based actions.
      */
 
+    //controls for what modifications are legal
+    private EditableProperty<TurnBasedAction.Type> action   = editable("action", null);
+    private EditableProperty<Player>               attDAO   = editable("attDAO", null);
+    private EditableProperty<Player>               blockDAO = editable("blockDAO", null);
+    private EditableProperty<AttackerImpl>         attDA    = editable("attDA", null);
+    private EditableProperty<BlockerImpl>          blockDA  = editable("blockDA", null);
+    
     public void setAction(TurnBasedAction.Type action) {
         switch(action) {
             case DEFENDER:
@@ -519,16 +598,66 @@ public class CombatImpl extends AbstractGameContent implements Combat {
             case ORDER_ATTACKERS:
             case DAMAGE_ASSIGNMENT:
             case DAMAGE_DEALING:
-                this.action = action;
             break;
             default:
                 throw new IllegalArgumentException(valueOf(action));
         }
+        log.debug("Entering " + action);
+        this.action.setValue(action);
+    }
+    
+    public void setAttackerAssignmentOrderPlayer(Player p) {
+        if(!getAttackingPlayers().contains(p)) throw new IllegalArgumentException();
+        log.debug("Attacker assignment order " + p);
+        attDAO.setValue(p);
+    }
+    
+    public void setBlockerAssignmentOrderPlayer(Player p) {
+        if(!getDefendingPlayers().contains(p)) throw new IllegalArgumentException();
+        log.debug("Blocker assignment order " + p);
+        blockDAO.setValue(p);
+    }
+    
+    public void setAttackerAssignmentAttacker(Attacker a) {
+        if(!getAttackers().contains(a)) throw new IllegalArgumentException();
+        log.debug("Attacker assignment " + a);
+        attDA.setValue((AttackerImpl) a);
+    }
+    
+    public void setBlockerAssignmentBlocker(Blocker b) {
+        if(!getBlockers().contains(b)) throw new IllegalArgumentException();
+        log.debug("Blocker assignment " + b);
+        blockDA.setValue((BlockerImpl) b);
+    }
+    
+    private <T> void check(T expected, T actual) {
+        if(expected == null? actual != null:!expected.equals(actual)) {
+            throw new IllegalStateException("Expected: " + expected + ", actual: " + actual);
+        }
     }
     
     private void checkAction(TurnBasedAction.Type action) {
-        if(this.action != action) throw new IllegalStateException("Expected: " + action + ", actual: "
-                + this.action);
+        check(this.action.getValue(), action);
+    }
+    
+    private void checkAttackerAssignmentOrderPlayer(Player p) {
+        checkAction(Type.ORDER_BLOCKERS);
+        check(attDAO.getValue(), p);
+    }
+    
+    private void checkBlockerAssignmentOrderPlayer(Player p) {
+        checkAction(Type.ORDER_ATTACKERS);
+        check(blockDAO.getValue(), p);
+    }
+    
+    private void checkAttackerAssignmentAttacker(AttackerImpl a) {
+        checkAction(Type.DAMAGE_ASSIGNMENT);
+        check(attDA.getValue(), a);
+    }
+    
+    private void checkBlockerAssignmentBlocker(BlockerImpl b) {
+        checkAction(Type.ORDER_BLOCKERS);
+        check(blockDA.getValue(), b);
     }
     
     //Beginning step
@@ -536,6 +665,7 @@ public class CombatImpl extends AbstractGameContent implements Combat {
     @Override
     public void setDefendingPlayers(Set<Player> defenders) {
         checkAction(TurnBasedAction.Type.DEFENDER);
+        log.debug("Setting defending players");
         //TODO implement
     }
     
@@ -543,7 +673,8 @@ public class CombatImpl extends AbstractGameContent implements Combat {
     
     public boolean isLegalAttackers(Player attacker) {
         checkAction(TurnBasedAction.Type.DECLARE_ATTACKERS);
-        //check whether every attacker has a defender assigned
+        log.debug("Checking legal attackers for " + attacker);
+        //check whether every attackerDamage has a defender assigned
         for(Attacker a:getAttackers())
             if(a.getAttacker().getController() == attacker && a.getDefender() == null) return false;
         //TODO implement restrictions & requirements
@@ -552,12 +683,15 @@ public class CombatImpl extends AbstractGameContent implements Combat {
     
     public void tapAttackers(Player attacker) {
         checkAction(TurnBasedAction.Type.DECLARE_ATTACKERS);
+        log.debug("Tapping attackers for " + attacker);
+        //TODO respect Vigilance
         for(Attacker a:getAttackers())
             if(a.getAttacker().getController() == attacker) a.getAttacker().getState().setState(TAPPED, true);
     }
     
     public GameAction getAttackersCost(Player attacker) {
         checkAction(TurnBasedAction.Type.DECLARE_ATTACKERS);
+        log.debug("Calculating attacking cost for " + attacker);
         //TODO implement
         return DummyCostFunction.EMPTY.apply(getGame());
     }
@@ -566,7 +700,8 @@ public class CombatImpl extends AbstractGameContent implements Combat {
     
     public boolean isLegalBlockers(Player defender) {
         checkAction(TurnBasedAction.Type.DECLARE_BLOCKERS);
-        //check whether every blocker has at least one attacker assigned
+        log.debug("Checking legal blockers for " + defender);
+        //check whether every blockerDamage has at least one attackerDamage assigned
         for(Blocker a:getBlockers())
             if(a.getBlocker().getController() == defender && a.getAttackers().isEmpty()) return false;
         //TODO implement restrictions & requirements
@@ -575,17 +710,19 @@ public class CombatImpl extends AbstractGameContent implements Combat {
     
     public GameAction getBlockersCost(Player defender) {
         checkAction(TurnBasedAction.Type.DECLARE_BLOCKERS);
+        log.debug("Calculating blocking cost for " + defender);
         //TODO implement
         return DummyCostFunction.EMPTY.apply(getGame());
     }
     
     public boolean isLegalAttackersAssignmentOrder(Player attacker) {
         checkAction(TurnBasedAction.Type.ORDER_ATTACKERS);
+        log.debug("Checking legal attacker DAO for " + attacker);
         for(AttackerImpl a:attackers.values()) {
             //ignore attackers of other players
             if(a.getAttacker().getController() != attacker) continue;
             
-            //checks whether the attacker has an order assigned
+            //checks whether the attackerDamage has an order assigned
             //setting the order checks if all blockers were assigned
             if(a.getDamageAssignmentOrder() == null) return false;
         }
@@ -594,11 +731,12 @@ public class CombatImpl extends AbstractGameContent implements Combat {
     
     public boolean isLegalBlockersAssignmentOrder(Player defender) {
         checkAction(TurnBasedAction.Type.ORDER_BLOCKERS);
+        log.debug("Checking legal blocker DAO for " + defender);
         for(BlockerImpl b:blockers.values()) {
             //ignore blockers of other players
             if(b.getBlocker().getController() != defender) continue;
             
-            //checks whether the blocker has an order assigned
+            //checks whether the blockerDamage has an order assigned
             //setting the order checks if all attackers were assigned
             if(b.getDamageAssignmentOrder() == null) return false;
         }
@@ -662,6 +800,7 @@ public class CombatImpl extends AbstractGameContent implements Combat {
                 
                 if(!attackersThisStep.isEmpty() && !blockersThisStep.isEmpty()) {
                     firstStrike.setValue(CombatDamageStep.FIRST);
+                    log.debug("Starting first strike combat damage step");
                     break;
                 }
             case BETWEEN:
@@ -688,6 +827,7 @@ public class CombatImpl extends AbstractGameContent implements Combat {
                 blockersThisStep.addAll(blockers);
                 
                 firstStrike.setValue(CombatDamageStep.REGULAR);
+                log.debug("Starting regular combat damage step");
             break;
             case AFTER:
                 throw new IllegalStateException("Already performed the last damage step");
@@ -711,13 +851,15 @@ public class CombatImpl extends AbstractGameContent implements Combat {
     //Damage Assignment
     
     public boolean isLegalAttackerAssignment(Attacker attacker) {
-        checkAction(TurnBasedAction.Type.DAMAGE_ASSIGNMENT);
+        checkAttackerAssignmentAttacker((AttackerImpl) attacker);
+        log.debug("Check legal attacker DA for " + attacker);
         //TODO implement
         return true;
     }
     
     public boolean isLegalBlockerAssignment(Blocker blocker) {
-        checkAction(TurnBasedAction.Type.DAMAGE_ASSIGNMENT);
+        checkBlockerAssignmentBlocker((BlockerImpl) blocker);
+        log.debug("Check legal blocker DA for " + blocker);
         //TODO implement
         return true;
     }
@@ -726,6 +868,8 @@ public class CombatImpl extends AbstractGameContent implements Combat {
     
     @Override
     public void dealDamage() {
+        checkAction(Type.DAMAGE_DEALING);
+        log.debug("Dealing damage");
         //TODO implement
     }
     

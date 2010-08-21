@@ -286,7 +286,7 @@ public final class MagicaCollections {
             
             @Override
             public int size() {
-                return entrySet.size();
+                return delegate.size();
             }
             
             @Override

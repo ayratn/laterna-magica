@@ -2,9 +2,9 @@ package net.slightlymagic.laterna.magica.cardsNew
 
 import java.util.regex._, Pattern._
 
-import net.slightlymagic.treeProperties._;
+import net.slightlymagic.treeProperties._
 
-import net.slightlymagic.laterna.magica.LaternaMagica._;
+import net.slightlymagic.laterna.magica.LaternaMagica._
 import net.slightlymagic.laterna.magica.util._, JavaCollections._
 
 /**

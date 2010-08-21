@@ -7,6 +7,7 @@
 package net.slightlymagic.laterna.magica.action.turnBased;
 
 
+import net.slightlymagic.laterna.magica.Combat;
 import net.slightlymagic.laterna.magica.Game;
 import net.slightlymagic.laterna.magica.action.AbstractGameAction;
 
@@ -24,7 +25,11 @@ public class DamageDealingAction extends AbstractGameAction implements TurnBased
     
     @Override
     public boolean execute() {
-        //TODO implement
+        Combat combat = getGame().getCombat();
+        combat.setAction(Type.DAMAGE_DEALING);
+        
+        combat.dealDamage();
+        
         return true;
     }
 }
