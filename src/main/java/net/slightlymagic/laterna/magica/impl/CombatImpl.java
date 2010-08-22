@@ -28,6 +28,7 @@ import java.util.HashSet;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
+import java.util.Map.Entry;
 import java.util.Set;
 
 import net.slightlymagic.laterna.magica.Combat;
@@ -39,6 +40,8 @@ import net.slightlymagic.laterna.magica.action.turnBased.TurnBasedAction.Type;
 import net.slightlymagic.laterna.magica.card.CardObject;
 import net.slightlymagic.laterna.magica.cost.impl.DummyCostFunction;
 import net.slightlymagic.laterna.magica.edit.property.EditableProperty;
+import net.slightlymagic.laterna.magica.effects.damage.DamagePermanentEvent;
+import net.slightlymagic.laterna.magica.effects.damage.DamagePlayerEvent;
 import net.slightlymagic.laterna.magica.player.Player;
 import net.slightlymagic.laterna.magica.util.MagicaCollections;
 import net.slightlymagic.laterna.magica.util.relational.ManySide;
@@ -188,6 +191,11 @@ public class CombatImpl extends AbstractGameContent implements Combat {
             AttackAssignmentImpl assignment = new AttackAssignmentImpl(this, defender);
             this.assignment.setValue(assignment);
             return assignment;
+        }
+        
+        @Override
+        public AttackAssignment getAttackerAssignment() {
+            return assignment.getValue();
         }
         
         @Override
@@ -358,7 +366,7 @@ public class CombatImpl extends AbstractGameContent implements Combat {
         private AttackerImpl              attacker;
         private DefenderImpl              defender;
         
-        private EditableProperty<Integer> attackerDamage = editable("attackerDamage", null);
+        private EditableProperty<Integer> attackerDamage = editable("attackerDamage", 0);
         
         public AttackAssignmentImpl(AttackerImpl attacker, DefenderImpl defender) {
             this.attacker = attacker;
@@ -375,31 +383,28 @@ public class CombatImpl extends AbstractGameContent implements Combat {
         
         private void resetAttackerAssignedDamage() {
             attacker.log.debug("Resetting damage assignment: " + attacker);
-            attackerDamage.setValue(null);
+            attackerDamage.setValue(0);
         }
         
         @Override
         public void setAttackerAssignedDamage(int amount) {
             checkAttackerAssignmentAttacker(getAttacker());
             attacker.log.debug("Setting damage assignment: " + attacker + " --> " + amount);
-            attackerDamage.setValue(amount);
+            attackerDamage.setValue(amount <= 0? 0:amount);
         }
         
         @Override
-        public int getAttackerAssignedDamage() throws IllegalStateException {
-            if(attackerDamage.getValue() == null) throw new IllegalStateException();
+        public int getAttackerAssignedDamage() {
             return attackerDamage.getValue();
         }
     }
     
     private class BlockAssignmentImpl implements BlockAssignment {
-        private final Logger              log            = LoggerFactory.getLogger(getClass());
-        
         private AttackerImpl              attacker;
         private BlockerImpl               blocker;
         
-        private EditableProperty<Integer> attackerDamage = editable("attackerDamage", null);
-        private EditableProperty<Integer> blockerDamage  = editable("blockerDamage", null);
+        private EditableProperty<Integer> attackerDamage = editable("attackerDamage", 0);
+        private EditableProperty<Integer> blockerDamage  = editable("blockerDamage", 0);
         
         public BlockAssignmentImpl(AttackerImpl attacker, BlockerImpl blocker) {
             this.attacker = attacker;
@@ -416,37 +421,35 @@ public class CombatImpl extends AbstractGameContent implements Combat {
         
         private void resetAttackerAssignedDamage() {
             attacker.log.debug("Resetting damage assignment: " + attacker);
-            attackerDamage.setValue(null);
+            attackerDamage.setValue(0);
         }
         
         @Override
         public void setAttackerAssignedDamage(int amount) {
             checkAttackerAssignmentAttacker(getAttacker());
             attacker.log.debug("Setting damage assignment: " + attacker + " --> " + amount);
-            attackerDamage.setValue(amount);
+            attackerDamage.setValue(amount <= 0? 0:amount);
         }
         
         @Override
-        public int getAttackerAssignedDamage() throws IllegalStateException {
-            if(attackerDamage.getValue() == null) throw new IllegalStateException();
+        public int getAttackerAssignedDamage() {
             return attackerDamage.getValue();
         }
         
         private void resetBlockerAssignedDamage() {
             blocker.log.debug("Resetting damage assignment: " + blocker);
-            blockerDamage.setValue(null);
+            blockerDamage.setValue(0);
         }
         
         @Override
         public void setBlockerAssignedDamage(int amount) {
-            checkBlockerAssignmentBlocker(getBlocker());
+            checkAttackerAssignmentAttacker(getAttacker());
             blocker.log.debug("Setting damage assignment: " + blocker + " --> " + amount);
-            blockerDamage.setValue(amount);
+            blockerDamage.setValue(amount <= 0? 0:amount);
         }
         
         @Override
-        public int getBlockerAssignedDamage() throws IllegalStateException {
-            if(blockerDamage.getValue() == null) throw new IllegalStateException();
+        public int getBlockerAssignedDamage() {
             return blockerDamage.getValue();
         }
     }
@@ -675,8 +678,10 @@ public class CombatImpl extends AbstractGameContent implements Combat {
         checkAction(TurnBasedAction.Type.DECLARE_ATTACKERS);
         log.debug("Checking legal attackers for " + attacker);
         //check whether every attackerDamage has a defender assigned
-        for(Attacker a:getAttackers())
+        for(Attacker a:getAttackers()) {
+            if(a.isRemovedFromCombat()) continue;
             if(a.getAttacker().getController() == attacker && a.getDefender() == null) return false;
+        }
         //TODO implement restrictions & requirements
         return true;
     }
@@ -685,13 +690,16 @@ public class CombatImpl extends AbstractGameContent implements Combat {
         checkAction(TurnBasedAction.Type.DECLARE_ATTACKERS);
         log.debug("Tapping attackers for " + attacker);
         //TODO respect Vigilance
-        for(Attacker a:getAttackers())
+        for(Attacker a:getAttackers()) {
+            if(a.isRemovedFromCombat()) continue;
             if(a.getAttacker().getController() == attacker) a.getAttacker().getState().setState(TAPPED, true);
+        }
     }
     
     public GameAction getAttackersCost(Player attacker) {
         checkAction(TurnBasedAction.Type.DECLARE_ATTACKERS);
         log.debug("Calculating attacking cost for " + attacker);
+        
         //TODO implement
         return DummyCostFunction.EMPTY.apply(getGame());
     }
@@ -702,8 +710,10 @@ public class CombatImpl extends AbstractGameContent implements Combat {
         checkAction(TurnBasedAction.Type.DECLARE_BLOCKERS);
         log.debug("Checking legal blockers for " + defender);
         //check whether every blockerDamage has at least one attackerDamage assigned
-        for(Blocker a:getBlockers())
-            if(a.getBlocker().getController() == defender && a.getAttackers().isEmpty()) return false;
+        for(Blocker b:getBlockers()) {
+            if(b.isRemovedFromCombat()) continue;
+            if(b.getBlocker().getController() == defender && b.getAttackers().isEmpty()) return false;
+        }
         //TODO implement restrictions & requirements
         return true;
     }
@@ -719,6 +729,7 @@ public class CombatImpl extends AbstractGameContent implements Combat {
         checkAction(TurnBasedAction.Type.ORDER_ATTACKERS);
         log.debug("Checking legal attacker DAO for " + attacker);
         for(AttackerImpl a:attackers.values()) {
+            if(a.isRemovedFromCombat()) continue;
             //ignore attackers of other players
             if(a.getAttacker().getController() != attacker) continue;
             
@@ -733,6 +744,7 @@ public class CombatImpl extends AbstractGameContent implements Combat {
         checkAction(TurnBasedAction.Type.ORDER_BLOCKERS);
         log.debug("Checking legal blocker DAO for " + defender);
         for(BlockerImpl b:blockers.values()) {
+            if(b.isRemovedFromCombat()) continue;
             //ignore blockers of other players
             if(b.getBlocker().getController() != defender) continue;
             
@@ -781,6 +793,14 @@ public class CombatImpl extends AbstractGameContent implements Combat {
         for(BlockAssignmentImpl b:c.getOtherCreatures().values())
             toughness -= c instanceof AttackerImpl? b.getBlockerAssignedDamage():b.getAttackerAssignedDamage();
         return toughness <= 0;
+    }
+    
+    /**
+     * Returns whether the attacker can assign excess damage to the defender rather than its blockers
+     */
+    private boolean hasTrample(AttackerImpl c) {
+        //TODO implement properly
+        return false;
     }
     
     @Override
@@ -850,18 +870,63 @@ public class CombatImpl extends AbstractGameContent implements Combat {
     
     //Damage Assignment
     
-    public boolean isLegalAttackerAssignment(Attacker attacker) {
-        checkAttackerAssignmentAttacker((AttackerImpl) attacker);
+    public boolean isLegalAttackerAssignment(Attacker a) {
+        AttackerImpl attacker = (AttackerImpl) a;
+        checkAttackerAssignmentAttacker(attacker);
         log.debug("Check legal attacker DA for " + attacker);
+        
+        //those removed from combat don't deal damage, so no assignment is necessary
+        if(attacker.isRemovedFromCombat()) return true;
         //TODO implement
-        return true;
+        
+        int damage = getAmmount(attacker);
+        for(BlockerImpl blocker:attacker.getDamageAssignmentOrder()) {
+            if(blocker.isRemovedFromCombat()) continue;
+            //Substract the amount of damage assigned to this blocker
+            damage -= attacker.getBlockers().get(blocker).getAttackerAssignedDamage();
+            //if the damage to this creature is not lethal but
+            //the attacker has not assigned all of its damage it's illegal
+            if(!isLethal(blocker) && damage != 0) return false;
+        }
+        //if we get here, either all damage was assigned, or all blockers were assigned lethal damage
+        //the combination damage is left, but some blockers were not assigned lethal damage is impossible
+        
+        if(attacker.getBlockers().isEmpty() || hasTrample(attacker)) {
+            //if the attacker is not blocked or has trample
+            damage -= attacker.getAttackerAssignment().getAttackerAssignedDamage();
+        } else {
+            //otherwise, no damage must be assigned
+            if(attacker.getAttackerAssignment().getAttackerAssignedDamage() != 0) return false;
+        }
+        
+        //will happen if too much/little damage was assigned to creatures,
+        //or the wrong amount of damage was assigned to the defending player
+        return damage == 0;
     }
     
-    public boolean isLegalBlockerAssignment(Blocker blocker) {
-        checkBlockerAssignmentBlocker((BlockerImpl) blocker);
+    public boolean isLegalBlockerAssignment(Blocker b) {
+        BlockerImpl blocker = (BlockerImpl) b;
+        checkBlockerAssignmentBlocker(blocker);
         log.debug("Check legal blocker DA for " + blocker);
+        
+        //those removed from combat don't deal damage, so no assignment is necessary
+        if(blocker.isRemovedFromCombat()) return true;
         //TODO implement
-        return true;
+        
+        int damage = getAmmount(blocker);
+        for(AttackerImpl attacker:blocker.getDamageAssignmentOrder()) {
+            if(attacker.isRemovedFromCombat()) continue;
+            //Substract the amount of damage assigned to this attacker
+            damage -= blocker.getAttackers().get(attacker).getBlockerAssignedDamage();
+            //if the damage to this creature is not lethal but
+            //the blocker has not assigned all of its damage it's illegal
+            if(!isLethal(attacker) && damage != 0) return false;
+        }
+        //if we get here, either all damage was assigned, or all attackers were assigned lethal damage
+        //the combination damage is left, but some attackers were not assigned lethal damage is impossible
+        
+        //will happen if too much/little damage was assigned to creatures
+        return damage == 0;
     }
     
     //Damage dealing
@@ -870,7 +935,36 @@ public class CombatImpl extends AbstractGameContent implements Combat {
     public void dealDamage() {
         checkAction(Type.DAMAGE_DEALING);
         log.debug("Dealing damage");
-        //TODO implement
+        
+        //TODO do this simultaneously
+        for(Attacker a:getAttackers()) {
+            if(a.isRemovedFromCombat()) continue;
+            for(Entry<? extends Blocker, ? extends BlockAssignment> e:a.getBlockers().entrySet()) {
+                Blocker b = e.getKey();
+                BlockAssignment ass = e.getValue();
+                if(b.isRemovedFromCombat()) continue;
+                //assign attacker -> blocker damage
+                new DamagePermanentEvent(b.getBlocker(), a.getAttacker(), ass.getAttackerAssignedDamage(), true,
+                        true).execute();
+                //assign blocker -> attacker damage
+                new DamagePermanentEvent(a.getAttacker(), b.getBlocker(), ass.getBlockerAssignedDamage(), true,
+                        true).execute();
+            }
+            
+            Defender d = a.getDefender();
+            if(d.isRemovedFromCombat()) continue;
+            
+
+            //assign attacker -> defender damage
+            AttackAssignment ass = a.getAttackerAssignment();
+            if(d instanceof PlaneswalkerDefender) {
+                new DamagePermanentEvent(((PlaneswalkerDefender) d).getDefendingPlaneswalker(), a.getAttacker(),
+                        ass.getAttackerAssignedDamage(), true, true).execute();
+            } else if(d instanceof PlayerDefender) {
+                new DamagePlayerEvent(((PlayerDefender) d).getDefendingPlayer(), a.getAttacker(),
+                        ass.getAttackerAssignedDamage(), true, true).execute();
+            } else throw new AssertionError(d);
+        }
     }
     
     @Override

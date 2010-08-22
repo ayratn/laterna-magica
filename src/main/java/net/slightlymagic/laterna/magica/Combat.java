@@ -55,6 +55,8 @@ public interface Combat {
         public boolean isRemovedFromCombat();
         
         public Defender getDefender();
+        
+        public AttackAssignment getAttackerAssignment();
     }
     
     public static interface Blocker {
@@ -129,11 +131,9 @@ public interface Combat {
         public void setAttackerAssignedDamage(int amount);
         
         /**
-         * Returns the amount of damage assigned by the attacker
-         * 
-         * @throws IllegalStateException if the attacker has not yet assigned damage
+         * Returns the amount of damage assigned by the attacker, or 0 if no damage is assigned
          */
-        public int getAttackerAssignedDamage() throws IllegalStateException;
+        public int getAttackerAssignedDamage();
     }
     
     public static interface BlockAssignment {
@@ -147,7 +147,7 @@ public interface Combat {
         public void setAttackerAssignedDamage(int amount);
         
         /**
-         * Returns the amount of damage assigned by the attacker
+         * Returns the amount of damage assigned by the attacker, or 0 if no damage is assigned
          */
         public int getAttackerAssignedDamage();
         
@@ -157,7 +157,7 @@ public interface Combat {
         public void setBlockerAssignedDamage(int amount);
         
         /**
-         * Returns the amount of damage assigned by the blocker
+         * Returns the amount of damage assigned by the blocker, or 0 if no damage is assigned
          */
         public int getBlockerAssignedDamage();
     }

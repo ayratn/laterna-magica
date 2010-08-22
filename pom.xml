@@ -1,6 +1,6 @@
 <project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
  xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
- 
+
  <modelVersion>4.0.0</modelVersion>
  <groupId>net.slightlymagic.laterna</groupId>
  <artifactId>LaternaMagica</artifactId>
@@ -8,19 +8,19 @@
  <name>LaternaMagica</name>
  <description>An implementation of the Magic Trading Card Game, featuring Rules Enforcement, playing against human and computer, multiplayer games and more.</description>
  <url>http://code.google.com/p/laterna-magica/</url>
- 
+
  <scm>
   <connection>scm:svn:http://code.google.com/p/laterna-magica/trunk/LaternaMagica/</connection>
   <developerConnection>scm:svn:https://code.google.com/p/laterna-magica/trunk/LaternaMagica/</developerConnection>
   <url>http://code.google.com/p/laterna-magica/source/browse/#svn/trunk/LaternaMagica/</url>
  </scm>
- 
+
  <properties>
   <maven.compiler.source>1.6</maven.compiler.source>
   <maven.compiler.target>1.6</maven.compiler.target>
   <encoding>UTF-8</encoding>
  </properties>
- 
+
  <build>
   <plugins>
    <plugin>
@@ -29,18 +29,23 @@
     <version>2.13.1</version>
     <executions>
      <execution>
-      <id>scala-compile-first</id>
-      <phase>process-resources</phase>
+      <id>compile</id>
       <goals>
-       <goal>add-source</goal>
        <goal>compile</goal>
       </goals>
+      <phase>compile</phase>
      </execution>
      <execution>
-      <id>scala-test-compile</id>
-      <phase>process-test-resources</phase>
+      <id>test-compile</id>
       <goals>
        <goal>testCompile</goal>
+      </goals>
+      <phase>test-compile</phase>
+     </execution>
+     <execution>
+      <phase>process-resources</phase>
+      <goals>
+       <goal>compile</goal>
       </goals>
      </execution>
     </executions>
@@ -98,11 +103,11 @@
    <version>0.0.3</version>
   </dependency>
   <dependency>
-  	<groupId>org.scala-lang</groupId>
-  	<artifactId>scala-library</artifactId>
-  	<version>2.8.0.r18462-b20090811081019</version>
-  	<type>jar</type>
-  	<scope>compile</scope>
+   <groupId>org.scala-lang</groupId>
+   <artifactId>scala-library</artifactId>
+   <version>2.8.0.r18462-b20090811081019</version>
+   <type>jar</type>
+   <scope>compile</scope>
   </dependency>
  </dependencies>
 </project>
