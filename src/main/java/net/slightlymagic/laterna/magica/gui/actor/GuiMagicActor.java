@@ -8,6 +8,7 @@ package net.slightlymagic.laterna.magica.gui.actor;
 
 
 import static javax.swing.JOptionPane.*;
+import static net.slightlymagic.laterna.magica.impl.CombatUtil.*;
 import static net.slightlymagic.laterna.magica.util.MagicaPredicates.*;
 
 import java.awt.BorderLayout;
@@ -193,40 +194,61 @@ public class GuiMagicActor extends AbstractMagicActor {
     
     @Override
     public void declareAttackers() {
-        //don't declare attackers
+        //use getValue to block until assignments are finished
+        getValue(channels.fiber, channels.actions, new AttackerActor(this));
     }
     
     @Override
-    public void declareBlockers() {
-        //don't declare blockers
-    }
+    public void declareBlockers() {}
     
     @Override
     public void orderAttackers() {
-        //since the actor didn't block, nothing to do
+        for(Blocker b:getGame().getCombat().getBlockers()) {
+            if(b.getBlocker().getController() != getPlayer()) continue;
+            
+            if(b.getAttackers().size() <= 1) {
+                b.setDamageAssignmentOrder(new ArrayList<Attacker>(b.getAttackers().keySet()));
+            } else {
+                throw new AssertionError();
+            }
+        }
     }
     
     @Override
     public void orderBlockers() {
-        //since the actor didn't attack, nothing to do
+        for(Attacker a:getGame().getCombat().getAttackers()) {
+            if(a.getAttacker().getController() != getPlayer()) continue;
+            
+            if(a.getBlockers().size() <= 1) {
+                a.setDamageAssignmentOrder(new ArrayList<Blocker>(a.getBlockers().keySet()));
+            } else {
+                throw new AssertionError();
+            }
+        }
     }
     
     @Override
     public Attacker getAttackerToAssignDamage(Collection<? extends Attacker> attackers) {
-        //should never get here, as there are no attackers by this player
-        throw new AssertionError();
+        if(attackers.size() == 1) return attackers.iterator().next();
+        ListChooser<Attacker> chooser = new ListChooser<Attacker>("Choose one",
+                "Choose an attacker to assign damage", new ArrayList<Attacker>(attackers));
+        chooser.show();
+        return chooser.getSelectedValue();
     }
     
     @Override
     public void assignDamage(Attacker attacker) {
-        //should never get here, as there are no attackers by this player
-        throw new AssertionError();
+        if(!attacker.getBlockers().isEmpty()) throw new AssertionError();
+        attacker.getAttackerAssignment().setAttackerAssignedDamage(getAmmount(attacker));
     }
     
     @Override
     public Blocker getBlockerToAssignDamage(Collection<? extends Blocker> blockers) {
-        //should never get here, as there are no blockers by this player
-        throw new AssertionError();
+        if(blockers.size() == 1) return blockers.iterator().next();
+        ListChooser<Blocker> chooser = new ListChooser<Blocker>("Choose one",
+                "Choose an attacker to assign damage", new ArrayList<Blocker>(blockers));
+        chooser.show();
+        return chooser.getSelectedValue();
     }
     
     @Override

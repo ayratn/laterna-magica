@@ -106,14 +106,14 @@ public interface Combat {
         public boolean isRemovedFromCombat();
     }
     
-    public static interface PlayerDefender {
+    public static interface PlayerDefender extends Defender {
         /**
          * Returns the defending player.
          */
         public Player getDefendingPlayer();
     }
     
-    public static interface PlaneswalkerDefender {
+    public static interface PlaneswalkerDefender extends Defender {
         /**
          * Returns the defending planeswalker.
          */
@@ -166,11 +166,19 @@ public interface Combat {
     
     /**
      * Declares a creature as an attacking creature
+     * 
+     * @throws IllegalStateException if it's not legal to do this operation at this point or the operation was
+     *             already executed for the parameter
+     * @throws IllegalArgumentException if the parameter is not legal for the operation
      */
     public Attacker declareAttacker(CardObject attackingCreature);
     
     /**
      * Assigns a creature to attack a given defender.
+     * 
+     * @throws IllegalStateException if it's not legal to do this operation at this point or the operation was
+     *             already executed for the parameter
+     * @throws IllegalArgumentException if the parameter is not legal for the operation
      */
     public AttackAssignment assignAttacker(Attacker attacker, Defender defender);
     
@@ -178,8 +186,7 @@ public interface Combat {
      * Returns the {@link Attacker} representation of the specified creature, or {@code null} if the creature is
      * not attacking.
      * 
-     * @throws IllegalArgumentException If the parameter is not a creature permanent controlled by the active
-     *             player
+     * @throws IllegalArgumentException if the parameter is not legal for the operation
      */
     public Attacker getAttacker(CardObject attacker);
     
@@ -196,13 +203,19 @@ public interface Combat {
     
     /**
      * Declares a creature as a blocking creature
+     * 
+     * @throws IllegalStateException if it's not legal to do this operation at this point or the operation was
+     *             already executed for the parameter
+     * @throws IllegalArgumentException if the parameter is not legal for the operation
      */
     public Blocker declareBlocker(CardObject blockingCreature);
     
     /**
      * Assigns a creature to block a given attacker.
      * 
-     * This method may be called multiple time to assign a blocker to block multiple attackers.
+     * @throws IllegalStateException if it's not legal to do this operation at this point or the operation was
+     *             already executed for the parameter
+     * @throws IllegalArgumentException if the parameter is not legal for the operation
      */
     public BlockAssignment assignBlocker(Blocker blocker, Attacker attacker);
     
@@ -210,8 +223,7 @@ public interface Combat {
      * Returns the {@link Blocker} representation of the specified creature, or {@code null} if the creature is not
      * blocking.
      * 
-     * @throws IllegalArgumentException If the parameter is not a creature permanent controlled by a defending
-     *             player
+     * @throws IllegalArgumentException if the parameter is not legal for the operation
      */
     public Blocker getBlocker(CardObject blocker);
     
@@ -230,15 +242,14 @@ public interface Combat {
      * Returns the {@link Defender} representation of the specified planeswalker, even if the planeswalker is not
      * attacked.
      * 
-     * @throws IllegalArgumentException If the parameter is not a planeswalker permanent controlled by a defending
-     *             player
+     * @throws IllegalArgumentException if the parameter is not legal for the operation
      */
     public PlaneswalkerDefender getDefender(CardObject defender);
     
     /**
      * Returns the {@link Defender} representation of the specified player, even if the player is not attacked.
      * 
-     * @throws IllegalArgumentException If the parameter is not a defending player
+     * @throws IllegalArgumentException if the parameter is not legal for the operation
      */
     public PlayerDefender getDefender(Player defender);
     
@@ -305,6 +316,9 @@ public interface Combat {
      * Sets the defending players. This method will throw an {@link IllegalArgumentException} if the defenders are
      * not valid, for example if the attacker or teammembers are contained, or the game variant restricts the set
      * of defenders otherwise.
+     * 
+     * @throws IllegalStateException if it's not legal to do this operation at this point
+     * @throws IllegalArgumentException if the parameter is not legal for the operation
      */
     public void setDefendingPlayers(Set<Player> defenders);
     

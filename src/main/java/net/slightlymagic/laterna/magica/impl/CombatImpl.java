@@ -7,17 +7,12 @@
 package net.slightlymagic.laterna.magica.impl;
 
 
-import static com.google.common.base.Predicates.*;
-import static com.google.common.base.Suppliers.*;
 import static java.lang.String.*;
 import static java.util.Collections.*;
 import static net.slightlymagic.laterna.magica.card.State.StateType.*;
-import static net.slightlymagic.laterna.magica.characteristics.CardType.*;
+import static net.slightlymagic.laterna.magica.impl.CombatUtil.*;
 import static net.slightlymagic.laterna.magica.util.MagicaCollections.*;
-import static net.slightlymagic.laterna.magica.util.MagicaFunctions.*;
-import static net.slightlymagic.laterna.magica.util.MagicaPredicates.*;
 import static net.slightlymagic.laterna.magica.util.relational.Relations.*;
-import static net.slightlymagic.laterna.magica.zone.Zone.Zones.*;
 
 import java.util.AbstractMap;
 import java.util.AbstractSet;
@@ -51,7 +46,6 @@ import net.slightlymagic.laterna.magica.util.relational.OneSide;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import com.google.common.base.Predicate;
 import com.google.common.collect.AbstractIterator;
 
 
@@ -62,29 +56,7 @@ import com.google.common.collect.AbstractIterator;
  * @author Clemens Koza
  */
 public class CombatImpl extends AbstractGameContent implements Combat {
-    private static final Logger                 log              = LoggerFactory.getLogger(CombatImpl.class);
-    
-    private static final Predicate<Player>      active           = new Predicate<Player>() {
-                                                                     @Override
-                                                                     public boolean apply(Player input) {
-                                                                         return input == input.getGame().getTurnStructure().getActivePlayer();
-                                                                     }
-                                                                 };
-    
-    private static final Predicate<MagicObject> permanent        = isIn(ofInstance(BATTLEFIELD));
-    private static final Predicate<MagicObject> untapped         = not(is(TAPPED));
-    private static final Predicate<MagicObject> creature         = and(permanent, card(has(CREATURE)));
-    private static final Predicate<MagicObject> planeswalker     = and(permanent, card(has(PLANESWALKER)));
-    private static final Predicate<CardObject>  untappedCreature = and(creature, untapped);
-    
-    private final Predicate<CardObject>         legalAttacker    = and(untappedCreature,
-                                                                         compose(active, controller));
-    //TODO consider teams
-    private final Predicate<Player>             legalDefPl       = not(active);
-    private final Predicate<CardObject>         legalDefPw       = and(planeswalker,
-                                                                         compose(legalDefPl, controller));
-    private final Predicate<CardObject>         legalBlocker     = and(untappedCreature,
-                                                                         compose(legalDefPl, controller));
+    private static final Logger log = LoggerFactory.getLogger(CombatImpl.class);
     
     private <T> EditableProperty<T> editable(String name, T value) {
         return new EditableProperty<T>(getGame(), null, name, value);
@@ -162,7 +134,7 @@ public class CombatImpl extends AbstractGameContent implements Combat {
         @Override
         protected void setCreature(CardObject creature) {
             checkAction(TurnBasedAction.Type.DECLARE_ATTACKERS);
-            if(!legalAttacker.apply(creature)) throw new IllegalArgumentException();
+            if(!isLegalAttacker(creature)) throw new IllegalArgumentException();
             super.setCreature(creature);
         }
         
@@ -212,7 +184,7 @@ public class CombatImpl extends AbstractGameContent implements Combat {
         @Override
         protected void setCreature(CardObject creature) {
             checkAction(TurnBasedAction.Type.DECLARE_BLOCKERS);
-            if(!legalBlocker.apply(creature)) throw new IllegalArgumentException();
+            if(!isLegalBlocker(creature)) throw new IllegalArgumentException();
             super.setCreature(creature);
         }
         
@@ -318,7 +290,7 @@ public class CombatImpl extends AbstractGameContent implements Combat {
         private Player defender;
         
         public PlayerDefenderImpl(Player defender) {
-            if(!legalDefPl.apply(defender)) throw new IllegalArgumentException();
+            if(!isLegalDefendingPlayer(defender)) throw new IllegalArgumentException();
             this.defender = defender;
         }
         
@@ -342,7 +314,7 @@ public class CombatImpl extends AbstractGameContent implements Combat {
         private CardObject defender;
         
         public PlaneswalkerDefenderImpl(CardObject defender) {
-            if(!legalDefPw.apply(defender)) throw new IllegalArgumentException();
+            if(!isLegalDefendingPlaneswalker(defender)) throw new IllegalArgumentException();
             this.defender = defender;
         }
         
@@ -486,7 +458,7 @@ public class CombatImpl extends AbstractGameContent implements Combat {
     }
     
     public AttackerImpl getAttacker(CardObject attacker) {
-        if(!legalAttacker.apply(attacker)) throw new IllegalArgumentException();
+        if(!isLegalAttacker(attacker)) throw new IllegalArgumentException();
         return attackers.get(attacker);
     }
     
@@ -519,7 +491,7 @@ public class CombatImpl extends AbstractGameContent implements Combat {
     }
     
     public BlockerImpl getBlocker(CardObject blocker) {
-        if(!legalBlocker.apply(blocker)) throw new IllegalArgumentException();
+        if(!isLegalBlocker(blocker)) throw new IllegalArgumentException();
         return blockers.get(blocker);
     }
     
@@ -536,14 +508,14 @@ public class CombatImpl extends AbstractGameContent implements Combat {
     //Defenders
     
     public PlaneswalkerDefender getDefender(CardObject defender) {
-        if(!legalDefPw.apply(defender)) throw new IllegalArgumentException();
+        if(!isLegalDefendingPlaneswalker(defender)) throw new IllegalArgumentException();
         PlaneswalkerDefenderImpl d = (PlaneswalkerDefenderImpl) defenders.get(defender);
         if(d == null) defenders.put(defender, d = new PlaneswalkerDefenderImpl(defender));
         return d;
     }
     
     public PlayerDefender getDefender(Player defender) {
-        if(!legalDefPl.apply(defender)) throw new IllegalArgumentException();
+        if(!isLegalDefendingPlayer(defender)) throw new IllegalArgumentException();
         PlayerDefenderImpl d = (PlayerDefenderImpl) defenders.get(defender);
         if(d == null) defenders.put(defender, d = new PlayerDefenderImpl(defender));
         return d;
@@ -552,9 +524,9 @@ public class CombatImpl extends AbstractGameContent implements Combat {
     public Collection<? extends Defender> getDefenders() {
         //ensure that all defenders are contained
         for(Player p:getGame().getPlayers())
-            if(legalDefPl.apply(p)) getDefender(p);
+            if(isLegalDefendingPlayer(p)) getDefender(p);
         for(MagicObject o:getGame().getBattlefield().getCards())
-            if(legalDefPw.apply((CardObject) o)) getDefender((CardObject) o);
+            if(isLegalDefendingPlaneswalker((CardObject) o)) getDefender((CardObject) o);
         return defendersView.values();
     }
     
@@ -575,7 +547,7 @@ public class CombatImpl extends AbstractGameContent implements Combat {
         //TODO implement properly
         List<Player> p = new ArrayList<Player>(getGame().getPlayers());
         for(Iterator<Player> it = p.iterator(); it.hasNext();)
-            if(!legalDefPl.apply(it.next())) it.remove();
+            if(!isLegalDefendingPlayer(it.next())) it.remove();
         return p;
     }
     
@@ -726,7 +698,7 @@ public class CombatImpl extends AbstractGameContent implements Combat {
     }
     
     public boolean isLegalAttackersAssignmentOrder(Player attacker) {
-        checkAction(TurnBasedAction.Type.ORDER_ATTACKERS);
+        checkAction(TurnBasedAction.Type.ORDER_BLOCKERS);
         log.debug("Checking legal attacker DAO for " + attacker);
         for(AttackerImpl a:attackers.values()) {
             if(a.isRemovedFromCombat()) continue;
@@ -741,7 +713,7 @@ public class CombatImpl extends AbstractGameContent implements Combat {
     }
     
     public boolean isLegalBlockersAssignmentOrder(Player defender) {
-        checkAction(TurnBasedAction.Type.ORDER_BLOCKERS);
+        checkAction(TurnBasedAction.Type.ORDER_ATTACKERS);
         log.debug("Checking legal blocker DAO for " + defender);
         for(BlockerImpl b:blockers.values()) {
             if(b.isRemovedFromCombat()) continue;
@@ -765,43 +737,6 @@ public class CombatImpl extends AbstractGameContent implements Combat {
     
     private Set<AttackerImpl>                  attackersThisStep = editableSet();
     private Set<BlockerImpl>                   blockersThisStep  = editableSet();
-    
-    /**
-     * Returns whether the creature deals, depending on {@code first}, first strike or regular damage.
-     */
-    private boolean dealsDamage(CreatureCombatant<?, ?> c, boolean first) {
-        //TODO determine first & double strike creatures
-        boolean firstStrike = false, doubleStrike = false;
-        
-        return first == (firstStrike || doubleStrike);
-    }
-    
-    /**
-     * Returns the amount of damage dealt by the creature
-     */
-    private int getAmmount(CreatureCombatant<?, ?> c) {
-        //TODO implement properly
-        return c.getCreature().getCharacteristics().get(0).getPower();
-    }
-    
-    /**
-     * Returns whether the creature was assigned lethal damage
-     */
-    private boolean isLethal(CreatureCombatant<?, ?> c) {
-        //TODO implement properly
-        int toughness = c.getCreature().getCharacteristics().get(0).getToughness();
-        for(BlockAssignmentImpl b:c.getOtherCreatures().values())
-            toughness -= c instanceof AttackerImpl? b.getBlockerAssignedDamage():b.getAttackerAssignedDamage();
-        return toughness <= 0;
-    }
-    
-    /**
-     * Returns whether the attacker can assign excess damage to the defender rather than its blockers
-     */
-    private boolean hasTrample(AttackerImpl c) {
-        //TODO implement properly
-        return false;
-    }
     
     @Override
     public void startCombatDamageStep() {

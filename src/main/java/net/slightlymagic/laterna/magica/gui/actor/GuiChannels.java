@@ -11,6 +11,7 @@ import java.util.concurrent.Executors;
 
 import net.slightlymagic.laterna.magica.MagicObject;
 import net.slightlymagic.laterna.magica.action.play.PlayAction;
+import net.slightlymagic.laterna.magica.player.Player;
 
 import org.jetlang.channels.Channel;
 import org.jetlang.channels.MemoryChannel;
@@ -34,6 +35,11 @@ public class GuiChannels {
      * Channel for publishing {@link MagicObject}s when the user clicks on them
      */
     public final Channel<MagicObject> objects      = new MemoryChannel<MagicObject>();
+    
+    /**
+     * Channel for publishing {@link Player}s when the user clicks on them
+     */
+    public final Channel<Player>      players      = new MemoryChannel<Player>();
     
     /**
      * Channel for publishing when the user clicks "pass priority"

@@ -20,6 +20,7 @@ import java.util.regex.Pattern;
 import net.slightlymagic.laterna.magica.GameContent;
 import net.slightlymagic.laterna.magica.action.turnBased.TurnBasedAction;
 import net.slightlymagic.laterna.magica.action.turnBased.TurnBasedAction.Type;
+import net.slightlymagic.laterna.magica.event.EnterTurnBasedActionListener;
 import net.slightlymagic.laterna.magica.event.PhaseChangedListener;
 import net.slightlymagic.laterna.magica.event.PriorChangedListener;
 import net.slightlymagic.laterna.magica.event.StepChangedListener;
@@ -259,4 +260,10 @@ public interface PhaseStructure extends GameContent {
     public void removePriorChangedListener(PriorChangedListener l);
     
     public void addPriorChangedListener(PriorChangedListener l);
+    
+    public Iterator<EnterTurnBasedActionListener> getEnterTurnBasedActionListeners();
+    
+    public void removeEnterTurnBasedActionListener(EnterTurnBasedActionListener l);
+    
+    public void addEnterTurnBasedActionListener(EnterTurnBasedActionListener l);
 }

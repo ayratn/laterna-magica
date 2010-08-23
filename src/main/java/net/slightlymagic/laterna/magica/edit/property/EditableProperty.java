@@ -73,7 +73,7 @@ public class EditableProperty<T> extends AbstractGameContent {
         
         @Override
         public String toString() {
-            return "Set " + s.getSourceBean() + "'s " + name + " to " + newValue;
+            return "Set " + (s == null? "":s.getSourceBean() + "'s ") + name + " to " + newValue;
         }
     }
 }

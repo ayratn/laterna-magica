@@ -35,13 +35,14 @@ public class OrderBlockersAction extends AbstractGameAction implements TurnBased
         combat.setAction(Type.ORDER_BLOCKERS);
         
         for(Player p:attacking) {
+            combat.setAttackerAssignmentOrderPlayer(p);
             Edit ref = getGame().getGameState().getCurrent();
             do {
                 getGame().getGameState().stepTo(ref);
                 CompoundEdit edit = new CompoundEdit(getGame(), true, "Order attackers' blockers for " + p);
                 p.getActor().orderBlockers();
                 edit.end();
-            } while(!combat.isLegalBlockersAssignmentOrder(p));
+            } while(!combat.isLegalAttackersAssignmentOrder(p));
         }
         
         return true;

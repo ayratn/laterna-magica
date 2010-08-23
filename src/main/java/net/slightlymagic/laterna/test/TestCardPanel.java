@@ -22,10 +22,12 @@ import javax.swing.JLabel;
 
 import net.slightlymagic.laterna.magica.Game;
 import net.slightlymagic.laterna.magica.LaternaMagica;
+import net.slightlymagic.laterna.magica.action.turnBased.TurnBasedAction.Type;
 import net.slightlymagic.laterna.magica.card.Printing;
 import net.slightlymagic.laterna.magica.deck.Deck;
 import net.slightlymagic.laterna.magica.deck.Deck.DeckType;
 import net.slightlymagic.laterna.magica.deck.impl.DeckImpl;
+import net.slightlymagic.laterna.magica.event.EnterTurnBasedActionListener;
 import net.slightlymagic.laterna.magica.event.PriorChangedListener;
 import net.slightlymagic.laterna.magica.gui.actor.GuiMagicActor;
 import net.slightlymagic.laterna.magica.gui.card.CardDetail;
@@ -35,7 +37,6 @@ import net.slightlymagic.laterna.magica.gui.util.GuiUtil;
 import net.slightlymagic.laterna.magica.gui.zone.ZonePanel;
 import net.slightlymagic.laterna.magica.impl.GameImpl;
 import net.slightlymagic.laterna.magica.impl.GameLoop;
-import net.slightlymagic.laterna.magica.player.MagicActor;
 import net.slightlymagic.laterna.magica.player.Player;
 import net.slightlymagic.laterna.magica.player.impl.PlayerImpl;
 
@@ -90,6 +91,12 @@ public class TestCardPanel {
                         g.getPhaseStructure().getStep(), g.getPhaseStructure().getPriorPlayer()));
             }
         });
+        g.getPhaseStructure().addEnterTurnBasedActionListener(new EnterTurnBasedActionListener() {
+            public void enterTurnBasedAction(Type action) {
+                l.setText(format("%s's %s - %s", g.getTurnStructure().getActivePlayer(),
+                        g.getPhaseStructure().getStep(), action));
+            }
+        });
         
         jf.add(l, BorderLayout.NORTH);
         jf.add(p);
@@ -97,9 +104,7 @@ public class TestCardPanel {
             private static final long serialVersionUID = -8679358973135402669L;
             
             public void actionPerformed(ActionEvent e) {
-                MagicActor actor = g.getPhaseStructure().getPriorPlayer().getActor();
-                if(!(actor instanceof GuiMagicActor)) return;
-                ((GuiMagicActor) actor).channels.passPriority.publish(null);
+                GuiUtil.publishPassPriority();
             }
         }), BorderLayout.SOUTH);
         
@@ -138,9 +143,12 @@ public class TestCardPanel {
         Deck d = new DeckImpl();
         d.addPool(DeckType.MAIN_DECK);
         
-        put(d, "Island", 20);
-        put(d, "Courier's Capsule", 12);
-        put(d, "Arcanis the Omnipotent", 8);
+//        put(d, "Island", 20);
+//        put(d, "Courier's Capsule", 12);
+//        put(d, "Arcanis the Omnipotent", 8);
+        put(d, "Forest", 20);
+        put(d, "Llanowar Elves", 12);
+        put(d, "Grizzly Bears", 8);
         
 
         final Game g = new GameImpl();

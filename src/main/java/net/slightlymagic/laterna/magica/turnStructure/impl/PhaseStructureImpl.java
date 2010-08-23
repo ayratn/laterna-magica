@@ -35,6 +35,7 @@ import net.slightlymagic.laterna.magica.edit.CompoundEdit;
 import net.slightlymagic.laterna.magica.edit.impl.EditableListenerList;
 import net.slightlymagic.laterna.magica.edit.property.EditableProperty;
 import net.slightlymagic.laterna.magica.edit.property.EditablePropertyChangeSupport;
+import net.slightlymagic.laterna.magica.event.EnterTurnBasedActionListener;
 import net.slightlymagic.laterna.magica.event.PhaseChangedListener;
 import net.slightlymagic.laterna.magica.event.PriorChangedListener;
 import net.slightlymagic.laterna.magica.event.StepChangedListener;
@@ -256,6 +257,7 @@ public class PhaseStructureImpl extends AbstractGameContent implements PhaseStru
             } else {
                 //TBAs at the end of the last step
                 for(TurnBasedAction.Type t:getStep().getEndActions()) {
+                    fireEnterTurnBasedAction(t);
                     TurnBasedAction action = turnBasedActions.get(t);
                     if(action != null) action.execute();
                     else log.warn("Turn based Action " + t + " does not exist");
@@ -273,6 +275,7 @@ public class PhaseStructureImpl extends AbstractGameContent implements PhaseStru
             
             //TBAs at the beginning of the next step
             for(TurnBasedAction.Type t:getStep().getBeginningActions()) {
+                fireEnterTurnBasedAction(t);
                 TurnBasedAction action = turnBasedActions.get(t);
                 if(action != null) action.execute();
                 else log.warn("Turn based Action " + t + " does not exist");
@@ -335,6 +338,11 @@ public class PhaseStructureImpl extends AbstractGameContent implements PhaseStru
             it.next().nextPhase(oldPhase, newPhase);
     }
     
+    private void fireEnterTurnBasedAction(TurnBasedAction.Type action) {
+        for(Iterator<EnterTurnBasedActionListener> it = getEnterTurnBasedActionListeners(); it.hasNext();)
+            it.next().enterTurnBasedAction(action);
+    }
+    
     
     public void addPriorChangedListener(PriorChangedListener l) {
         listeners.add(PriorChangedListener.class, l);
@@ -374,5 +382,19 @@ public class PhaseStructureImpl extends AbstractGameContent implements PhaseStru
     @SuppressWarnings("unchecked")
     public Iterator<PhaseChangedListener> getPhaseChangedListeners() {
         return listeners.getIterator(PhaseChangedListener.class);
+    }
+    
+    
+    public void addEnterTurnBasedActionListener(EnterTurnBasedActionListener l) {
+        listeners.add(EnterTurnBasedActionListener.class, l);
+    }
+    
+    public void removeEnterTurnBasedActionListener(EnterTurnBasedActionListener l) {
+        listeners.remove(EnterTurnBasedActionListener.class, l);
+    }
+    
+    @SuppressWarnings("unchecked")
+    public Iterator<EnterTurnBasedActionListener> getEnterTurnBasedActionListeners() {
+        return listeners.getIterator(EnterTurnBasedActionListener.class);
     }
 }

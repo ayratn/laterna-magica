@@ -140,6 +140,11 @@ public class GuiUtil {
         actors.remove(actor);
     }
     
+    public static void publishPassPriority() {
+        for(GuiMagicActor actor:actors)
+            actor.channels.passPriority.publish(null);
+    }
+    
     private static final class CardListener implements ActionListener {
         public void actionPerformed(ActionEvent e) {
             CardTextButton p = (CardTextButton) e.getSource();
@@ -174,8 +179,8 @@ public class GuiUtil {
         @Override
         public void mouseExited(MouseEvent e) {
             if(!(e.getSource() instanceof CardDisplay)) return;
-            for(CardDisplay c:cards)
-                c.setCard(null);
+//            for(CardDisplay c:cards)
+//                c.setCard(null);
         }
     }
     
