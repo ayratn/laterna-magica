@@ -4,7 +4,7 @@
  * Created on 10.04.2010
  */
 
-package net.slightlymagic.laterna.magica.gui.util;
+package net.slightlymagic.laterna.magica.gui.actor;
 
 
 import static javax.swing.JOptionPane.*;
@@ -31,6 +31,7 @@ import net.slightlymagic.laterna.magica.cost.ManaCost;
 import net.slightlymagic.laterna.magica.effect.replacement.ReplaceableEvent;
 import net.slightlymagic.laterna.magica.effect.replacement.ReplacementEffect;
 import net.slightlymagic.laterna.magica.gui.mana.symbol.ManaSymbolChooser;
+import net.slightlymagic.laterna.magica.gui.util.ListChooser;
 import net.slightlymagic.laterna.magica.mana.Mana;
 import net.slightlymagic.laterna.magica.mana.ManaSequence;
 import net.slightlymagic.laterna.magica.mana.ManaSymbol;

@@ -30,6 +30,7 @@ import net.slightlymagic.laterna.magica.action.special.LandDropAction;
 import net.slightlymagic.laterna.magica.card.CardObject;
 import net.slightlymagic.laterna.magica.characteristic.CharacteristicSnapshot;
 import net.slightlymagic.laterna.magica.characteristics.CardType;
+import net.slightlymagic.laterna.magica.gui.actor.GuiActor;
 import net.slightlymagic.laterna.magica.gui.card.CardDisplay;
 import net.slightlymagic.laterna.magica.gui.card.CardTextButton;
 import net.slightlymagic.laterna.magica.player.Actor;

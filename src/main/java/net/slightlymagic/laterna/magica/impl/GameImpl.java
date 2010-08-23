@@ -126,7 +126,7 @@ public class GameImpl implements Game {
     }
     
     public Zone getBattlefield() {
-        return getZone(ANTE);
+        return getZone(BATTLEFIELD);
     }
     
     public Zone getCommand() {
