@@ -27,7 +27,7 @@ import net.slightlymagic.laterna.magica.player.Player;
  * @version V0.0 09.04.2010
  * @author Clemens Koza
  */
-public class NoopActor extends AbstractActor {
+public class NoopActor extends AbstractMagicActor {
     public NoopActor(Player player) {
         super(player);
     }

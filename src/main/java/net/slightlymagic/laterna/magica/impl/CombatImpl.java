@@ -581,7 +581,7 @@ public class CombatImpl extends AbstractGameContent implements Combat {
     
     //Lifecycle
     /* These methods implement the flow of the combat phase. More precisely, they will be called by turn based
-     * actions in the right order, where this class is primary for enforcing the rules and the Actor for making
+     * actions in the right order, where this class is primary for enforcing the rules and the MagicActor for making
      * decisions. Both are mediated by the turn based actions.
      */
 

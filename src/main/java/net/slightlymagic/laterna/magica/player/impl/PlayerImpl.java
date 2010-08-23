@@ -28,7 +28,7 @@ import net.slightlymagic.laterna.magica.event.DrawListener;
 import net.slightlymagic.laterna.magica.impl.AbstractGameContent;
 import net.slightlymagic.laterna.magica.mana.ManaPool;
 import net.slightlymagic.laterna.magica.mana.impl.ManaPoolImpl;
-import net.slightlymagic.laterna.magica.player.Actor;
+import net.slightlymagic.laterna.magica.player.MagicActor;
 import net.slightlymagic.laterna.magica.player.LifeTotal;
 import net.slightlymagic.laterna.magica.player.Player;
 import net.slightlymagic.laterna.magica.util.ExtendedListenerList;
@@ -56,7 +56,7 @@ public class PlayerImpl extends AbstractGameContent implements Player {
     private EditablePropertyChangeSupport s;
     private EditableProperty<Deck>        deck;
     
-    private Actor                         actor;
+    private MagicActor                         actor;
     private String                        name;
     private LifeTotal                     life;
     private ManaPool                      pool;
@@ -85,12 +85,12 @@ public class PlayerImpl extends AbstractGameContent implements Player {
         e.end();
     }
     
-    public Actor getActor() {
+    public MagicActor getActor() {
         if(actor == null) actor = new NoopActor(this);
         return actor;
     }
     
-    public void setActor(Actor a) {
+    public void setActor(MagicActor a) {
         if(a.getPlayer() != this) throw new IllegalArgumentException();
         actor = a;
     }

@@ -32,12 +32,12 @@ public interface Player extends GameContent {
     public static final String DECK              = "deck";
     public static final String LAND_DROP_COUNTER = "LandDrop";
     
-    public void setActor(Actor a);
+    public void setActor(MagicActor a);
     
     /**
      * Returns this player's actor.
      */
-    public Actor getActor();
+    public MagicActor getActor();
     
     /**
      * Sets the player's deck.

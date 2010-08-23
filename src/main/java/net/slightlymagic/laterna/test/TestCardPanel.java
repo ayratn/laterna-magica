@@ -13,6 +13,7 @@ import java.awt.BorderLayout;
 import java.awt.event.ActionEvent;
 import java.io.IOException;
 import java.util.List;
+import java.util.Map;
 
 import javax.swing.AbstractAction;
 import javax.swing.JButton;
@@ -22,12 +23,11 @@ import javax.swing.JLabel;
 import net.slightlymagic.laterna.magica.Game;
 import net.slightlymagic.laterna.magica.LaternaMagica;
 import net.slightlymagic.laterna.magica.card.Printing;
-import net.slightlymagic.laterna.magica.cards.AllCards;
 import net.slightlymagic.laterna.magica.deck.Deck;
 import net.slightlymagic.laterna.magica.deck.Deck.DeckType;
 import net.slightlymagic.laterna.magica.deck.impl.DeckImpl;
 import net.slightlymagic.laterna.magica.event.PriorChangedListener;
-import net.slightlymagic.laterna.magica.gui.actor.GuiActor;
+import net.slightlymagic.laterna.magica.gui.actor.GuiMagicActor;
 import net.slightlymagic.laterna.magica.gui.card.CardDetail;
 import net.slightlymagic.laterna.magica.gui.card.CardImage;
 import net.slightlymagic.laterna.magica.gui.player.PlayerPanel;
@@ -35,7 +35,7 @@ import net.slightlymagic.laterna.magica.gui.util.GuiUtil;
 import net.slightlymagic.laterna.magica.gui.zone.ZonePanel;
 import net.slightlymagic.laterna.magica.impl.GameImpl;
 import net.slightlymagic.laterna.magica.impl.GameLoop;
-import net.slightlymagic.laterna.magica.player.Actor;
+import net.slightlymagic.laterna.magica.player.MagicActor;
 import net.slightlymagic.laterna.magica.player.Player;
 import net.slightlymagic.laterna.magica.player.impl.PlayerImpl;
 
@@ -56,9 +56,9 @@ public class TestCardPanel {
         
         final Game g = initGame();
         Player me = g.getPlayers().get(0);
-        me.setActor(new GuiActor(me));
+        me.setActor(new GuiMagicActor(me));
         Player her = g.getPlayers().get(1);
-        her.setActor(new GuiActor(her));
+        her.setActor(new GuiMagicActor(her));
         
         JFrame jf = new JFrame();
         jf.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
@@ -76,11 +76,11 @@ public class TestCardPanel {
         p.add(z, "stack");
         
         CardImage im = new CardImage();
-        GuiUtil.cardMouseListener.add(im);
+        GuiUtil.add(im);
         p.add(im, "picture");
         
         CardDetail de = new CardDetail(18);
-        GuiUtil.cardMouseListener.add(de);
+        GuiUtil.add(de);
         p.add(de, "detail");
         
         final JLabel l = new JLabel();
@@ -97,9 +97,9 @@ public class TestCardPanel {
             private static final long serialVersionUID = -8679358973135402669L;
             
             public void actionPerformed(ActionEvent e) {
-                Actor actor = g.getPhaseStructure().getPriorPlayer().getActor();
-                if(!(actor instanceof GuiActor)) return;
-                ((GuiActor) actor).putAction(null);
+                MagicActor actor = g.getPhaseStructure().getPriorPlayer().getActor();
+                if(!(actor instanceof GuiMagicActor)) return;
+                ((GuiMagicActor) actor).channels.passPriority.publish(null);
             }
         }), BorderLayout.SOUTH);
         
@@ -108,6 +108,7 @@ public class TestCardPanel {
         jf.setVisible(true);
         
         g.startGame();
+        
         //run in the main thread
         new GameLoop(g).run();
     }
@@ -131,16 +132,12 @@ public class TestCardPanel {
     }
     
     private static Game initGame() throws IOException {
-        AllCards c = LaternaMagica.CARDS();
+//        AllCards c = LaternaMagica.CARDS();
 //        c.compile();
         
         Deck d = new DeckImpl();
         d.addPool(DeckType.MAIN_DECK);
         
-//        d.getPool(DeckType.MAIN_DECK).put(c.getCard("Forest"), 8);
-//        d.getPool(DeckType.MAIN_DECK).put(c.getCard("Wooded Bastion"), 8);
-//        d.getPool(DeckType.MAIN_DECK).put(c.getCard("Llanowar Elves"), 8);
-//        d.getPool(DeckType.MAIN_DECK).put(c.getCard("Wrath of God"), 8);
         put(d, "Island", 20);
         put(d, "Courier's Capsule", 12);
         put(d, "Arcanis the Omnipotent", 8);
@@ -159,7 +156,19 @@ public class TestCardPanel {
     }
     
     private static void put(Deck d, String name, int num) {
-        List<Printing> printings = LaternaMagica.CARDS().getCard(name).getPrintings();
-        d.getPool(DeckType.MAIN_DECK).put(printings.get((int) (Math.random() * printings.size())), num);
+        Map<Printing, Integer> pool = d.getPool(DeckType.MAIN_DECK);
+        List<Printing> list = LaternaMagica.CARDS().getCard(name).getPrintings();
+        for(int i = 0; i < num; i++)
+            put(pool, list);
+    }
+    
+    /**
+     * Randomly adds one of the printings to the pool
+     */
+    private static void put(Map<Printing, Integer> pool, List<Printing> list) {
+        Printing p = list.get((int) (Math.random() * list.size()));
+        Integer old = pool.put(p, 1);
+        //If there already were cards, add 1
+        if(old != null) pool.put(p, old + 1);
     }
 }

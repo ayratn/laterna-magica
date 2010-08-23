@@ -1,5 +1,5 @@
 /**
- * Actor.java
+ * MagicActor.java
  * 
  * Created on 09.04.2010
  */
@@ -26,13 +26,14 @@ import net.slightlymagic.laterna.magica.mana.ManaSequence;
 
 
 /**
- * The interface Actor is the "controller" whereas Player is the model. An actor defines the behavior of the player
- * and may use any strategy, for example a GUI for user input, a remotely connected actor, or an AI algorithm.
+ * The interface MagicActor is the "controller" whereas Player is the model. A magic actor defines the behavior of
+ * the player and may use any strategy, for example a GUI for user input, a remotely connected actor, or an AI
+ * algorithm.
  * 
  * @version V0.0 09.04.2010
  * @author Clemens Koza
  */
-public interface Actor extends GameContent {
+public interface MagicActor extends GameContent {
     /**
      * Returns the player this actor represents.
      */

@@ -1,5 +1,5 @@
 /**
- * Actor.java
+ * MagicActor.java
  * 
  * Created on 23.08.2010
  */
@@ -13,7 +13,7 @@ import org.jetlang.fibers.Fiber;
 
 
 /**
- * The class Actor.
+ * The class MagicActor.
  * 
  * @version V0.0 23.08.2010
  * @author Clemens Koza

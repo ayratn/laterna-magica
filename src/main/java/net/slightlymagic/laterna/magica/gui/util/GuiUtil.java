@@ -30,11 +30,13 @@ import net.slightlymagic.laterna.magica.action.special.LandDropAction;
 import net.slightlymagic.laterna.magica.card.CardObject;
 import net.slightlymagic.laterna.magica.characteristic.CharacteristicSnapshot;
 import net.slightlymagic.laterna.magica.characteristics.CardType;
-import net.slightlymagic.laterna.magica.gui.actor.GuiActor;
+import net.slightlymagic.laterna.magica.gui.actor.GuiMagicActor;
 import net.slightlymagic.laterna.magica.gui.card.CardDisplay;
 import net.slightlymagic.laterna.magica.gui.card.CardTextButton;
-import net.slightlymagic.laterna.magica.player.Actor;
 import net.slightlymagic.laterna.magica.player.Player;
+
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 
 /**
@@ -44,6 +46,8 @@ import net.slightlymagic.laterna.magica.player.Player;
  * @author Clemens Koza
  */
 public class GuiUtil {
+    private static final Logger log = LoggerFactory.getLogger(GuiUtil.class);
+    
     ////
     // Actions
     ////
@@ -124,48 +128,59 @@ public class GuiUtil {
     // Cards
     ////
     
+
+    //TODO this will cause a memory leak when playing multiple games. add some abstraction for a GUI instance
+    private static final List<GuiMagicActor> actors = new ArrayList<GuiMagicActor>();
+    
+    public static void add(GuiMagicActor actor) {
+        actors.add(actor);
+    }
+    
+    public static void remove(GuiMagicActor actor) {
+        actors.remove(actor);
+    }
+    
     private static final class CardListener implements ActionListener {
         public void actionPerformed(ActionEvent e) {
             CardTextButton p = (CardTextButton) e.getSource();
             MagicObject c = p.getCard().getCard();
-            Player player = c.getGame().getPhaseStructure().getPriorPlayer();
-            Actor actor = player.getActor();
-            if(!(actor instanceof GuiActor)) return;
-            PlayAction a = getActionOptional(player, c);
-            if(a != null) ((GuiActor) actor).putAction(a);
+            
+            log.debug("Card clicked: " + c);
+            log.trace("Publishing to " + actors);
+            for(GuiMagicActor actor:actors)
+                actor.channels.objects.publish(c);
         }
     }
     
-    public static final class CardMouseListener extends MouseAdapter {
-        private List<CardDisplay> c = new ArrayList<CardDisplay>();
-        
-        public void add(CardDisplay c) {
-            this.c.add(c);
-        }
-        
-        public void remove(CardDisplay c) {
-            this.c.remove(c);
-        }
-        
+    private static final List<CardDisplay> cards = new ArrayList<CardDisplay>();
+    
+    public static void add(CardDisplay card) {
+        cards.add(card);
+    }
+    
+    public static void remove(CardDisplay card) {
+        cards.remove(card);
+    }
+    
+    private static final class CardMouseListener extends MouseAdapter {
         @Override
         public void mouseEntered(MouseEvent e) {
             if(!(e.getSource() instanceof CardDisplay)) return;
             CharacteristicSnapshot sn = ((CardDisplay) e.getSource()).getCard();
-            for(CardDisplay c:this.c)
+            for(CardDisplay c:cards)
                 c.setCard(sn);
         }
         
         @Override
         public void mouseExited(MouseEvent e) {
             if(!(e.getSource() instanceof CardDisplay)) return;
-            CharacteristicSnapshot sn = ((CardDisplay) e.getSource()).getCard();
-            for(CardDisplay c:this.c)
-                c.setCard(sn);
+            for(CardDisplay c:cards)
+                c.setCard(null);
         }
     }
     
-    private static final ActionListener   cardListener      = new CardListener();
-    public static final CardMouseListener cardMouseListener = new CardMouseListener();
+    private static final ActionListener    cardListener      = new CardListener();
+    private static final CardMouseListener cardMouseListener = new CardMouseListener();
     
     /**
      * Returns a component for displaying the specified card. The returned component will also implement
