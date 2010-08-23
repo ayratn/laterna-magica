@@ -11,6 +11,7 @@ import java.util.Map;
 import java.util.Map.Entry;
 
 import net.slightlymagic.laterna.magica.Game;
+import net.slightlymagic.laterna.magica.MagicObject;
 import net.slightlymagic.laterna.magica.card.CardObject;
 import net.slightlymagic.laterna.magica.card.Printing;
 import net.slightlymagic.laterna.magica.card.impl.CardObjectImpl;
@@ -35,6 +36,9 @@ public class GameInitializer implements GameStartListener.Internal {
                 //reset land drops at the end of each turn
                 for(Player p:game.getPlayers())
                     p.getCounter(Player.LAND_DROP_COUNTER).reset();
+                //clear summoning sickness
+                for(MagicObject c:game.getBattlefield().getCards())
+                    c.getCounter("summoningSickness").reset();
             }
         });
         

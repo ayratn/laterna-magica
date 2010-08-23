@@ -138,6 +138,11 @@ public abstract class MagicObjectImpl extends AbstractTimestamped implements Mag
                 + ev.getTo());
         
         zone.setValue(ev.getTo());
+        if(ev.getTo().getType() == Zones.BATTLEFIELD) {
+            getCounter("summoningSickness").reset();
+            getCounter("summoningSickness").increase();
+        }
+        
         getTimestamp().updateTimestamp();
         
         PeekingIterator<MoveCardListener> from = Iterators.peekingIterator(ev.getFrom() == null? Iterators.<MoveCardListener> emptyIterator():ev.getFrom().getMoveCardListeners());

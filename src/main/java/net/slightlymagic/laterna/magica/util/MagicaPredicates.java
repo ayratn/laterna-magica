@@ -7,6 +7,7 @@
 package net.slightlymagic.laterna.magica.util;
 
 
+import static com.google.common.base.Suppliers.*;
 import static java.util.Arrays.*;
 
 import java.io.Serializable;
@@ -22,6 +23,7 @@ import net.slightlymagic.laterna.magica.characteristics.SubType;
 import net.slightlymagic.laterna.magica.characteristics.SuperType;
 import net.slightlymagic.laterna.magica.player.Player;
 import net.slightlymagic.laterna.magica.zone.Zone;
+import net.slightlymagic.laterna.magica.zone.Zone.Zones;
 
 import com.google.common.base.Function;
 import com.google.common.base.Predicate;
@@ -218,6 +220,25 @@ public final class MagicaPredicates {
         };
     }
     
+    public static final Predicate<MagicObject> summoningSick = SummoningSick.INSTANCE;
+    
+    private static enum SummoningSick implements SerializablePredicate<MagicObject> {
+        INSTANCE;
+        
+        private static final Predicate<MagicObject> creature = Predicates.and(card(has(CardType.CREATURE)),
+                                                                     isIn(ofInstance(Zones.BATTLEFIELD)));
+        
+        @Override
+        public boolean apply(MagicObject input) {
+            if(!creature.apply(input)) return false;
+            //TODO check haste
+            boolean haste = false;
+            
+            System.out.println(input.getCounter("summoningSickness").getCount());
+            return !(input.getCounter("summoningSickness").getCount() == 0 || haste);
+        }
+    }
+    
     /**
      * The class CardPredicate. This class performs a match operation on a card based on a
      * {@link ObjectCharacteristics} predicate, as specified in {@magic.ruleRef 20100716/R7086}.
@@ -225,7 +246,7 @@ public final class MagicaPredicates {
      * @version V1.0 10.10.2009
      * @author Clemens Koza
      */
-    public static class CardPredicate implements SerializablePredicate<MagicObject> {
+    private static class CardPredicate implements SerializablePredicate<MagicObject> {
         private static final long                        serialVersionUID = -6788854536917781953L;
         
         private Predicate<? super ObjectCharacteristics> predicate;

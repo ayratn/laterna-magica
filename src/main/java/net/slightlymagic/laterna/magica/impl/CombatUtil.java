@@ -50,7 +50,8 @@ public class CombatUtil {
     private static final Predicate<Player>      legalDefPl       = not(active);
     private static final Predicate<CardObject>  legalDefPw       = and(planeswalker,
                                                                          compose(legalDefPl, controller));
-    private static final Predicate<CardObject>  legalAttacker    = and(untappedCreature,
+    @SuppressWarnings("unchecked")
+    private static final Predicate<CardObject>  legalAttacker    = and(untappedCreature, not(summoningSick),
                                                                          compose(active, controller));
     private static final Predicate<CardObject>  legalBlocker     = and(untappedCreature,
                                                                          compose(legalDefPl, controller));
@@ -75,7 +76,7 @@ public class CombatUtil {
      * Returns whether the creature deals, depending on {@code first}, first strike or regular damage.
      */
     public static boolean dealsDamage(Attacker a, boolean first) {
-        //TODO determine first & double strike creatures
+        //TODO check first & double strike
         boolean firstStrike = false, doubleStrike = false;
         
         return (first == firstStrike) || doubleStrike;
@@ -85,7 +86,7 @@ public class CombatUtil {
      * Returns whether the creature deals, depending on {@code first}, first strike or regular damage.
      */
     public static boolean dealsDamage(Blocker b, boolean first) {
-        //TODO determine first & double strike creatures
+        //TODO check first & double strike
         boolean firstStrike = false, doubleStrike = false;
         
         return (first == firstStrike) || doubleStrike;
@@ -133,7 +134,7 @@ public class CombatUtil {
      * Returns whether the attacker can assign excess damage to the defender rather than its blockers
      */
     public static boolean hasTrample(Attacker a) {
-        //TODO implement properly
+        //TODO check trample
         return false;
     }
 }

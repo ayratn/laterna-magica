@@ -7,6 +7,7 @@
 package net.slightlymagic.laterna.magica.cost.impl;
 
 
+import static net.slightlymagic.laterna.magica.util.MagicaPredicates.*;
 import net.slightlymagic.laterna.magica.MagicObject;
 import net.slightlymagic.laterna.magica.ability.AbilityObject;
 import net.slightlymagic.laterna.magica.action.AbstractGameAction;
@@ -58,9 +59,9 @@ public class TapSymbolInformation extends AbstractPlayInformation {
         
         @Override
         public boolean execute() {
-            //TODO implement summoning sickness & Haste
             if(o.getZone().getType() != Zones.BATTLEFIELD) return false;
             if(o.getState().getState(StateType.TAPPED)) return false;
+            if(summoningSick.apply(o)) return false;
             
             o.getState().setState(StateType.TAPPED, true);
             return true;
