@@ -9,6 +9,7 @@ package net.slightlymagic.laterna.magica.util.relational.editableImpl;
 
 import net.slightlymagic.laterna.magica.Game;
 import net.slightlymagic.laterna.magica.edit.property.EditableProperty;
+import net.slightlymagic.laterna.magica.edit.property.EditablePropertyChangeSupport;
 import net.slightlymagic.laterna.magica.impl.AbstractGameContent;
 
 
@@ -19,15 +20,13 @@ import net.slightlymagic.laterna.magica.impl.AbstractGameContent;
  * @author Clemens Koza
  */
 class EditableEntity<T> extends AbstractGameContent {
-    private final EditableProperty<T> value;
+    protected final EditablePropertyChangeSupport s;
+    private final EditableProperty<T>             value;
     
-    public EditableEntity(Game game) {
-        this(game, null);
-    }
-    
-    public EditableEntity(Game game, T value) {
+    public EditableEntity(Game game, EditablePropertyChangeSupport s, T value) {
         super(game);
-        this.value = new EditableProperty<T>(getGame(), null, "value");
+        this.s = s;
+        this.value = new EditableProperty<T>(getGame(), s, "value");
         setValue(value);
     }
     

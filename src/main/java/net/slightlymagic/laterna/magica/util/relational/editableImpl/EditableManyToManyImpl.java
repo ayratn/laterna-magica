@@ -18,6 +18,7 @@ import java.util.Map;
 import java.util.Set;
 
 import net.slightlymagic.laterna.magica.Game;
+import net.slightlymagic.laterna.magica.edit.property.EditablePropertyChangeSupport;
 import net.slightlymagic.laterna.magica.util.relational.ManyToMany;
 
 import com.google.common.collect.AbstractIterator;
@@ -38,12 +39,24 @@ public class EditableManyToManyImpl<M, N, T> extends EditableEntity<M> implement
     private final Map<EditableManyToManyImpl<N, M, T>, T> otherSideView;
     private final Map<N, T>                               otherSideValuesView;
     
+    public EditableManyToManyImpl(EditablePropertyChangeSupport s) {
+        this(s, null);
+    }
+    
+    public EditableManyToManyImpl(EditablePropertyChangeSupport s, M value) {
+        this(s.getGame(), s, value);
+    }
+    
     public EditableManyToManyImpl(Game game) {
         this(game, null);
     }
     
     public EditableManyToManyImpl(Game game, M value) {
-        super(game, value);
+        this(game, null, value);
+    }
+    
+    private EditableManyToManyImpl(Game game, EditablePropertyChangeSupport s, M value) {
+        super(game, s, value);
         
         otherSide = editableMap(getGame(), new HashMap<EditableManyToManyImpl<N, M, T>, T>());
         otherSideView = unmodifiableMap(otherSide);

@@ -8,6 +8,7 @@ package net.slightlymagic.laterna.magica.util.relational;
 
 
 import net.slightlymagic.laterna.magica.Game;
+import net.slightlymagic.laterna.magica.edit.property.EditablePropertyChangeSupport;
 import net.slightlymagic.laterna.magica.util.relational.editableImpl.EditableManySideImpl;
 import net.slightlymagic.laterna.magica.util.relational.editableImpl.EditableManyToManyImpl;
 import net.slightlymagic.laterna.magica.util.relational.editableImpl.EditableOneSideImpl;
@@ -57,5 +58,21 @@ public final class Relations {
     
     public static <A, B> OneToOne<A, B> oneToOne(Game game, A value) {
         return new EditableOneToOneImpl<A, B>(game, value);
+    }
+    
+    public static <M, N, T> ManyToMany<M, N, T> manyToMany(EditablePropertyChangeSupport s, M value) {
+        return new EditableManyToManyImpl<M, N, T>(s, value);
+    }
+    
+    public static <O, M> OneSide<O, M> oneSide(EditablePropertyChangeSupport s, O value) {
+        return new EditableOneSideImpl<O, M>(s, value);
+    }
+    
+    public static <M, O> ManySide<M, O> manySide(EditablePropertyChangeSupport s, M value) {
+        return new EditableManySideImpl<M, O>(s, value);
+    }
+    
+    public static <A, B> OneToOne<A, B> oneToOne(EditablePropertyChangeSupport s, A value) {
+        return new EditableOneToOneImpl<A, B>(s, value);
     }
 }

@@ -199,7 +199,10 @@ public class GuiMagicActor extends AbstractMagicActor {
     }
     
     @Override
-    public void declareBlockers() {}
+    public void declareBlockers() {
+        //use getValue to block until assignments are finished
+        getValue(channels.fiber, channels.actions, new BlockerActor(this));
+    }
     
     @Override
     public void orderAttackers() {
@@ -230,6 +233,13 @@ public class GuiMagicActor extends AbstractMagicActor {
     @Override
     public Attacker getAttackerToAssignDamage(Collection<? extends Attacker> attackers) {
         if(attackers.size() == 1) return attackers.iterator().next();
+        for(Attacker a:attackers) {
+            //assigning damage for unblocked creatures is trivial
+            if(a.getBlockers().isEmpty()) return a;
+            //assigning damage for only one blocker without trample
+            if(a.getBlockers().size() == 1 && !hasTrample(a)) return a;
+        }
+        
         ListChooser<Attacker> chooser = new ListChooser<Attacker>("Choose one",
                 "Choose an attacker to assign damage", new ArrayList<Attacker>(attackers));
         chooser.show();
@@ -238,13 +248,23 @@ public class GuiMagicActor extends AbstractMagicActor {
     
     @Override
     public void assignDamage(Attacker attacker) {
-        if(!attacker.getBlockers().isEmpty()) throw new AssertionError();
-        attacker.getAttackerAssignment().setAttackerAssignedDamage(getAmmount(attacker));
+        if(attacker.getBlockers().isEmpty()) {
+            attacker.getAttackerAssignment().setAttackerAssignedDamage(getAmmount(attacker));
+        } else if(attacker.getBlockers().size() == 1 && !hasTrample(attacker)) {
+            attacker.getBlockers().values().iterator().next().setAttackerAssignedDamage(getAmmount(attacker));
+        } else {
+            //TODO implement
+            throw new UnsupportedOperationException();
+        }
     }
     
     @Override
     public Blocker getBlockerToAssignDamage(Collection<? extends Blocker> blockers) {
         if(blockers.size() == 1) return blockers.iterator().next();
+        for(Blocker b:blockers) {
+            //assigning damage for only one attacker is trivial
+            if(b.getAttackers().size() == 1) return b;
+        }
         ListChooser<Blocker> chooser = new ListChooser<Blocker>("Choose one",
                 "Choose an attacker to assign damage", new ArrayList<Blocker>(blockers));
         chooser.show();
@@ -253,7 +273,11 @@ public class GuiMagicActor extends AbstractMagicActor {
     
     @Override
     public void assignDamage(Blocker blocker) {
-        //should never get here, as there are no blockers by this player
-        throw new AssertionError();
+        if(blocker.getAttackers().size() == 1) {
+            blocker.getAttackers().values().iterator().next().setBlockerAssignedDamage(getAmmount(blocker));
+        } else {
+            //TODO implement
+            throw new UnsupportedOperationException();
+        }
     }
 }

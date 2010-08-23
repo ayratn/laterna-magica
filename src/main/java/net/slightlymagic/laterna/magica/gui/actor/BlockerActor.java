@@ -1,5 +1,5 @@
 /**
- * ActionActor.java
+ * BlockerActor.java
  * 
  * Created on 23.08.2010
  */
@@ -9,10 +9,9 @@ package net.slightlymagic.laterna.magica.gui.actor;
 
 import net.slightlymagic.laterna.magica.Combat;
 import net.slightlymagic.laterna.magica.Combat.Attacker;
-import net.slightlymagic.laterna.magica.Combat.Defender;
+import net.slightlymagic.laterna.magica.Combat.Blocker;
 import net.slightlymagic.laterna.magica.MagicObject;
 import net.slightlymagic.laterna.magica.card.CardObject;
-import net.slightlymagic.laterna.magica.player.Player;
 
 import org.jetlang.core.Callback;
 import org.slf4j.Logger;
@@ -20,7 +19,7 @@ import org.slf4j.LoggerFactory;
 
 
 /**
- * The class ActionActor.
+ * The class BlockerActor.
  * 
  * @version V0.0 23.08.2010
  * @author Clemens Koza
@@ -30,18 +29,16 @@ public class BlockerActor extends GuiActor {
     
     private Combat              combat;
     
-    private Defender            defender;
+    private Attacker            attacker;
     
     public BlockerActor(GuiMagicActor actor) {
         super(actor);
         combat = actor.getGame().getCombat();
-        defender = combat.getDefender(combat.getDefendingPlayers().get(0));
     }
     
     @Override
     public void start() {
         disposables.add(actor.channels.objects.subscribe(actor.channels.fiber, new CardCallback()));
-        disposables.add(actor.channels.players.subscribe(actor.channels.fiber, new PlayerCallback()));
         disposables.add(actor.channels.passPriority.subscribe(actor.channels.fiber, new PassPriorityCallback()));
     }
     
@@ -52,24 +49,16 @@ public class BlockerActor extends GuiActor {
             if(!(c instanceof CardObject)) return;
             CardObject card = (CardObject) c;
             try {
-                defender = combat.getDefender(card);
-                return;
-            } catch(IllegalArgumentException ex) {}
-            try {
                 Attacker a = combat.getAttacker(card);
-                if(a == null) a = combat.declareAttacker(card);
-                combat.assignAttacker(a, defender);
-                return;
+                if(a != null) {
+                    attacker = a;
+                    return;
+                }
             } catch(IllegalArgumentException ex) {}
-        }
-    }
-    
-    private class PlayerCallback implements Callback<Player> {
-        @Override
-        public void onMessage(Player p) {
-            log.debug("Received: " + p);
             try {
-                defender = combat.getDefender(p);
+                Blocker b = combat.getBlocker(card);
+                if(b == null) b = combat.declareBlocker(card);
+                combat.assignBlocker(b, attacker);
                 return;
             } catch(IllegalArgumentException ex) {}
         }

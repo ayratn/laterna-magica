@@ -48,18 +48,18 @@ import com.google.common.collect.PeekingIterator;
  * @author Clemens Koza
  */
 public abstract class MagicObjectImpl extends AbstractTimestamped implements MagicObject {
-    protected ExtendedListenerList           listeners;
-    protected EditablePropertyChangeSupport  s;
+    protected final ExtendedListenerList          listeners;
+    protected final EditablePropertyChangeSupport s;
     
 
-    private Player                           owner;
+    private Player                                owner;
     //a card's controller is not a characteristic, but the representation is perfect
-    private OverridingCharacteristic<Player> controller;
+    private OverridingCharacteristic<Player>      controller;
     //the zone the card is in
-    private LocalEffects                     effects;
-    private EditableProperty<Zone>           zone;
+    private LocalEffects                          effects;
+    private EditableProperty<Zone>                zone;
     
-    private Map<String, EditableCounter>     counters;
+    private Map<String, EditableCounter>          counters;
     
     public MagicObjectImpl(Game game) {
         super(game);

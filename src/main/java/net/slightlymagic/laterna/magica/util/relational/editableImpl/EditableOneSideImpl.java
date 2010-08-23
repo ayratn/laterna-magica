@@ -16,6 +16,7 @@ import java.util.Iterator;
 import java.util.Set;
 
 import net.slightlymagic.laterna.magica.Game;
+import net.slightlymagic.laterna.magica.edit.property.EditablePropertyChangeSupport;
 import net.slightlymagic.laterna.magica.util.relational.ManySide;
 import net.slightlymagic.laterna.magica.util.relational.OneSide;
 
@@ -33,12 +34,25 @@ public class EditableOneSideImpl<O, M> extends EditableEntity<O> implements OneS
     private final Set<EditableManySideImpl<M, O>> manySideView;
     private final Set<M>                          manySideValuesView;
     
+    public EditableOneSideImpl(EditablePropertyChangeSupport s) {
+        this(s, null);
+    }
+    
+    public EditableOneSideImpl(EditablePropertyChangeSupport s, O value) {
+        this(s.getGame(), s, value);
+    }
+    
     public EditableOneSideImpl(Game game) {
         this(game, null);
     }
     
     public EditableOneSideImpl(Game game, O value) {
-        super(game, value);
+        this(game, null, value);
+    }
+    
+    private EditableOneSideImpl(Game game, EditablePropertyChangeSupport s, O value) {
+        super(game, s, value);
+        
         manySide = editableSet(getGame(), new HashSet<EditableManySideImpl<M, O>>());
         manySideView = unmodifiableSet(manySide);
         manySideValuesView = new AbstractSet<M>() {

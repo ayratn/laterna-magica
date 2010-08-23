@@ -9,6 +9,7 @@ package net.slightlymagic.laterna.magica.util.relational.editableImpl;
 
 import net.slightlymagic.laterna.magica.Game;
 import net.slightlymagic.laterna.magica.edit.property.EditableProperty;
+import net.slightlymagic.laterna.magica.edit.property.EditablePropertyChangeSupport;
 import net.slightlymagic.laterna.magica.util.relational.OneToOne;
 
 
@@ -21,13 +22,26 @@ import net.slightlymagic.laterna.magica.util.relational.OneToOne;
 public class EditableOneToOneImpl<A, B> extends EditableEntity<A> implements OneToOne<A, B> {
     private final EditableProperty<EditableOneToOneImpl<B, A>> otherSide;
     
+    public EditableOneToOneImpl(EditablePropertyChangeSupport s) {
+        this(s, null);
+    }
+    
+    public EditableOneToOneImpl(EditablePropertyChangeSupport s, A value) {
+        this(s.getGame(), s, value);
+    }
+    
     public EditableOneToOneImpl(Game game) {
         this(game, null);
     }
     
     public EditableOneToOneImpl(Game game, A value) {
-        super(game, value);
-        otherSide = new EditableProperty<EditableOneToOneImpl<B, A>>(getGame(), null, "otherSide");
+        this(game, null, value);
+    }
+    
+    private EditableOneToOneImpl(Game game, EditablePropertyChangeSupport s, A value) {
+        super(game, s, value);
+        
+        otherSide = new EditableProperty<EditableOneToOneImpl<B, A>>(getGame(), s, "otherSide");
     }
     
     public void setOtherSide(OneToOne<B, A> e) {

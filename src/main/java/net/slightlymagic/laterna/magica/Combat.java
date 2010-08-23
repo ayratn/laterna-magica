@@ -16,6 +16,7 @@ import net.slightlymagic.laterna.magica.action.GameAction;
 import net.slightlymagic.laterna.magica.action.turnBased.TurnBasedAction;
 import net.slightlymagic.laterna.magica.card.CardObject;
 import net.slightlymagic.laterna.magica.player.Player;
+import net.slightlymagic.laterna.magica.util.BoundBean;
 
 
 /**
@@ -24,8 +25,8 @@ import net.slightlymagic.laterna.magica.player.Player;
  * @version V0.0 15.08.2010
  * @author Clemens Koza
  */
-public interface Combat {
-    public static interface Attacker {
+public interface Combat extends BoundBean {
+    public static interface Attacker extends BoundBean {
         /**
          * Returns the attacking creature represented by this attack.
          */
@@ -59,7 +60,7 @@ public interface Combat {
         public AttackAssignment getAttackerAssignment();
     }
     
-    public static interface Blocker {
+    public static interface Blocker extends BoundBean {
         /**
          * Returns the blocking creature represented by this attack.
          */
@@ -89,7 +90,7 @@ public interface Combat {
         public boolean isRemovedFromCombat();
     }
     
-    public static interface Defender {
+    public static interface Defender extends BoundBean {
         /**
          * Returns either the defending player or the defending planeswalker's controller.
          */
@@ -120,7 +121,7 @@ public interface Combat {
         public CardObject getDefendingPlaneswalker();
     }
     
-    public static interface AttackAssignment {
+    public static interface AttackAssignment extends BoundBean {
         public Attacker getAttacker();
         
         public Defender getDefender();
@@ -136,7 +137,7 @@ public interface Combat {
         public int getAttackerAssignedDamage();
     }
     
-    public static interface BlockAssignment {
+    public static interface BlockAssignment extends BoundBean {
         public Attacker getAttacker();
         
         public Blocker getBlocker();

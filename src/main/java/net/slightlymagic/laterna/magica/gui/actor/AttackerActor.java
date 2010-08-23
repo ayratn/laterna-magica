@@ -1,5 +1,5 @@
 /**
- * ActionActor.java
+ * AttackerActor.java
  * 
  * Created on 23.08.2010
  */
@@ -20,7 +20,7 @@ import org.slf4j.LoggerFactory;
 
 
 /**
- * The class ActionActor.
+ * The class AttackerActor.
  * 
  * @version V0.0 23.08.2010
  * @author Clemens Koza

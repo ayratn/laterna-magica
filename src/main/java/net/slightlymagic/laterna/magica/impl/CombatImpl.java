@@ -14,6 +14,7 @@ import static net.slightlymagic.laterna.magica.impl.CombatUtil.*;
 import static net.slightlymagic.laterna.magica.util.MagicaCollections.*;
 import static net.slightlymagic.laterna.magica.util.relational.Relations.*;
 
+import java.beans.PropertyChangeListener;
 import java.util.AbstractMap;
 import java.util.AbstractSet;
 import java.util.ArrayList;
@@ -35,6 +36,7 @@ import net.slightlymagic.laterna.magica.action.turnBased.TurnBasedAction.Type;
 import net.slightlymagic.laterna.magica.card.CardObject;
 import net.slightlymagic.laterna.magica.cost.impl.DummyCostFunction;
 import net.slightlymagic.laterna.magica.edit.property.EditableProperty;
+import net.slightlymagic.laterna.magica.edit.property.EditablePropertyChangeSupport;
 import net.slightlymagic.laterna.magica.effects.damage.DamagePermanentEvent;
 import net.slightlymagic.laterna.magica.effects.damage.DamagePlayerEvent;
 import net.slightlymagic.laterna.magica.player.Player;
@@ -58,8 +60,8 @@ import com.google.common.collect.AbstractIterator;
 public class CombatImpl extends AbstractGameContent implements Combat {
     private static final Logger log = LoggerFactory.getLogger(CombatImpl.class);
     
-    private <T> EditableProperty<T> editable(String name, T value) {
-        return new EditableProperty<T>(getGame(), null, name, value);
+    private <T> EditableProperty<T> editable(EditablePropertyChangeSupport s, String name, T value) {
+        return new EditableProperty<T>(getGame(), s, name, value);
     }
     
     private <T> Set<T> editableSet() {
@@ -71,9 +73,11 @@ public class CombatImpl extends AbstractGameContent implements Combat {
     }
     
     private abstract class Combatant {
-        protected final Logger            log               = LoggerFactory.getLogger(getClass());
+        protected final Logger                        log               = LoggerFactory.getLogger(getClass());
+        protected final EditablePropertyChangeSupport s                 = new EditablePropertyChangeSupport(
+                                                                                getGame(), this);
         
-        private EditableProperty<Boolean> removedFromCombat = editable("removedFromCombat", false);
+        private EditableProperty<Boolean>             removedFromCombat = editable(s, "removedFromCombat", false);
         
         public void setRemovedFromCombat(boolean removedFromCombat) {
             log.debug("Remove from combat: " + this + " --> " + removedFromCombat);
@@ -83,13 +87,29 @@ public class CombatImpl extends AbstractGameContent implements Combat {
         public boolean isRemovedFromCombat() {
             return removedFromCombat.getValue();
         }
+        
+        public void addPropertyChangeListener(PropertyChangeListener listener) {
+            s.addPropertyChangeListener(listener);
+        }
+        
+        public void addPropertyChangeListener(String propertyName, PropertyChangeListener listener) {
+            s.addPropertyChangeListener(propertyName, listener);
+        }
+        
+        public void removePropertyChangeListener(PropertyChangeListener listener) {
+            s.removePropertyChangeListener(listener);
+        }
+        
+        public void removePropertyChangeListener(String propertyName, PropertyChangeListener listener) {
+            s.removePropertyChangeListener(propertyName, listener);
+        }
     }
     
     private abstract class CreatureCombatant<A, B> extends Combatant {
         @SuppressWarnings({"unchecked", "rawtypes"})
         private ManyToMany<A, B, BlockAssignmentImpl> combatant = (ManyToMany) manyToMany(getGame(), this);
         private CardObject                            creature;
-        private EditableProperty<List<B>>             order     = editable("order", null);
+        private EditableProperty<List<B>>             order     = editable(s, "order", null);
         
         protected CreatureCombatant(CardObject creature) {
             setCreature(creature);
@@ -125,7 +145,7 @@ public class CombatImpl extends AbstractGameContent implements Combat {
     
     private class AttackerImpl extends CreatureCombatant<AttackerImpl, BlockerImpl> implements Attacker {
         private ManySide<AttackerImpl, DefenderImpl>   defender   = manySide(getGame(), this);
-        private EditableProperty<AttackAssignmentImpl> assignment = editable("attackAssignment", null);
+        private EditableProperty<AttackAssignmentImpl> assignment = editable(s, "attackAssignment", null);
         
         public AttackerImpl(CardObject creature) {
             super(creature);
@@ -335,10 +355,13 @@ public class CombatImpl extends AbstractGameContent implements Combat {
     }
     
     private class AttackAssignmentImpl implements AttackAssignment {
-        private AttackerImpl              attacker;
-        private DefenderImpl              defender;
+        protected final EditablePropertyChangeSupport s              = new EditablePropertyChangeSupport(
+                                                                             getGame(), this);
         
-        private EditableProperty<Integer> attackerDamage = editable("attackerDamage", 0);
+        private AttackerImpl                          attacker;
+        private DefenderImpl                          defender;
+        
+        private EditableProperty<Integer>             attackerDamage = editable(s, "attackerDamage", 0);
         
         public AttackAssignmentImpl(AttackerImpl attacker, DefenderImpl defender) {
             this.attacker = attacker;
@@ -369,14 +392,33 @@ public class CombatImpl extends AbstractGameContent implements Combat {
         public int getAttackerAssignedDamage() {
             return attackerDamage.getValue();
         }
+        
+        public void addPropertyChangeListener(PropertyChangeListener listener) {
+            s.addPropertyChangeListener(listener);
+        }
+        
+        public void addPropertyChangeListener(String propertyName, PropertyChangeListener listener) {
+            s.addPropertyChangeListener(propertyName, listener);
+        }
+        
+        public void removePropertyChangeListener(PropertyChangeListener listener) {
+            s.removePropertyChangeListener(listener);
+        }
+        
+        public void removePropertyChangeListener(String propertyName, PropertyChangeListener listener) {
+            s.removePropertyChangeListener(propertyName, listener);
+        }
     }
     
     private class BlockAssignmentImpl implements BlockAssignment {
-        private AttackerImpl              attacker;
-        private BlockerImpl               blocker;
+        protected final EditablePropertyChangeSupport s              = new EditablePropertyChangeSupport(
+                                                                             getGame(), this);
         
-        private EditableProperty<Integer> attackerDamage = editable("attackerDamage", 0);
-        private EditableProperty<Integer> blockerDamage  = editable("blockerDamage", 0);
+        private AttackerImpl                          attacker;
+        private BlockerImpl                           blocker;
+        
+        private EditableProperty<Integer>             attackerDamage = editable(s, "attackerDamage", 0);
+        private EditableProperty<Integer>             blockerDamage  = editable(s, "blockerDamage", 0);
         
         public BlockAssignmentImpl(AttackerImpl attacker, BlockerImpl blocker) {
             this.attacker = attacker;
@@ -424,14 +466,49 @@ public class CombatImpl extends AbstractGameContent implements Combat {
         public int getBlockerAssignedDamage() {
             return blockerDamage.getValue();
         }
+        
+        public void addPropertyChangeListener(PropertyChangeListener listener) {
+            s.addPropertyChangeListener(listener);
+        }
+        
+        public void addPropertyChangeListener(String propertyName, PropertyChangeListener listener) {
+            s.addPropertyChangeListener(propertyName, listener);
+        }
+        
+        public void removePropertyChangeListener(PropertyChangeListener listener) {
+            s.removePropertyChangeListener(listener);
+        }
+        
+        public void removePropertyChangeListener(String propertyName, PropertyChangeListener listener) {
+            s.removePropertyChangeListener(propertyName, listener);
+        }
     }
     
-    private Map<MagicObject, AttackerImpl> attackers, attackersView;
-    private Map<MagicObject, BlockerImpl>  blockers, blockersView;
-    private Map<Object, DefenderImpl>      defenders, defendersView;
+    protected final EditablePropertyChangeSupport s = new EditablePropertyChangeSupport(getGame(), this);
+    
+    private Map<MagicObject, AttackerImpl>        attackers, attackersView;
+    private Map<MagicObject, BlockerImpl>         blockers, blockersView;
+    private Map<Object, DefenderImpl>             defenders, defendersView;
+    
+    public void addPropertyChangeListener(PropertyChangeListener listener) {
+        s.addPropertyChangeListener(listener);
+    }
+    
+    public void addPropertyChangeListener(String propertyName, PropertyChangeListener listener) {
+        s.addPropertyChangeListener(propertyName, listener);
+    }
+    
+    public void removePropertyChangeListener(PropertyChangeListener listener) {
+        s.removePropertyChangeListener(listener);
+    }
+    
+    public void removePropertyChangeListener(String propertyName, PropertyChangeListener listener) {
+        s.removePropertyChangeListener(propertyName, listener);
+    }
     
     public CombatImpl(Game game) {
         super(game);
+        
         attackers = editableMap(getGame(), new HashMap<MagicObject, AttackerImpl>());
         attackersView = unmodifiableMap(attackers);
         blockers = editableMap(getGame(), new HashMap<MagicObject, BlockerImpl>());
@@ -558,11 +635,11 @@ public class CombatImpl extends AbstractGameContent implements Combat {
      */
 
     //controls for what modifications are legal
-    private EditableProperty<TurnBasedAction.Type> action   = editable("action", null);
-    private EditableProperty<Player>               attDAO   = editable("attDAO", null);
-    private EditableProperty<Player>               blockDAO = editable("blockDAO", null);
-    private EditableProperty<AttackerImpl>         attDA    = editable("attDA", null);
-    private EditableProperty<BlockerImpl>          blockDA  = editable("blockDA", null);
+    private EditableProperty<TurnBasedAction.Type> action   = editable(s, "action", null);
+    private EditableProperty<Player>               attDAO   = editable(s, "attDAO", null);
+    private EditableProperty<Player>               blockDAO = editable(s, "blockDAO", null);
+    private EditableProperty<AttackerImpl>         attDA    = editable(s, "attDA", null);
+    private EditableProperty<BlockerImpl>          blockDA  = editable(s, "blockDA", null);
     
     public void setAction(TurnBasedAction.Type action) {
         switch(action) {
@@ -651,10 +728,12 @@ public class CombatImpl extends AbstractGameContent implements Combat {
         log.debug("Checking legal attackers for " + attacker);
         //check whether every attackerDamage has a defender assigned
         for(Attacker a:getAttackers()) {
-            if(a.isRemovedFromCombat()) continue;
-            if(a.getAttacker().getController() == attacker && a.getDefender() == null) return false;
+            if(a.isRemovedFromCombat() || a.getAttacker().getController() != attacker) continue;
+            if(a.getDefender() == null) return false;
+            //TODO implement restrictions & requirements
+            //although this is in the loop, don't forget for blocking requirements
+            //i.e. creatures not even checked in this loop
         }
-        //TODO implement restrictions & requirements
         return true;
     }
     
@@ -663,8 +742,8 @@ public class CombatImpl extends AbstractGameContent implements Combat {
         log.debug("Tapping attackers for " + attacker);
         //TODO respect Vigilance
         for(Attacker a:getAttackers()) {
-            if(a.isRemovedFromCombat()) continue;
-            if(a.getAttacker().getController() == attacker) a.getAttacker().getState().setState(TAPPED, true);
+            if(a.isRemovedFromCombat() || a.getAttacker().getController() != attacker) continue;
+            a.getAttacker().getState().setState(TAPPED, true);
         }
     }
     
@@ -683,10 +762,13 @@ public class CombatImpl extends AbstractGameContent implements Combat {
         log.debug("Checking legal blockers for " + defender);
         //check whether every blockerDamage has at least one attackerDamage assigned
         for(Blocker b:getBlockers()) {
-            if(b.isRemovedFromCombat()) continue;
-            if(b.getBlocker().getController() == defender && b.getAttackers().isEmpty()) return false;
+            if(b.isRemovedFromCombat() || b.getBlocker().getController() != defender) continue;
+            if(b.getAttackers().isEmpty()) return false;
+            //TODO implement restrictions & requirements
+            //although this is in the loop, don't forget for blocking requirements
+            //i.e. creatures not even checked in this loop
+            if(b.getAttackers().size() > 1) return false;
         }
-        //TODO implement restrictions & requirements
         return true;
     }
     
@@ -701,9 +783,7 @@ public class CombatImpl extends AbstractGameContent implements Combat {
         checkAction(TurnBasedAction.Type.ORDER_BLOCKERS);
         log.debug("Checking legal attacker DAO for " + attacker);
         for(AttackerImpl a:attackers.values()) {
-            if(a.isRemovedFromCombat()) continue;
-            //ignore attackers of other players
-            if(a.getAttacker().getController() != attacker) continue;
+            if(a.isRemovedFromCombat() || a.getAttacker().getController() != attacker) continue;
             
             //checks whether the attackerDamage has an order assigned
             //setting the order checks if all blockers were assigned
@@ -716,9 +796,7 @@ public class CombatImpl extends AbstractGameContent implements Combat {
         checkAction(TurnBasedAction.Type.ORDER_ATTACKERS);
         log.debug("Checking legal blocker DAO for " + defender);
         for(BlockerImpl b:blockers.values()) {
-            if(b.isRemovedFromCombat()) continue;
-            //ignore blockers of other players
-            if(b.getBlocker().getController() != defender) continue;
+            if(b.isRemovedFromCombat() || b.getBlocker().getController() != defender) continue;
             
             //checks whether the blockerDamage has an order assigned
             //setting the order checks if all attackers were assigned
@@ -733,7 +811,8 @@ public class CombatImpl extends AbstractGameContent implements Combat {
         BEFORE, FIRST, BETWEEN, REGULAR, AFTER
     }
     
-    private EditableProperty<CombatDamageStep> firstStrike       = editable("firstStrike", CombatDamageStep.BEFORE);
+    private EditableProperty<CombatDamageStep> firstStrike       = editable(s, "firstStrike",
+                                                                         CombatDamageStep.BEFORE);
     
     private Set<AttackerImpl>                  attackersThisStep = editableSet();
     private Set<BlockerImpl>                   blockersThisStep  = editableSet();
@@ -758,6 +837,7 @@ public class CombatImpl extends AbstractGameContent implements Combat {
                     log.debug("Starting first strike combat damage step");
                     break;
                 }
+                //Drop through if no attackers & blockers
             case BETWEEN:
                 /* 510.5.: The only creatures that assign combat damage in that step are the remaining attackers
                  * and blockers that had neither first strike nor double strike as the first combat damage step
@@ -812,7 +892,6 @@ public class CombatImpl extends AbstractGameContent implements Combat {
         
         //those removed from combat don't deal damage, so no assignment is necessary
         if(attacker.isRemovedFromCombat()) return true;
-        //TODO implement
         
         int damage = getAmmount(attacker);
         for(BlockerImpl blocker:attacker.getDamageAssignmentOrder()) {
@@ -846,7 +925,6 @@ public class CombatImpl extends AbstractGameContent implements Combat {
         
         //those removed from combat don't deal damage, so no assignment is necessary
         if(blocker.isRemovedFromCombat()) return true;
-        //TODO implement
         
         int damage = getAmmount(blocker);
         for(AttackerImpl attacker:blocker.getDamageAssignmentOrder()) {
