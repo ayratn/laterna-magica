@@ -18,9 +18,6 @@ import net.slightlymagic.laterna.magica.player.Player;
 import net.slightlymagic.laterna.magica.player.impl.DrawEvent;
 import net.slightlymagic.laterna.magica.util.MagicaCollections;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-
 
 /**
  * The class LoseOnDrawAction. This class implements {@magic.ruleRef 20100716/R7045b}: If a player
@@ -31,10 +28,8 @@ import org.slf4j.LoggerFactory;
  * @author Clemens Koza
  */
 public class LoseOnDrawAction extends AbstractGameAction implements StateBasedAction {
-    private static final Logger log = LoggerFactory.getLogger(LoseOnDrawAction.class);
-    
     //Set of players that tried to draw a card but couldn't
-    private Set<Player>         players;
+    private Set<Player> players;
     
     public LoseOnDrawAction(Game game) {
         super(game);

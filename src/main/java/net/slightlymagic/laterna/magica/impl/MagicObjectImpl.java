@@ -10,12 +10,12 @@ package net.slightlymagic.laterna.magica.impl;
 import static java.lang.String.*;
 
 import java.beans.PropertyChangeListener;
-import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Iterator;
 import java.util.Map;
 import java.util.Set;
 
+import net.slightlymagic.beans.properties.Property;
 import net.slightlymagic.laterna.magica.Game;
 import net.slightlymagic.laterna.magica.MagicObject;
 import net.slightlymagic.laterna.magica.characteristic.ObjectCharacteristics;
@@ -24,16 +24,11 @@ import net.slightlymagic.laterna.magica.characteristics.Characteristics;
 import net.slightlymagic.laterna.magica.counter.EditableCounter;
 import net.slightlymagic.laterna.magica.counter.EditableCounterImpl;
 import net.slightlymagic.laterna.magica.edit.CompoundEdit;
-import net.slightlymagic.laterna.magica.edit.impl.EditableListenerList;
-import net.slightlymagic.laterna.magica.edit.property.EditableProperty;
-import net.slightlymagic.laterna.magica.edit.property.EditablePropertyChangeSupport;
 import net.slightlymagic.laterna.magica.effect.LocalEffects;
 import net.slightlymagic.laterna.magica.effect.impl.LocalEffectsImpl;
 import net.slightlymagic.laterna.magica.event.MoveCardListener;
 import net.slightlymagic.laterna.magica.player.Player;
 import net.slightlymagic.laterna.magica.timestamp.impl.AbstractTimestamped;
-import net.slightlymagic.laterna.magica.util.ExtendedListenerList;
-import net.slightlymagic.laterna.magica.util.MagicaCollections;
 import net.slightlymagic.laterna.magica.zone.Zone;
 import net.slightlymagic.laterna.magica.zone.Zone.Zones;
 
@@ -48,27 +43,21 @@ import com.google.common.collect.PeekingIterator;
  * @author Clemens Koza
  */
 public abstract class MagicObjectImpl extends AbstractTimestamped implements MagicObject {
-    protected final ExtendedListenerList          listeners;
-    protected final EditablePropertyChangeSupport s;
-    
-
-    private Player                                owner;
+    private Player                           owner;
     //a card's controller is not a characteristic, but the representation is perfect
-    private OverridingCharacteristic<Player>      controller;
+    private OverridingCharacteristic<Player> controller;
     //the zone the card is in
-    private LocalEffects                          effects;
-    private EditableProperty<Zone>                zone;
+    private LocalEffects                     effects;
+    private Property<Zone>                   zone;
     
-    private Map<String, EditableCounter>          counters;
+    private Map<String, EditableCounter>     counters;
     
     public MagicObjectImpl(Game game) {
         super(game);
-        listeners = new EditableListenerList(game);
-        s = new EditablePropertyChangeSupport(getGame(), this);
         
-        zone = new EditableProperty<Zone>(getGame(), s, ZONE);
+        zone = properties.property(ZONE);
         
-        counters = MagicaCollections.editableMap(game, new HashMap<String, EditableCounter>());
+        counters = properties.map("counters");
         
         effects = new LocalEffectsImpl(getGame());
         
@@ -171,18 +160,22 @@ public abstract class MagicObjectImpl extends AbstractTimestamped implements Mag
         return true;
     }
     
+    @Override
     public void addPropertyChangeListener(PropertyChangeListener listener) {
         s.addPropertyChangeListener(listener);
     }
     
+    @Override
     public void addPropertyChangeListener(String propertyName, PropertyChangeListener listener) {
         s.addPropertyChangeListener(propertyName, listener);
     }
     
+    @Override
     public void removePropertyChangeListener(PropertyChangeListener listener) {
         s.removePropertyChangeListener(listener);
     }
     
+    @Override
     public void removePropertyChangeListener(String propertyName, PropertyChangeListener listener) {
         s.removePropertyChangeListener(propertyName, listener);
     }
@@ -192,7 +185,7 @@ public abstract class MagicObjectImpl extends AbstractTimestamped implements Mag
         
         public Player getValue() {
             value = getOwner();
-            //TODO s controller-changing effects
+            //TODO implement controller-changing effects
             return value;
         }
         

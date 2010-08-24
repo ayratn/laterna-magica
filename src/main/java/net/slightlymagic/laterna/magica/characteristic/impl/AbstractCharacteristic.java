@@ -8,12 +8,11 @@ package net.slightlymagic.laterna.magica.characteristic.impl;
 
 
 import static java.lang.String.*;
-import net.slightlymagic.laterna.magica.Game;
+import net.slightlymagic.beans.properties.Property;
 import net.slightlymagic.laterna.magica.characteristic.Characteristic;
 import net.slightlymagic.laterna.magica.characteristic.ObjectCharacteristics;
 import net.slightlymagic.laterna.magica.characteristics.Characteristics;
 import net.slightlymagic.laterna.magica.edit.Edit;
-import net.slightlymagic.laterna.magica.edit.property.EditableProperty;
 import net.slightlymagic.laterna.magica.effect.ContinuousEffect;
 import net.slightlymagic.laterna.magica.impl.AbstractGameContent;
 
@@ -39,14 +38,13 @@ import net.slightlymagic.laterna.magica.impl.AbstractGameContent;
 abstract class AbstractCharacteristic<T extends ContinuousEffect> extends AbstractGameContent implements Characteristic {
     private ObjectCharacteristics characteristics;
     private Characteristics       characteristic;
-    private EditableProperty<T>   first;
+    private Property<T>           first;
     
-    public AbstractCharacteristic(Game game, ObjectCharacteristics characteristics, Characteristics characteristic) {
-        super(game);
+    public AbstractCharacteristic(ObjectCharacteristicsImpl characteristics, Characteristics characteristic) {
+        super(characteristics);
         this.characteristics = characteristics;
         this.characteristic = characteristic;
-        first = new EditableProperty<T>(getGame(), getCharacteristics().getPropertyChangeSupport(),
-                characteristic.name() + ".first");
+        first = properties.property(characteristic.name() + ".first");
     }
     
     public ObjectCharacteristics getCharacteristics() {

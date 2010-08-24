@@ -11,6 +11,8 @@ import java.util.ArrayList;
 import java.util.List;
 
 import org.jetlang.core.Disposable;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 
 /**
@@ -20,6 +22,8 @@ import org.jetlang.core.Disposable;
  * @author Clemens Koza
  */
 public abstract class GuiActor implements Disposable {
+    protected final Logger           log         = LoggerFactory.getLogger(GuiActor.class);
+    
     protected final GuiMagicActor    actor;
     protected final List<Disposable> disposables = new ArrayList<Disposable>();
     

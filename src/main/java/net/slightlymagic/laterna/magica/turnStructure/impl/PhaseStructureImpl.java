@@ -13,6 +13,7 @@ import java.util.Iterator;
 import java.util.Map;
 import java.util.Set;
 
+import net.slightlymagic.beans.properties.Property;
 import net.slightlymagic.laterna.magica.Combat;
 import net.slightlymagic.laterna.magica.Game;
 import net.slightlymagic.laterna.magica.MagicObject;
@@ -32,9 +33,6 @@ import net.slightlymagic.laterna.magica.action.turnBased.TurnBasedAction;
 import net.slightlymagic.laterna.magica.action.turnBased.TurnBasedAction.Type;
 import net.slightlymagic.laterna.magica.action.turnBased.UntapAction;
 import net.slightlymagic.laterna.magica.edit.CompoundEdit;
-import net.slightlymagic.laterna.magica.edit.impl.EditableListenerList;
-import net.slightlymagic.laterna.magica.edit.property.EditableProperty;
-import net.slightlymagic.laterna.magica.edit.property.EditablePropertyChangeSupport;
 import net.slightlymagic.laterna.magica.event.EnterTurnBasedActionListener;
 import net.slightlymagic.laterna.magica.event.PhaseChangedListener;
 import net.slightlymagic.laterna.magica.event.PriorChangedListener;
@@ -45,9 +43,6 @@ import net.slightlymagic.laterna.magica.player.Player;
 import net.slightlymagic.laterna.magica.turnStructure.PhaseStructure;
 import net.slightlymagic.laterna.magica.zone.SortedZone;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-
 
 /**
  * The class PhaseStructureImpl.
@@ -56,16 +51,11 @@ import org.slf4j.LoggerFactory;
  * @author Clemens Koza
  */
 public class PhaseStructureImpl extends AbstractGameContent implements PhaseStructure {
-    private static final Logger             log = LoggerFactory.getLogger(PhaseStructureImpl.class);
-    
-    protected EditableListenerList          listeners;
-    protected EditablePropertyChangeSupport s;
-    
     /**
      * The index of the player that has priority. The index is stored because it is easier to determine the next
      * player this way.
      */
-    private EditableProperty<Integer>       prior;
+    private Property<Integer>          prior;
     /**
      * Stores the player that last took an action, which is naturally the first player to pass priority in
      * sequence. If that player would again receive priority (from another player), all players have passed in
@@ -73,28 +63,26 @@ public class PhaseStructureImpl extends AbstractGameContent implements PhaseStru
      * 
      * The index is stored because it is easier to compare to prior.
      */
-    private EditableProperty<Integer>       firstPassed;
+    private Property<Integer>          firstPassed;
     /**
      * Stores if there is currently a prior player. There is no one if turn based actions are processed
      */
-    private boolean                         hasPrior;
+    private boolean                    hasPrior;
     
-    private EditableProperty<Integer>       phase, step;
+    private Property<Integer>          phase, step;
     
-    private Map<Type, TurnBasedAction>      turnBasedActions;
-    private Set<StateBasedAction>           stateBasedActions;
+    private Map<Type, TurnBasedAction> turnBasedActions;
+    private Set<StateBasedAction>      stateBasedActions;
     
-    private EditableProperty<Combat>        combat;
+    private Property<Combat>           combat;
     
     public PhaseStructureImpl(Game game) {
         super(game);
-        listeners = new EditableListenerList(getGame());
-        s = new EditablePropertyChangeSupport(getGame(), this);
-        prior = new EditableProperty<Integer>(getGame(), null, "prior", -1);
-        firstPassed = new EditableProperty<Integer>(getGame(), null, "firstPassed", 0);
-        phase = new EditableProperty<Integer>(getGame(), null, "phase", -1);
-        step = new EditableProperty<Integer>(getGame(), null, "step", -1);
-        combat = new EditableProperty<Combat>(getGame(), null, "combat");
+        prior = properties.property("prior", -1);
+        firstPassed = properties.property("firstPassed", 0);
+        phase = properties.property("phase", -1);
+        step = properties.property("step", -1);
+        combat = properties.property("combat");
         
         //no need for editable, since it's only created once
         turnBasedActions = new EnumMap<Type, TurnBasedAction>(Type.class);

@@ -251,28 +251,17 @@ public final class MagicaPredicates {
         
         private Predicate<? super ObjectCharacteristics> predicate;
         
-        public CardPredicate() {}
-        
         public CardPredicate(Predicate<? super ObjectCharacteristics> predicate) {
-            setPredicate(predicate);
-        }
-        
-        public void setPredicate(Predicate<? super ObjectCharacteristics> predicate) {
             if(predicate == null) throw new IllegalArgumentException("predicate == null");
             this.predicate = predicate;
         }
         
-        public Predicate<? super ObjectCharacteristics> getPredicate() {
-            return this.predicate;
-        }
-        
         /**
-         * Performs the match operation of {@link #getPredicate()} on the {@link ObjectCharacteristics} of the
+         * Performs the match operation of {@link #predicate} on the {@link ObjectCharacteristics} of the
          * {@link MagicObject}, until one match succeeded. Returns true if at least one match operation returned
          * true. Throws an {@link IllegalStateException} if the matcher was not set.
          */
         public boolean apply(MagicObject o) {
-            if(predicate == null) throw new IllegalStateException();
             for(ObjectCharacteristics ch:o.getCharacteristics())
                 if(predicate.apply(ch)) return true;
             return false;

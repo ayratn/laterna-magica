@@ -11,9 +11,6 @@ import net.slightlymagic.laterna.magica.Game;
 import net.slightlymagic.laterna.magica.action.play.PlayAction;
 import net.slightlymagic.laterna.magica.turnStructure.PhaseStructure;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-
 
 /**
  * The class GameLoop.
@@ -22,9 +19,7 @@ import org.slf4j.LoggerFactory;
  * @author Clemens Koza
  */
 public class GameLoop extends AbstractGameContent implements Runnable {
-    private static final Logger log = LoggerFactory.getLogger(GameLoop.class);
-    
-    private boolean             run = true;
+    private boolean run = true;
     
     public GameLoop(Game game) {
         super(game);

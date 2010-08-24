@@ -10,36 +10,28 @@ package net.slightlymagic.laterna.magica.player.impl;
 import static net.slightlymagic.laterna.magica.zone.Zone.Zones.*;
 
 import java.util.EnumMap;
-import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 
+import net.slightlymagic.beans.properties.Property;
 import net.slightlymagic.laterna.magica.Game;
 import net.slightlymagic.laterna.magica.MagicObject;
 import net.slightlymagic.laterna.magica.counter.EditableCounter;
 import net.slightlymagic.laterna.magica.counter.EditableCounterImpl;
 import net.slightlymagic.laterna.magica.deck.Deck;
 import net.slightlymagic.laterna.magica.edit.CompoundEdit;
-import net.slightlymagic.laterna.magica.edit.impl.EditableListenerList;
-import net.slightlymagic.laterna.magica.edit.property.EditableProperty;
-import net.slightlymagic.laterna.magica.edit.property.EditablePropertyChangeSupport;
 import net.slightlymagic.laterna.magica.event.DrawListener;
 import net.slightlymagic.laterna.magica.impl.AbstractGameContent;
 import net.slightlymagic.laterna.magica.mana.ManaPool;
 import net.slightlymagic.laterna.magica.mana.impl.ManaPoolImpl;
-import net.slightlymagic.laterna.magica.player.MagicActor;
 import net.slightlymagic.laterna.magica.player.LifeTotal;
+import net.slightlymagic.laterna.magica.player.MagicActor;
 import net.slightlymagic.laterna.magica.player.Player;
-import net.slightlymagic.laterna.magica.util.ExtendedListenerList;
-import net.slightlymagic.laterna.magica.util.MagicaCollections;
 import net.slightlymagic.laterna.magica.zone.SortedZone;
 import net.slightlymagic.laterna.magica.zone.Zone;
 import net.slightlymagic.laterna.magica.zone.Zone.Zones;
 import net.slightlymagic.laterna.magica.zone.impl.ZoneImpl;
-
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
 
 /**
@@ -49,34 +41,27 @@ import org.slf4j.LoggerFactory;
  * @author Clemens Koza
  */
 public class PlayerImpl extends AbstractGameContent implements Player {
-    private static final Logger           log = LoggerFactory.getLogger(PlayerImpl.class);
+    private Property<Deck>               deck;
     
-    protected ExtendedListenerList        listeners;
+    private MagicActor                   actor;
+    private String                       name;
+    private LifeTotal                    life;
+    private ManaPool                     pool;
     
-    private EditablePropertyChangeSupport s;
-    private EditableProperty<Deck>        deck;
+    private Map<String, EditableCounter> counters;
     
-    private MagicActor                         actor;
-    private String                        name;
-    private LifeTotal                     life;
-    private ManaPool                      pool;
-    
-    private Map<String, EditableCounter>  counters;
-    
-    private Map<Zones, Zone>              zones;
+    private Map<Zones, Zone>             zones;
     
     public PlayerImpl(Game game, String name) {
         super(game);
-        listeners = new EditableListenerList(getGame());
-        s = new EditablePropertyChangeSupport(getGame(), this);
-        deck = new EditableProperty<Deck>(getGame(), s, "deck");
+        deck = properties.property("deck");
         
         CompoundEdit e = new CompoundEdit(getGame(), true, "Create " + name);
         this.name = name;
         life = new LifeTotalImpl(this);
         pool = new ManaPoolImpl(this);
         
-        counters = MagicaCollections.editableMap(getGame(), new HashMap<String, EditableCounter>());
+        counters = properties.map("counters");
         
         zones = new EnumMap<Zone.Zones, Zone>(Zones.class);
         for(Zones z:new Zones[] {GRAVEYARD, HAND, LIBRARY})

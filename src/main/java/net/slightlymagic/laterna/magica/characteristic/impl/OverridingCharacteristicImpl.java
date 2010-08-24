@@ -7,14 +7,10 @@
 package net.slightlymagic.laterna.magica.characteristic.impl;
 
 
-import net.slightlymagic.laterna.magica.Game;
 import net.slightlymagic.laterna.magica.characteristic.OverridingCharacteristic;
 import net.slightlymagic.laterna.magica.characteristics.Characteristics;
 import net.slightlymagic.laterna.magica.edit.Edit;
 import net.slightlymagic.laterna.magica.effect.characteristic.OverridingCharacteristicEffect;
-
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
 
 /**
@@ -24,14 +20,12 @@ import org.slf4j.LoggerFactory;
  * @author Clemens Koza
  */
 public class OverridingCharacteristicImpl<T> extends AbstractCharacteristic<OverridingCharacteristicEffect<T>> implements OverridingCharacteristic<T> {
-    private static final Logger log = LoggerFactory.getLogger(OverridingCharacteristicImpl.class);
+    private String        name;
+    protected RefreshEdit edit;
+    protected T           value;
     
-    private String              name;
-    protected RefreshEdit       edit;
-    protected T                 value;
-    
-    public OverridingCharacteristicImpl(Game game, ObjectCharacteristicsImpl characteristics, Characteristics characteristic, String name) {
-        super(game, characteristics, characteristic);
+    public OverridingCharacteristicImpl(ObjectCharacteristicsImpl characteristics, Characteristics characteristic, String name) {
+        super(characteristics, characteristic);
         this.name = name;
     }
     
@@ -85,15 +79,13 @@ public class OverridingCharacteristicImpl<T> extends AbstractCharacteristic<Over
         protected void execute() {
             oldValue = value;
             value = newValue;
-            getCharacteristics().getPropertyChangeSupport().firePropertyChange(getCharacteristic().name(),
-                    oldValue, newValue);
+            s.firePropertyChange(getCharacteristic().name(), oldValue, newValue);
         }
         
         @Override
         protected void rollback() {
             value = oldValue;
-            getCharacteristics().getPropertyChangeSupport().firePropertyChange(getCharacteristic().name(),
-                    newValue, oldValue);
+            s.firePropertyChange(getCharacteristic().name(), newValue, oldValue);
         }
         
         @Override

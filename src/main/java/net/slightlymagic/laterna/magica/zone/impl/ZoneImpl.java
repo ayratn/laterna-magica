@@ -10,8 +10,6 @@ package net.slightlymagic.laterna.magica.zone.impl;
 import static java.lang.String.*;
 import static java.util.Collections.*;
 
-import java.beans.PropertyChangeListener;
-import java.beans.PropertyChangeSupport;
 import java.util.Collections;
 import java.util.Iterator;
 import java.util.LinkedList;
@@ -20,20 +18,11 @@ import java.util.List;
 import net.slightlymagic.laterna.magica.Game;
 import net.slightlymagic.laterna.magica.MagicObject;
 import net.slightlymagic.laterna.magica.edit.CompoundEdit;
-import net.slightlymagic.laterna.magica.edit.impl.EditableListenerList;
-import net.slightlymagic.laterna.magica.edit.property.EditablePropertyChangeSupport;
-import net.slightlymagic.laterna.magica.edit.property.PropertyChangeListListener;
 import net.slightlymagic.laterna.magica.event.MoveCardListener;
 import net.slightlymagic.laterna.magica.impl.AbstractGameContent;
 import net.slightlymagic.laterna.magica.impl.MoveCardEvent;
 import net.slightlymagic.laterna.magica.player.Player;
-import net.slightlymagic.laterna.magica.util.ExtendedListenerList;
-import net.slightlymagic.laterna.magica.util.ListenableCollections;
-import net.slightlymagic.laterna.magica.util.MagicaCollections;
 import net.slightlymagic.laterna.magica.zone.SortedZone;
-
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
 
 /**
@@ -45,13 +34,9 @@ import org.slf4j.LoggerFactory;
  * @author Clemens Koza
  */
 public class ZoneImpl extends AbstractGameContent implements SortedZone {
-    private static final Logger     log = LoggerFactory.getLogger(ZoneImpl.class);
-    
-    protected ExtendedListenerList  listeners;
-    protected PropertyChangeSupport s;
-    private Zones                   type;
-    private Player                  owner;
-    private List<MagicObject>       cards, view;
+    private Zones  type;
+    private Player owner;
+    private List<MagicObject> cards, view;
     
     public ZoneImpl(Game game, Zones type) {
         this(game, type, null);
@@ -63,8 +48,6 @@ public class ZoneImpl extends AbstractGameContent implements SortedZone {
                 + "'s " + type);
         this.type = type;
         this.owner = owner;
-        listeners = new EditableListenerList(getGame());
-        s = new EditablePropertyChangeSupport(getGame(), this);
         addMoveCardListener(new MoveListener());
         e.end();
     }
@@ -79,9 +62,7 @@ public class ZoneImpl extends AbstractGameContent implements SortedZone {
     
     public List<MagicObject> getCards() {
         if(cards == null) {
-            LinkedList<MagicObject> cards = new LinkedList<MagicObject>();
-            this.cards = MagicaCollections.editableList(getGame(), ListenableCollections.listenableList(cards,
-                    new PropertyChangeListListener<MagicObject>(s, CARDS)));
+            cards = properties.list("cards", new LinkedList<MagicObject>());
             view = unmodifiableList(cards);
         }
         return view;
@@ -102,22 +83,6 @@ public class ZoneImpl extends AbstractGameContent implements SortedZone {
     public boolean isEmpty() {
         if(cards == null) return true;
         return getCards().isEmpty();
-    }
-    
-    public void addPropertyChangeListener(PropertyChangeListener listener) {
-        s.addPropertyChangeListener(listener);
-    }
-    
-    public void addPropertyChangeListener(String propertyName, PropertyChangeListener listener) {
-        s.addPropertyChangeListener(propertyName, listener);
-    }
-    
-    public void removePropertyChangeListener(PropertyChangeListener listener) {
-        s.removePropertyChangeListener(listener);
-    }
-    
-    public void removePropertyChangeListener(String propertyName, PropertyChangeListener listener) {
-        s.removePropertyChangeListener(propertyName, listener);
     }
     
     public void addMoveCardListener(MoveCardListener l) {

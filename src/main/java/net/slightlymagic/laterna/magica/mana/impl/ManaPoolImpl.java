@@ -9,18 +9,14 @@ package net.slightlymagic.laterna.magica.mana.impl;
 
 import static java.util.Collections.*;
 
-import java.util.HashSet;
 import java.util.Iterator;
 import java.util.Set;
 
-import net.slightlymagic.laterna.magica.edit.impl.EditableListenerList;
 import net.slightlymagic.laterna.magica.event.ManaPoolListener;
 import net.slightlymagic.laterna.magica.impl.AbstractGameContent;
 import net.slightlymagic.laterna.magica.mana.Mana;
 import net.slightlymagic.laterna.magica.mana.ManaPool;
 import net.slightlymagic.laterna.magica.player.Player;
-import net.slightlymagic.laterna.magica.util.ExtendedListenerList;
-import net.slightlymagic.laterna.magica.util.MagicaCollections;
 
 
 /**
@@ -30,18 +26,14 @@ import net.slightlymagic.laterna.magica.util.MagicaCollections;
  * @author Clemens Koza
  */
 public class ManaPoolImpl extends AbstractGameContent implements ManaPool {
-    protected ExtendedListenerList listeners;
-    
-    private Player                 owner;
-    private Set<Mana>              pool, manaView;
+    private Player owner;
+    private Set<Mana> pool, poolView;
     
     public ManaPoolImpl(Player owner) {
         super(owner.getGame());
-        listeners = new EditableListenerList(getGame());
         this.owner = owner;
-        Set<Mana> s = new HashSet<Mana>();
-        pool = MagicaCollections.editableSet(getGame(), s);
-        manaView = unmodifiableSet(s);
+        pool = properties.set("pool");
+        poolView = unmodifiableSet(pool);
     }
     
     public Player getOwner() {
@@ -49,7 +41,7 @@ public class ManaPoolImpl extends AbstractGameContent implements ManaPool {
     }
     
     public Set<Mana> getPool() {
-        return manaView;
+        return poolView;
     }
     
     public void addMana(Mana mana) {

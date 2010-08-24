@@ -15,8 +15,6 @@ import net.slightlymagic.laterna.magica.card.CardObject;
 import net.slightlymagic.laterna.magica.player.Player;
 
 import org.jetlang.core.Callback;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
 
 /**
@@ -26,11 +24,9 @@ import org.slf4j.LoggerFactory;
  * @author Clemens Koza
  */
 public class AttackerActor extends GuiActor {
-    private static final Logger log = LoggerFactory.getLogger(AttackerActor.class);
+    private Combat   combat;
     
-    private Combat              combat;
-    
-    private Defender            defender;
+    private Defender defender;
     
     public AttackerActor(GuiMagicActor actor) {
         super(actor);

@@ -9,9 +9,7 @@ package net.slightlymagic.laterna.magica.impl;
 
 import static net.slightlymagic.laterna.magica.zone.Zone.Zones.*;
 
-import java.util.ArrayList;
 import java.util.EnumMap;
-import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
@@ -23,7 +21,7 @@ import net.slightlymagic.laterna.magica.counter.EditableCounter;
 import net.slightlymagic.laterna.magica.counter.EditableCounterImpl;
 import net.slightlymagic.laterna.magica.edit.CompoundEdit;
 import net.slightlymagic.laterna.magica.edit.GameState;
-import net.slightlymagic.laterna.magica.edit.impl.EditableListenerList;
+import net.slightlymagic.laterna.magica.edit.property.EditableBoundBean;
 import net.slightlymagic.laterna.magica.effect.GlobalEffects;
 import net.slightlymagic.laterna.magica.effect.impl.GlobalEffectsImpl;
 import net.slightlymagic.laterna.magica.effect.replacement.ReplacementEngine;
@@ -34,8 +32,6 @@ import net.slightlymagic.laterna.magica.turnStructure.PhaseStructure;
 import net.slightlymagic.laterna.magica.turnStructure.TurnStructure;
 import net.slightlymagic.laterna.magica.turnStructure.impl.PhaseStructureImpl;
 import net.slightlymagic.laterna.magica.turnStructure.impl.TurnStructureImpl;
-import net.slightlymagic.laterna.magica.util.ExtendedListenerList;
-import net.slightlymagic.laterna.magica.util.MagicaCollections;
 import net.slightlymagic.laterna.magica.zone.SortedZone;
 import net.slightlymagic.laterna.magica.zone.Zone;
 import net.slightlymagic.laterna.magica.zone.Zone.Zones;
@@ -48,9 +44,7 @@ import net.slightlymagic.laterna.magica.zone.impl.ZoneImpl;
  * @version V0.0 04.09.2009
  * @author Clemens Koza
  */
-public class GameImpl implements Game {
-    protected ExtendedListenerList       listeners;
-    
+public class GameImpl extends EditableBoundBean implements Game {
     private GameState                    gameState;
     private Random                       random;
     private GlobalEffects                globalEffects;
@@ -66,16 +60,18 @@ public class GameImpl implements Game {
     
     public GameImpl() {
         gameState = new GameState(this);
+        init(this);
+        
         CompoundEdit edit = new CompoundEdit(this, true, "Create game");
-        listeners = new EditableListenerList(this);
+        
         random = new MagicaRandom(this);
         globalEffects = new GlobalEffectsImpl(this);
         timestampFactory = new TimestampFactory(this);
         replacementEngine = new ReplacementEngine(this);
         turnStructure = new TurnStructureImpl(this);
         phaseStructure = new PhaseStructureImpl(this);
-        players = MagicaCollections.editableList(this, new ArrayList<Player>());
-        counters = MagicaCollections.editableMap(this, new HashMap<String, EditableCounter>());
+        players = properties.list("players");
+        counters = properties.map("counters");
         
         zones = new EnumMap<Zone.Zones, Zone>(Zones.class);
         for(Zones z:new Zones[] {ANTE, BATTLEFIELD, COMMAND, EXILE, STACK})

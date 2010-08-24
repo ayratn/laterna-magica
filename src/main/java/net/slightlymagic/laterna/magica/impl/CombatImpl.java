@@ -9,10 +9,10 @@ package net.slightlymagic.laterna.magica.impl;
 
 import static java.lang.String.*;
 import static java.util.Collections.*;
+import static net.slightlymagic.beans.relational.Relations.*;
 import static net.slightlymagic.laterna.magica.card.State.StateType.*;
 import static net.slightlymagic.laterna.magica.impl.CombatUtil.*;
 import static net.slightlymagic.laterna.magica.util.MagicaCollections.*;
-import static net.slightlymagic.laterna.magica.util.relational.Relations.*;
 
 import java.beans.PropertyChangeListener;
 import java.util.AbstractMap;
@@ -27,6 +27,10 @@ import java.util.Map;
 import java.util.Map.Entry;
 import java.util.Set;
 
+import net.slightlymagic.beans.properties.Property;
+import net.slightlymagic.beans.relational.ManySide;
+import net.slightlymagic.beans.relational.ManyToMany;
+import net.slightlymagic.beans.relational.OneSide;
 import net.slightlymagic.laterna.magica.Combat;
 import net.slightlymagic.laterna.magica.Game;
 import net.slightlymagic.laterna.magica.MagicObject;
@@ -35,18 +39,9 @@ import net.slightlymagic.laterna.magica.action.turnBased.TurnBasedAction;
 import net.slightlymagic.laterna.magica.action.turnBased.TurnBasedAction.Type;
 import net.slightlymagic.laterna.magica.card.CardObject;
 import net.slightlymagic.laterna.magica.cost.impl.DummyCostFunction;
-import net.slightlymagic.laterna.magica.edit.property.EditableProperty;
-import net.slightlymagic.laterna.magica.edit.property.EditablePropertyChangeSupport;
 import net.slightlymagic.laterna.magica.effects.damage.DamagePermanentEvent;
 import net.slightlymagic.laterna.magica.effects.damage.DamagePlayerEvent;
 import net.slightlymagic.laterna.magica.player.Player;
-import net.slightlymagic.laterna.magica.util.MagicaCollections;
-import net.slightlymagic.laterna.magica.util.relational.ManySide;
-import net.slightlymagic.laterna.magica.util.relational.ManyToMany;
-import net.slightlymagic.laterna.magica.util.relational.OneSide;
-
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
 import com.google.common.collect.AbstractIterator;
 
@@ -58,26 +53,16 @@ import com.google.common.collect.AbstractIterator;
  * @author Clemens Koza
  */
 public class CombatImpl extends AbstractGameContent implements Combat {
-    private static final Logger log = LoggerFactory.getLogger(CombatImpl.class);
-    
-    private <T> EditableProperty<T> editable(EditablePropertyChangeSupport s, String name, T value) {
-        return new EditableProperty<T>(getGame(), s, name, value);
-    }
-    
-    private <T> Set<T> editableSet() {
-        return MagicaCollections.editableSet(getGame(), new HashSet<T>());
-    }
-    
     private static <T> boolean equal(Collection<? extends T> c1, Collection<? extends T> c2) {
         return c1.containsAll(c2) && c2.containsAll(c1);
     }
     
-    private abstract class Combatant {
-        protected final Logger                        log               = LoggerFactory.getLogger(getClass());
-        protected final EditablePropertyChangeSupport s                 = new EditablePropertyChangeSupport(
-                                                                                getGame(), this);
+    private abstract class Combatant extends AbstractGameContent {
+        private Property<Boolean> removedFromCombat = properties.property("removedFromCombat", false);
         
-        private EditableProperty<Boolean>             removedFromCombat = editable(s, "removedFromCombat", false);
+        public Combatant() {
+            super(CombatImpl.this.getGame());
+        }
         
         public void setRemovedFromCombat(boolean removedFromCombat) {
             log.debug("Remove from combat: " + this + " --> " + removedFromCombat);
@@ -88,30 +73,35 @@ public class CombatImpl extends AbstractGameContent implements Combat {
             return removedFromCombat.getValue();
         }
         
+        @Override
         public void addPropertyChangeListener(PropertyChangeListener listener) {
             s.addPropertyChangeListener(listener);
         }
         
+        @Override
         public void addPropertyChangeListener(String propertyName, PropertyChangeListener listener) {
             s.addPropertyChangeListener(propertyName, listener);
         }
         
+        @Override
         public void removePropertyChangeListener(PropertyChangeListener listener) {
             s.removePropertyChangeListener(listener);
         }
         
+        @Override
         public void removePropertyChangeListener(String propertyName, PropertyChangeListener listener) {
             s.removePropertyChangeListener(propertyName, listener);
         }
     }
     
     private abstract class CreatureCombatant<A, B> extends Combatant {
-        @SuppressWarnings({"unchecked", "rawtypes"})
-        private ManyToMany<A, B, BlockAssignmentImpl> combatant = (ManyToMany) manyToMany(getGame(), this);
+        private ManyToMany<A, B, BlockAssignmentImpl> combatant;
         private CardObject                            creature;
-        private EditableProperty<List<B>>             order     = editable(s, "order", null);
+        private Property<List<B>>                     order = properties.property("damageAssignmentOrder");
         
-        protected CreatureCombatant(CardObject creature) {
+        @SuppressWarnings({"unchecked", "rawtypes"})
+        protected CreatureCombatant(CardObject creature, String otherSide) {
+            combatant = (ManyToMany) manyToMany(properties, otherSide, this);
             setCreature(creature);
         }
         
@@ -144,11 +134,11 @@ public class CombatImpl extends AbstractGameContent implements Combat {
     }
     
     private class AttackerImpl extends CreatureCombatant<AttackerImpl, BlockerImpl> implements Attacker {
-        private ManySide<AttackerImpl, DefenderImpl>   defender   = manySide(getGame(), this);
-        private EditableProperty<AttackAssignmentImpl> assignment = editable(s, "attackAssignment", null);
+        private ManySide<AttackerImpl, DefenderImpl> defender   = manySide(properties, "defender", this);
+        private Property<AttackAssignmentImpl>       assignment = properties.property("attackAssignment");
         
         public AttackerImpl(CardObject creature) {
-            super(creature);
+            super(creature, "blockers");
         }
         
         @Override
@@ -198,7 +188,7 @@ public class CombatImpl extends AbstractGameContent implements Combat {
     
     private class BlockerImpl extends CreatureCombatant<BlockerImpl, AttackerImpl> implements Blocker {
         public BlockerImpl(CardObject creature) {
-            super(creature);
+            super(creature, "attackers");
         }
         
         @Override
@@ -238,7 +228,7 @@ public class CombatImpl extends AbstractGameContent implements Combat {
     }
     
     private abstract class DefenderImpl extends Combatant implements Defender {
-        private OneSide<DefenderImpl, AttackerImpl> defender = oneSide(getGame(), this);
+        private OneSide<DefenderImpl, AttackerImpl> defender = oneSide(properties, "attackers", this);
         
         @Override
         public Map<? extends AttackerImpl, ? extends AttackAssignmentImpl> getAttackers() {
@@ -355,13 +345,10 @@ public class CombatImpl extends AbstractGameContent implements Combat {
     }
     
     private class AttackAssignmentImpl implements AttackAssignment {
-        protected final EditablePropertyChangeSupport s              = new EditablePropertyChangeSupport(
-                                                                             getGame(), this);
+        private AttackerImpl      attacker;
+        private DefenderImpl      defender;
         
-        private AttackerImpl                          attacker;
-        private DefenderImpl                          defender;
-        
-        private EditableProperty<Integer>             attackerDamage = editable(s, "attackerDamage", 0);
+        private Property<Integer> attackerDamage = properties.property("attackerDamage", 0);
         
         public AttackAssignmentImpl(AttackerImpl attacker, DefenderImpl defender) {
             this.attacker = attacker;
@@ -377,14 +364,14 @@ public class CombatImpl extends AbstractGameContent implements Combat {
         }
         
         private void resetAttackerAssignedDamage() {
-            attacker.log.debug("Resetting damage assignment: " + attacker);
+            log.debug("Resetting damage assignment: " + attacker);
             attackerDamage.setValue(0);
         }
         
         @Override
         public void setAttackerAssignedDamage(int amount) {
             checkAttackerAssignmentAttacker(getAttacker());
-            attacker.log.debug("Setting damage assignment: " + attacker + " --> " + amount);
+            log.debug("Setting damage assignment: " + attacker + " --> " + amount);
             attackerDamage.setValue(amount <= 0? 0:amount);
         }
         
@@ -411,14 +398,11 @@ public class CombatImpl extends AbstractGameContent implements Combat {
     }
     
     private class BlockAssignmentImpl implements BlockAssignment {
-        protected final EditablePropertyChangeSupport s              = new EditablePropertyChangeSupport(
-                                                                             getGame(), this);
+        private AttackerImpl      attacker;
+        private BlockerImpl       blocker;
         
-        private AttackerImpl                          attacker;
-        private BlockerImpl                           blocker;
-        
-        private EditableProperty<Integer>             attackerDamage = editable(s, "attackerDamage", 0);
-        private EditableProperty<Integer>             blockerDamage  = editable(s, "blockerDamage", 0);
+        private Property<Integer> attackerDamage = properties.property("attackerDamage", 0);
+        private Property<Integer> blockerDamage  = properties.property("blockerDamage", 0);
         
         public BlockAssignmentImpl(AttackerImpl attacker, BlockerImpl blocker) {
             this.attacker = attacker;
@@ -434,14 +418,14 @@ public class CombatImpl extends AbstractGameContent implements Combat {
         }
         
         private void resetAttackerAssignedDamage() {
-            attacker.log.debug("Resetting damage assignment: " + attacker);
+            log.debug("Resetting damage assignment: " + attacker);
             attackerDamage.setValue(0);
         }
         
         @Override
         public void setAttackerAssignedDamage(int amount) {
             checkAttackerAssignmentAttacker(getAttacker());
-            attacker.log.debug("Setting damage assignment: " + attacker + " --> " + amount);
+            log.debug("Setting damage assignment: " + attacker + " --> " + amount);
             attackerDamage.setValue(amount <= 0? 0:amount);
         }
         
@@ -451,14 +435,14 @@ public class CombatImpl extends AbstractGameContent implements Combat {
         }
         
         private void resetBlockerAssignedDamage() {
-            blocker.log.debug("Resetting damage assignment: " + blocker);
+            log.debug("Resetting damage assignment: " + blocker);
             blockerDamage.setValue(0);
         }
         
         @Override
         public void setBlockerAssignedDamage(int amount) {
             checkAttackerAssignmentAttacker(getAttacker());
-            blocker.log.debug("Setting damage assignment: " + blocker + " --> " + amount);
+            log.debug("Setting damage assignment: " + blocker + " --> " + amount);
             blockerDamage.setValue(amount <= 0? 0:amount);
         }
         
@@ -484,24 +468,26 @@ public class CombatImpl extends AbstractGameContent implements Combat {
         }
     }
     
-    protected final EditablePropertyChangeSupport s = new EditablePropertyChangeSupport(getGame(), this);
+    private Map<MagicObject, AttackerImpl> attackers, attackersView;
+    private Map<MagicObject, BlockerImpl>  blockers, blockersView;
+    private Map<Object, DefenderImpl>      defenders, defendersView;
     
-    private Map<MagicObject, AttackerImpl>        attackers, attackersView;
-    private Map<MagicObject, BlockerImpl>         blockers, blockersView;
-    private Map<Object, DefenderImpl>             defenders, defendersView;
-    
+    @Override
     public void addPropertyChangeListener(PropertyChangeListener listener) {
         s.addPropertyChangeListener(listener);
     }
     
+    @Override
     public void addPropertyChangeListener(String propertyName, PropertyChangeListener listener) {
         s.addPropertyChangeListener(propertyName, listener);
     }
     
+    @Override
     public void removePropertyChangeListener(PropertyChangeListener listener) {
         s.removePropertyChangeListener(listener);
     }
     
+    @Override
     public void removePropertyChangeListener(String propertyName, PropertyChangeListener listener) {
         s.removePropertyChangeListener(propertyName, listener);
     }
@@ -635,11 +621,11 @@ public class CombatImpl extends AbstractGameContent implements Combat {
      */
 
     //controls for what modifications are legal
-    private EditableProperty<TurnBasedAction.Type> action   = editable(s, "action", null);
-    private EditableProperty<Player>               attDAO   = editable(s, "attDAO", null);
-    private EditableProperty<Player>               blockDAO = editable(s, "blockDAO", null);
-    private EditableProperty<AttackerImpl>         attDA    = editable(s, "attDA", null);
-    private EditableProperty<BlockerImpl>          blockDA  = editable(s, "blockDA", null);
+    private Property<TurnBasedAction.Type> action   = properties.property("action");
+    private Property<Player>               attDAO   = properties.property("attDAO");
+    private Property<Player>               blockDAO = properties.property("blockDAO");
+    private Property<AttackerImpl>         attDA    = properties.property("attDA");
+    private Property<BlockerImpl>          blockDA  = properties.property("blockDA");
     
     public void setAction(TurnBasedAction.Type action) {
         switch(action) {
@@ -811,11 +797,11 @@ public class CombatImpl extends AbstractGameContent implements Combat {
         BEFORE, FIRST, BETWEEN, REGULAR, AFTER
     }
     
-    private EditableProperty<CombatDamageStep> firstStrike       = editable(s, "firstStrike",
-                                                                         CombatDamageStep.BEFORE);
+    private Property<CombatDamageStep> firstStrike       = properties.property("firstStrike",
+                                                                 CombatDamageStep.BEFORE);
     
-    private Set<AttackerImpl>                  attackersThisStep = editableSet();
-    private Set<BlockerImpl>                   blockersThisStep  = editableSet();
+    private Set<AttackerImpl>          attackersThisStep = properties.set("attackersThisStep");
+    private Set<BlockerImpl>           blockersThisStep  = properties.set("blockersThisStep");
     
     @Override
     public void startCombatDamageStep() {

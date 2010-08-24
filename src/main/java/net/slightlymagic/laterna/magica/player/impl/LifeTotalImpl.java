@@ -10,16 +10,12 @@ package net.slightlymagic.laterna.magica.player.impl;
 import java.beans.PropertyChangeListener;
 import java.util.Iterator;
 
-import net.slightlymagic.laterna.magica.Game;
-import net.slightlymagic.laterna.magica.GameContent;
+import net.slightlymagic.beans.properties.Property;
 import net.slightlymagic.laterna.magica.edit.CompoundEdit;
-import net.slightlymagic.laterna.magica.edit.impl.EditableListenerList;
-import net.slightlymagic.laterna.magica.edit.property.EditableProperty;
-import net.slightlymagic.laterna.magica.edit.property.EditablePropertyChangeSupport;
 import net.slightlymagic.laterna.magica.event.LifeListener;
+import net.slightlymagic.laterna.magica.impl.AbstractGameContent;
 import net.slightlymagic.laterna.magica.player.LifeTotal;
 import net.slightlymagic.laterna.magica.player.Player;
-import net.slightlymagic.laterna.magica.util.ExtendedListenerList;
 
 
 /**
@@ -28,25 +24,18 @@ import net.slightlymagic.laterna.magica.util.ExtendedListenerList;
  * @version V0.0 16.10.2009
  * @author Clemens Koza
  */
-public class LifeTotalImpl implements LifeTotal, GameContent {
-    protected ExtendedListenerList          listeners;
-    protected EditablePropertyChangeSupport s;
-    private EditableProperty<Integer>       life;
-    private Player                          player;
+public class LifeTotalImpl extends AbstractGameContent implements LifeTotal {
+    private Property<Integer> life;
+    private Player            player;
     
     public LifeTotalImpl(Player player) {
+        super(player.getGame());
         this.player = player;
-        listeners = new EditableListenerList(getGame());
-        s = new EditablePropertyChangeSupport(getGame(), this);
-        life = new EditableProperty<Integer>(getGame(), s, LIFE_TOTAL, 0);
+        life = properties.property(LIFE_TOTAL, 0);
     }
     
     public Player getPlayer() {
         return player;
-    }
-    
-    public Game getGame() {
-        return getPlayer().getGame();
     }
     
     public int getLifeTotal() {
@@ -102,18 +91,22 @@ public class LifeTotalImpl implements LifeTotal, GameContent {
         return true;
     }
     
+    @Override
     public void addPropertyChangeListener(PropertyChangeListener listener) {
         s.addPropertyChangeListener(listener);
     }
     
+    @Override
     public void addPropertyChangeListener(String propertyName, PropertyChangeListener listener) {
         s.addPropertyChangeListener(propertyName, listener);
     }
     
+    @Override
     public void removePropertyChangeListener(PropertyChangeListener listener) {
         s.removePropertyChangeListener(listener);
     }
     
+    @Override
     public void removePropertyChangeListener(String propertyName, PropertyChangeListener listener) {
         s.removePropertyChangeListener(propertyName, listener);
     }

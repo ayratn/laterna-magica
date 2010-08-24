@@ -8,8 +8,6 @@ package net.slightlymagic.laterna.magica.characteristic.impl;
 
 
 import static net.slightlymagic.laterna.magica.characteristics.Characteristics.*;
-
-import net.slightlymagic.laterna.magica.Game;
 import net.slightlymagic.laterna.magica.characteristic.PTCharacteristic;
 import net.slightlymagic.laterna.magica.characteristics.CardType;
 import net.slightlymagic.laterna.magica.edit.Edit;
@@ -17,9 +15,6 @@ import net.slightlymagic.laterna.magica.effect.characteristic.PTChangingEffect;
 import net.slightlymagic.laterna.magica.effect.characteristic.PTEffect;
 import net.slightlymagic.laterna.magica.effect.characteristic.PTSettingEffect;
 import net.slightlymagic.laterna.magica.effect.characteristic.PTSwitchingEffect;
-
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
 
 /**
@@ -29,14 +24,12 @@ import org.slf4j.LoggerFactory;
  * @author Clemens Koza
  */
 public class PTCharacteristicImpl extends AbstractCharacteristic<PTEffect> implements PTCharacteristic {
-    private static final Logger log = LoggerFactory.getLogger(PTCharacteristicImpl.class);
+    private String        name;
+    protected RefreshEdit edit;
+    protected int         p, t;
     
-    private String              name;
-    protected RefreshEdit       edit;
-    protected int               p, t;
-    
-    public PTCharacteristicImpl(Game game, ObjectCharacteristicsImpl characteristics, String name) {
-        super(game, characteristics, POWER_TOUGHNESS);
+    public PTCharacteristicImpl(ObjectCharacteristicsImpl characteristics, String name) {
+        super(characteristics, POWER_TOUGHNESS);
         this.name = name;
     }
     
@@ -121,20 +114,16 @@ public class PTCharacteristicImpl extends AbstractCharacteristic<PTEffect> imple
             oldT = t;
             p = newP;
             t = newT;
-            getCharacteristics().getPropertyChangeSupport().firePropertyChange(getCharacteristic().name() + ".p",
-                    oldP, newP);
-            getCharacteristics().getPropertyChangeSupport().firePropertyChange(getCharacteristic().name() + ".t",
-                    oldT, newT);
+            s.firePropertyChange(getCharacteristic().name() + ".p", oldP, newP);
+            s.firePropertyChange(getCharacteristic().name() + ".t", oldT, newT);
         }
         
         @Override
         protected void rollback() {
             p = oldP;
             t = oldT;
-            getCharacteristics().getPropertyChangeSupport().firePropertyChange(getCharacteristic().name() + ".p",
-                    newP, oldP);
-            getCharacteristics().getPropertyChangeSupport().firePropertyChange(getCharacteristic().name() + ".t",
-                    newT, oldT);
+            s.firePropertyChange(getCharacteristic().name() + ".p", newP, oldP);
+            s.firePropertyChange(getCharacteristic().name() + ".t", newT, oldT);
         }
         
         @Override

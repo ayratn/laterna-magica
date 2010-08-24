@@ -7,10 +7,11 @@
 package net.slightlymagic.laterna.magica.edit.property;
 
 
-import static java.lang.String.*;
+import net.slightlymagic.beans.properties.AbstractProperty;
+import net.slightlymagic.beans.properties.Property;
 import net.slightlymagic.laterna.magica.Game;
+import net.slightlymagic.laterna.magica.GameContent;
 import net.slightlymagic.laterna.magica.edit.Edit;
-import net.slightlymagic.laterna.magica.impl.AbstractGameContent;
 
 
 /**
@@ -19,33 +20,27 @@ import net.slightlymagic.laterna.magica.impl.AbstractGameContent;
  * @version V0.0 16.07.2010
  * @author Clemens Koza
  */
-public class EditableProperty<T> extends AbstractGameContent {
-    private EditablePropertyChangeSupport s;
-    private String                        name;
-    private T                             value;
+class EditableProperty<T> extends AbstractProperty<T> implements GameContent {
+    private Game        game;
+    private Property<T> property;
     
-    public EditableProperty(Game game, EditablePropertyChangeSupport s, String name) {
-        this(game, s, name, null);
-    }
-    
-    public EditableProperty(Game game, EditablePropertyChangeSupport s, String name, T initialValue) {
-        super(game);
-        this.s = s;
-        this.name = name;
-        value = initialValue;
-    }
-    
-    public void setValue(T value) {
-        if(this.value != value) new SetValueEdit(value).execute();
-    }
-    
-    public T getValue() {
-        return value;
+    public EditableProperty(Game game, Property<T> property) {
+        if(property == null) throw new IllegalArgumentException();
+        this.game = game;
+        this.property = property;
     }
     
     @Override
-    public String toString() {
-        return valueOf(getValue());
+    public Game getGame() {
+        return game;
+    }
+    
+    public void setValue(T value) {
+        if(getValue() != value) new SetValueEdit(value).execute();
+    }
+    
+    public T getValue() {
+        return property.getValue();
     }
     
     private class SetValueEdit extends Edit {
@@ -60,20 +55,18 @@ public class EditableProperty<T> extends AbstractGameContent {
         
         @Override
         protected void execute() {
-            oldValue = value;
-            value = newValue;
-            if(s != null) s.firePropertyChange(name, oldValue, newValue);
+            oldValue = property.getValue();
+            property.setValue(newValue);
         }
         
         @Override
         protected void rollback() {
-            value = oldValue;
-            if(s != null) s.firePropertyChange(name, newValue, oldValue);
+            property.setValue(oldValue);
         }
         
         @Override
         public String toString() {
-            return "Set " + (s == null? "":s.getSourceBean() + "'s ") + name + " to " + newValue;
+            return "Set value to " + newValue;
         }
     }
 }

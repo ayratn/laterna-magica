@@ -44,6 +44,10 @@ public class MapRemoveEdit<K, V> extends Edit {
         if(removed) map.put(key, oldValue);
     }
     
+    public V getOldValue() {
+        return oldValue;
+    }
+    
     @Override
     public String toString() {
         return "Remove " + key + " from map";

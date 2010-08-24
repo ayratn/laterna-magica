@@ -11,6 +11,7 @@ import static java.util.Collections.*;
 
 import java.util.List;
 
+import net.slightlymagic.beans.properties.Property;
 import net.slightlymagic.laterna.magica.Game;
 import net.slightlymagic.laterna.magica.MagicObject;
 import net.slightlymagic.laterna.magica.ability.AbilityObject;
@@ -22,8 +23,6 @@ import net.slightlymagic.laterna.magica.action.play.PlayAction;
 import net.slightlymagic.laterna.magica.action.play.PlayInformation;
 import net.slightlymagic.laterna.magica.characteristic.AbilityCharacteristics;
 import net.slightlymagic.laterna.magica.characteristic.impl.AbilityCharacteristicsImpl;
-import net.slightlymagic.laterna.magica.edit.property.EditableProperty;
-import net.slightlymagic.laterna.magica.edit.property.EditablePropertyChangeSupport;
 import net.slightlymagic.laterna.magica.impl.MagicObjectImpl;
 
 
@@ -40,16 +39,14 @@ public class AbilityObjectImpl extends MagicObjectImpl implements AbilityObject 
     private NonStaticAbility                       ability;
     private List<? extends AbilityCharacteristics> characteristics;
     
-    private final EditablePropertyChangeSupport    s;
-    private EditableProperty<PlayInformation>      info;
+    private Property<PlayInformation>              info;
     
     public AbilityObjectImpl(Game game, MagicObject object, NonStaticAbility ability) {
         super(game);
         this.object = object;
         this.ability = ability;
         
-        s = new EditablePropertyChangeSupport(getGame(), this);
-        info = new EditableProperty<PlayInformation>(getGame(), s, "info");
+        info = properties.property("info");
         
         setOwner(object.getOwner());
         characteristics = singletonList(new AbilityCharacteristicsImpl(object, ability));

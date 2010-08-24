@@ -7,9 +7,8 @@
 package net.slightlymagic.laterna.magica.counter;
 
 
+import net.slightlymagic.beans.properties.Property;
 import net.slightlymagic.laterna.magica.Game;
-import net.slightlymagic.laterna.magica.edit.property.EditableProperty;
-import net.slightlymagic.laterna.magica.edit.property.EditablePropertyChangeSupport;
 import net.slightlymagic.laterna.magica.impl.AbstractGameContent;
 
 
@@ -20,13 +19,11 @@ import net.slightlymagic.laterna.magica.impl.AbstractGameContent;
  * @author Clemens Koza
  */
 public class EditableCounterImpl extends AbstractGameContent implements EditableCounter {
-    private EditablePropertyChangeSupport s;
-    private EditableProperty<Integer>     count;
+    private Property<Integer> count;
     
     public EditableCounterImpl(Game game) {
         super(game);
-        s = new EditablePropertyChangeSupport(getGame(), this);
-        count = new EditableProperty<Integer>(getGame(), s, "count", 0);
+        count = properties.property("count", 0);
     }
     
     public int getCount() {

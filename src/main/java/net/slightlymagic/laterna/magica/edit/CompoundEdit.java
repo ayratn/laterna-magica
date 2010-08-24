@@ -13,9 +13,6 @@ import java.util.List;
 
 import net.slightlymagic.laterna.magica.Game;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-
 
 /**
  * The class CompoundEdit. This is used for edits that implement a "collection" of edits that are done together.
@@ -24,12 +21,11 @@ import org.slf4j.LoggerFactory;
  * @author Clemens Koza
  */
 public class CompoundEdit extends Edit {
-    private static final Logger log              = LoggerFactory.getLogger(CompoundEdit.class);
+    private static final long serialVersionUID = 2293396706254539981L;
     
-    private static final long   serialVersionUID = 2293396706254539981L;
-    private List<Edit>          children         = new ArrayList<Edit>();
-    private String              name;
-    private boolean             childrenToString;
+    private List<Edit>        children         = new ArrayList<Edit>();
+    private String            name;
+    private boolean           childrenToString;
     
     public CompoundEdit(Game game, boolean atomic) {
         this(game, atomic, null, true);

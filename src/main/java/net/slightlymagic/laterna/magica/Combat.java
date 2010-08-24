@@ -12,11 +12,11 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
+import net.slightlymagic.beans.BoundBean;
 import net.slightlymagic.laterna.magica.action.GameAction;
 import net.slightlymagic.laterna.magica.action.turnBased.TurnBasedAction;
 import net.slightlymagic.laterna.magica.card.CardObject;
 import net.slightlymagic.laterna.magica.player.Player;
-import net.slightlymagic.laterna.magica.util.BoundBean;
 
 
 /**

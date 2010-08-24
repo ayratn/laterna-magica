@@ -12,15 +12,11 @@ import static java.lang.String.*;
 import java.util.HashSet;
 import java.util.Set;
 
-import net.slightlymagic.laterna.magica.Game;
-import net.slightlymagic.laterna.magica.characteristic.SetCharacteristic;
 import net.slightlymagic.laterna.magica.characteristic.CharacteristicSnapshot.SetCharacteristicSnapshot;
+import net.slightlymagic.laterna.magica.characteristic.SetCharacteristic;
 import net.slightlymagic.laterna.magica.characteristics.Characteristics;
 import net.slightlymagic.laterna.magica.edit.Edit;
 import net.slightlymagic.laterna.magica.effect.characteristic.SetCharacteristicEffect;
-
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
 
 /**
@@ -30,15 +26,13 @@ import org.slf4j.LoggerFactory;
  * @author Clemens Koza
  */
 public class SetCharacteristicImpl<T> extends AbstractCharacteristic<SetCharacteristicEffect<T>> implements SetCharacteristic<T> {
-    private static final Logger log = LoggerFactory.getLogger(SetCharacteristicImpl.class);
+    private String        name;
+    protected boolean     adding;
+    protected RefreshEdit edit;
+    protected Set<T>      values;
     
-    private String              name;
-    protected boolean           adding;
-    protected RefreshEdit       edit;
-    protected Set<T>            values;
-    
-    public SetCharacteristicImpl(Game game, ObjectCharacteristicsImpl characteristics, Characteristics characteristic, String name) {
-        super(game, characteristics, characteristic);
+    public SetCharacteristicImpl(ObjectCharacteristicsImpl characteristics, Characteristics characteristic, String name) {
+        super(characteristics, characteristic);
         this.name = name;
         values = new HashSet<T>();
     }
@@ -154,8 +148,7 @@ public class SetCharacteristicImpl<T> extends AbstractCharacteristic<SetCharacte
             oldAdding = adding;
             values = newValues;
             adding = newAdding;
-            getCharacteristics().getPropertyChangeSupport().firePropertyChange(getCharacteristic().name(), null,
-                    null);
+            s.firePropertyChange(getCharacteristic().name(), null, null);
         }
         
         @Override

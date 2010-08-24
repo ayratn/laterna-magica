@@ -8,8 +8,8 @@ package net.slightlymagic.laterna.magica.edit.property;
 
 
 import java.beans.PropertyChangeListener;
-import java.beans.PropertyChangeSupport;
 
+import net.slightlymagic.beans.PropertyChangeSupport;
 import net.slightlymagic.laterna.magica.Game;
 import net.slightlymagic.laterna.magica.GameContent;
 import net.slightlymagic.laterna.magica.edit.Edit;
@@ -21,16 +21,14 @@ import net.slightlymagic.laterna.magica.edit.Edit;
  * @version V0.0 16.07.2010
  * @author Clemens Koza
  */
-public class EditablePropertyChangeSupport extends PropertyChangeSupport implements GameContent {
+class EditablePropertyChangeSupport extends PropertyChangeSupport implements GameContent {
     private static final long serialVersionUID = -4241465377828790076L;
     
     private Game              game;
-    private Object            sourceBean;
     
     public EditablePropertyChangeSupport(Game game, Object sourceBean) {
         super(sourceBean);
         this.game = game;
-        this.sourceBean = sourceBean;
     }
     
     public Game getGame() {
@@ -73,10 +71,6 @@ public class EditablePropertyChangeSupport extends PropertyChangeSupport impleme
     
     private void removePropertyChangeListener0(String propertyName, PropertyChangeListener listener) {
         super.removePropertyChangeListener(propertyName, listener);
-    }
-    
-    Object getSourceBean() {
-        return sourceBean;
     }
     
     private class PropertyChangeListenerEdit extends Edit {

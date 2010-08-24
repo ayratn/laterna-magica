@@ -12,7 +12,10 @@ import java.util.LinkedList;
 import java.util.List;
 
 import net.slightlymagic.laterna.magica.Game;
-import net.slightlymagic.laterna.magica.impl.AbstractGameContent;
+import net.slightlymagic.laterna.magica.GameContent;
+
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 
 /**
@@ -38,9 +41,12 @@ import net.slightlymagic.laterna.magica.impl.AbstractGameContent;
  * @version V1.0 17.01.2010
  * @author Clemens Koza
  */
-public abstract class Edit extends AbstractGameContent implements Serializable, Comparable<Edit> {
+public abstract class Edit implements GameContent, Serializable, Comparable<Edit> {
     private static final long serialVersionUID = 381930042216610090L;
     
+    protected final Logger    log              = LoggerFactory.getLogger(getClass());
+    
+    private Game              game;
     private Edit              parent;
     private boolean           atomic;
     
@@ -50,9 +56,14 @@ public abstract class Edit extends AbstractGameContent implements Serializable, 
     
     //This constructor is used by compound edits
     Edit(GameState gameState, boolean atomic) {
-        super(gameState.getGame());
+        game = gameState.getGame();
         this.atomic = atomic;
         gameState.add(this);
+    }
+    
+    @Override
+    public Game getGame() {
+        return game;
     }
     
     void setParent(Edit parent) {

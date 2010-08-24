@@ -9,9 +9,9 @@ package net.slightlymagic.laterna.magica.edit.impl;
 
 import java.util.EventListener;
 
+import net.slightlymagic.beans.EventListenerList;
 import net.slightlymagic.laterna.magica.Game;
 import net.slightlymagic.laterna.magica.GameContent;
-import net.slightlymagic.laterna.magica.util.ExtendedListenerList;
 
 
 /**
@@ -20,7 +20,7 @@ import net.slightlymagic.laterna.magica.util.ExtendedListenerList;
  * @version V0.0 29.03.2010
  * @author Clemens Koza
  */
-public class EditableListenerList extends ExtendedListenerList implements GameContent {
+public class EditableListenerList extends EventListenerList implements GameContent {
     private static final long serialVersionUID = 8278453808866780920L;
     
     private Game              game;

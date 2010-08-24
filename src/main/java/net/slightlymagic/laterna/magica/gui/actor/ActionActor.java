@@ -12,8 +12,6 @@ import net.slightlymagic.laterna.magica.action.play.PlayAction;
 import net.slightlymagic.laterna.magica.gui.util.GuiUtil;
 
 import org.jetlang.core.Callback;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
 
 /**
@@ -23,8 +21,6 @@ import org.slf4j.LoggerFactory;
  * @author Clemens Koza
  */
 public class ActionActor extends GuiActor {
-    private static final Logger log = LoggerFactory.getLogger(ActionActor.class);
-    
     public ActionActor(GuiMagicActor actor) {
         super(actor);
     }

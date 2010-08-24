@@ -27,7 +27,6 @@ import net.slightlymagic.laterna.magica.characteristics.MagicColor;
 import net.slightlymagic.laterna.magica.characteristics.SubType;
 import net.slightlymagic.laterna.magica.characteristics.SuperType;
 import net.slightlymagic.laterna.magica.edit.CompoundEdit;
-import net.slightlymagic.laterna.magica.edit.property.EditablePropertyChangeSupport;
 import net.slightlymagic.laterna.magica.effect.characteristic.CharacteristicEffect;
 import net.slightlymagic.laterna.magica.effect.characteristic.OverridingCharacteristicEffect;
 import net.slightlymagic.laterna.magica.effect.characteristic.PTEffect;
@@ -36,9 +35,6 @@ import net.slightlymagic.laterna.magica.effect.characteristic.impl.ColorChanging
 import net.slightlymagic.laterna.magica.effect.characteristic.impl.EffectComparator;
 import net.slightlymagic.laterna.magica.impl.AbstractGameContent;
 import net.slightlymagic.laterna.magica.mana.ManaSequence;
-
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
 import com.google.common.base.Predicate;
 
@@ -50,10 +46,6 @@ import com.google.common.base.Predicate;
  * @author Clemens Koza
  */
 public class ObjectCharacteristicsImpl extends AbstractGameContent implements ObjectCharacteristics {
-    private static final Logger                        log = LoggerFactory.getLogger(ObjectCharacteristicsImpl.class);
-    
-    private EditablePropertyChangeSupport              s;
-    
     private boolean                                    refreshing;
     private MagicObject                                card;
     private OverridingCharacteristicImpl<String>       name;
@@ -67,18 +59,16 @@ public class ObjectCharacteristicsImpl extends AbstractGameContent implements Ob
     
     public ObjectCharacteristicsImpl(MagicObject card) {
         super(card.getGame());
-        s = new EditablePropertyChangeSupport(getGame(), this);
         this.card = card;
         
         CompoundEdit e = new CompoundEdit(getGame(), true, "Create " + getCard() + "'s ObjectCharacteristics");
         
-        name = new OverridingCharacteristicImpl<String>(getGame(), this, NAME, this + "'s name");
-        manaCost = new OverridingCharacteristicImpl<ManaSequence>(getGame(), this, MANA_COST, this
-                + "'s mana cost");
-        color = new SetCharacteristicImpl<MagicColor>(getGame(), this, COLOR, this + "'s color");
-        superTypes = new SetCharacteristicImpl<SuperType>(getGame(), this, SUPERTYPE, this + "'s supertypes");
-        cardTypes = new SetCharacteristicImpl<CardType>(getGame(), this, CARD_TYPE, this + "'s card types");
-        subTypes = new SetCharacteristicImpl<SubType>(getGame(), this, SUBTYPE, this + "'s subtypes") {
+        name = new OverridingCharacteristicImpl<String>(this, NAME, this + "'s name");
+        manaCost = new OverridingCharacteristicImpl<ManaSequence>(this, MANA_COST, this + "'s mana cost");
+        color = new SetCharacteristicImpl<MagicColor>(this, COLOR, this + "'s color");
+        superTypes = new SetCharacteristicImpl<SuperType>(this, SUPERTYPE, this + "'s supertypes");
+        cardTypes = new SetCharacteristicImpl<CardType>(this, CARD_TYPE, this + "'s card types");
+        subTypes = new SetCharacteristicImpl<SubType>(this, SUBTYPE, this + "'s subtypes") {
             @Override
             public boolean hasValue(SubType value) {
                 if(!value.contained(getTypeCharacteristic())) return false;
@@ -96,14 +86,10 @@ public class ObjectCharacteristicsImpl extends AbstractGameContent implements Ob
                 return b;
             }
         };
-        abilities = new SetCharacteristicImpl<Ability>(getGame(), this, ABILITIES, this + "'s abilities");
-        pt = new PTCharacteristicImpl(getGame(), this, this + "'s P/T");
+        abilities = new SetCharacteristicImpl<Ability>(this, ABILITIES, this + "'s abilities");
+        pt = new PTCharacteristicImpl(this, this + "'s P/T");
         
         e.end();
-    }
-    
-    public EditablePropertyChangeSupport getPropertyChangeSupport() {
-        return s;
     }
     
     public MagicObject getCard() {
@@ -260,7 +246,7 @@ public class ObjectCharacteristicsImpl extends AbstractGameContent implements Ob
         c.setManaCost(getManaCost());
         c.setPower(getPower());
         c.setToughness(getToughness());
-        //TODO s loyalty
+        //TODO implement loyalty
         c.setLoyalty(0);
         
         getColorCharacteristic().getValues(c.getColors());

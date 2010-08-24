@@ -30,6 +30,7 @@ import net.slightlymagic.laterna.magica.edit.impl.ListIteratorSetEdit;
 import net.slightlymagic.laterna.magica.edit.impl.ListRemoveEdit;
 import net.slightlymagic.laterna.magica.edit.impl.ListSetEdit;
 import net.slightlymagic.laterna.magica.edit.impl.MapPutEdit;
+import net.slightlymagic.laterna.magica.edit.impl.MapRemoveEdit;
 import net.slightlymagic.laterna.magica.edit.impl.SetAddEdit;
 import net.slightlymagic.laterna.magica.edit.impl.SetIteratorRemoveEdit;
 import net.slightlymagic.laterna.magica.edit.impl.SetRemoveEdit;
@@ -273,6 +274,29 @@ public final class MagicaCollections {
             MapPutEdit<K, V> e = new MapPutEdit<K, V>(getGame(), delegate, key, value);
             e.execute();
             return e.getOldValue();
+        }
+        
+        @SuppressWarnings("unchecked")
+        @Override
+        public V remove(Object key) {
+            MapRemoveEdit<K, V> e = new MapRemoveEdit<K, V>(getGame(), delegate, (K) key);
+            e.execute();
+            return e.getOldValue();
+        }
+        
+        @Override
+        public V get(Object key) {
+            return delegate.get(key);
+        }
+        
+        @Override
+        public boolean containsKey(Object key) {
+            return delegate.containsKey(key);
+        }
+        
+        @Override
+        public boolean containsValue(Object value) {
+            return delegate.containsValue(value);
         }
         
         @Override

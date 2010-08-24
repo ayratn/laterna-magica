@@ -10,15 +10,13 @@ package net.slightlymagic.laterna.magica.card.impl;
 import java.beans.PropertyChangeListener;
 import java.util.Iterator;
 
+import net.slightlymagic.beans.properties.Property;
 import net.slightlymagic.laterna.magica.card.CardObject;
 import net.slightlymagic.laterna.magica.card.State;
 import net.slightlymagic.laterna.magica.edit.CompoundEdit;
 import net.slightlymagic.laterna.magica.edit.impl.EditableListenerList;
-import net.slightlymagic.laterna.magica.edit.property.EditableProperty;
-import net.slightlymagic.laterna.magica.edit.property.EditablePropertyChangeSupport;
 import net.slightlymagic.laterna.magica.event.PermanentStateChangedListener;
 import net.slightlymagic.laterna.magica.impl.AbstractGameContent;
-import net.slightlymagic.laterna.magica.util.ExtendedListenerList;
 
 
 /**
@@ -28,12 +26,9 @@ import net.slightlymagic.laterna.magica.util.ExtendedListenerList;
  * @author Clemens Koza
  */
 public class StateImpl extends AbstractGameContent implements State {
-    protected final ExtendedListenerList          listeners;
-    protected final EditablePropertyChangeSupport s;
+    private final CardObject          card;
     
-    private final CardObject                      card;
-    
-    private final EditableProperty<Boolean>[]     states;
+    private final Property<Boolean>[] states;
     
     @SuppressWarnings("unchecked")
     public StateImpl(CardObject card) {
@@ -41,10 +36,9 @@ public class StateImpl extends AbstractGameContent implements State {
         this.card = card;
         listeners = new EditableListenerList(getGame());
         
-        s = new EditablePropertyChangeSupport(getGame(), this);
-        states = new EditableProperty[StateType.values().length];
+        states = new Property[StateType.values().length];
         for(int i = 0; i < states.length; i++)
-            states[i] = new EditableProperty<Boolean>(getGame(), s, StateType.values()[i].name(), false);
+            states[i] = properties.property(StateType.values()[i].name(), false);
     }
     
     public CardObject getCard() {
@@ -94,18 +88,22 @@ public class StateImpl extends AbstractGameContent implements State {
                 PermanentStateChangedListener.class);
     }
     
+    @Override
     public void addPropertyChangeListener(PropertyChangeListener listener) {
         s.addPropertyChangeListener(listener);
     }
     
+    @Override
     public void addPropertyChangeListener(String propertyName, PropertyChangeListener listener) {
         s.addPropertyChangeListener(propertyName, listener);
     }
     
+    @Override
     public void removePropertyChangeListener(PropertyChangeListener listener) {
         s.removePropertyChangeListener(listener);
     }
     
+    @Override
     public void removePropertyChangeListener(String propertyName, PropertyChangeListener listener) {
         s.removePropertyChangeListener(propertyName, listener);
     }

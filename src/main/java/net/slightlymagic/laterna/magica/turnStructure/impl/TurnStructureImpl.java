@@ -11,16 +11,13 @@ import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.List;
 
+import net.slightlymagic.beans.properties.Property;
 import net.slightlymagic.laterna.magica.Game;
 import net.slightlymagic.laterna.magica.edit.CompoundEdit;
-import net.slightlymagic.laterna.magica.edit.impl.EditableListenerList;
-import net.slightlymagic.laterna.magica.edit.property.EditableProperty;
-import net.slightlymagic.laterna.magica.edit.property.EditablePropertyChangeSupport;
 import net.slightlymagic.laterna.magica.event.ActiveChangedListener;
 import net.slightlymagic.laterna.magica.impl.AbstractGameContent;
 import net.slightlymagic.laterna.magica.player.Player;
 import net.slightlymagic.laterna.magica.turnStructure.TurnStructure;
-import net.slightlymagic.laterna.magica.util.MagicaCollections;
 
 
 /**
@@ -30,13 +27,10 @@ import net.slightlymagic.laterna.magica.util.MagicaCollections;
  * @author Clemens Koza
  */
 public class TurnStructureImpl extends AbstractGameContent implements TurnStructure {
-    protected EditableListenerList          listeners;
-    protected EditablePropertyChangeSupport s;
-    
     /**
      * The number of the turn in the turn sequence, starting with 1.
      */
-    private EditableProperty<Integer>       turnNumber;
+    private Property<Integer> turnNumber;
     /**
      * The index of the player whose turn would currently be.
      * 
@@ -44,31 +38,29 @@ public class TurnStructureImpl extends AbstractGameContent implements TurnStruct
      * players A, B and C, C takes an extra turn after A's turn. After C's turn, B should continue. If the index
      * were that of C, A would have taken the next turn.
      */
-    private EditableProperty<Integer>       regularPlayer;
+    private Property<Integer> regularPlayer;
     /**
      * Extra turns taken after the current turn
      */
-    private List<Player>                    addedTurns;
+    private List<Player>      addedTurns;
     /**
      * Skipped turns
      */
-    private List<Player>                    skippedTurns;
+    private List<Player>      skippedTurns;
     /**
      * The really active Player
      */
-    private EditableProperty<Player>        activePlayer;
+    private Property<Player>  activePlayer;
     
     public TurnStructureImpl(Game game) {
         super(game);
-        listeners = new EditableListenerList(getGame());
-        s = new EditablePropertyChangeSupport(getGame(), this);
-        turnNumber = new EditableProperty<Integer>(getGame(), s, "turnNumber", 0);
-        activePlayer = new EditableProperty<Player>(getGame(), s, "activePlayer");
+        turnNumber = properties.property("turnNumber", 0);
+        activePlayer = properties.property("activePlayer");
         //don't provide property change events for this one
-        regularPlayer = new EditableProperty<Integer>(getGame(), null, "regularPlayer", -1);
+        regularPlayer = properties.property("regularPlayer", -1);
         
-        addedTurns = MagicaCollections.editableList(getGame(), new LinkedList<Player>());
-        skippedTurns = MagicaCollections.editableList(getGame(), new LinkedList<Player>());
+        addedTurns = properties.list("addedTurns", new LinkedList<Player>());
+        skippedTurns = properties.list("skippedTurns", new LinkedList<Player>());
     }
     
     public void takeExtraTurn(Player p) {

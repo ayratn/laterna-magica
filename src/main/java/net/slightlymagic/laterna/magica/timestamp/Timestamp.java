@@ -13,13 +13,10 @@ import java.util.HashSet;
 import java.util.Iterator;
 import java.util.Set;
 
-import net.slightlymagic.laterna.magica.edit.CompoundEdit;
-import net.slightlymagic.laterna.magica.edit.Edit;
-import net.slightlymagic.laterna.magica.edit.impl.EditableListenerList;
+import net.slightlymagic.beans.properties.Property;
 import net.slightlymagic.laterna.magica.event.MoveCardListener;
 import net.slightlymagic.laterna.magica.event.TimestampListener;
 import net.slightlymagic.laterna.magica.impl.AbstractGameContent;
-import net.slightlymagic.laterna.magica.util.ExtendedListenerList;
 
 import com.google.common.collect.Iterators;
 import com.google.common.collect.PeekingIterator;
@@ -34,15 +31,13 @@ import com.google.common.collect.PeekingIterator;
  * @author Clemens Koza
  */
 public class Timestamp extends AbstractGameContent implements Comparable<Timestamp> {
-    private TimestampFactory       f;
-    private int                    timestamp;
-    
-    protected ExtendedListenerList listeners;
+    private TimestampFactory  f;
+    private Property<Integer> timestamp;
     
     Timestamp(TimestampFactory f) {
         super(f.getGame());
-        listeners = new EditableListenerList(getGame());
         this.f = f;
+        timestamp = properties.property("timestamp", 0);
         updateTimestamp();
     }
     
@@ -50,23 +45,20 @@ public class Timestamp extends AbstractGameContent implements Comparable<Timesta
      * Return's the timestamp's value as an int.
      */
     public int getTimestamp() {
-        return timestamp;
+        return timestamp.getValue();
     }
     
     /**
      * Advances this Timestamp to the next timestamp and returns it.
      */
     public int updateTimestamp() {
-        CompoundEdit edit = new CompoundEdit(getGame(), true, "Update Timestamp");
-        f.nextTimestamp();
-        new UpdateTimestampEdit().execute();
-        edit.end();
+        timestamp.setValue(f.nextTimestamp());
         return getTimestamp();
     }
     
     public int compareTo(Timestamp o) {
         assert o.f == f;
-        return timestamp - o.timestamp;
+        return timestamp.getValue().compareTo(o.timestamp.getValue());
     }
     
     @Override
@@ -74,7 +66,7 @@ public class Timestamp extends AbstractGameContent implements Comparable<Timesta
         final int prime = 31;
         int result = 1;
         result = prime * result + ((f == null)? 0:f.hashCode());
-        result = prime * result + timestamp;
+        result = prime * result + ((timestamp == null)? 0:timestamp.hashCode());
         return result;
     }
     
@@ -87,7 +79,9 @@ public class Timestamp extends AbstractGameContent implements Comparable<Timesta
         if(f == null) {
             if(other.f != null) return false;
         } else if(!f.equals(other.f)) return false;
-        if(timestamp != other.timestamp) return false;
+        if(timestamp == null) {
+            if(other.timestamp != null) return false;
+        } else if(!timestamp.equals(other.timestamp)) return false;
         return true;
     }
     
@@ -129,30 +123,5 @@ public class Timestamp extends AbstractGameContent implements Comparable<Timesta
     @SuppressWarnings("unchecked")
     public Iterator<TimestampListener> getTimestampListeners() {
         return listeners.getIterator(TimestampListener.Internal.class, TimestampListener.class);
-    }
-    
-    private class UpdateTimestampEdit extends Edit {
-        private static final long serialVersionUID = -2740256948787388566L;
-        private int               before;
-        
-        public UpdateTimestampEdit() {
-            super(Timestamp.this.getGame());
-        }
-        
-        @Override
-        public void execute() {
-            before = timestamp;
-            timestamp = f.getCurrentTimestamp();
-        }
-        
-        @Override
-        public void rollback() {
-            timestamp = before;
-        }
-        
-        @Override
-        public String toString() {
-            return format("Update timestamp to %d", timestamp);
-        }
     }
 }

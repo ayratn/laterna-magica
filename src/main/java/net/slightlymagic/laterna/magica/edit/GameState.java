@@ -20,9 +20,6 @@ import java.util.NoSuchElementException;
 import net.slightlymagic.laterna.magica.Game;
 import net.slightlymagic.laterna.magica.impl.AbstractGameContent;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-
 
 /**
  * The class GameState. The game state stores the root edit and therefore the whole edit hierarchy.
@@ -34,15 +31,13 @@ import org.slf4j.LoggerFactory;
  * @author Clemens Koza
  */
 public class GameState extends AbstractGameContent implements Serializable {
-    private static final long   serialVersionUID = -8594325531298473425L;
+    private static final long serialVersionUID = -8594325531298473425L;
     
-    private static final Logger log              = LoggerFactory.getLogger(GameState.class);
-    
-    private LinkedList<Edit>    stack;
+    private LinkedList<Edit>  stack;
     
     //first is the tree's root, current is the last executed move (or an open parent move), last is the last move
     //in the tree (either the current or a move in the future)
-    private Edit                first, current, last;
+    private Edit              first, current, last;
     
     public GameState(Game game) {
         super(game);

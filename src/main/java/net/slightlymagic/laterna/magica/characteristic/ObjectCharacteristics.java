@@ -14,7 +14,6 @@ import net.slightlymagic.laterna.magica.characteristics.CardType;
 import net.slightlymagic.laterna.magica.characteristics.MagicColor;
 import net.slightlymagic.laterna.magica.characteristics.SubType;
 import net.slightlymagic.laterna.magica.characteristics.SuperType;
-import net.slightlymagic.laterna.magica.edit.property.EditablePropertyChangeSupport;
 import net.slightlymagic.laterna.magica.mana.ManaSequence;
 
 
@@ -58,11 +57,6 @@ import net.slightlymagic.laterna.magica.mana.ManaSequence;
  * @author Clemens Koza
  */
 public interface ObjectCharacteristics extends GameContent {
-    /**
-     * Returns the property change s used by all {@link Characteristic}s in this {@link ObjectCharacteristics}.
-     */
-    public EditablePropertyChangeSupport getPropertyChangeSupport();
-    
     /**
      * <p>
      * Returns the card object to which this characteristics belongs.

@@ -16,6 +16,7 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
+import net.slightlymagic.beans.properties.Property;
 import net.slightlymagic.laterna.magica.Game;
 import net.slightlymagic.laterna.magica.MagicObject;
 import net.slightlymagic.laterna.magica.action.play.CastAction;
@@ -28,15 +29,10 @@ import net.slightlymagic.laterna.magica.card.Printing;
 import net.slightlymagic.laterna.magica.card.State;
 import net.slightlymagic.laterna.magica.characteristic.CardCharacteristics;
 import net.slightlymagic.laterna.magica.characteristic.impl.CardCharacteristicsImpl;
-import net.slightlymagic.laterna.magica.edit.property.EditableProperty;
-import net.slightlymagic.laterna.magica.edit.property.EditablePropertyChangeSupport;
 import net.slightlymagic.laterna.magica.event.MoveCardListener;
 import net.slightlymagic.laterna.magica.impl.MagicObjectImpl;
 import net.slightlymagic.laterna.magica.impl.MoveCardEvent;
 import net.slightlymagic.laterna.magica.zone.Zone.Zones;
-
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
 import com.google.common.base.Function;
 import com.google.common.base.Predicate;
@@ -50,8 +46,6 @@ import com.google.common.collect.Lists;
  * @author Clemens Koza
  */
 public class CardObjectImpl extends MagicObjectImpl implements CardObject {
-    private static final Logger                 log         = LoggerFactory.getLogger(CardObjectImpl.class);
-    
     private static final Predicate<MagicObject> isPermanent = isIn(ofInstance(BATTLEFIELD));
     
     private List<CardCharacteristics>           characteristics, activeCharacteristics, activeCharacteristicsView;
@@ -60,9 +54,8 @@ public class CardObjectImpl extends MagicObjectImpl implements CardObject {
     
     private Printing                            printing;
     
-    private EditablePropertyChangeSupport       s;
-    private EditableProperty<PlayInformation>   info;
-    private EditableProperty<Integer>           damage;
+    private Property<PlayInformation>           info;
+    private Property<Integer>                   damage;
     
     public CardObjectImpl(Game game, CardTemplate template) {
         this(game, template, null);
@@ -105,9 +98,8 @@ public class CardObjectImpl extends MagicObjectImpl implements CardObject {
     }
     
     protected void init(CardTemplate template) {
-        s = new EditablePropertyChangeSupport(getGame(), this);
-        info = new EditableProperty<PlayInformation>(getGame(), s, "info");
-        damage = new EditableProperty<Integer>(getGame(), s, "damage", 0);
+        info = properties.property("info");
+        damage = properties.property("damage", 0);
         
         characteristics = new ArrayList<CardCharacteristics>();
         activeCharacteristics = new ArrayList<CardCharacteristics>();
