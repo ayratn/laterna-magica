@@ -38,6 +38,7 @@ public class LaternaMagica {
         Configurator c = new Configurator().configure(url).execute();
         
         PROPS = c.getConfigurator(PropertyTreeConfigurator.class).getTree();
+//        System.out.println(PROPS.getAllProperty(Predicates.alwaysTrue()).toString().replaceAll(",", "\n"));
         CARDS = new AllCards();
         
         boolean compile = PROPS().getBoolean("/laterna/res/cards/compileOnStart", false);
@@ -45,6 +46,7 @@ public class LaternaMagica {
             try {
                 log.info("Loading...");
                 CARDS.load();
+                log.info("ok");
             } catch(Exception ex) {
                 log.error("Error loading compiled cards; cards were not completely loaded.\n"
                         + "LaternaMagica will now try to recreate the cards.\n"
@@ -55,6 +57,7 @@ public class LaternaMagica {
         if(compile) {
             log.info("Compiling...");
             CARDS.compile();
+            log.info("ok");
         }
     }
     

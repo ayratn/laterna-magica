@@ -21,7 +21,7 @@ import net.slightlymagic.laterna.magica.counter.EditableCounter;
 import net.slightlymagic.laterna.magica.counter.EditableCounterImpl;
 import net.slightlymagic.laterna.magica.edit.CompoundEdit;
 import net.slightlymagic.laterna.magica.edit.GameState;
-import net.slightlymagic.laterna.magica.edit.property.EditableBoundBean;
+import net.slightlymagic.laterna.magica.edit.property.AbstractEditableBean;
 import net.slightlymagic.laterna.magica.effect.GlobalEffects;
 import net.slightlymagic.laterna.magica.effect.impl.GlobalEffectsImpl;
 import net.slightlymagic.laterna.magica.effect.replacement.ReplacementEngine;
@@ -44,7 +44,7 @@ import net.slightlymagic.laterna.magica.zone.impl.ZoneImpl;
  * @version V0.0 04.09.2009
  * @author Clemens Koza
  */
-public class GameImpl extends EditableBoundBean implements Game {
+public class GameImpl extends AbstractEditableBean implements Game {
     private GameState                    gameState;
     private Random                       random;
     private GlobalEffects                globalEffects;

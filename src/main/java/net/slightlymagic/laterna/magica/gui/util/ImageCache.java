@@ -66,6 +66,7 @@ public final class ImageCache {
     public URI getSymbolURI(String symbol) {
         if("{T}".equals(symbol) || "{Q}".equals(symbol)) {
             File f = PROPS().getFile("/laterna/res/pics/symbols");
+            f = new File(f, "small");
             f = new File(f, symbol.substring(1, 2) + ".png");
             return f.toURI();
         } else return getSymbolURI(ManaFactoryImpl.INSTANCE.parseSymbol(symbol));

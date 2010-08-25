@@ -7,8 +7,6 @@
 package net.slightlymagic.laterna.magica;
 
 
-
-
 /**
  * <p>
  * The class GameContent. This interface specifies the capabilities that any object in a magic game must provide.

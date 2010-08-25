@@ -7,6 +7,7 @@
 package net.slightlymagic.laterna.magica.gui.util;
 
 
+import java.awt.image.BufferedImage;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -56,8 +57,12 @@ public class SymbolTextCreator implements SymbolTextCreatorProps {
                     reminder = false;
                 } else {
                     //append symbol
-                    p.setCaretPosition(d.getLength());
-                    p.insertIcon(new ImageIcon(i.getImage(i.setSize(i.getSymbolURI(m.group(1)), size, size))));
+                    String symbol = m.group(1);
+                    BufferedImage im = i.getImage(i.setSize(i.getSymbolURI(symbol), size, size));
+                    if(im != null) {
+                        p.setCaretPosition(d.getLength());
+                        p.insertIcon(new ImageIcon(im));
+                    } else d.insertString(d.getLength(), symbol, d.getStyle(reminder? "reminder":"rules"));
                 }
             }
             //store the tail

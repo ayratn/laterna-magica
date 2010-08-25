@@ -12,7 +12,7 @@ import net.slightlymagic.beans.PropertyChangeSupport;
 import net.slightlymagic.beans.properties.Properties;
 import net.slightlymagic.laterna.magica.Game;
 import net.slightlymagic.laterna.magica.GameContent;
-import net.slightlymagic.laterna.magica.edit.property.EditableBoundBean;
+import net.slightlymagic.laterna.magica.edit.property.AbstractEditableBean;
 
 
 /**
@@ -21,7 +21,7 @@ import net.slightlymagic.laterna.magica.edit.property.EditableBoundBean;
  * @version V0.0 04.09.2009
  * @author Clemens Koza
  */
-public abstract class AbstractGameContent extends EditableBoundBean implements GameContent {
+public abstract class AbstractGameContent extends AbstractEditableBean implements GameContent {
     private final Game game;
     
     /**

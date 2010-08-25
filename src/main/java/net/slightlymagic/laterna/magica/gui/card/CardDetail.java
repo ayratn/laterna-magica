@@ -173,9 +173,8 @@ public class CardDetail extends JPanel implements CardDisplay {
             assert o == getCard();
             
             name.setText(getCard().getName());
-            //TODO mana cost doesn't show. probably an issue with the preferred size
             mana.setText("");
-            SymbolTextCreator.formatRulesText(valueOf(getCard().getManaCost()), (int) textSize);
+            SymbolTextCreator.formatRulesText(valueOf(getCard().getManaCost()), mana, (int) textSize);
             
             text.setText("");
             for(Iterator<Ability> it = getCard().getAbilities().getValues().iterator(); it.hasNext();) {
