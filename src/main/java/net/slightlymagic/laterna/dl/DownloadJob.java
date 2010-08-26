@@ -8,7 +8,13 @@ package net.slightlymagic.laterna.dl;
 
 
 import java.io.File;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.OutputStream;
+import java.net.Proxy;
 import java.net.URL;
+import java.net.URLConnection;
 
 import javax.swing.BoundedRangeModel;
 import javax.swing.DefaultBoundedRangeModel;
@@ -29,14 +35,14 @@ public class DownloadJob extends AbstractLaternaBean {
     }
     
     private final String              name;
-    private final URL                 source;
-    private final File                destination;
+    private final Source              source;
+    private final Destination         destination;
     private final Property<State>     state    = properties.property("state", State.NEW);
     private final Property<String>    message  = properties.property("message");
     private final Property<Exception> error    = properties.property("error");
     private final BoundedRangeModel   progress = new DefaultBoundedRangeModel();
     
-    public DownloadJob(String name, URL source, File destination) {
+    public DownloadJob(String name, Source source, Destination destination) {
         this.name = name;
         this.source = source;
         this.destination = destination;
@@ -106,11 +112,101 @@ public class DownloadJob extends AbstractLaternaBean {
         return name;
     }
     
-    public URL getSource() {
+    public Source getSource() {
         return source;
     }
     
-    public File getDestination() {
+    public Destination getDestination() {
         return destination;
+    }
+    
+    public static Source fromURL(final String url) {
+        return fromURL(null, url);
+    }
+    
+    public static Source fromURL(final URL url) {
+        return fromURL(null, url);
+    }
+    
+    public static Source fromURL(final Proxy proxy, final String url) {
+        return new Source() {
+            private URLConnection c;
+            
+            public URLConnection getConnection() throws IOException {
+                if(c == null) c = proxy == null? new URL(url).openConnection():new URL(url).openConnection(proxy);
+                return c;
+            }
+            
+            @Override
+            public InputStream open() throws IOException {
+                return getConnection().getInputStream();
+            }
+            
+            @Override
+            public int length() throws IOException {
+                return getConnection().getContentLength();
+            }
+        };
+    }
+    
+    public static Source fromURL(final Proxy proxy, final URL url) {
+        return new Source() {
+            private URLConnection c;
+            
+            public URLConnection getConnection() throws IOException {
+                if(c == null) c = proxy == null? url.openConnection():url.openConnection(proxy);
+                return c;
+            }
+            
+            @Override
+            public InputStream open() throws IOException {
+                return getConnection().getInputStream();
+            }
+            
+            @Override
+            public int length() throws IOException {
+                return getConnection().getContentLength();
+            }
+        };
+    }
+    
+    public static Destination toFile(final String file) {
+        return toFile(new File(file));
+    }
+    
+    public static Destination toFile(final File file) {
+        return new Destination() {
+            @Override
+            public OutputStream open() throws IOException {
+                File parent = file.getAbsoluteFile().getParentFile();
+                if(!parent.exists() && !parent.mkdirs()) throw new IOException(parent
+                        + ": directory could not be created");
+                return new FileOutputStream(file);
+            }
+            
+            @Override
+            public boolean exists() {
+                return file.isFile();
+            }
+            
+            @Override
+            public void delete() throws IOException {
+                if(file.exists() && !file.delete()) throw new IOException(file + " couldn't be deleted");
+            }
+        };
+    }
+    
+    public static interface Source {
+        public InputStream open() throws IOException;
+        
+        public int length() throws IOException;
+    }
+    
+    public static interface Destination {
+        public OutputStream open() throws IOException;
+        
+        public boolean exists() throws IOException;
+        
+        public void delete() throws IOException;
     }
 }

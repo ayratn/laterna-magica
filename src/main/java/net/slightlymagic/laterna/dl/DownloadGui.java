@@ -50,7 +50,7 @@ public class DownloadGui extends JPanel {
     public static void main(String[] args) throws IOException {
         LaternaMagica.init();
         
-        DownloadGui g = new DownloadGui();
+        DownloadGui g = new DownloadGui(new Downloader());
         Iterable<DownloadJob> it = Iterables.concat(new GathererSymbols(), new GathererCardBack(),
                 new GathererCards());
         
@@ -65,16 +65,17 @@ public class DownloadGui extends JPanel {
         
     }
     
-    private Downloader                      d          = new Downloader();
-    private DownloadListener                l          = new DownloadListener();
-    private BoundedRangeModel               model      = new DefaultBoundedRangeModel(0, 0, 0, 0);
-    private JProgressBar                    progress   = new JProgressBar(model);
+    private final Downloader                      d;
+    private final DownloadListener                l          = new DownloadListener();
+    private final BoundedRangeModel               model      = new DefaultBoundedRangeModel(0, 0, 0, 0);
+    private final JProgressBar                    progress   = new JProgressBar(model);
     
-    private Map<DownloadJob, DownloadPanel> progresses = new HashMap<DownloadJob, DownloadPanel>();
-    private JPanel                          panel      = new JPanel();
+    private final Map<DownloadJob, DownloadPanel> progresses = new HashMap<DownloadJob, DownloadPanel>();
+    private final JPanel                          panel      = new JPanel();
     
-    public DownloadGui() {
+    public DownloadGui(Downloader d) {
         super(new BorderLayout());
+        this.d = d;
         d.addPropertyChangeListener(l);
         
         JPanel p = new JPanel(new BorderLayout());
@@ -84,13 +85,7 @@ public class DownloadGui extends JPanel {
         b.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                for(DownloadJob j:d.getJobs()) {
-                    switch(j.getState()) {
-                        case NEW:
-                        case WORKING:
-                            j.setState(State.ABORTED);
-                    }
-                }
+                getDownloader().dispose();
             }
         });
         p.add(b, BorderLayout.EAST);
@@ -187,6 +182,18 @@ public class DownloadGui extends JPanel {
             
             setBorder(BorderFactory.createTitledBorder(job.getName()));
             add(bar = new JProgressBar(job.getProgress()), BorderLayout.SOUTH);
+            JButton b = new JButton("X");
+            b.addActionListener(new ActionListener() {
+                @Override
+                public void actionPerformed(ActionEvent e) {
+                    switch(getJob().getState()) {
+                        case NEW:
+                        case WORKING:
+                            getJob().setState(State.ABORTED);
+                    }
+                }
+            });
+            add(b, BorderLayout.EAST);
             
             if(job.getState() == State.FINISHED | job.getState() == State.ABORTED) {
                 changeProgress(+1, 0);

@@ -8,11 +8,10 @@ package net.slightlymagic.laterna.dl.sources;
 
 
 import static java.lang.String.*;
+import static net.slightlymagic.laterna.dl.DownloadJob.*;
 import static net.slightlymagic.laterna.magica.LaternaMagica.*;
 
 import java.io.File;
-import java.net.MalformedURLException;
-import java.net.URL;
 import java.util.Iterator;
 
 import net.slightlymagic.laterna.dl.DownloadJob;
@@ -70,14 +69,9 @@ public class GathererSymbols implements Iterable<DownloadJob> {
                 else if(symbol.equals("Q")) symbol = "untap";
                 else if(symbol.equals("S")) symbol = "snow";
                 
-                URL url;
-                try {
-                    url = new URL(format(urlFmt, sizes[sizeIndex], symbol));
-                } catch(MalformedURLException ex) {
-                    throw new AssertionError(ex);
-                }
+                String url = format(urlFmt, sizes[sizeIndex], symbol);
                 
-                return new DownloadJob(sym + " " + sizes[sizeIndex], url, dst);
+                return new DownloadJob(sym, fromURL(url), toFile(dst));
             }
         };
     }

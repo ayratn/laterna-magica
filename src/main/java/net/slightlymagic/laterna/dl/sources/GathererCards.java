@@ -8,11 +8,10 @@ package net.slightlymagic.laterna.dl.sources;
 
 
 import static java.lang.String.*;
+import static net.slightlymagic.laterna.dl.DownloadJob.*;
 import static net.slightlymagic.laterna.magica.LaternaMagica.*;
 
 import java.io.File;
-import java.net.MalformedURLException;
-import java.net.URL;
 import java.util.Iterator;
 
 import net.slightlymagic.laterna.dl.DownloadJob;
@@ -44,13 +43,8 @@ public class GathererCards implements Iterable<DownloadJob> {
                 int id = p.getMultiverseID();
                 String name = id + " " + p.getTemplate().getCardParts().get(0).getName() + " " + p.getExpansion();
                 File dst = new File(outDir, id + ".jpg");
-                URL url;
-                try {
-                    url = new URL(format(urlFmt, id));
-                } catch(MalformedURLException ex) {
-                    throw new AssertionError(ex);
-                }
-                return new DownloadJob(name, url, dst);
+                String url = format(urlFmt, id);
+                return new DownloadJob(name, fromURL(url), toFile(dst));
             }
         };
     }

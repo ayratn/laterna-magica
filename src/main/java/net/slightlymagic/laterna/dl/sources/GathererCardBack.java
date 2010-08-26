@@ -7,11 +7,10 @@
 package net.slightlymagic.laterna.dl.sources;
 
 
+import static net.slightlymagic.laterna.dl.DownloadJob.*;
 import static net.slightlymagic.laterna.magica.LaternaMagica.*;
 
 import java.io.File;
-import java.net.MalformedURLException;
-import java.net.URL;
 import java.util.Iterator;
 
 import net.slightlymagic.laterna.dl.DownloadJob;
@@ -26,16 +25,11 @@ import com.google.common.collect.Iterators;
  * @author Clemens Koza
  */
 public class GathererCardBack implements Iterable<DownloadJob> {
-    private static final File   outDir = PROPS().getFile("/laterna/res/pics/cards");
-    private static final String url    = "http://gatherer.wizards.com/Handlers/Image.ashx?multiverseid=0&type=card";
+    private static final File   out = new File(PROPS().getFile("/laterna/res/pics/cards"), "0.jpg");
+    private static final String url = "http://gatherer.wizards.com/Handlers/Image.ashx?multiverseid=0&type=card";
     
     @Override
     public Iterator<DownloadJob> iterator() {
-        try {
-            return Iterators.singletonIterator(new DownloadJob("0 Card Back", new URL(url), new File(outDir,
-                    "0.jpg")));
-        } catch(MalformedURLException ex) {
-            throw new AssertionError();
-        }
+        return Iterators.singletonIterator(new DownloadJob("0 Card Back", fromURL(url), toFile(out)));
     }
 }
