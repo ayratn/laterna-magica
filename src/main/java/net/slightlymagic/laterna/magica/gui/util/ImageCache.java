@@ -67,20 +67,22 @@ public final class ImageCache {
         if("{T}".equals(symbol) || "{Q}".equals(symbol)) {
             File f = PROPS().getFile("/laterna/res/pics/symbols");
             f = new File(f, "small");
-            f = new File(f, symbol.substring(1, 2) + ".png");
+            f = new File(f, symbol.substring(1, 2) + ".gif");
             return f.toURI();
         } else return getSymbolURI(ManaFactoryImpl.INSTANCE.parseSymbol(symbol));
     }
     
     public URI getSymbolURI(MagicColor c) {
         File f = PROPS().getFile("/laterna/res/pics/symbols");
-        f = new File(f, (c == null? 'X':c.getShortChar()) + ".png");
+        f = new File(f, "small");
+        f = new File(f, (c == null? 'X':c.getShortChar()) + ".gif");
         return f.toURI();
     }
     
     public URI getSymbolURI(ManaSymbol s) {
         File f = PROPS().getFile("/laterna/res/pics/symbols");
-        f = new File(f, s.toString().replaceAll("[{}/]", "") + ".png");
+        f = new File(f, "small");
+        f = new File(f, s.toString().replaceAll("[{}/]", "") + ".gif");
         return f.toURI();
     }
     
@@ -161,6 +163,7 @@ public final class ImageCache {
         } catch(NullPointerException ex) {
             return null;
         } catch(ComputationException ex) {
+            log.warn("", ex);
             return null;
         }
     }
@@ -195,8 +198,10 @@ public final class ImageCache {
             
             BufferedImage im;
             
-            if(fromCache) im = getImage(uri);
-            else try {
+            if(fromCache) {
+                im = getImage(uri);
+                if(im == null) return null;
+            } else try {
                 im = ImageIO.read(uri.toURL());
             } catch(IOException ex) {
                 throw new ComputationException(ex);

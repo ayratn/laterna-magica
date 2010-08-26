@@ -12,6 +12,8 @@ import java.awt.Dimension;
 import java.awt.Frame;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.event.WindowAdapter;
+import java.awt.event.WindowEvent;
 import java.beans.IndexedPropertyChangeEvent;
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
@@ -50,7 +52,7 @@ public class DownloadGui extends JPanel {
     public static void main(String[] args) throws IOException {
         LaternaMagica.init();
         
-        DownloadGui g = new DownloadGui(new Downloader());
+        final DownloadGui g = new DownloadGui(new Downloader());
         Iterable<DownloadJob> it = Iterables.concat(new GathererSymbols(), new GathererCardBack(),
                 new GathererCards());
         
@@ -58,6 +60,13 @@ public class DownloadGui extends JPanel {
             g.getDownloader().add(job);
         
         JDialog d = new JDialog((Frame) null, true);
+        d.setDefaultCloseOperation(JDialog.DISPOSE_ON_CLOSE);
+        d.addWindowListener(new WindowAdapter() {
+            @Override
+            public void windowClosing(WindowEvent e) {
+                g.getDownloader().dispose();
+            }
+        });
         d.setLayout(new BorderLayout());
         d.add(g);
         d.pack();
@@ -181,7 +190,7 @@ public class DownloadGui extends JPanel {
             this.job = job;
             
             setBorder(BorderFactory.createTitledBorder(job.getName()));
-            add(bar = new JProgressBar(job.getProgress()), BorderLayout.SOUTH);
+            add(bar = new JProgressBar(job.getProgress()));
             JButton b = new JButton("X");
             b.addActionListener(new ActionListener() {
                 @Override
@@ -207,8 +216,8 @@ public class DownloadGui extends JPanel {
             Dimension d = getPreferredSize();
             d.width = Integer.MAX_VALUE;
             setMaximumSize(d);
-            d.width = 500;
-            setMinimumSize(d);
+//            d.width = 500;
+//            setMinimumSize(d);
         }
         
         public DownloadJob getJob() {

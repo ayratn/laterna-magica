@@ -61,7 +61,7 @@ public class SymbolTextCreator implements SymbolTextCreatorProps {
                     BufferedImage im = i.getImage(i.setSize(i.getSymbolURI(symbol), size, size));
                     if(im != null) {
                         p.setCaretPosition(d.getLength());
-                        p.insertIcon(new ImageIcon(im));
+                        p.insertIcon(new ImageIcon(im, symbol));
                     } else d.insertString(d.getLength(), symbol, d.getStyle(reminder? "reminder":"rules"));
                 }
             }
