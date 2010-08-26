@@ -1,8 +1,0 @@
-@date	2010-07-30
-@author	Silly Freak
-
-@set	PVC common 209162
-
-name	Saproling
-type	creature - saproling
-pt		1 / 1

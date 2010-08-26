@@ -1,8 +1,0 @@
-@date	2010-07-30
-@author	Silly Freak
-
-@set	GVL common 201843
-
-name	Elephant
-type	creature - elephant
-pt		3 / 3

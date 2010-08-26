@@ -1,9 +1,0 @@
-@date	2010-07-30
-@author	Silly Freak
-
-@set	GVL common 201842
-@set	GVL common 201844
-
-name	Beast
-type	creature - beast
-pt		4 / 4
