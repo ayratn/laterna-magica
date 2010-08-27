@@ -7,9 +7,12 @@
 package net.slightlymagic.laterna.magica.turnStructure.impl;
 
 
+import static java.util.Arrays.*;
+
 import java.util.EnumMap;
 import java.util.HashSet;
 import java.util.Iterator;
+import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
@@ -33,7 +36,6 @@ import net.slightlymagic.laterna.magica.action.turnBased.TurnBasedAction;
 import net.slightlymagic.laterna.magica.action.turnBased.TurnBasedAction.Type;
 import net.slightlymagic.laterna.magica.action.turnBased.UntapAction;
 import net.slightlymagic.laterna.magica.edit.CompoundEdit;
-import net.slightlymagic.laterna.magica.event.EnterTurnBasedActionListener;
 import net.slightlymagic.laterna.magica.event.PhaseChangedListener;
 import net.slightlymagic.laterna.magica.event.PriorChangedListener;
 import net.slightlymagic.laterna.magica.event.StepChangedListener;
@@ -55,7 +57,7 @@ public class PhaseStructureImpl extends AbstractGameContent implements PhaseStru
      * The index of the player that has priority. The index is stored because it is easier to determine the next
      * player this way.
      */
-    private Property<Integer>          prior;
+    private Property<Integer>              prior;
     /**
      * Stores the player that last took an action, which is naturally the first player to pass priority in
      * sequence. If that player would again receive priority (from another player), all players have passed in
@@ -63,26 +65,36 @@ public class PhaseStructureImpl extends AbstractGameContent implements PhaseStru
      * 
      * The index is stored because it is easier to compare to prior.
      */
-    private Property<Integer>          firstPassed;
-    /**
-     * Stores if there is currently a prior player. There is no one if turn based actions are processed
-     */
-    private boolean                    hasPrior;
+    private Property<Integer>              firstPassed;
     
-    private Property<Integer>          phase, step;
+    private Property<Integer>              phase, step;
     
-    private Map<Type, TurnBasedAction> turnBasedActions;
-    private Set<StateBasedAction>      stateBasedActions;
+    private Map<Type, TurnBasedAction>     turnBasedActions;
+    private Set<StateBasedAction>          stateBasedActions;
     
-    private Property<Combat>           combat;
+    private Property<Combat>               combat;
+    private Property<TurnBasedAction.Type> turnBasedAction;
     
     public PhaseStructureImpl(Game game) {
         super(game);
-        prior = properties.property("prior", -1);
-        firstPassed = properties.property("firstPassed", 0);
-        phase = properties.property("phase", -1);
-        step = properties.property("step", -1);
+        List<Player> pl = getGame().getPlayers();
+        prior = properties.property(null, new IndexProperty<Player>(s, "prior", -1, pl));
+        firstPassed = properties.property(null, new IndexProperty<Player>(s, "firstPassed", 0, pl));
+        phase = properties.property(null, new IndexProperty<Phase>(s, "phase", -1, asList(Phase.values())));
+        step = properties.property(null, new IndexProperty<Step>(s, "step", -1, null) {
+            @Override
+            public List<Step> getValues() {
+                Phase p = getPhase();
+                return p != null? p.getSteps():null;
+            }
+        });
+        
+//        prior = properties.property("prior", -1);
+//        firstPassed = properties.property("firstPassed", 0);
+//        phase = properties.property("phase", -1);
+//        step = properties.property("step", -1);
         combat = properties.property("combat");
+        turnBasedAction = properties.property("turnBasedAction");
         
         //no need for editable, since it's only created once
         turnBasedActions = new EnumMap<Type, TurnBasedAction>(Type.class);
@@ -109,52 +121,62 @@ public class PhaseStructureImpl extends AbstractGameContent implements PhaseStru
         stateBasedActions.add(new LethalDamageAction(getGame()));
     }
     
-    
     public Phase getPhase() {
-        int phase = this.phase.getValue();
-        if(phase == -1) throw new IllegalStateException("Before first turn");
         //TODO enable phase adding and skipping
-        return Phase.values()[phase];
+        int phase = this.phase.getValue();
+        return phase == -1? null:Phase.values()[phase];
     }
     
     
     public Step getStep() {
-        int step = this.step.getValue();
-        if(step == -1) throw new IllegalStateException("Before first turn");
         //TODO enable step adding and skipping
-        return getPhase().getSteps().get(step);
+        int step = this.step.getValue();
+        if(step == -1) return null;
+        Phase p = getPhase();
+        if(p == null) return null;
+        return p.getSteps().get(step);
     }
     
     
     public Player getPriorPlayer() {
         int prior = this.prior.getValue();
-        if(prior == -1) throw new IllegalStateException("Before first turn");
-        return hasPrior? getGame().getPlayers().get(prior):null;
+        return prior == -1? null:getGame().getPlayers().get(prior);
     }
     
+    @Override
+    public Type getTurnBasedAction() {
+        return turnBasedAction.getValue();
+    }
     
     public void takeAction(boolean took) {
         CompoundEdit ed = new CompoundEdit(getGame(), true,
                 took? "Prior player took an action":"Prior player passed priority");
         
-        Player oldPrior = prior.getValue().intValue() == -1? null:getPriorPlayer();
+        Player oldPrior = getPriorPlayer();
         
-        hasPrior = false;
+        int prior = this.prior.getValue();
+        
+        this.prior.setValue(-1);
         
         if(took) {
-            firstPassed.setValue(prior.getValue());
+            firstPassed.setValue(prior);
             //a player that took an action receives priority again
         } else {
             //the next player receives priority
-            prior.setValue((prior.getValue() + 1) % getGame().getPlayers().size());
-            if(prior.getValue().intValue() == firstPassed.getValue().intValue()) {
+            prior = (prior + 1) % getGame().getPlayers().size();
+            //All players passed, priority is back at the player who most recently did something
+            if(prior == firstPassed.getValue().intValue()) {
                 passedInSuccession();
+                //When everything else happened, the active player receives priority
+                prior = getGame().getPlayers().indexOf(getGame().getTurnStructure().getActivePlayer());
+                firstPassed.setValue(prior);
             }
         }
-        receivePriority();
+        beforeReceivePriority();
         
-        hasPrior = true;
+        this.prior.setValue(prior);
         
+
         Player newPrior = getPriorPlayer();
         fireNextPrior(oldPrior, newPrior);
         
@@ -163,28 +185,6 @@ public class PhaseStructureImpl extends AbstractGameContent implements PhaseStru
     
     public Combat getCombat() {
         return combat.getValue();
-    }
-    
-    /**
-     * Gives the player that currently has priority the priority again.
-     */
-    private void receivePriority() {
-        receivePriority(prior.getValue());
-    }
-    
-    /**
-     * Gives the specified player priority.
-     */
-    private void receivePriority(Player player) {
-        receivePriority(getGame().getPlayers().indexOf(player));
-    }
-    
-    /**
-     * Gives the specified player priority.
-     */
-    private void receivePriority(int player) {
-        if(prior.getValue().intValue() != player) prior.setValue(player);
-        beforeReceivePriority();
     }
     
     /**
@@ -216,7 +216,6 @@ public class PhaseStructureImpl extends AbstractGameContent implements PhaseStru
      * <li>Ending the current phase if the step was the last in the phase</li>
      * <li>Ending the current turn if the phase was the last in the turn</li>
      * <li>If necessary, turn-based actions are performed for the old and new step</li>
-     * <li>Finally, the active player receives priority</li>
      * </ul>
      */
     private void passedInSuccession() {
@@ -226,9 +225,6 @@ public class PhaseStructureImpl extends AbstractGameContent implements PhaseStru
             //this will remove the object from the stack
             o.getPlayInformation().getEffect().execute();
         } else nextStep();
-        //When everything else happened, the active player receives priority
-        receivePriority(getGame().getTurnStructure().getActivePlayer());
-        firstPassed.setValue(prior.getValue());
     }
     
     /**
@@ -245,11 +241,12 @@ public class PhaseStructureImpl extends AbstractGameContent implements PhaseStru
             } else {
                 //TBAs at the end of the last step
                 for(TurnBasedAction.Type t:getStep().getEndActions()) {
-                    fireEnterTurnBasedAction(t);
+                    turnBasedAction.setValue(t);
                     TurnBasedAction action = turnBasedActions.get(t);
                     if(action != null) action.execute();
                     else log.warn("Turn based Action " + t + " does not exist");
                 }
+                turnBasedAction.setValue(null);
                 step.setValue((step.getValue() + 1) % getPhase().getSteps().size());
             }
             
@@ -263,11 +260,12 @@ public class PhaseStructureImpl extends AbstractGameContent implements PhaseStru
             
             //TBAs at the beginning of the next step
             for(TurnBasedAction.Type t:getStep().getBeginningActions()) {
-                fireEnterTurnBasedAction(t);
+                turnBasedAction.setValue(t);
                 TurnBasedAction action = turnBasedActions.get(t);
                 if(action != null) action.execute();
                 else log.warn("Turn based Action " + t + " does not exist");
             }
+            turnBasedAction.setValue(null);
             
             e.end();
         } while(!getStep().isGetPriority());
@@ -326,11 +324,6 @@ public class PhaseStructureImpl extends AbstractGameContent implements PhaseStru
             it.next().nextPhase(oldPhase, newPhase);
     }
     
-    private void fireEnterTurnBasedAction(TurnBasedAction.Type action) {
-        for(Iterator<EnterTurnBasedActionListener> it = getEnterTurnBasedActionListeners(); it.hasNext();)
-            it.next().enterTurnBasedAction(action);
-    }
-    
     
     public void addPriorChangedListener(PriorChangedListener l) {
         listeners.add(PriorChangedListener.class, l);
@@ -370,19 +363,5 @@ public class PhaseStructureImpl extends AbstractGameContent implements PhaseStru
     @SuppressWarnings("unchecked")
     public Iterator<PhaseChangedListener> getPhaseChangedListeners() {
         return listeners.getIterator(PhaseChangedListener.class);
-    }
-    
-    
-    public void addEnterTurnBasedActionListener(EnterTurnBasedActionListener l) {
-        listeners.add(EnterTurnBasedActionListener.class, l);
-    }
-    
-    public void removeEnterTurnBasedActionListener(EnterTurnBasedActionListener l) {
-        listeners.remove(EnterTurnBasedActionListener.class, l);
-    }
-    
-    @SuppressWarnings("unchecked")
-    public Iterator<EnterTurnBasedActionListener> getEnterTurnBasedActionListeners() {
-        return listeners.getIterator(EnterTurnBasedActionListener.class);
     }
 }

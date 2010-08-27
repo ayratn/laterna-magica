@@ -80,7 +80,7 @@ public final class MagicaUtils {
                     }
                 break;
                 default:
-                    throw new AssertionError();
+                    throw new AssertionError(s.getType());
             }
         }
     }

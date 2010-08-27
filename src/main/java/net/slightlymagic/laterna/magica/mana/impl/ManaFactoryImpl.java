@@ -19,6 +19,8 @@ import net.slightlymagic.laterna.magica.mana.ManaFactory;
 import net.slightlymagic.laterna.magica.mana.ManaSequence;
 import net.slightlymagic.laterna.magica.mana.ManaSymbol;
 
+import com.google.common.base.Joiner;
+
 
 /**
  * The class ManaFactoryImpl. This class uses a notation using braces. For example, the "one mana" symbol is "{1}",
@@ -91,14 +93,7 @@ public final class ManaFactoryImpl implements ManaFactory {
             case COLORED:
                 return valueOf(symbol.getColor().getShortChar());
             case HYBRID:
-                Iterator<ManaSymbol> parts = symbol.getParts().iterator();
-                if(!parts.hasNext()) return "";
-                StringBuilder erg = new StringBuilder(toString0(parts.next()));
-                while(parts.hasNext()) {
-                    erg.append("/");
-                    erg.append(toString0(parts.next()));
-                }
-                return erg.toString();
+                return Joiner.on('/').join(symbol.getParts());
             case NUMERAL:
                 return String.valueOf(symbol.getAmount());
             case SNOW:
@@ -106,7 +101,7 @@ public final class ManaFactoryImpl implements ManaFactory {
             case VARIABLE:
                 return valueOf(symbol.getVariableName());
             default:
-                throw new AssertionError();
+                throw new AssertionError(symbol.getType());
         }
     }
     

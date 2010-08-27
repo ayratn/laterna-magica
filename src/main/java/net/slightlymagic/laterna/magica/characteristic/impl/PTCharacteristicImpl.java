@@ -105,7 +105,7 @@ public class PTCharacteristicImpl extends AbstractCharacteristic<PTEffect> imple
                 int i = newP;
                 newP = newT;
                 newT = i;
-            } else throw new AssertionError();
+            } else throw new AssertionError(ef);
         }
         
         @Override

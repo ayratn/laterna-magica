@@ -17,10 +17,10 @@ import java.util.List;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
+import net.slightlymagic.beans.BoundBean;
 import net.slightlymagic.laterna.magica.GameContent;
 import net.slightlymagic.laterna.magica.action.turnBased.TurnBasedAction;
 import net.slightlymagic.laterna.magica.action.turnBased.TurnBasedAction.Type;
-import net.slightlymagic.laterna.magica.event.EnterTurnBasedActionListener;
 import net.slightlymagic.laterna.magica.event.PhaseChangedListener;
 import net.slightlymagic.laterna.magica.event.PriorChangedListener;
 import net.slightlymagic.laterna.magica.event.StepChangedListener;
@@ -65,7 +65,7 @@ import net.slightlymagic.laterna.magica.player.Player;
  * @version V0.0 16.10.2009
  * @author Clemens Koza
  */
-public interface PhaseStructure extends GameContent {
+public interface PhaseStructure extends GameContent, BoundBean {
     /**
      * The phases of a turn. See {@magic.ruleRef 20100716/R5001}.
      */
@@ -230,9 +230,14 @@ public interface PhaseStructure extends GameContent {
     public Step getStep();
     
     /**
-     * Returns the player who has priority.
+     * Returns the player who has priority. This value will be {@code null} while a turn based action is executed.
      */
     public Player getPriorPlayer();
+    
+    /**
+     * Returns the currently executed turn based action.
+     */
+    public TurnBasedAction.Type getTurnBasedAction();
     
     /**
      * Signals that the player who has priority has or has not taken an action. A parameter of true signals that
@@ -260,10 +265,4 @@ public interface PhaseStructure extends GameContent {
     public void removePriorChangedListener(PriorChangedListener l);
     
     public void addPriorChangedListener(PriorChangedListener l);
-    
-    public Iterator<EnterTurnBasedActionListener> getEnterTurnBasedActionListeners();
-    
-    public void removeEnterTurnBasedActionListener(EnterTurnBasedActionListener l);
-    
-    public void addEnterTurnBasedActionListener(EnterTurnBasedActionListener l);
 }

@@ -7,8 +7,6 @@
 package net.slightlymagic.laterna.test;
 
 
-import static java.lang.String.*;
-
 import java.awt.BorderLayout;
 import java.awt.event.ActionEvent;
 import java.io.IOException;
@@ -22,23 +20,21 @@ import javax.swing.JLabel;
 
 import net.slightlymagic.laterna.magica.Game;
 import net.slightlymagic.laterna.magica.LaternaMagica;
-import net.slightlymagic.laterna.magica.action.turnBased.TurnBasedAction.Type;
 import net.slightlymagic.laterna.magica.card.Printing;
 import net.slightlymagic.laterna.magica.deck.Deck;
 import net.slightlymagic.laterna.magica.deck.Deck.DeckType;
 import net.slightlymagic.laterna.magica.deck.impl.DeckImpl;
-import net.slightlymagic.laterna.magica.event.EnterTurnBasedActionListener;
-import net.slightlymagic.laterna.magica.event.PriorChangedListener;
+import net.slightlymagic.laterna.magica.gui.Gui;
+import net.slightlymagic.laterna.magica.gui.TurnProgressUpdater;
 import net.slightlymagic.laterna.magica.gui.actor.GuiMagicActor;
 import net.slightlymagic.laterna.magica.gui.card.CardDetail;
 import net.slightlymagic.laterna.magica.gui.card.CardImage;
-import net.slightlymagic.laterna.magica.gui.player.PlayerPanel;
-import net.slightlymagic.laterna.magica.gui.util.GuiUtil;
 import net.slightlymagic.laterna.magica.gui.zone.ZonePanel;
 import net.slightlymagic.laterna.magica.impl.GameImpl;
 import net.slightlymagic.laterna.magica.impl.GameLoop;
 import net.slightlymagic.laterna.magica.player.Player;
 import net.slightlymagic.laterna.magica.player.impl.PlayerImpl;
+import net.slightlymagic.laterna.magica.zone.Zone.Zones;
 
 import org.jdesktop.swingx.JXMultiSplitPane;
 import org.jdesktop.swingx.MultiSplitLayout;
@@ -56,10 +52,12 @@ public class TestCardPanel {
         LaternaMagica.init();
         
         final Game g = initGame();
+        final Gui gui = new Gui(g);
+        
         Player me = g.getPlayers().get(0);
-        me.setActor(new GuiMagicActor(me));
+        me.setActor(new GuiMagicActor(gui, me));
         Player her = g.getPlayers().get(1);
-        her.setActor(new GuiMagicActor(her));
+        her.setActor(new GuiMagicActor(gui, her));
         
         JFrame jf = new JFrame();
         jf.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
@@ -67,44 +65,33 @@ public class TestCardPanel {
         JXMultiSplitPane p = new JXMultiSplitPane(new MultiSplitLayout(createLayout()));
         for(int i = 0; i < g.getPlayers().size(); i++) {
             Player pl = g.getPlayers().get(i);
-            p.add(new PlayerPanel(pl), "player" + i);
+            p.add(gui.getPlayerPanel(pl), "player" + i);
             
-            p.add(new ZonePanel(pl.getHand()), "hand" + i);
-            p.add(new ZonePanel(g.getBattlefield(), pl), "play" + i);
+            p.add(gui.getZonePanel(pl, Zones.HAND), "hand" + i);
+            p.add(gui.getZonePanel(pl, Zones.BATTLEFIELD), "play" + i);
         }
         
-        ZonePanel z = new ZonePanel(g.getStack());
+        ZonePanel z = gui.getZonePanel(Zones.STACK);
         p.add(z, "stack");
         
         CardImage im = new CardImage();
-        GuiUtil.add(im);
+        gui.add(im);
         p.add(im, "picture");
         
         CardDetail de = new CardDetail(18);
-        GuiUtil.add(de);
+        gui.add(de);
         p.add(de, "detail");
         
-        final JLabel l = new JLabel();
-        g.getPhaseStructure().addPriorChangedListener(new PriorChangedListener() {
-            public void nextPrior(Player oldPrior, Player newPrior) {
-                l.setText(format("%s's %s - %s has priority", g.getTurnStructure().getActivePlayer(),
-                        g.getPhaseStructure().getStep(), g.getPhaseStructure().getPriorPlayer()));
-            }
-        });
-        g.getPhaseStructure().addEnterTurnBasedActionListener(new EnterTurnBasedActionListener() {
-            public void enterTurnBasedAction(Type action) {
-                l.setText(format("%s's %s - %s", g.getTurnStructure().getActivePlayer(),
-                        g.getPhaseStructure().getStep(), action));
-            }
-        });
+        JLabel turnProgress = new JLabel();
+        new TurnProgressUpdater(turnProgress, g);
         
-        jf.add(l, BorderLayout.NORTH);
+        jf.add(turnProgress, BorderLayout.NORTH);
         jf.add(p);
         jf.add(new JButton(new AbstractAction("Pass priority") {
             private static final long serialVersionUID = -8679358973135402669L;
             
             public void actionPerformed(ActionEvent e) {
-                GuiUtil.publishPassPriority();
+                gui.publishPassPriority();
             }
         }), BorderLayout.SOUTH);
         

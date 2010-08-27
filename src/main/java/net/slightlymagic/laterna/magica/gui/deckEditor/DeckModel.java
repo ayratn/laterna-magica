@@ -75,7 +75,7 @@ public class DeckModel extends AbstractTableModel implements CardPoolModel {
             case 1:
                 return pool.get(p);
             default:
-                throw new AssertionError();
+                throw new IndexOutOfBoundsException();
         }
     }
     

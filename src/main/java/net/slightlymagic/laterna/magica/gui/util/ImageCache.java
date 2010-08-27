@@ -163,7 +163,6 @@ public final class ImageCache {
         } catch(NullPointerException ex) {
             return null;
         } catch(ComputationException ex) {
-            log.warn("", ex);
             return null;
         }
     }

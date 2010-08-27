@@ -79,7 +79,7 @@ public class PoolModel extends AbstractTableModel implements CardPoolModel {
             case 0:
                 return p.getTemplate().toString();
             default:
-                throw new AssertionError();
+                throw new IndexOutOfBoundsException();
         }
     }
     

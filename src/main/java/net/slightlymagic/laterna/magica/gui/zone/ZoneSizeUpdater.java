@@ -29,6 +29,7 @@ public class ZoneSizeUpdater implements PropertyChangeListener {
         this.l = l;
         this.z = z;
         l.setText("" + z.size());
+        z.addPropertyChangeListener(Zone.CARDS, this);
     }
     
     public void propertyChange(PropertyChangeEvent evt) {

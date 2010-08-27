@@ -124,7 +124,7 @@ public final class MagicaPredicates {
         else if(value instanceof SuperType) return has((SuperType) value);
         else if(value instanceof CardType) return has((CardType) value);
         else if(value instanceof SubType) return has((SubType) value);
-        else throw new AssertionError();
+        else throw new AssertionError(value);
     }
     
     /**

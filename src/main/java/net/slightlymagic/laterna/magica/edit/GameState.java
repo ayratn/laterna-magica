@@ -130,7 +130,7 @@ public class GameState extends AbstractGameContent implements Serializable {
                     forward();
             break;
             default:
-                throw new AssertionError();
+                throw new AssertionError(signum(e.compareTo(current)));
         }
     }
     

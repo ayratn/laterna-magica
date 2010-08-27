@@ -138,7 +138,7 @@ public class SetCharacteristicImpl<T> extends AbstractCharacteristic<SetCharacte
                     newValues.addAll(ef.getSetValues());
                 break;
                 default:
-                    throw new AssertionError();
+                    throw new AssertionError(ef.getMode());
             }
         }
         

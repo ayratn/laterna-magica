@@ -28,14 +28,15 @@ public class LifeTotalUpdater implements PropertyChangeListener {
     public LifeTotalUpdater(JLabel label, LifeTotal life) {
         this.label = label;
         this.life = life;
-        lifeUpdated();
-    }
-    
-    private void lifeUpdated() {
-        label.setText("" + life.getLifeTotal());
+        life.addPropertyChangeListener(LifeTotal.LIFE_TOTAL, this);
+        update();
     }
     
     public void propertyChange(PropertyChangeEvent evt) {
-        if(evt.getSource() == life && LifeTotal.LIFE_TOTAL.equals(evt.getPropertyName())) lifeUpdated();
+        update();
+    }
+    
+    private void update() {
+        label.setText("" + life.getLifeTotal());
     }
 }

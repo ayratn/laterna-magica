@@ -67,7 +67,7 @@ public class ManaSymbolChooser extends JPanel {
                 chooser = new VariableChooser();
             break;
             default:
-                throw new AssertionError();
+                throw new AssertionError(original.getType());
         }
         
         boolean noop = chooser instanceof NoopChooser;

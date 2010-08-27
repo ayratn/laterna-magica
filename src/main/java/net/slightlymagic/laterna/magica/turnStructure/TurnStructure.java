@@ -9,6 +9,7 @@ package net.slightlymagic.laterna.magica.turnStructure;
 
 import java.util.Iterator;
 
+import net.slightlymagic.beans.BoundBean;
 import net.slightlymagic.laterna.magica.GameContent;
 import net.slightlymagic.laterna.magica.event.ActiveChangedListener;
 import net.slightlymagic.laterna.magica.player.Player;
@@ -20,7 +21,7 @@ import net.slightlymagic.laterna.magica.player.Player;
  * @version V0.0 05.09.2009
  * @author Clemens Koza
  */
-public interface TurnStructure extends GameContent {
+public interface TurnStructure extends GameContent, BoundBean {
     /**
      * Schedules the player to take an extra turn after the current one. The last turn scheduled this way is taken
      * first.

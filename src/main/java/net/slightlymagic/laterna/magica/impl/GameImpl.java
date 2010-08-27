@@ -9,6 +9,8 @@ package net.slightlymagic.laterna.magica.impl;
 
 import static net.slightlymagic.laterna.magica.zone.Zone.Zones.*;
 
+import java.beans.PropertyChangeEvent;
+import java.beans.PropertyChangeListener;
 import java.util.EnumMap;
 import java.util.Iterator;
 import java.util.List;
@@ -65,17 +67,24 @@ public class GameImpl extends AbstractEditableBean implements Game {
         CompoundEdit edit = new CompoundEdit(this, true, "Create game");
         
         random = new MagicaRandom(this);
-        globalEffects = new GlobalEffectsImpl(this);
-        timestampFactory = new TimestampFactory(this);
-        replacementEngine = new ReplacementEngine(this);
-        turnStructure = new TurnStructureImpl(this);
-        phaseStructure = new PhaseStructureImpl(this);
         players = properties.list("players");
         counters = properties.map("counters");
         
         zones = new EnumMap<Zone.Zones, Zone>(Zones.class);
         for(Zones z:new Zones[] {ANTE, BATTLEFIELD, COMMAND, EXILE, STACK})
             zones.put(z, new ZoneImpl(this, z));
+        
+        globalEffects = new GlobalEffectsImpl(this);
+        timestampFactory = new TimestampFactory(this);
+        replacementEngine = new ReplacementEngine(this);
+        turnStructure = new TurnStructureImpl(this);
+        phaseStructure = new PhaseStructureImpl(this);
+        phaseStructure.addPropertyChangeListener("combat", new PropertyChangeListener() {
+            @Override
+            public void propertyChange(PropertyChangeEvent evt) {
+                s.firePropertyChange(evt.getPropertyName(), evt.getOldValue(), evt.getNewValue());
+            }
+        });
         
         addGameStartListener(new GameInitializer());
         edit.end();

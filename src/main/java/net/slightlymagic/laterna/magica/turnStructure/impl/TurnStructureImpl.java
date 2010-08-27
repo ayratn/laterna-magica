@@ -96,7 +96,6 @@ public class TurnStructureImpl extends AbstractGameContent implements TurnStruct
     }
     
     public Player getActivePlayer() {
-        if(activePlayer.getValue() == null) throw new IllegalStateException("Before first turn");
         return activePlayer.getValue();
     }
     

@@ -10,6 +10,7 @@ package net.slightlymagic.laterna.magica;
 import java.util.List;
 import java.util.Random;
 
+import net.slightlymagic.beans.BoundBean;
 import net.slightlymagic.laterna.magica.counter.Counter;
 import net.slightlymagic.laterna.magica.edit.GameState;
 import net.slightlymagic.laterna.magica.effect.GlobalEffects;
@@ -32,7 +33,7 @@ import net.slightlymagic.laterna.magica.zone.Zone.Zones;
  * @version V0.0 12.07.2009
  * @author Clemens Koza
  */
-public interface Game extends Cloneable {
+public interface Game extends BoundBean {
     /**
      * <p>
      * Returns the GameState for this game.

@@ -32,8 +32,8 @@ import net.slightlymagic.laterna.magica.characteristics.SuperType;
 import net.slightlymagic.laterna.magica.cost.ManaCost;
 import net.slightlymagic.laterna.magica.effect.replacement.ReplaceableEvent;
 import net.slightlymagic.laterna.magica.effect.replacement.ReplacementEffect;
+import net.slightlymagic.laterna.magica.gui.Gui;
 import net.slightlymagic.laterna.magica.gui.mana.symbol.ManaSymbolChooser;
-import net.slightlymagic.laterna.magica.gui.util.GuiUtil;
 import net.slightlymagic.laterna.magica.gui.util.ListChooser;
 import net.slightlymagic.laterna.magica.mana.Mana;
 import net.slightlymagic.laterna.magica.mana.ManaSequence;
@@ -61,9 +61,16 @@ public class GuiMagicActor extends AbstractMagicActor {
     
     public final GuiChannels    channels = new GuiChannels();
     
-    public GuiMagicActor(Player player) {
+    private final Gui           gui;
+    
+    public GuiMagicActor(Gui gui, Player player) {
         super(player);
-        GuiUtil.add(this);
+        this.gui = gui;
+        getGui().add(this);
+    }
+    
+    public Gui getGui() {
+        return gui;
     }
     
     private static <T> T getValue(Fiber f, Channel<T> ch, GuiActor a) {
@@ -137,7 +144,7 @@ public class GuiMagicActor extends AbstractMagicActor {
                 case VARIABLE:
                     throw new IllegalArgumentException("Cost contains hybrid or variable symbols");
                 default:
-                    throw new AssertionError();
+                    throw new AssertionError(sym.getType());
             }
         }
         

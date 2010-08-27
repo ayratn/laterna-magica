@@ -44,7 +44,7 @@ import net.slightlymagic.laterna.magica.zone.Zone.Zones;
  * @version V0.0 29.07.2010
  * @author Clemens Koza
  */
-public class CardDetail extends JPanel implements CardDisplay {
+public class CardDetail extends CardPanel {
     private static final long      serialVersionUID = 831660638002643394L;
     
     private boolean                isTapped;
@@ -112,6 +112,7 @@ public class CardDetail extends JPanel implements CardDisplay {
         f = f.deriveFont(textSize);
         
         text.setBorder(null);
+        mana.setEditable(false);
         
         for(JComponent l:new JComponent[] {name, mana, types, text, pt}) {
             l.setOpaque(false);
