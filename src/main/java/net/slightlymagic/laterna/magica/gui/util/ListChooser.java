@@ -45,14 +45,6 @@ import javax.swing.event.ListSelectionListener;
  * </ul>
  */
 public class ListChooser<T> {
-    public static void main(String[] args) {
-        ListChooser<String> c = new ListChooser<String>("test", "choose a or b", 0, 2, "a", "b");
-        System.out.println(c.show());
-        for(String s:c.getSelectedValues()) {
-            System.out.println(s);
-        }
-    }
-    
     //Data and number of choices for the list
     private List<T>     list;
     private int         minChoices, maxChoices;

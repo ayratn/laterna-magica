@@ -12,14 +12,12 @@ import static java.util.Collections.*;
 import static net.slightlymagic.beans.relational.Relations.*;
 import static net.slightlymagic.laterna.magica.card.State.StateType.*;
 import static net.slightlymagic.laterna.magica.impl.CombatUtil.*;
-import static net.slightlymagic.laterna.magica.util.MagicaCollections.*;
 
 import java.beans.PropertyChangeListener;
 import java.util.AbstractMap;
 import java.util.AbstractSet;
 import java.util.ArrayList;
 import java.util.Collection;
-import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Iterator;
 import java.util.List;
@@ -495,11 +493,11 @@ public class CombatImpl extends AbstractGameContent implements Combat {
     public CombatImpl(Game game) {
         super(game);
         
-        attackers = editableMap(getGame(), new HashMap<MagicObject, AttackerImpl>());
+        attackers = properties.map("attackers");
         attackersView = unmodifiableMap(attackers);
-        blockers = editableMap(getGame(), new HashMap<MagicObject, BlockerImpl>());
+        blockers = properties.map("blockers");
         blockersView = unmodifiableMap(blockers);
-        defenders = editableMap(getGame(), new HashMap<Object, DefenderImpl>());
+        defenders = properties.map("defenders");
         defendersView = unmodifiableMap(defenders);
     }
     
@@ -521,7 +519,7 @@ public class CombatImpl extends AbstractGameContent implements Combat {
     }
     
     public AttackerImpl getAttacker(CardObject attacker) {
-        if(!isLegalAttacker(attacker)) throw new IllegalArgumentException();
+        if(!isLegalAttacker(attacker)) throw new IllegalArgumentException(valueOf(attacker));
         return attackers.get(attacker);
     }
     
@@ -554,7 +552,7 @@ public class CombatImpl extends AbstractGameContent implements Combat {
     }
     
     public BlockerImpl getBlocker(CardObject blocker) {
-        if(!isLegalBlocker(blocker)) throw new IllegalArgumentException();
+        if(!isLegalBlocker(blocker)) throw new IllegalArgumentException(valueOf(blocker));
         return blockers.get(blocker);
     }
     
@@ -571,14 +569,14 @@ public class CombatImpl extends AbstractGameContent implements Combat {
     //Defenders
     
     public PlaneswalkerDefender getDefender(CardObject defender) {
-        if(!isLegalDefendingPlaneswalker(defender)) throw new IllegalArgumentException();
+        if(!isLegalDefendingPlaneswalker(defender)) throw new IllegalArgumentException(valueOf(defender));
         PlaneswalkerDefenderImpl d = (PlaneswalkerDefenderImpl) defenders.get(defender);
         if(d == null) defenders.put(defender, d = new PlaneswalkerDefenderImpl(defender));
         return d;
     }
     
     public PlayerDefender getDefender(Player defender) {
-        if(!isLegalDefendingPlayer(defender)) throw new IllegalArgumentException();
+        if(!isLegalDefendingPlayer(defender)) throw new IllegalArgumentException(valueOf(defender));
         PlayerDefenderImpl d = (PlayerDefenderImpl) defenders.get(defender);
         if(d == null) defenders.put(defender, d = new PlayerDefenderImpl(defender));
         return d;
@@ -645,25 +643,25 @@ public class CombatImpl extends AbstractGameContent implements Combat {
     }
     
     public void setAttackerAssignmentOrderPlayer(Player p) {
-        if(!getAttackingPlayers().contains(p)) throw new IllegalArgumentException();
+        if(!getAttackingPlayers().contains(p)) throw new IllegalArgumentException(valueOf(p));
         log.debug("Attacker assignment order " + p);
         attDAO.setValue(p);
     }
     
     public void setBlockerAssignmentOrderPlayer(Player p) {
-        if(!getDefendingPlayers().contains(p)) throw new IllegalArgumentException();
+        if(!getDefendingPlayers().contains(p)) throw new IllegalArgumentException(valueOf(p));
         log.debug("Blocker assignment order " + p);
         blockDAO.setValue(p);
     }
     
     public void setAttackerAssignmentAttacker(Attacker a) {
-        if(!getAttackers().contains(a)) throw new IllegalArgumentException();
+        if(!getAttackers().contains(a)) throw new IllegalArgumentException(valueOf(a));
         log.debug("Attacker assignment " + a);
         attDA.setValue((AttackerImpl) a);
     }
     
     public void setBlockerAssignmentBlocker(Blocker b) {
-        if(!getBlockers().contains(b)) throw new IllegalArgumentException();
+        if(!getBlockers().contains(b)) throw new IllegalArgumentException(valueOf(b));
         log.debug("Blocker assignment " + b);
         blockDA.setValue((BlockerImpl) b);
     }

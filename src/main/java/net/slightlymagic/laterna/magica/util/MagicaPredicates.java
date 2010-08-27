@@ -234,7 +234,6 @@ public final class MagicaPredicates {
             //TODO check haste
             boolean haste = false;
             
-            System.out.println(input.getCounter("summoningSickness").getCount());
             return !(input.getCounter("summoningSickness").getCount() == 0 || haste);
         }
     }

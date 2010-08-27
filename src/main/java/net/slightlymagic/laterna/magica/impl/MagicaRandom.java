@@ -25,11 +25,7 @@ import net.slightlymagic.laterna.magica.edit.Edit;
  * @author Clemens Koza
  */
 public class MagicaRandom extends Random implements GameContent {
-    private static final long serialVersionUID = -4408352337561360743L;
-    
-    public static void main(String[] args) {
-        System.out.println(new GameImpl().getGameState());
-    }
+    private static final long serialVersionUID     = -4408352337561360743L;
     
     private Game              game;
     

@@ -41,6 +41,7 @@ import net.slightlymagic.laterna.magica.mana.ManaSymbol;
 import net.slightlymagic.laterna.magica.mana.impl.ManaSequenceImpl;
 import net.slightlymagic.laterna.magica.player.Player;
 import net.slightlymagic.laterna.magica.player.impl.AbstractMagicActor;
+import net.slightlymagic.laterna.magica.turnStructure.PhaseStructure.Step;
 
 import org.jetlang.channels.Channel;
 import org.jetlang.fibers.Fiber;
@@ -83,6 +84,15 @@ public class GuiMagicActor extends AbstractMagicActor {
     }
     
     public PlayAction getAction() {
+        if(getGame().getStack().isEmpty()) {
+            //skip a few steps to be quicker
+            Step step = getGame().getPhaseStructure().getStep();
+            if(step == Step.BEGINNING_DRAW) return null;
+            if(step == Step.COMBAT_BEGINNING) return null;
+            if(step == Step.COMBAT_DAMAGE) return null;
+            if(step == Step.COMBAT_END) return null;
+            if(step == Step.ENDING_CLEANUP) return null;
+        }
         return getValue(channels.fiber, channels.actions, new ActionActor(this));
     }
     
