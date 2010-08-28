@@ -29,7 +29,6 @@ import net.slightlymagic.laterna.magica.card.CardTemplate;
 import net.slightlymagic.laterna.magica.card.Printing;
 import net.slightlymagic.laterna.magica.characteristics.MagicColor;
 import net.slightlymagic.laterna.magica.mana.ManaSymbol;
-import net.slightlymagic.laterna.magica.mana.impl.ManaFactoryImpl;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -62,40 +61,40 @@ public final class ImageCache {
         images = new MapMaker().softValues().makeComputingMap(new ImageFunction());
     }
     
+    private void checkSize(String size) {
+        if("small".equals(size)) return;
+        if("medium".equals(size)) return;
+        if("large".equals(size)) return;
+        throw new IllegalArgumentException(size);
+    }
     
     public URI getSymbolURI(String symbol) {
-        if("{T}".equals(symbol) || "{Q}".equals(symbol)) {
-            File f = PROPS().getFile("/laterna/res/pics/symbols");
-            f = new File(f, "small");
-            f = new File(f, symbol.substring(1, 2) + ".gif");
-            return f.toURI();
-        } else return getSymbolURI(ManaFactoryImpl.INSTANCE.parseSymbol(symbol));
+        return getSymbolURI(symbol, "large");
     }
     
     public URI getSymbolURI(MagicColor c) {
-        File f = PROPS().getFile("/laterna/res/pics/symbols");
-        f = new File(f, "small");
-        f = new File(f, (c == null? 'X':c.getShortChar()) + ".gif");
-        return f.toURI();
+        return getSymbolURI(c, "large");
     }
     
     public URI getSymbolURI(ManaSymbol s) {
+        return getSymbolURI(s, "large");
+    }
+    
+    public URI getSymbolURI(String symbol, String size) {
+        checkSize(size);
         File f = PROPS().getFile("/laterna/res/pics/symbols");
-        f = new File(f, "small");
-        f = new File(f, s.toString().replaceAll("[{}/]", "") + ".gif");
+        f = new File(f, size);
+        f = new File(f, symbol.replaceAll("[{}/]", "") + ".gif");
         return f.toURI();
     }
     
-    public BufferedImage getSymbol(String symbol) {
-        return getImage(getSymbolURI(symbol));
+    public URI getSymbolURI(MagicColor c, String size) {
+        if(c == null) return getSymbolURI("{X}", size);
+        return getSymbolURI("{" + c.getShortChar() + "}", size);
     }
     
-    public BufferedImage getSymbol(MagicColor c) {
-        return getImage(getSymbolURI(c));
-    }
-    
-    public BufferedImage getSymbol(ManaSymbol s) {
-        return getImage(getSymbolURI(s));
+    public URI getSymbolURI(ManaSymbol s, String size) {
+        return getSymbolURI(s.toString(), size);
     }
     
     public URI getCardURI(CardObject card) {
@@ -114,22 +113,6 @@ public final class ImageCache {
         File f = PROPS().getFile("/laterna/res/pics/cards");
         f = new File(f, multiverseID + ".jpg");
         return f.toURI();
-    }
-    
-    public BufferedImage getCard(CardObject card) {
-        return getImage(getCardURI(card));
-    }
-    
-    public BufferedImage getCard(CardTemplate card) {
-        return getImage(getCardURI(card));
-    }
-    
-    public BufferedImage getCard(Printing card) {
-        return getImage(getCardURI(card));
-    }
-    
-    public BufferedImage getCard(int multiverseID) {
-        return getImage(getCardURI(multiverseID));
     }
     
     

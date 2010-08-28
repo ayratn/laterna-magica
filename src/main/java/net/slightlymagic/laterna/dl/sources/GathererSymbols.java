@@ -26,8 +26,11 @@ import com.google.common.collect.AbstractIterator;
  * @author Clemens Koza
  */
 public class GathererSymbols implements Iterable<DownloadJob> {
+    //TODO chaos and planeswalker symbol
+    //chaos: http://gatherer.wizards.com/Images/Symbols/chaos.gif
+    
     private static final File     outDir  = PROPS().getFile("/laterna/res/pics/symbols");
-    private static final String   urlFmt  = "http://gatherer.wizards.com/Handlers/Image.ashx?sizes=%1$s&name=%2$s&type=symbol";
+    private static final String   urlFmt  = "http://gatherer.wizards.com/handlers/image.ashx?size=%1$s&name=%2$s&type=symbol";
     
     private static final String[] sizes   = {"small", "medium", "large"};
     

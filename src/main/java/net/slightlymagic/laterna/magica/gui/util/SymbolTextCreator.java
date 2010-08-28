@@ -8,6 +8,7 @@ package net.slightlymagic.laterna.magica.gui.util;
 
 
 import java.awt.image.BufferedImage;
+import java.net.URI;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -26,7 +27,7 @@ import javax.swing.text.StyledDocument;
  * @version V0.0 28.10.2009
  * @author Clemens Koza
  */
-public class SymbolTextCreator implements SymbolTextCreatorProps {
+public class SymbolTextCreator {
     public static JTextPane formatRulesText(String text, int size) {
         return formatRulesText(text, new JTextPane(), size);
     }
@@ -58,7 +59,11 @@ public class SymbolTextCreator implements SymbolTextCreatorProps {
                 } else {
                     //append symbol
                     String symbol = m.group(1);
-                    BufferedImage im = i.getImage(i.setSize(i.getSymbolURI(symbol), size, size));
+                    URI uri;
+                    if(size < 15) uri = i.getSymbolURI(symbol, "small");
+                    else if(size < 25) uri = i.getSymbolURI(symbol, "medium");
+                    else uri = i.getSymbolURI(symbol, "large");
+                    BufferedImage im = i.getImage(i.setSize(uri, size, size));
                     if(im != null) {
                         p.setCaretPosition(d.getLength());
                         p.insertIcon(new ImageIcon(im, symbol));

@@ -47,7 +47,7 @@ public class Downloader extends AbstractLaternaBean implements Disposable {
     
     public Downloader() {
         PoolFiberFactory f = new PoolFiberFactory(pool);
-        //sbscribe multiple fibers for parallel execution
+        //subscribe multiple fibers for parallel execution
         for(int i = 0, numThreads = 10; i < numThreads; i++) {
             Fiber fiber = f.create();
             fiber.start();

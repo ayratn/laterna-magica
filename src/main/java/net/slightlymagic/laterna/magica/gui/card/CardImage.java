@@ -50,10 +50,11 @@ public class CardImage extends CardPanel implements Observer {
     
     public void update(Observable o, Object arg) {
         assert c == o;
+        ImageCache ic = ImageCache.getInstance();
         BufferedImage im = null;
-        if(c != null) im = ImageCache.getInstance().getCard(c.getPrinting());
+        if(c != null) im = ic.getImage(ic.getCardURI(c.getPrinting()));
         //the card back
-        if(im == null) im = ImageCache.getInstance().getCard(0);
+        if(im == null) im = ic.getImage(ic.getCardURI(0));
         l.setIcon(im == null? null:new ImageIcon(im));
     }
 }

@@ -40,7 +40,8 @@ public class ManaSymbolLabel extends JLabel {
     
     public void setSymbol(ManaSymbol symbol) {
         this.symbol = symbol;
-        Image im = ImageCache.getInstance().getSymbol(symbol);
+        ImageCache ic = ImageCache.getInstance();
+        Image im = ic.getImage(ic.getSymbolURI(symbol, "medium"));
         if(im == null) {
             setIcon(null);
             setText(symbol.toString());
