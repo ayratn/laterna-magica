@@ -16,11 +16,6 @@
   <url>http://code.google.com/p/laterna-magica/source/browse/#svn/trunk/LaternaMagica/</url>
  </scm>
 
- <properties>
-  <maven.compiler.source>1.6</maven.compiler.source>
-  <maven.compiler.target>1.6</maven.compiler.target>
-  <encoding>UTF-8</encoding>
- </properties>
 
  <build>
   <plugins>
