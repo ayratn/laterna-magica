@@ -43,7 +43,7 @@ public class TestAllCards {
     @Test
     public void testRead() {
         for(CardTemplate t:cards.getTemplates())
-            print(t.getCardParts().get(0).getCharacteristics(new CharacteristicSnapshot()));
+            t.getCardParts().get(0).getCharacteristics(new CharacteristicSnapshot());
     }
     
     public static void print(CharacteristicSnapshot c) {
