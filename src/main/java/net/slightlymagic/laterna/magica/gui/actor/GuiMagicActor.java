@@ -76,9 +76,9 @@ public class GuiMagicActor extends AbstractMagicActor {
     
     private static <T> T getValue(Fiber f, Channel<T> ch, GuiActor a) {
         a.start();
-        log.debug("Waiting for result...");
+        log.trace("Waiting for result...");
         T result = Parallel.getValue(f, ch);
-        log.debug("received!");
+        log.trace("received!");
         a.dispose();
         return result;
     }
@@ -226,12 +226,11 @@ public class GuiMagicActor extends AbstractMagicActor {
         for(Blocker b:getGame().getCombat().getBlockers()) {
             if(b.getBlocker().getController() != getPlayer()) continue;
             
-            if(b.getAttackers().size() <= 1) {
-                b.setDamageAssignmentOrder(new ArrayList<Attacker>(b.getAttackers().keySet()));
-            } else {
-                //TODO let the user sort attackers
-                throw new UnsupportedOperationException();
+            List<Attacker> attackers = new ArrayList<Attacker>(b.getAttackers().keySet());
+            if(attackers.size() > 1) {
+                //TODO show a sort dialog
             }
+            b.setDamageAssignmentOrder(attackers);
         }
     }
     
@@ -240,12 +239,11 @@ public class GuiMagicActor extends AbstractMagicActor {
         for(Attacker a:getGame().getCombat().getAttackers()) {
             if(a.getAttacker().getController() != getPlayer()) continue;
             
-            if(a.getBlockers().size() <= 1) {
-                a.setDamageAssignmentOrder(new ArrayList<Blocker>(a.getBlockers().keySet()));
-            } else {
-                //TODO let the user sort attackers
-                throw new UnsupportedOperationException();
+            List<Blocker> blockers = new ArrayList<Blocker>(a.getBlockers().keySet());
+            if(blockers.size() > 1) {
+                //TODO show a sort dialog
             }
+            a.setDamageAssignmentOrder(blockers);
         }
     }
     

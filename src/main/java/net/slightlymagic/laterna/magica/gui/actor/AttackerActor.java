@@ -7,6 +7,10 @@
 package net.slightlymagic.laterna.magica.gui.actor;
 
 
+import static java.lang.String.*;
+
+import javax.swing.Action;
+
 import net.slightlymagic.laterna.magica.Combat;
 import net.slightlymagic.laterna.magica.Combat.Attacker;
 import net.slightlymagic.laterna.magica.Combat.Defender;
@@ -15,6 +19,7 @@ import net.slightlymagic.laterna.magica.card.CardObject;
 import net.slightlymagic.laterna.magica.player.Player;
 
 import org.jetlang.core.Callback;
+import org.jetlang.core.Disposable;
 
 
 /**
@@ -36,9 +41,34 @@ public class AttackerActor extends GuiActor {
     
     @Override
     public void start() {
+        updateLabel();
+        
         disposables.add(actor.channels.objects.subscribe(actor.channels.fiber, new CardCallback()));
         disposables.add(actor.channels.players.subscribe(actor.channels.fiber, new PlayerCallback()));
         disposables.add(actor.channels.passPriority.subscribe(actor.channels.fiber, new PassPriorityCallback()));
+    }
+    
+    private void updateLabel() {
+        String s = format(
+                "<html><center>Declare attackers - Select a defender to attack, then the attackers.<br/>"
+                        + "Currently attacking %s<br/>" + "Click here to continue.</center</html>", defender);
+        disposables.add(setName(s));
+    }
+    
+    private Disposable setName(final String newName) {
+        return new Disposable() {
+            private String oldName;
+            
+            {
+                oldName = (String) actor.getGui().getPassPriorityAction().getValue(Action.NAME);
+                actor.getGui().getPassPriorityAction().putValue(Action.NAME, newName);
+            }
+            
+            @Override
+            public void dispose() {
+                actor.getGui().getPassPriorityAction().putValue(Action.NAME, oldName);
+            }
+        };
     }
     
     private class CardCallback implements Callback<MagicObject> {
@@ -49,6 +79,7 @@ public class AttackerActor extends GuiActor {
             CardObject card = (CardObject) c;
             try {
                 defender = combat.getDefender(card);
+                updateLabel();
                 return;
             } catch(IllegalArgumentException ex) {}
             try {

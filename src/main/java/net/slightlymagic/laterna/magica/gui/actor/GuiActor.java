@@ -7,6 +7,8 @@
 package net.slightlymagic.laterna.magica.gui.actor;
 
 
+import static java.util.Collections.*;
+
 import java.util.ArrayList;
 import java.util.List;
 
@@ -38,7 +40,11 @@ public abstract class GuiActor implements Disposable {
      */
     public abstract void start();
     
+    /**
+     * Disposes all disposables in reverse order
+     */
     public void dispose() {
+        reverse(disposables);
         for(Disposable d:disposables)
             d.dispose();
         disposables.clear();

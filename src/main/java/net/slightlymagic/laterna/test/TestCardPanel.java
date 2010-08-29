@@ -8,12 +8,10 @@ package net.slightlymagic.laterna.test;
 
 
 import java.awt.BorderLayout;
-import java.awt.event.ActionEvent;
 import java.io.IOException;
 import java.util.List;
 import java.util.Map;
 
-import javax.swing.AbstractAction;
 import javax.swing.JButton;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
@@ -87,13 +85,7 @@ public class TestCardPanel {
         
         jf.add(turnProgress, BorderLayout.NORTH);
         jf.add(p);
-        jf.add(new JButton(new AbstractAction("Pass priority") {
-            private static final long serialVersionUID = -8679358973135402669L;
-            
-            public void actionPerformed(ActionEvent e) {
-                gui.publishPassPriority();
-            }
-        }), BorderLayout.SOUTH);
+        jf.add(new JButton(gui.getPassPriorityAction()), BorderLayout.SOUTH);
         
 //        jf.pack();
         jf.setSize(700, 300);

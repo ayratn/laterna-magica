@@ -22,6 +22,7 @@ import net.slightlymagic.laterna.magica.action.play.CastAction;
 import net.slightlymagic.laterna.magica.action.play.PlayAction;
 import net.slightlymagic.laterna.magica.action.special.LandDropAction;
 import net.slightlymagic.laterna.magica.card.CardObject;
+import net.slightlymagic.laterna.magica.characteristic.ObjectCharacteristics;
 import net.slightlymagic.laterna.magica.characteristics.CardType;
 import net.slightlymagic.laterna.magica.player.Player;
 
@@ -54,14 +55,15 @@ public class GuiUtil {
             }
         }
         
-        Set<Ability> abilities = new HashSet<Ability>();
-        boolean b = card.getCharacteristics().get(0).getAbilityCharacteristic().isAdding(abilities);
-        //abilities can't be "all but"
-        assert b;
-        for(Ability ability:abilities) {
-            if(ability instanceof ActivatedAbility) {
-                list.add(new ActivateAction(player, card, (ActivatedAbility) ability));
-            }
+        for(ObjectCharacteristics c:card.getCharacteristics()) {
+            Set<Ability> abilities = new HashSet<Ability>();
+            boolean b = c.getAbilityCharacteristic().isAdding(abilities);
+            //abilities can't be "all but"
+            assert b;
+            for(Ability ability:abilities)
+                if(ability instanceof ActivatedAbility) {
+                    list.add(new ActivateAction(player, card, (ActivatedAbility) ability));
+                }
         }
         
         for(Iterator<PlayAction> it = list.iterator(); it.hasNext();)

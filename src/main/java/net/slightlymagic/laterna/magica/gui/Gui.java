@@ -16,6 +16,10 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
+import javax.swing.AbstractAction;
+import javax.swing.Action;
+import javax.swing.JRootPane;
+
 import net.slightlymagic.laterna.magica.Game;
 import net.slightlymagic.laterna.magica.MagicObject;
 import net.slightlymagic.laterna.magica.characteristic.CharacteristicSnapshot;
@@ -74,6 +78,13 @@ public class Gui {
                                                               }
                                                           }
                                                       });
+    private final JRootPane                   table   = new JRootPane();
+    private final Action                      pass    = new AbstractAction("Pass Priority") {
+                                                          @Override
+                                                          public void actionPerformed(ActionEvent e) {
+                                                              publishPassPriority();
+                                                          }
+                                                      };
     
     public Gui(Game game) {
         this.game = game;
@@ -96,6 +107,14 @@ public class Gui {
         return zones.get(new PlayerZones(game, zone));
     }
     
+    public JRootPane getTable() {
+        return table;
+    }
+    
+    public Action getPassPriorityAction() {
+        return pass;
+    }
+    
     /**
      * Adds a GuiMagicActor that wants to be notified on events happening in this Gui.
      * 
@@ -109,6 +128,11 @@ public class Gui {
         actors.remove(actor);
     }
     
+    private void publishPassPriority() {
+        for(GuiMagicActor actor:actors)
+            actor.channels.passPriority.publish(null);
+    }
+    
     /**
      * Adds a CardDisplay that wants to be notified whenever a card is selected in this Gui.
      */
@@ -120,9 +144,9 @@ public class Gui {
         cards.remove(card);
     }
     
-    public void publishPassPriority() {
-        for(GuiMagicActor actor:actors)
-            actor.channels.passPriority.publish(null);
+    public void showCard(CharacteristicSnapshot sn) {
+        for(CardDisplay c:cards)
+            c.setCard(sn);
     }
     
     /**
@@ -155,15 +179,13 @@ public class Gui {
         public void mouseEntered(MouseEvent e) {
             if(!(e.getSource() instanceof CardDisplay)) return;
             CharacteristicSnapshot sn = ((CardDisplay) e.getSource()).getCard();
-            for(CardDisplay c:cards)
-                c.setCard(sn);
+            showCard(sn);
         }
         
         @Override
         public void mouseExited(MouseEvent e) {
             if(!(e.getSource() instanceof CardDisplay)) return;
-//            for(CardDisplay c:cards)
-//                c.setCard(null);
+//            showCard(null);
         }
     }
     
