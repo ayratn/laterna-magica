@@ -7,6 +7,7 @@
 package net.slightlymagic.laterna.magica.gui.actor;
 
 
+import static java.lang.String.*;
 import net.slightlymagic.laterna.magica.Combat;
 import net.slightlymagic.laterna.magica.Combat.Attacker;
 import net.slightlymagic.laterna.magica.Combat.Blocker;
@@ -51,9 +52,10 @@ public class BlockerActor extends GuiActor {
                     return;
                 }
             } catch(IllegalArgumentException ex) {}
-            try {
+            if(attacker != null) try {
                 Blocker b = combat.getBlocker(card);
                 if(b == null) b = combat.declareBlocker(card);
+                log.debug(valueOf(b));
                 combat.assignBlocker(b, attacker);
                 return;
             } catch(IllegalArgumentException ex) {}

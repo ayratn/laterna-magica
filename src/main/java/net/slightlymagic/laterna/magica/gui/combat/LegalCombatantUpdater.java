@@ -97,11 +97,9 @@ public class LegalCombatantUpdater implements PropertyChangeListener {
     
     @Override
     public void propertyChange(PropertyChangeEvent evt) {
-        System.out.println(evt.getSource());
         if(evt.getSource() instanceof Game) updateCombatants();
         else if(evt.getSource() instanceof Combat) {
             MapEvent<?, ?> ev = (MapEvent<?, ?>) evt;
-            System.out.println(ev.getKey());
             if(ev.getKey() instanceof CardObject) treat((CardObject) ev.getKey());
         }
     }

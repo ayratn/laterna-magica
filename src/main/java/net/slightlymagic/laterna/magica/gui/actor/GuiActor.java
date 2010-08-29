@@ -22,7 +22,7 @@ import org.slf4j.LoggerFactory;
  * @author Clemens Koza
  */
 public abstract class GuiActor implements Disposable {
-    protected final Logger           log         = LoggerFactory.getLogger(GuiActor.class);
+    protected final Logger           log         = LoggerFactory.getLogger(getClass());
     
     protected final GuiMagicActor    actor;
     protected final List<Disposable> disposables = new ArrayList<Disposable>();

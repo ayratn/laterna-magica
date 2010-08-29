@@ -515,12 +515,16 @@ public class CombatImpl extends AbstractGameContent implements Combat {
     public AttackAssignment assignAttacker(Attacker attacker, Defender defender) {
         checkAction(TurnBasedAction.Type.DECLARE_ATTACKERS);
         if(!attackers.values().contains(attacker)) throw new IllegalStateException("Creature is not attacking");
+        if(!defenders.values().contains(defender)) throw new IllegalStateException("Illegal defender");
         return ((AttackerImpl) attacker).setDefender((DefenderImpl) defender);
     }
     
     public AttackerImpl getAttacker(CardObject attacker) {
-        if(!isLegalAttacker(attacker)) throw new IllegalArgumentException(valueOf(attacker));
-        return attackers.get(attacker);
+        AttackerImpl a = attackers.get(attacker);
+        //check legality only after looking up the attacker.
+        //A creature already attacking may become illegal, but still be attacking.
+        if(a == null && !isLegalAttacker(attacker)) throw new IllegalArgumentException(valueOf(attacker));
+        return a;
     }
     
     public Collection<? extends Attacker> getAttackers() {
@@ -528,6 +532,7 @@ public class CombatImpl extends AbstractGameContent implements Combat {
     }
     
     public void removeFromCombat(Attacker attacker) {
+        if(!attackers.values().contains(attacker)) throw new IllegalStateException("Creature is not attacking");
         ((AttackerImpl) attacker).setRemovedFromCombat(true);
     }
     
@@ -552,8 +557,11 @@ public class CombatImpl extends AbstractGameContent implements Combat {
     }
     
     public BlockerImpl getBlocker(CardObject blocker) {
-        if(!isLegalBlocker(blocker)) throw new IllegalArgumentException(valueOf(blocker));
-        return blockers.get(blocker);
+        BlockerImpl b = blockers.get(blocker);
+        //check legality only after looking up the blocker.
+        //A creature already blocking may become illegal, but still be blocking.
+        if(b == null && !isLegalBlocker(blocker)) throw new IllegalArgumentException(valueOf(blocker));
+        return b;
     }
     
     public Collection<? extends Blocker> getBlockers() {
@@ -569,16 +577,20 @@ public class CombatImpl extends AbstractGameContent implements Combat {
     //Defenders
     
     public PlaneswalkerDefender getDefender(CardObject defender) {
-        if(!isLegalDefendingPlaneswalker(defender)) throw new IllegalArgumentException(valueOf(defender));
         PlaneswalkerDefenderImpl d = (PlaneswalkerDefenderImpl) defenders.get(defender);
-        if(d == null) defenders.put(defender, d = new PlaneswalkerDefenderImpl(defender));
+        if(d == null) {
+            if(!isLegalDefendingPlaneswalker(defender)) throw new IllegalArgumentException(valueOf(defender));
+            defenders.put(defender, d = new PlaneswalkerDefenderImpl(defender));
+        }
         return d;
     }
     
     public PlayerDefender getDefender(Player defender) {
-        if(!isLegalDefendingPlayer(defender)) throw new IllegalArgumentException(valueOf(defender));
         PlayerDefenderImpl d = (PlayerDefenderImpl) defenders.get(defender);
-        if(d == null) defenders.put(defender, d = new PlayerDefenderImpl(defender));
+        if(d == null) {
+            if(!isLegalDefendingPlayer(defender)) throw new IllegalArgumentException(valueOf(defender));
+            defenders.put(defender, d = new PlayerDefenderImpl(defender));
+        }
         return d;
     }
     
@@ -666,7 +678,7 @@ public class CombatImpl extends AbstractGameContent implements Combat {
         blockDA.setValue((BlockerImpl) b);
     }
     
-    private <T> void check(T expected, T actual) {
+    private <T> void check(T actual, T expected) {
         if(expected == null? actual != null:!expected.equals(actual)) {
             throw new IllegalStateException("Expected: " + expected + ", actual: " + actual);
         }
@@ -692,7 +704,7 @@ public class CombatImpl extends AbstractGameContent implements Combat {
     }
     
     private void checkBlockerAssignmentBlocker(BlockerImpl b) {
-        checkAction(Type.ORDER_BLOCKERS);
+        checkAction(Type.DAMAGE_ASSIGNMENT);
         check(blockDA.getValue(), b);
     }
     

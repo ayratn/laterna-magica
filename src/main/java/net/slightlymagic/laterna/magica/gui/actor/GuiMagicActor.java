@@ -229,7 +229,8 @@ public class GuiMagicActor extends AbstractMagicActor {
             if(b.getAttackers().size() <= 1) {
                 b.setDamageAssignmentOrder(new ArrayList<Attacker>(b.getAttackers().keySet()));
             } else {
-                throw new AssertionError();
+                //TODO let the user sort attackers
+                throw new UnsupportedOperationException();
             }
         }
     }
@@ -242,7 +243,8 @@ public class GuiMagicActor extends AbstractMagicActor {
             if(a.getBlockers().size() <= 1) {
                 a.setDamageAssignmentOrder(new ArrayList<Blocker>(a.getBlockers().keySet()));
             } else {
-                throw new AssertionError();
+                //TODO let the user sort attackers
+                throw new UnsupportedOperationException();
             }
         }
     }
