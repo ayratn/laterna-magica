@@ -93,8 +93,6 @@ public class CardObjectImpl extends MagicObjectImpl implements CardObject {
                 activeCharacteristics.add(characteristics.get(0));
             break;
         }
-        
-        activeCharacteristics.add(characteristics.get(0));
     }
     
     protected void init(CardTemplate template) {

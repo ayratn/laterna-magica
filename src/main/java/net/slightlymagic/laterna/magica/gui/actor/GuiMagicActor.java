@@ -33,6 +33,13 @@ import net.slightlymagic.laterna.magica.cost.ManaCost;
 import net.slightlymagic.laterna.magica.effect.replacement.ReplaceableEvent;
 import net.slightlymagic.laterna.magica.effect.replacement.ReplacementEffect;
 import net.slightlymagic.laterna.magica.gui.Gui;
+import net.slightlymagic.laterna.magica.gui.actor.actors.ActionActor;
+import net.slightlymagic.laterna.magica.gui.actor.actors.AssignAttackerDamageActor;
+import net.slightlymagic.laterna.magica.gui.actor.actors.AssignBlockerDamageActor;
+import net.slightlymagic.laterna.magica.gui.actor.actors.AttackerActor;
+import net.slightlymagic.laterna.magica.gui.actor.actors.BlockerActor;
+import net.slightlymagic.laterna.magica.gui.actor.actors.ChooseAttackerActor;
+import net.slightlymagic.laterna.magica.gui.actor.actors.ChooseBlockerActor;
 import net.slightlymagic.laterna.magica.gui.mana.symbol.ManaSymbolChooser;
 import net.slightlymagic.laterna.magica.gui.util.ListChooser;
 import net.slightlymagic.laterna.magica.mana.Mana;
@@ -109,6 +116,7 @@ public class GuiMagicActor extends AbstractMagicActor {
         List<ManaSymbolChooser> choosers = new ArrayList<ManaSymbolChooser>(symbols.size());
         
         //TODO equivalent variable costs must have equal values
+        //Actually, variables are chosen before resolving, thus should already be fixed here
         JPanel center = new JPanel(new GridLayout(1, 0));
         for(ManaSymbol symbol:symbols) {
             ManaSymbolChooser c = new ManaSymbolChooser(symbol);
@@ -257,10 +265,7 @@ public class GuiMagicActor extends AbstractMagicActor {
             if(a.getBlockers().size() == 1 && !hasTrample(a)) return a;
         }
         
-        ListChooser<Attacker> chooser = new ListChooser<Attacker>("Choose one",
-                "Choose an attacker to assign damage", new ArrayList<Attacker>(attackers));
-        chooser.show();
-        return chooser.getSelectedValue();
+        return getValue(channels.fiber, channels.attackers, new ChooseAttackerActor(this, attackers));
     }
     
     @Override
@@ -270,8 +275,8 @@ public class GuiMagicActor extends AbstractMagicActor {
         } else if(attacker.getBlockers().size() == 1 && !hasTrample(attacker)) {
             attacker.getBlockers().values().iterator().next().setAttackerAssignedDamage(getAmmount(attacker));
         } else {
-            //TODO implement
-            throw new UnsupportedOperationException();
+            //use getValue to block until assignments are finished
+            getValue(channels.fiber, channels.actions, new AssignAttackerDamageActor(this, attacker));
         }
     }
     
@@ -282,10 +287,8 @@ public class GuiMagicActor extends AbstractMagicActor {
             //assigning damage for only one attacker is trivial
             if(b.getAttackers().size() == 1) return b;
         }
-        ListChooser<Blocker> chooser = new ListChooser<Blocker>("Choose one",
-                "Choose an attacker to assign damage", new ArrayList<Blocker>(blockers));
-        chooser.show();
-        return chooser.getSelectedValue();
+        
+        return getValue(channels.fiber, channels.blockers, new ChooseBlockerActor(this, blockers));
     }
     
     @Override
@@ -293,8 +296,8 @@ public class GuiMagicActor extends AbstractMagicActor {
         if(blocker.getAttackers().size() == 1) {
             blocker.getAttackers().values().iterator().next().setBlockerAssignedDamage(getAmmount(blocker));
         } else {
-            //TODO implement
-            throw new UnsupportedOperationException();
+            //use getValue to block until assignments are finished
+            getValue(channels.fiber, channels.actions, new AssignBlockerDamageActor(this, blocker));
         }
     }
 }

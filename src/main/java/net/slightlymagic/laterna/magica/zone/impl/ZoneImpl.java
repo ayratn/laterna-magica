@@ -44,6 +44,8 @@ public class ZoneImpl extends AbstractGameContent implements SortedZone {
     
     public ZoneImpl(Game game, Zones type, Player owner) {
         super(game);
+        if(type.isOwnedZone() && owner == null) throw new IllegalArgumentException("Owner missing");
+        if(!type.isOwnedZone() && owner != null) throw new IllegalArgumentException("Zone not owned");
         CompoundEdit e = new CompoundEdit(getGame(), true, owner == null? "Create " + type:"Create " + owner
                 + "'s " + type);
         this.type = type;

@@ -4,11 +4,13 @@
  * Created on 23.08.2010
  */
 
-package net.slightlymagic.laterna.magica.gui.actor;
+package net.slightlymagic.laterna.magica.gui.actor.actors;
 
 
 import net.slightlymagic.laterna.magica.MagicObject;
 import net.slightlymagic.laterna.magica.action.play.PlayAction;
+import net.slightlymagic.laterna.magica.gui.actor.GuiActor;
+import net.slightlymagic.laterna.magica.gui.actor.GuiMagicActor;
 import net.slightlymagic.laterna.magica.gui.util.GuiUtil;
 
 import org.jetlang.core.Callback;

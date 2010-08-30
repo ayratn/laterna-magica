@@ -12,6 +12,12 @@ import static java.util.Collections.*;
 import java.util.ArrayList;
 import java.util.List;
 
+import javax.swing.Action;
+import javax.swing.border.Border;
+
+import net.slightlymagic.laterna.magica.gui.Gui;
+import net.slightlymagic.laterna.magica.gui.card.CardPanel;
+
 import org.jetlang.core.Disposable;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -34,6 +40,10 @@ public abstract class GuiActor implements Disposable {
         this.actor = actor;
     }
     
+    public Gui getGui() {
+        return actor.getGui();
+    }
+    
     /**
      * This method should store all generated {@link Disposable}s in {@link #disposables}, so that they can
      * automatically handled in {@link #dispose()}.
@@ -48,5 +58,55 @@ public abstract class GuiActor implements Disposable {
         for(Disposable d:disposables)
             d.dispose();
         disposables.clear();
+    }
+    
+    //Utility methods
+    
+    protected Disposable setName(final String newName) {
+        return new Disposable() {
+            private String oldName;
+            
+            {
+                oldName = (String) actor.getGui().getPassPriorityAction().getValue(Action.NAME);
+                actor.getGui().getPassPriorityAction().putValue(Action.NAME, newName);
+            }
+            
+            @Override
+            public void dispose() {
+                actor.getGui().getPassPriorityAction().putValue(Action.NAME, oldName);
+            }
+        };
+    }
+    
+    protected Disposable setEnabled(final boolean newEnabled) {
+        return new Disposable() {
+            private boolean oldEnabled;
+            
+            {
+                oldEnabled = getGui().getPassPriorityAction().isEnabled();
+                getGui().getPassPriorityAction().setEnabled(newEnabled);
+            }
+            
+            @Override
+            public void dispose() {
+                getGui().getPassPriorityAction().setEnabled(oldEnabled);
+            }
+        };
+    }
+    
+    protected Disposable setBorder(final CardPanel p, final Border newBorder) {
+        return new Disposable() {
+            private Border oldBorder;
+            
+            {
+                oldBorder = p.getBorder();
+                p.setBorder(newBorder);
+            }
+            
+            @Override
+            public void dispose() {
+                p.setBorder(oldBorder);
+            }
+        };
     }
 }

@@ -80,6 +80,8 @@ public class Gui {
                                                       });
     private final JRootPane                   table   = new JRootPane();
     private final Action                      pass    = new AbstractAction("Pass Priority") {
+                                                          private static final long serialVersionUID = -5885737484288302672L;
+                                                          
                                                           @Override
                                                           public void actionPerformed(ActionEvent e) {
                                                               publishPassPriority();
@@ -104,6 +106,7 @@ public class Gui {
     }
     
     public ZonePanel getZonePanel(Zones zone) {
+        if(zone.isOwnedZone()) throw new IllegalArgumentException("Player missing");
         return zones.get(new PlayerZones(game, zone));
     }
     

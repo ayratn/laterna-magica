@@ -4,21 +4,19 @@
  * Created on 23.08.2010
  */
 
-package net.slightlymagic.laterna.magica.gui.actor;
+package net.slightlymagic.laterna.magica.gui.actor.actors;
 
 
 import static java.lang.String.*;
-
-import javax.swing.Action;
-
 import net.slightlymagic.laterna.magica.Combat;
 import net.slightlymagic.laterna.magica.Combat.Attacker;
 import net.slightlymagic.laterna.magica.Combat.Blocker;
 import net.slightlymagic.laterna.magica.MagicObject;
 import net.slightlymagic.laterna.magica.card.CardObject;
+import net.slightlymagic.laterna.magica.gui.actor.GuiActor;
+import net.slightlymagic.laterna.magica.gui.actor.GuiMagicActor;
 
 import org.jetlang.core.Callback;
-import org.jetlang.core.Disposable;
 
 
 /**
@@ -48,28 +46,13 @@ public class BlockerActor extends GuiActor {
     private void updateLabel() {
         String s;
         if(attacker == null) {
-            s = "Declare blockers - Select an attacker to block, then the blockers";
+            s = "<html><center>Declare blockers - Select an attacker to block, then the blockers<br/>"
+                    + "Click here to continue.</center></html>";
         } else {
-            s = format("<html>Declare blockers - Select an attacker to block, then the blockers.<br/>"
-                    + "Currently blocking %s<br/>" + "Click here to continue.</html>", attacker);
+            s = format("<html><center>Declare blockers - Select an attacker to block, then the blockers<br/>"
+                    + "Currently blocking %s<br/>" + "Click here to continue.</center></html>", attacker);
         }
         disposables.add(setName(s));
-    }
-    
-    private Disposable setName(final String newName) {
-        return new Disposable() {
-            private String oldName;
-            
-            {
-                oldName = (String) actor.getGui().getPassPriorityAction().getValue(Action.NAME);
-                actor.getGui().getPassPriorityAction().putValue(Action.NAME, newName);
-            }
-            
-            @Override
-            public void dispose() {
-                actor.getGui().getPassPriorityAction().putValue(Action.NAME, oldName);
-            }
-        };
     }
     
     private class CardCallback implements Callback<MagicObject> {

@@ -4,22 +4,20 @@
  * Created on 23.08.2010
  */
 
-package net.slightlymagic.laterna.magica.gui.actor;
+package net.slightlymagic.laterna.magica.gui.actor.actors;
 
 
 import static java.lang.String.*;
-
-import javax.swing.Action;
-
 import net.slightlymagic.laterna.magica.Combat;
 import net.slightlymagic.laterna.magica.Combat.Attacker;
 import net.slightlymagic.laterna.magica.Combat.Defender;
 import net.slightlymagic.laterna.magica.MagicObject;
 import net.slightlymagic.laterna.magica.card.CardObject;
+import net.slightlymagic.laterna.magica.gui.actor.GuiActor;
+import net.slightlymagic.laterna.magica.gui.actor.GuiMagicActor;
 import net.slightlymagic.laterna.magica.player.Player;
 
 import org.jetlang.core.Callback;
-import org.jetlang.core.Disposable;
 
 
 /**
@@ -53,22 +51,6 @@ public class AttackerActor extends GuiActor {
                 "<html><center>Declare attackers - Select a defender to attack, then the attackers.<br/>"
                         + "Currently attacking %s<br/>" + "Click here to continue.</center</html>", defender);
         disposables.add(setName(s));
-    }
-    
-    private Disposable setName(final String newName) {
-        return new Disposable() {
-            private String oldName;
-            
-            {
-                oldName = (String) actor.getGui().getPassPriorityAction().getValue(Action.NAME);
-                actor.getGui().getPassPriorityAction().putValue(Action.NAME, newName);
-            }
-            
-            @Override
-            public void dispose() {
-                actor.getGui().getPassPriorityAction().putValue(Action.NAME, oldName);
-            }
-        };
     }
     
     private class CardCallback implements Callback<MagicObject> {

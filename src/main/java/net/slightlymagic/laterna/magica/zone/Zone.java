@@ -37,39 +37,42 @@ public interface Zone extends GameContent {
         /**
          * {@magic.ruleRef 20100716/R407}
          */
-        ANTE,
+        ANTE(false),
         /**
          * {@magic.ruleRef 20100716/R403}
          */
-        BATTLEFIELD,
+        BATTLEFIELD(false),
         /**
          * {@magic.ruleRef 20100716/R408}
          */
-        COMMAND,
+        COMMAND(false),
         /**
          * {@magic.ruleRef 20100716/R406}
          */
-        EXILE,
+        EXILE(false),
         /**
          * {@magic.ruleRef 20100716/R404}
          */
-        GRAVEYARD,
+        GRAVEYARD(true),
         /**
          * {@magic.ruleRef 20100716/R402}
          */
-        HAND,
+        HAND(true),
         /**
          * {@magic.ruleRef 20100716/R401}
          */
-        LIBRARY,
+        LIBRARY(true),
         /**
          * {@magic.ruleRef 20100716/R405}
          */
-        STACK;
+        STACK(false);
         
-        private final String name;
+        private final String  name;
+        private final boolean owned;
         
-        private Zones() {
+        private Zones(boolean owned) {
+            this.owned = owned;
+            
             String s = super.toString().toLowerCase();
             Matcher m = Pattern.compile("(^|_)(.)").matcher(s);
             StringBuffer result = new StringBuffer();
@@ -79,6 +82,10 @@ public interface Zone extends GameContent {
             }
             m.appendTail(result);
             name = result.toString();
+        }
+        
+        public boolean isOwnedZone() {
+            return owned;
         }
         
         @Override

@@ -9,6 +9,8 @@ package net.slightlymagic.laterna.magica.gui.actor;
 
 import java.util.concurrent.Executors;
 
+import net.slightlymagic.laterna.magica.Combat.Attacker;
+import net.slightlymagic.laterna.magica.Combat.Blocker;
 import net.slightlymagic.laterna.magica.MagicObject;
 import net.slightlymagic.laterna.magica.action.play.PlayAction;
 import net.slightlymagic.laterna.magica.player.Player;
@@ -30,6 +32,16 @@ public class GuiChannels {
      * Channel for receiving {@link PlayAction}s to execute when the player has priority
      */
     public final Channel<PlayAction>  actions      = new MemoryChannel<PlayAction>();
+    
+    /**
+     * Channel for receiving {@link Attacker}s
+     */
+    public final Channel<Attacker>    attackers    = new MemoryChannel<Attacker>();
+    
+    /**
+     * Channel for receiving {@link Blocker}s
+     */
+    public final Channel<Blocker>     blockers     = new MemoryChannel<Blocker>();
     
     /**
      * Channel for publishing {@link MagicObject}s when the user clicks on them
