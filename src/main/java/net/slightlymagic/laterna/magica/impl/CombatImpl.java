@@ -816,6 +816,16 @@ public class CombatImpl extends AbstractGameContent implements Combat {
     @Override
     public void startCombatDamageStep() {
         checkAction(TurnBasedAction.Type.DAMAGE_ASSIGNMENT);
+        
+        //reset all assigned damage
+        for(AttackerImpl a:attackers.values()) {
+            a.assignment.getValue().resetAttackerAssignedDamage();
+            for(BlockAssignmentImpl b:a.getBlockers().values()) {
+                b.resetAttackerAssignedDamage();
+                b.resetBlockerAssignedDamage();
+            }
+        }
+        
         switch(firstStrike.getValue()) {
             case BEFORE:
                 /* 510.5.: If at least one attacking or blocking creature has first strike (see rule 702.7) or
@@ -978,14 +988,7 @@ public class CombatImpl extends AbstractGameContent implements Combat {
     
     @Override
     public boolean nextDamageStep() {
-        //reset all assigned damage
-        for(AttackerImpl a:attackers.values()) {
-            a.assignment.getValue().resetAttackerAssignedDamage();
-            for(BlockAssignmentImpl b:a.getBlockers().values()) {
-                b.resetAttackerAssignedDamage();
-                b.resetBlockerAssignedDamage();
-            }
-        }
+        checkAction(TurnBasedAction.Type.DAMAGE_DEALING);
         
         switch(firstStrike.getValue()) {
             case FIRST:

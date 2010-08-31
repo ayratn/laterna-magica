@@ -56,7 +56,10 @@ public class Gui implements Disposable {
     private final Map<Player, PlayerPanel>    players = new MapMaker().makeComputingMap(new Function<Player, PlayerPanel>() {
                                                           @Override
                                                           public PlayerPanel apply(Player from) {
-                                                              return new PlayerPanelImpl(Gui.this, from);
+                                                              PlayerPanel p = new PlayerPanelImpl(Gui.this, from);
+                                                              p.getButton().addActionListener(
+                                                                      new PlayerListener(from));
+                                                              return p;
                                                           }
                                                       });
     private final Map<PlayerZones, ZonePanel> zones   = new MapMaker().makeComputingMap(new Function<PlayerZones, ZonePanel>() {
@@ -195,6 +198,19 @@ public class Gui implements Disposable {
             
             for(GuiMagicActor actor:actors)
                 actor.channels.objects.publish(c);
+        }
+    }
+    
+    private final class PlayerListener implements ActionListener {
+        private final Player p;
+        
+        public PlayerListener(Player p) {
+            this.p = p;
+        }
+        
+        public void actionPerformed(ActionEvent e) {
+            for(GuiMagicActor actor:actors)
+                actor.channels.players.publish(p);
         }
     }
     

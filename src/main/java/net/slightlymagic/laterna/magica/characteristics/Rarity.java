@@ -19,6 +19,7 @@ import java.util.Map;
  */
 public enum Rarity {
     LAND('L'), COMMON('C'), UNCOMMON('U'), RARE('R'), MYTHIC('M');
+    //TODO how to represent the purple rarity from timespiral?
     
     private static final Map<Character, Rarity> rarities;
     

@@ -8,11 +8,11 @@ package net.slightlymagic.laterna.magica.gui.actor;
 
 
 import javax.swing.Action;
+import javax.swing.JComponent;
 import javax.swing.border.Border;
 
 import net.slightlymagic.laterna.magica.gui.DisposeSupport;
 import net.slightlymagic.laterna.magica.gui.Gui;
-import net.slightlymagic.laterna.magica.gui.card.CardPanel;
 
 import org.jetlang.core.Disposable;
 import org.slf4j.Logger;
@@ -87,7 +87,7 @@ public abstract class GuiActor implements Disposable {
         };
     }
     
-    protected Disposable setBorder(final CardPanel p, final Border newBorder) {
+    protected Disposable setBorder(final JComponent p, final Border newBorder) {
         return new Disposable() {
             private Border oldBorder;
             

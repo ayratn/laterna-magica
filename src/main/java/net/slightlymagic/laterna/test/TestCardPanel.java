@@ -108,14 +108,16 @@ public class TestCardPanel {
         jf.setVisible(true);
         
         g.startGame();
-        putGrizzliesIntoPlay(g);
+        putIntoPlay(g, "Trained Armodon", 2);
+        putIntoPlay(g, "Grizzly Bears", 2);
+        putIntoPlay(g, "Llanowar Elves", 2);
         
         //run in the main thread
         new GameLoop(g).run();
     }
     
-    private static void putGrizzliesIntoPlay(Game game) {
-        CardTemplate grizzly = LaternaMagica.CARDS().getCard("Grizzly Bears");
+    private static void putIntoPlay(Game game, String name, int num) {
+        CardTemplate grizzly = LaternaMagica.CARDS().getCard(name);
         List<MagicObject> grizzlies = new ArrayList<MagicObject>();
         
         for(Player p:game.getPlayers()) {
@@ -123,7 +125,7 @@ public class TestCardPanel {
             for(MagicObject o:p.getLibrary().getCards()) {
                 if(((CardObject) o).getTemplate().equals(grizzly)) {
                     grizzlies.add(o);
-                    if(++count == 3) break;
+                    if(++count == num) break;
                 }
             }
         }
@@ -173,9 +175,10 @@ public class TestCardPanel {
 //        put(d, "Island", 20);
 //        put(d, "Courier's Capsule", 12);
 //        put(d, "Arcanis the Omnipotent", 8);
-        put(d, "Llanowar Elves", 12);
         put(d, "Forest", 20);
-        put(d, "Grizzly Bears", 8);
+        put(d, "Llanowar Elves", 10);
+        put(d, "Grizzly Bears", 5);
+        put(d, "Trained Armodon", 5);
         
 
         final Game g = new GameImpl();

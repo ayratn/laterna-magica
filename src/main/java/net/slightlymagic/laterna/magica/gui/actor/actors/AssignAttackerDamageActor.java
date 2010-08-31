@@ -8,6 +8,7 @@ package net.slightlymagic.laterna.magica.gui.actor.actors;
 
 
 import static java.lang.String.*;
+import static java.util.Collections.*;
 
 import java.awt.Color;
 import java.util.ArrayList;
@@ -19,9 +20,13 @@ import java.util.Map.Entry;
 import javax.swing.BorderFactory;
 import javax.swing.border.Border;
 
+import net.slightlymagic.laterna.magica.Combat.AttackAssignment;
 import net.slightlymagic.laterna.magica.Combat.Attacker;
 import net.slightlymagic.laterna.magica.Combat.BlockAssignment;
 import net.slightlymagic.laterna.magica.Combat.Blocker;
+import net.slightlymagic.laterna.magica.Combat.Defender;
+import net.slightlymagic.laterna.magica.Combat.PlaneswalkerDefender;
+import net.slightlymagic.laterna.magica.Combat.PlayerDefender;
 import net.slightlymagic.laterna.magica.MagicObject;
 import net.slightlymagic.laterna.magica.card.CardObject;
 import net.slightlymagic.laterna.magica.gui.actor.GuiActor;
@@ -46,6 +51,7 @@ public class AssignAttackerDamageActor extends GuiActor {
     private int                              damageLeft;
     private List<CardObject>                 order;
     private Map<CardObject, BlockAssignment> assignments;
+    private Map<Object, AttackAssignment>    assignment;
     
 
     private static final Border              blocker        = BorderFactory.createLineBorder(Color.RED, 4);
@@ -63,17 +69,29 @@ public class AssignAttackerDamageActor extends GuiActor {
         assignments = new HashMap<CardObject, BlockAssignment>();
         for(BlockAssignment ass:attacker.getBlockers().values())
             assignments.put(ass.getBlocker().getBlocker(), ass);
+        
+        Defender d = attacker.getAttackerAssignment().getDefender();
+        Object key;
+        if(d instanceof PlayerDefender) key = ((PlayerDefender) d).getDefendingPlayer();
+        else if(d instanceof PlaneswalkerDefender) key = ((PlaneswalkerDefender) d).getDefendingPlaneswalker();
+        else throw new AssertionError(d);
+        assignment = singletonMap(key, attacker.getAttackerAssignment());
     }
     
     @Override
     public void start() {
         d.add(actor.channels.objects.subscribe(actor.channels.fiber, new CardCallback()));
+        d.add(actor.channels.players.subscribe(actor.channels.fiber, new PlayerCallback()));
         
         for(Entry<MagicObject, CardPanel> e:getBattlefield().entrySet()) {
             if(assignments.containsKey(e.getKey())) d.add(setBorder(e.getValue(), furtherBlocker));
+            else if(assignment.containsKey(e.getKey())) d.add(setBorder(e.getValue(), furtherBlocker));
             else d.add(setBorder(e.getValue(), other));
         }
-        //TODO handle defenders
+        Object key = assignment.keySet().iterator().next();
+        if(key instanceof Player) {
+            d.add(setBorder(getGui().getPlayerPanel((Player) key).getButton(), furtherBlocker));
+        }
         
         update();
         d.add(setEnabled(false));
@@ -91,8 +109,13 @@ public class AssignAttackerDamageActor extends GuiActor {
                 break;
             }
         }
-        if(allLethal) {
-            //TODO handle defenders
+        if(allLethal && (order.isEmpty() || CombatUtil.hasTrample(attacker))) {
+            Object key = assignment.keySet().iterator().next();
+            if(key instanceof Player) {
+                d.add(setBorder(getGui().getPlayerPanel((Player) key).getButton(), blocker));
+            } else if(key instanceof CardObject) {
+                d.add(setBorder(m.get(key), blocker));
+            } else throw new AssertionError();
         }
     }
     
@@ -114,6 +137,30 @@ public class AssignAttackerDamageActor extends GuiActor {
                 damageLeft--;
                 update();
                 if(damageLeft == 0) actor.channels.actions.publish(null);
+                return;
+            }
+            AttackAssignment a = assignment.get(c);
+            if(a != null) {
+                a.setAttackerAssignedDamage(a.getAttackerAssignedDamage() + 1);
+                damageLeft--;
+                update();
+                if(damageLeft == 0) actor.channels.actions.publish(null);
+                return;
+            }
+        }
+    }
+    
+    private class PlayerCallback implements Callback<Player> {
+        @Override
+        public void onMessage(Player p) {
+            log.debug("Received: " + p);
+            AttackAssignment a = assignment.get(p);
+            if(a != null) {
+                a.setAttackerAssignedDamage(a.getAttackerAssignedDamage() + 1);
+                damageLeft--;
+                update();
+                if(damageLeft == 0) actor.channels.actions.publish(null);
+                return;
             }
         }
     }

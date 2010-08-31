@@ -39,6 +39,7 @@ public class DamageAssignmentAction extends AbstractGameAction implements TurnBa
         List<Player> attacking = combat.getAttackingPlayers();
         List<Player> defending = combat.getDefendingPlayers();
         combat.setAction(Type.DAMAGE_ASSIGNMENT);
+        combat.startCombatDamageStep();
         
         for(Player p:attacking) {
             CompoundEdit edit = new CompoundEdit(getGame(), true, "Assign attacker damage for " + p);

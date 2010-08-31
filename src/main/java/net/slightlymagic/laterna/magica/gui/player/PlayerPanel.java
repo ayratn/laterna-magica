@@ -7,6 +7,7 @@
 package net.slightlymagic.laterna.magica.gui.player;
 
 
+import javax.swing.JButton;
 import javax.swing.JPanel;
 
 import net.slightlymagic.laterna.magica.gui.Gui;
@@ -39,4 +40,6 @@ public abstract class PlayerPanel extends JPanel implements Disposable {
     public Player getPlayer() {
         return player;
     }
+    
+    public abstract JButton getButton();
 }

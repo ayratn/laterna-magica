@@ -11,8 +11,10 @@ import java.awt.BorderLayout;
 import java.awt.GridLayout;
 
 import javax.swing.BorderFactory;
+import javax.swing.JButton;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
+import javax.swing.border.CompoundBorder;
 
 import net.slightlymagic.laterna.magica.gui.DisposeSupport;
 import net.slightlymagic.laterna.magica.gui.Gui;
@@ -31,6 +33,8 @@ public class PlayerPanelImpl extends PlayerPanel {
     private static final long      serialVersionUID = -5284446908967592513L;
     
     protected final DisposeSupport d                = new DisposeSupport();
+    
+    private JButton                button;
     
     public PlayerPanelImpl(Gui gui, Player player) {
         super(gui, player);
@@ -53,7 +57,11 @@ public class PlayerPanelImpl extends PlayerPanel {
         JLabel life = new JLabel();
         life.setFont(life.getFont().deriveFont(24f));
         d.add(new LifeTotalUpdater(life, getPlayer().getLifeTotal()));
-        add(life, BorderLayout.EAST);
+        
+        add(button = new JButton(), BorderLayout.EAST);
+        button.removeAll();
+        button.add(life);
+        button.setBorder(((CompoundBorder) button.getBorder()).getOutsideBorder());
         
         ManaPoolPanel mp = new ManaPoolPanel(getPlayer().getManaPool());
         d.add(mp);
@@ -62,5 +70,10 @@ public class PlayerPanelImpl extends PlayerPanel {
     
     public void dispose() {
         d.dispose();
+    }
+    
+    @Override
+    public JButton getButton() {
+        return button;
     }
 }

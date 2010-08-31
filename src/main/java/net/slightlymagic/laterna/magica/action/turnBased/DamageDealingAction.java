@@ -30,6 +30,10 @@ public class DamageDealingAction extends AbstractGameAction implements TurnBased
         
         combat.dealDamage();
         
+        if(combat.nextDamageStep()) {
+            //TODO add an additional damage step to the phase structure
+        }
+        
         return true;
     }
 }

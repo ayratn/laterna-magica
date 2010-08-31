@@ -379,7 +379,8 @@ public interface Combat extends BoundBean {
     //Combat Damage Step
     
     /**
-     * Initializes the Combat for the current combat damage step.
+     * Initializes the Combat for the current combat damage step. Eventually clears state from previous damage
+     * steps.
      */
     public void startCombatDamageStep();
     
@@ -409,8 +410,7 @@ public interface Combat extends BoundBean {
     public void dealDamage();
     
     /**
-     * Returns if another combat damage step should happen after this one. If so, this method will clear all
-     * assigned damage to be ready for the next step.
+     * Returns if another combat damage step should happen after this one.
      */
     public boolean nextDamageStep();
 }
