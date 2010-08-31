@@ -12,6 +12,8 @@ import java.util.Set;
 
 import net.slightlymagic.laterna.magica.Combat.Attacker;
 import net.slightlymagic.laterna.magica.Combat.Blocker;
+import net.slightlymagic.laterna.magica.action.GameAction;
+import net.slightlymagic.laterna.magica.action.play.ActivateAction;
 import net.slightlymagic.laterna.magica.action.play.PlayAction;
 import net.slightlymagic.laterna.magica.cost.ManaCost;
 import net.slightlymagic.laterna.magica.effect.replacement.ReplaceableEvent;
@@ -36,6 +38,14 @@ public class NoopActor extends AbstractMagicActor {
      * Always returns null, which means to pass priority.
      */
     public PlayAction getAction() {
+        return null;
+    }
+    
+    /**
+     * Always returns null, which means not to activate abilities.
+     */
+    @Override
+    public ActivateAction activateManaAbility(GameAction cost) {
         return null;
     }
     

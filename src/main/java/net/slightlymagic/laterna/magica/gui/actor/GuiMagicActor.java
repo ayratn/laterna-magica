@@ -26,6 +26,9 @@ import net.slightlymagic.concurrent.Parallel;
 import net.slightlymagic.laterna.magica.Combat.Attacker;
 import net.slightlymagic.laterna.magica.Combat.Blocker;
 import net.slightlymagic.laterna.magica.MagicObject;
+import net.slightlymagic.laterna.magica.action.CompoundActionImpl;
+import net.slightlymagic.laterna.magica.action.GameAction;
+import net.slightlymagic.laterna.magica.action.play.ActivateAction;
 import net.slightlymagic.laterna.magica.action.play.PlayAction;
 import net.slightlymagic.laterna.magica.characteristics.MagicColor;
 import net.slightlymagic.laterna.magica.characteristics.SuperType;
@@ -40,6 +43,7 @@ import net.slightlymagic.laterna.magica.gui.actor.actors.AttackerActor;
 import net.slightlymagic.laterna.magica.gui.actor.actors.BlockerActor;
 import net.slightlymagic.laterna.magica.gui.actor.actors.ChooseAttackerActor;
 import net.slightlymagic.laterna.magica.gui.actor.actors.ChooseBlockerActor;
+import net.slightlymagic.laterna.magica.gui.actor.actors.ManaActor;
 import net.slightlymagic.laterna.magica.gui.mana.symbol.ManaSymbolChooser;
 import net.slightlymagic.laterna.magica.gui.util.ListChooser;
 import net.slightlymagic.laterna.magica.mana.Mana;
@@ -109,6 +113,13 @@ public class GuiMagicActor extends AbstractMagicActor implements Disposable {
         return getValue(channels.fiber, channels.actions, new ActionActor(this));
     }
     
+    public ActivateAction activateManaAbility(GameAction cost) {
+        int[] amounts = getManaCost(new int[7], cost);
+        //enough mana to pay the cost
+        if(getManaToPay(amounts) != null) return null;
+        return (ActivateAction) getValue(channels.fiber, channels.actions, new ManaActor(this, amounts));
+    }
+    
     public ReplacementEffect getReplacementEffect(ReplaceableEvent event, Set<ReplacementEffect> effects) {
         ListChooser<ReplacementEffect> chooser = new ListChooser<ReplacementEffect>("Choose one",
                 "Choose a replacement effect to apply", new ArrayList<ReplacementEffect>(effects));
@@ -144,6 +155,38 @@ public class GuiMagicActor extends AbstractMagicActor implements Disposable {
         return new ManaSequenceImpl(symbols);
     }
     
+    private static int[] getManaCost(int[] amounts, GameAction cost) {
+        if(cost instanceof ManaCost) {
+            //is the cost a mana cost?
+            for(ManaSymbol sym:((ManaCost) cost).getCost().getSymbols()) {
+                switch(sym.getType()) {
+                    case COLORED:
+                        amounts[sym.getColor().ordinal()]++;
+                    break;
+                    case SNOW:
+                        amounts[5]++;
+                    break;
+                    case NUMERAL:
+                        amounts[6] += sym.getAmount();
+                    break;
+                    case HYBRID:
+                    case VARIABLE:
+                        throw new IllegalArgumentException("Cost contains hybrid or variable symbols");
+                    default:
+                        throw new AssertionError(sym.getType());
+                }
+            }
+        } else if(cost instanceof CompoundActionImpl) {
+            //does the cost contain a mana cost?
+            List<? extends GameAction> actions = ((CompoundActionImpl) cost).getActions();
+            for(GameAction action:actions)
+                getManaCost(amounts, action);
+            //otherwise...
+        }
+        
+        return amounts;
+    }
+    
     private static final Predicate<MagicObject> isSnow = card(has(SuperType.SNOW));
     
     public Set<Mana> getManaToPay(ManaCost cost) {
@@ -152,26 +195,12 @@ public class GuiMagicActor extends AbstractMagicActor implements Disposable {
         //this approach is easy but does not account for special restrictions
         
         //WUBRGSX
-        int[] amounts = new int[7];
-        for(ManaSymbol sym:cost.getCost().getSymbols()) {
-            switch(sym.getType()) {
-                case COLORED:
-                    amounts[sym.getColor().ordinal()]++;
-                break;
-                case SNOW:
-                    amounts[5]++;
-                break;
-                case NUMERAL:
-                    amounts[6] += sym.getAmount();
-                break;
-                case HYBRID:
-                case VARIABLE:
-                    throw new IllegalArgumentException("Cost contains hybrid or variable symbols");
-                default:
-                    throw new AssertionError(sym.getType());
-            }
-        }
+        int[] amounts = getManaCost(new int[7], cost);
         
+        return getManaToPay(amounts);
+    }
+    
+    public Set<Mana> getManaToPay(int[] amounts) {
         //make a source and destination set
         Set<Mana> pool = new HashSet<Mana>(getPlayer().getManaPool().getPool()), result = new HashSet<Mana>();
         
@@ -182,10 +211,10 @@ public class GuiMagicActor extends AbstractMagicActor implements Disposable {
                     pool.remove(mana);
                     result.add(mana);
                     amounts[5]--;
-                    break main;
+                    continue main;
                 }
-                continue main;
             }
+            return null;
         }
         for(int i = 0; i < 5; i++) {
             main: while(amounts[i] > 0) {
@@ -201,6 +230,14 @@ public class GuiMagicActor extends AbstractMagicActor implements Disposable {
             }
         }
         main: while(amounts[6] > 0) {
+            for(Mana mana:pool) {
+                if(mana.getColor() == null) {
+                    pool.remove(mana);
+                    result.add(mana);
+                    amounts[6]--;
+                    continue main;
+                }
+            }
             if(!pool.isEmpty()) {
                 Mana mana = pool.iterator().next();
                 pool.remove(mana);

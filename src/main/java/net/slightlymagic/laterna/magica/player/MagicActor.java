@@ -16,6 +16,8 @@ import net.slightlymagic.laterna.magica.Combat.Blocker;
 import net.slightlymagic.laterna.magica.Combat.Defender;
 import net.slightlymagic.laterna.magica.Game;
 import net.slightlymagic.laterna.magica.GameContent;
+import net.slightlymagic.laterna.magica.action.GameAction;
+import net.slightlymagic.laterna.magica.action.play.ActivateAction;
 import net.slightlymagic.laterna.magica.action.play.PlayAction;
 import net.slightlymagic.laterna.magica.card.CardObject;
 import net.slightlymagic.laterna.magica.cost.ManaCost;
@@ -44,6 +46,12 @@ public interface MagicActor extends GameContent {
      * priority.
      */
     public PlayAction getAction();
+    
+    /**
+     * Returns an action to activate a mana ability when paying a cost, or {@code null} if no more abilities should
+     * be played.
+     */
+    public ActivateAction activateManaAbility(GameAction cost);
     
     /**
      * Returns the Replacement effect chosen by the player to be applied to a {@link ReplaceableEvent}. The effect

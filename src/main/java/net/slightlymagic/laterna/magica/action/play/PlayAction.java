@@ -111,7 +111,11 @@ public abstract class PlayAction extends AbstractGameAction {
         
         //If the cost contains mana, activate mana abilities
         if(isManaCost(cost)) {
-            //TODO let activate mana abilities
+            for(;;) {
+                ActivateAction a = getController().getActor().activateManaAbility(cost);
+                if(a == null) break;
+                a.execute();
+            }
         }
         
         //Pay the cost
