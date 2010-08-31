@@ -41,16 +41,16 @@ public class AttackerActor extends GuiActor {
     public void start() {
         updateLabel();
         
-        disposables.add(actor.channels.objects.subscribe(actor.channels.fiber, new CardCallback()));
-        disposables.add(actor.channels.players.subscribe(actor.channels.fiber, new PlayerCallback()));
-        disposables.add(actor.channels.passPriority.subscribe(actor.channels.fiber, new PassPriorityCallback()));
+        d.add(actor.channels.objects.subscribe(actor.channels.fiber, new CardCallback()));
+        d.add(actor.channels.players.subscribe(actor.channels.fiber, new PlayerCallback()));
+        d.add(actor.channels.passPriority.subscribe(actor.channels.fiber, new PassPriorityCallback()));
     }
     
     private void updateLabel() {
         String s = format(
                 "<html><center>Declare attackers - Select a defender to attack, then the attackers.<br/>"
                         + "Currently attacking %s<br/>" + "Click here to continue.</center</html>", defender);
-        disposables.add(setName(s));
+        d.add(setName(s));
     }
     
     private class CardCallback implements Callback<MagicObject> {

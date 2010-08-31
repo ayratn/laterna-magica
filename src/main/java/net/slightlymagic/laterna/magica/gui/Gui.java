@@ -37,6 +37,8 @@ import net.slightlymagic.laterna.magica.player.Player;
 import net.slightlymagic.laterna.magica.zone.Zone;
 import net.slightlymagic.laterna.magica.zone.Zone.Zones;
 
+import org.jetlang.core.Disposable;
+
 import com.google.common.base.Function;
 import com.google.common.collect.MapMaker;
 
@@ -47,7 +49,7 @@ import com.google.common.collect.MapMaker;
  * @version V0.0 27.08.2010
  * @author Clemens Koza
  */
-public class Gui {
+public class Gui implements Disposable {
     private final Game                        game;
     private final List<GuiMagicActor>         actors  = new ArrayList<GuiMagicActor>();
     private final List<CardDisplay>           cards   = new ArrayList<CardDisplay>();
@@ -95,6 +97,25 @@ public class Gui {
     
     public Game getGame() {
         return game;
+    }
+    
+    /**
+     * Deletes all connections from the game to the gui, leaving the Gui and all related objects free for garbage
+     * collections.
+     */
+    public void dispose() {
+        for(GuiMagicActor a:actors)
+            a.dispose();
+        actors.clear();
+        for(CardDisplay d:cards)
+            d.dispose();
+        cards.clear();
+        for(PlayerPanel p:players.values())
+            p.dispose();
+        players.clear();
+        for(ZonePanel p:zones.values())
+            p.dispose();
+        zones.clear();
     }
     
     public PlayerPanel getPlayerPanel(Player player) {

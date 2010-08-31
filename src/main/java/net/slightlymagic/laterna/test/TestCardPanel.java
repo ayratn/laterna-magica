@@ -8,16 +8,24 @@ package net.slightlymagic.laterna.test;
 
 
 import java.awt.BorderLayout;
+import java.awt.Container;
 import java.io.IOException;
+import java.io.PrintWriter;
+import java.io.StringWriter;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
 import javax.swing.JButton;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
+import javax.swing.JPanel;
 
 import net.slightlymagic.laterna.magica.Game;
 import net.slightlymagic.laterna.magica.LaternaMagica;
+import net.slightlymagic.laterna.magica.MagicObject;
+import net.slightlymagic.laterna.magica.card.CardObject;
+import net.slightlymagic.laterna.magica.card.CardTemplate;
 import net.slightlymagic.laterna.magica.card.Printing;
 import net.slightlymagic.laterna.magica.deck.Deck;
 import net.slightlymagic.laterna.magica.deck.Deck.DeckType;
@@ -27,7 +35,6 @@ import net.slightlymagic.laterna.magica.gui.TurnProgressUpdater;
 import net.slightlymagic.laterna.magica.gui.actor.GuiMagicActor;
 import net.slightlymagic.laterna.magica.gui.card.CardDetail;
 import net.slightlymagic.laterna.magica.gui.card.CardImage;
-import net.slightlymagic.laterna.magica.gui.zone.ZonePanel;
 import net.slightlymagic.laterna.magica.impl.GameImpl;
 import net.slightlymagic.laterna.magica.impl.GameLoop;
 import net.slightlymagic.laterna.magica.player.Player;
@@ -59,60 +66,101 @@ public class TestCardPanel {
         
         JFrame jf = new JFrame();
         jf.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        jf.add(gui.getTable());
         
-        JXMultiSplitPane p = new JXMultiSplitPane(new MultiSplitLayout(createLayout()));
-        for(int i = 0; i < g.getPlayers().size(); i++) {
-            Player pl = g.getPlayers().get(i);
-            p.add(gui.getPlayerPanel(pl), "player" + i);
-            
-            p.add(gui.getZonePanel(pl, Zones.HAND), "hand" + i);
-            p.add(gui.getZonePanel(pl, Zones.BATTLEFIELD), "play" + i);
-        }
-        
-        ZonePanel z = gui.getZonePanel(Zones.STACK);
-        p.add(z, "stack");
-        
-        CardImage im = new CardImage();
-        gui.add(im);
-        p.add(im, "picture");
-        
-        CardDetail de = new CardDetail(18);
-        gui.add(de);
-        p.add(de, "detail");
+
+        JXMultiSplitPane overall = new JXMultiSplitPane(new MultiSplitLayout(getOverallLayout()));
+        JXMultiSplitPane zones = new JXMultiSplitPane(new MultiSplitLayout(getZonesLayout()));
         
         JLabel turnProgress = new JLabel();
         new TurnProgressUpdater(turnProgress, g);
         
-        jf.add(turnProgress, BorderLayout.NORTH);
-        jf.add(p);
-        jf.add(new JButton(gui.getPassPriorityAction()), BorderLayout.SOUTH);
+        Container c = gui.getTable().getContentPane();
+        c.add(turnProgress, BorderLayout.NORTH);
+        c.add(overall);
+        c.add(new JButton(gui.getPassPriorityAction()), BorderLayout.SOUTH);
         
-//        jf.pack();
+        for(int i = 0; i < g.getPlayers().size(); i++) {
+            Player pl = g.getPlayers().get(i);
+            overall.add(gui.getPlayerPanel(pl), "player" + i);
+            
+            zones.add(gui.getZonePanel(pl, Zones.HAND), "hand" + i);
+            zones.add(gui.getZonePanel(pl, Zones.BATTLEFIELD), "play" + i);
+        }
+        
+        {
+            JPanel p = new JPanel(new BorderLayout());
+            p.add(zones);
+            p.add(gui.getZonePanel(Zones.STACK), BorderLayout.EAST);
+            overall.add(p, "center");
+        }
+        
+
+        CardImage im = new CardImage();
+        gui.add(im);
+        overall.add(im, "picture");
+        
+        CardDetail de = new CardDetail(18);
+        gui.add(de);
+        overall.add(de, "detail");
+        
         jf.setSize(700, 300);
         jf.setVisible(true);
         
         g.startGame();
+        putGrizzliesIntoPlay(g);
         
         //run in the main thread
         new GameLoop(g).run();
     }
     
-    private static Node createLayout() {
-        return MultiSplitLayout.parseModel("                    "
-                + "(ROW                                         "
-                + "  (COLUMN (LEAF name=player1 weight=0.5)     "
-                + "          (LEAF name=player0 weight=0.5)     "
-                + " )(COLUMN (LEAF name=hand1   weight=0.25)    "
-                + "          (LEAF name=play1   weight=0.25)    "
-                + "          (LEAF name=play0   weight=0.25)    "
-                + "          (LEAF name=hand0   weight=0.25)    "
-                + "          weight=0.7                         "
-                + " )        (LEAF name=stack   weight=0)       "
-                + "  (COLUMN (LEAF name=picture weight=0.5)     "
-                + "          (LEAF name=detail  weight=0.5)     "
-                + "          weight=0.3                         "
-                + " )                                           "
-                + ")                                            ");
+    private static void putGrizzliesIntoPlay(Game game) {
+        CardTemplate grizzly = LaternaMagica.CARDS().getCard("Grizzly Bears");
+        List<MagicObject> grizzlies = new ArrayList<MagicObject>();
+        
+        for(Player p:game.getPlayers()) {
+            int count = 0;
+            for(MagicObject o:p.getLibrary().getCards()) {
+                if(((CardObject) o).getTemplate().equals(grizzly)) {
+                    grizzlies.add(o);
+                    if(++count == 3) break;
+                }
+            }
+        }
+        
+        for(MagicObject o:grizzlies) {
+            o.setZone(game.getBattlefield());
+            o.getCounter("summoningSickness").reset();
+        }
+    }
+    
+    private static Node getOverallLayout() {
+        StringWriter sw = new StringWriter();
+        PrintWriter w = new PrintWriter(sw);
+        w.println("(ROW");
+        w.println(" (COLUMN");
+        w.println("  (LEAF name=player1 weight=0.5)");
+        w.println("  (LEAF name=player0 weight=0.5)");
+        w.println(" )");
+        w.println("  (LEAF name=center  weight=1)");
+        w.println(" (COLUMN");
+        w.println("  (LEAF name=picture weight=0.5)");
+        w.println("  (LEAF name=detail  weight=0.5)");
+        w.println(" )");
+        w.println(")");
+        return MultiSplitLayout.parseModel(sw.toString());
+    }
+    
+    private static Node getZonesLayout() {
+        StringWriter sw = new StringWriter();
+        PrintWriter w = new PrintWriter(sw);
+        w.println("(COLUMN");
+        w.println(" (LEAF name=hand1 weight=0.25)");
+        w.println(" (LEAF name=play1 weight=0.25)");
+        w.println(" (LEAF name=play0 weight=0.25)");
+        w.println(" (LEAF name=hand0 weight=0.25)");
+        w.println(")");
+        return MultiSplitLayout.parseModel(sw.toString());
     }
     
     private static Game initGame() throws IOException {
@@ -125,8 +173,8 @@ public class TestCardPanel {
 //        put(d, "Island", 20);
 //        put(d, "Courier's Capsule", 12);
 //        put(d, "Arcanis the Omnipotent", 8);
-        put(d, "Forest", 20);
         put(d, "Llanowar Elves", 12);
+        put(d, "Forest", 20);
         put(d, "Grizzly Bears", 8);
         
 

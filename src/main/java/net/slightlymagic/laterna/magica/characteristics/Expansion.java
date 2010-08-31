@@ -24,46 +24,46 @@ import java.util.regex.Pattern;
  */
 public enum Expansion {
     //Core Sets
-    _LEA("1E", "Limited Edition Alpha"),
-    _LEB("2E", "Limited Edition Beta"),
-    _2ED("2U", "Unlimited Edition"),
-    _3ED("3E", "Revised Edition"),
-    _4ED("4E", "Fourth Edition"),
-    _5ED("5E", "Fifth Edition"),
-    _6ED("6E", "Classic Sixth Edition"),
-    _7ED("7E", "Seventh Edition"),
-    _8ED("Eighth Edition"),
-    _9ED("Ninth Edition"),
+    _LEA("A", "1E", "Limited Edition Alpha"),
+    _LEB("B", "2E", "Limited Edition Beta"),
+    _2ED("U", "2U", "Unlimited Edition"),
+    _3ED("R", "3E", "Revised Edition"),
+    _4ED(null, "4E", "Fourth Edition"),
+    _5ED(null, "5E", "Fifth Edition"),
+    _6ED(null, "6E", "Classic Sixth Edition"),
+    _7ED(null, "7E", "Seventh Edition"),
+    _8ED("8E", "Eighth Edition"),
+    _9ED("9E", "Ninth Edition"),
     _10E("Tenth Edition"),
     _M10("Magic 2010"),
     _M11("Magic 2011"),
     
     //Decks
     _EVG("Duel Decks: Elves vs. Goblins"),
-    _JVC("DD2", "Duel Decks: Jace vs. Chandra"),
-    _DVD("DDC", "Duel Decks: Divine vs. Demonic"),
-    _GVL("DDD", "Duel Decks: Garruk vs. Liliana"),
-    _PVC("DDE", "Duel Decks: Phyrexia vs. the Coalition"),
-    _PDS("H09", "Premium Deck Series: Slivers"),
+    _JVC("JVC", "DD2", "Duel Decks: Jace vs. Chandra"),
+    _DVD("DVD", "DDC", "Duel Decks: Divine vs. Demonic"),
+    _GVL(null, "DDD", "Duel Decks: Garruk vs. Liliana"),
+    _PVC(null, "DDE", "Duel Decks: Phyrexia vs. the Coalition"),
+    _PDS(null, "H09", "Premium Deck Series: Slivers"),
     
     //Box Sets
-    _BRB("BR", "Battle Royale Box Set"),
-    _BTD("BD", "Beatdown Box Set"),
+    _BRB(null, "BR", "Battle Royale Box Set"),
+    _BTD(null, "BD", "Beatdown Box Set"),
     
     //From the Vault
-    _FVD("DRB", "From the Vault: Dragons"),
-    _FVE("V09", "From the Vault: Exiled"),
+    _FVD(null, "DRB", "From the Vault: Dragons"),
+    _FVE(null, "V09", "From the Vault: Exiled"),
     
     //Special Items
-    _VAN("VAN", "Vanguard"),
+    _VAN("Vanguard"),
     _HOP("Planechase"),
-    _TBA("ARC", "Archenemy"),
+    _TBA(null, "ARC", "Archenemy"),
     
     //Promo-Sets
-    _PPR("PPR", "Promo set for Gatherer"),
+    _PPR("Promo set for Gatherer"),
     
     //Un-Sets
-    _UGL("UG", "Unglued"),
+    _UGL(null, "UG", "Unglued"),
     _UNH("Unhinged"),
     
     //Magic Online Masters Editon
@@ -72,69 +72,69 @@ public enum Expansion {
     _ME3("Masters Edition III"),
     
     //Starter Sets
-    _POR("PO", "Portal"),
-    _P02("P2", "Portal Second Age"),
-    _PTK("PK", "Portal Three Kingdoms"),
-    _S99("P3", "Starter 1999"),
-    _S00("P4", "Starter 2000"),
+    _POR("PT", "PO", "Portal"),
+    _P02(null, "P2", "Portal Second Age"),
+    _PTK("P3", "PK", "Portal Three Kingdoms"),
+    _S99("ST", "P3", "Starter 1999"),
+    _S00("S2K", "P4", "Starter 2000"),
     
-    _CHR("CH", "Chronicles"),
+    _CHR(null, "CH", "Chronicles"),
     
     //Expansion sets
     
-    _ARN("AN", "Arabian Nights"),
-    _ATQ("AQ", "Antiquities"),
-    _LEG("LE", "Legends"),
-    _DRK("DK", "The Dark"),
-    _FEM("FE", "Fallen Empires"),
+    _ARN(null, "AN", "Arabian Nights"),
+    _ATQ(null, "AQ", "Antiquities"),
+    _LEG(null, "LE", "Legends"),
+    _DRK(null, "DK", "The Dark"),
+    _FEM(null, "FE", "Fallen Empires"),
     
     //Ice Age Block
-    _ICE("IA", "Ice Age"),
-    _ALL("AL", "Alliances"),
-    _CSP("Coldsnap"),
+    _ICE(null, "IA", "Ice Age"),
+    _ALL(null, "AL", "Alliances"),
+    _CSP("CS", "Coldsnap"),
     
     //Homelands is not officially part of the ice age block
-    _HML("HM", "Homelands"),
+    _HML("HL", "HM", "Homelands"),
     
     //Mirage Block
-    _MIR("MI", "Mirage"),
-    _VIS("VI", "Visions"),
-    _WTH("WL", "Weatherlight"),
+    _MIR(null, "MI", "Mirage"),
+    _VIS(null, "VI", "Visions"),
+    _WTH(null, "WL", "Weatherlight"),
     
     //Tempest Block
-    _TMP("TE", "Tempest"),
-    _STH("ST", "Stronghold"),
-    _EXO("EX", "Exodus"),
+    _TMP(null, "TE", "Tempest"),
+    _STH("SH", "ST", "Stronghold"),
+    _EXO(null, "EX", "Exodus"),
     
     //Urza Block
-    _USG("UZ", "Urza's Saga"),
-    _ULG("GU", "Urza's Legacy"),
-    _UDS("CG", "Urza's Destiny"),
+    _USG("US", "UZ", "Urza's Saga"),
+    _ULG("UL", "GU", "Urza's Legacy"),
+    _UDS("UD", "CG", "Urza's Destiny"),
     
     //Masques Block
-    _MMQ("MM", "Mercadian Masques"),
-    _NMS("NE", "Nemesis"),
-    _PCY("PR", "Prophecy"),
+    _MMQ(null, "MM", "Mercadian Masques"),
+    _NMS(null, "NE", "Nemesis"),
+    _PCY("PY", "PR", "Prophecy"),
     
     //Invasion Block
-    _INV("IN", "Invasion"),
-    _PLS("PS", "Planeshift"),
-    _APC("AP", "Apocalypse"),
+    _INV(null, "IN", "Invasion"),
+    _PLS(null, "PS", "Planeshift"),
+    _APC(null, "AP", "Apocalypse"),
     
     //Odyssey Block
-    _ODY("OD", "Odyssey"),
-    _TOR("Torment"),
-    _JUD("Judgment"),
+    _ODY(null, "OD", "Odyssey"),
+    _TOR("TO", "Torment"),
+    _JUD("JU", "Judgment"),
     
     //Onslaught Block
-    _ONS("Onslaught"),
-    _LGN("Legions"),
-    _SCG("Scourge"),
+    _ONS("ON", "Onslaught"),
+    _LGN("LE", "Legions"),
+    _SCG("SC", "Scourge"),
     
     //Mirrodin Block
-    _MRD("Mirrodin"),
-    _DST("Darksteel"),
-    _5DN("Fifth Dawn"),
+    _MRD("MR", "Mirrodin"),
+    _DST("DS", "Darksteel"),
+    _5DN("FD", "Fifth Dawn"),
     
     //Kamigawa Block
     _CHK("Champions of Kamigawa"),
@@ -143,7 +143,7 @@ public enum Expansion {
     
     //Ravnica Block
     _RAV("Ravnica: City of Guilds"),
-    _GPT("Guildpact"),
+    _GPT("GP", "Guildpact"),
     _DIS("Dissension"),
     
     //Time Spiral Block
@@ -161,7 +161,7 @@ public enum Expansion {
     
     //Shards of Alara Block
     _ALA("Shards of Alara"),
-    _CON("Conflux"),
+    _CON("CFX", "Conflux"),
     _ARB("Alara Reborn"),
     
     //Zendikar Block
@@ -179,7 +179,7 @@ public enum Expansion {
         BufferedReader r = new BufferedReader(new InputStreamReader(
                 Expansion.class.getResourceAsStream("sets.txt")));
         try {
-            Pattern p = Pattern.compile("(.*?)\t(.*?)\t(.*)");
+            Pattern p = Pattern.compile("(.*?)\t(.*?)\t(.*?)\t(.*)");
             String s;
             while((s = r.readLine()) != null) {
                 if(s.length() > 0 && s.charAt(0) == '#') continue;
@@ -189,13 +189,31 @@ public enum Expansion {
                     continue;
                 }
                 
-                String wikipedia = m.group(2);
+                String wikipedia = m.group(3);
                 String gatherer = m.group(1);
-                String longName = m.group(3).replaceAll("\"", "\\\\\"");
-                if(wikipedia.equals("")) wikipedia = gatherer;
+                String mws = m.group(2);
+                String longName = m.group(4).replaceAll("\"", "\\\\\"");
+                if(wikipedia.equals("")) {
+                    wikipedia = gatherer;
+                    gatherer = "";
+                }
                 
-                if(gatherer.equals("")) System.out.printf("_%s(\"%s\"),%n", wikipedia, longName);
-                else System.out.printf("_%s(\"%s\", \"%s\"),%n", wikipedia, gatherer, longName);
+                switch((gatherer.equals("")? 0:1) | (mws.equals("")? 0:2)) {
+                    case 0: //!gatherer && !mws
+                        System.out.printf("_%s(\"%s\"),%n", wikipedia, longName);
+                    break;
+                    case 1: //gatherer && !mws
+                        System.out.printf("_%s(null, \"%s\", \"%s\"),%n", wikipedia, gatherer, longName);
+                    break;
+                    case 2: //!gatherer && mws
+                        System.out.printf("_%s(\"%s\", \"%s\"),%n", wikipedia, mws, longName);
+                    break;
+                    case 3: //gatherer && mws
+                        System.out.printf("_%s(\"%s\", \"%s\", \"%s\"),%n", wikipedia, mws, gatherer, longName);
+                    break;
+                    default:
+                        throw new AssertionError();
+                }
             }
         } finally {
             try {
@@ -227,20 +245,29 @@ public enum Expansion {
         return gatherer.get(gathererName);
     }
     
-    private final String shortName, gathererName, longName;
+    private final String shortName, mwsName, gathererName, longName;
     
     private Expansion(String longName) {
-        this(null, longName);
+        this(null, null, longName);
     }
     
-    private Expansion(String gathererName, String longName) {
+    private Expansion(String mwsName, String longName) {
+        this(mwsName, null, longName);
+    }
+    
+    private Expansion(String mwsName, String gathererName, String longName) {
         shortName = name().substring(1);
         this.gathererName = gathererName != null? gathererName:shortName;
+        this.mwsName = mwsName != null? mwsName:gathererName;
         this.longName = longName;
     }
     
     public String getShortName() {
         return shortName;
+    }
+    
+    public String getMwsName() {
+        return mwsName;
     }
     
     public String getGathererName() {

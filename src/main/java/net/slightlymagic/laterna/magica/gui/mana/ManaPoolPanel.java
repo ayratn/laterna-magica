@@ -17,10 +17,13 @@ import javax.swing.JPanel;
 
 import net.slightlymagic.laterna.magica.characteristics.MagicColor;
 import net.slightlymagic.laterna.magica.event.ManaPoolListener;
+import net.slightlymagic.laterna.magica.gui.DisposeSupport;
 import net.slightlymagic.laterna.magica.gui.mana.symbol.ManaSymbolLabel;
 import net.slightlymagic.laterna.magica.mana.Mana;
 import net.slightlymagic.laterna.magica.mana.ManaPool;
 import net.slightlymagic.laterna.magica.mana.impl.ManaPoolEvent;
+
+import org.jetlang.core.Disposable;
 
 
 /**
@@ -29,19 +32,25 @@ import net.slightlymagic.laterna.magica.mana.impl.ManaPoolEvent;
  * @version V0.0 14.04.2010
  * @author Clemens Koza
  */
-public class ManaPoolPanel extends JPanel {
-    private static final long serialVersionUID = -5407083116641530085L;
+public class ManaPoolPanel extends JPanel implements Disposable {
+    private static final long      serialVersionUID = -5407083116641530085L;
     
-    private ManaPool          pool;
+    protected final DisposeSupport d                = new DisposeSupport();
     
-    private JLabel[]          labels;
+    private ManaPool               pool;
+    
+    private JLabel[]               labels;
     
     public ManaPoolPanel(ManaPool pool) {
         super(null);
         this.pool = pool;
-        pool.addManaPoolListener(new Updater());
         setupComponents();
+        d.add(new Updater());
         update();
+    }
+    
+    public void dispose() {
+        d.dispose();
     }
     
     public ManaPool getPool() {
@@ -77,7 +86,16 @@ public class ManaPoolPanel extends JPanel {
     }
     
     //TODO change to PropertyChangeListener
-    private class Updater implements ManaPoolListener {
+    private class Updater implements ManaPoolListener, Disposable {
+        public Updater() {
+            //TODO use a PCL
+            pool.addManaPoolListener(this);
+        }
+        
+        public void dispose() {
+            pool.removeManaPoolListener(this);
+        }
+        
         public void ManaAdded(ManaPoolEvent ev) {
             assert ev.getPool() == getPool();
             update();

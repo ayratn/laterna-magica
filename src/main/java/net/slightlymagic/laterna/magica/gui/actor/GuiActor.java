@@ -7,14 +7,10 @@
 package net.slightlymagic.laterna.magica.gui.actor;
 
 
-import static java.util.Collections.*;
-
-import java.util.ArrayList;
-import java.util.List;
-
 import javax.swing.Action;
 import javax.swing.border.Border;
 
+import net.slightlymagic.laterna.magica.gui.DisposeSupport;
 import net.slightlymagic.laterna.magica.gui.Gui;
 import net.slightlymagic.laterna.magica.gui.card.CardPanel;
 
@@ -30,10 +26,10 @@ import org.slf4j.LoggerFactory;
  * @author Clemens Koza
  */
 public abstract class GuiActor implements Disposable {
-    protected final Logger           log         = LoggerFactory.getLogger(getClass());
+    protected final Logger         log = LoggerFactory.getLogger(getClass());
     
-    protected final GuiMagicActor    actor;
-    protected final List<Disposable> disposables = new ArrayList<Disposable>();
+    protected final GuiMagicActor  actor;
+    protected final DisposeSupport d   = new DisposeSupport();
     
     
     public GuiActor(GuiMagicActor actor) {
@@ -54,10 +50,7 @@ public abstract class GuiActor implements Disposable {
      * Disposes all disposables in reverse order
      */
     public void dispose() {
-        reverse(disposables);
-        for(Disposable d:disposables)
-            d.dispose();
-        disposables.clear();
+        d.dispose();
     }
     
     //Utility methods
@@ -101,11 +94,14 @@ public abstract class GuiActor implements Disposable {
             {
                 oldBorder = p.getBorder();
                 p.setBorder(newBorder);
+                
+                log.debug("set border: " + newBorder);
             }
             
             @Override
             public void dispose() {
                 p.setBorder(oldBorder);
+                log.debug("reset border: " + oldBorder);
             }
         };
     }

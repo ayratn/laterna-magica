@@ -14,6 +14,8 @@ import javax.swing.JLabel;
 
 import net.slightlymagic.laterna.magica.player.LifeTotal;
 
+import org.jetlang.core.Disposable;
+
 
 /**
  * The class LifeTotalUpdater.
@@ -21,7 +23,7 @@ import net.slightlymagic.laterna.magica.player.LifeTotal;
  * @version V0.0 08.04.2010
  * @author Clemens Koza
  */
-public class LifeTotalUpdater implements PropertyChangeListener {
+public class LifeTotalUpdater implements PropertyChangeListener, Disposable {
     private JLabel    label;
     private LifeTotal life;
     
@@ -30,6 +32,10 @@ public class LifeTotalUpdater implements PropertyChangeListener {
         this.life = life;
         life.addPropertyChangeListener(LifeTotal.LIFE_TOTAL, this);
         update();
+    }
+    
+    public void dispose() {
+        life.removePropertyChangeListener(LifeTotal.LIFE_TOTAL, this);
     }
     
     public void propertyChange(PropertyChangeEvent evt) {

@@ -14,6 +14,8 @@ import javax.swing.JLabel;
 
 import net.slightlymagic.laterna.magica.zone.Zone;
 
+import org.jetlang.core.Disposable;
+
 
 /**
  * The class ZoneSizeUpdater.
@@ -21,7 +23,7 @@ import net.slightlymagic.laterna.magica.zone.Zone;
  * @version V0.0 08.04.2010
  * @author Clemens Koza
  */
-public class ZoneSizeUpdater implements PropertyChangeListener {
+public class ZoneSizeUpdater implements PropertyChangeListener, Disposable {
     private JLabel l;
     private Zone   z;
     
@@ -30,6 +32,10 @@ public class ZoneSizeUpdater implements PropertyChangeListener {
         this.z = z;
         l.setText("" + z.size());
         z.addPropertyChangeListener(Zone.CARDS, this);
+    }
+    
+    public void dispose() {
+        z.removePropertyChangeListener(Zone.CARDS, this);
     }
     
     public void propertyChange(PropertyChangeEvent evt) {

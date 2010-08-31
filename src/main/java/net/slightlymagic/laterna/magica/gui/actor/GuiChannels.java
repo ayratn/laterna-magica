@@ -17,6 +17,7 @@ import net.slightlymagic.laterna.magica.player.Player;
 
 import org.jetlang.channels.Channel;
 import org.jetlang.channels.MemoryChannel;
+import org.jetlang.core.Disposable;
 import org.jetlang.fibers.Fiber;
 import org.jetlang.fibers.PoolFiberFactory;
 
@@ -27,7 +28,7 @@ import org.jetlang.fibers.PoolFiberFactory;
  * @version V0.0 23.08.2010
  * @author Clemens Koza
  */
-public class GuiChannels {
+public class GuiChannels implements Disposable {
     /**
      * Channel for receiving {@link PlayAction}s to execute when the player has priority
      */
@@ -64,9 +65,17 @@ public class GuiChannels {
      */
     public final Fiber                fiber;
     
+    private final PoolFiberFactory    f;
+    
     public GuiChannels() {
-        PoolFiberFactory f = new PoolFiberFactory(Executors.newCachedThreadPool());
+        f = new PoolFiberFactory(Executors.newCachedThreadPool());
         fiber = start(f.create());
+    }
+    
+    @Override
+    public void dispose() {
+        fiber.dispose();
+        f.dispose();
     }
     
     private Fiber start(Fiber f) {

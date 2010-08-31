@@ -439,7 +439,7 @@ public class CombatImpl extends AbstractGameContent implements Combat {
         
         @Override
         public void setBlockerAssignedDamage(int amount) {
-            checkAttackerAssignmentAttacker(getAttacker());
+            checkBlockerAssignmentBlocker(getBlocker());
             log.debug("Setting damage assignment: " + blocker + " --> " + amount);
             blockerDamage.setValue(amount <= 0? 0:amount);
         }

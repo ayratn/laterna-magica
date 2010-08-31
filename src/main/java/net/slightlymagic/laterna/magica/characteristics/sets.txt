@@ -1,151 +1,152 @@
 #Gatherer
-#	Wikipedia
-#		Long
+#	MWS
+#		Wikipedia
+#			Long
 //Core Sets
-1E	LEA	Limited Edition Alpha
-2E	LEB	Limited Edition Beta
-2U	2ED	Unlimited Edition
-3E	3ED	Revised Edition
-4E	4ED	Fourth Edition
-5E	5ED	Fifth Edition
-6E	6ED	Classic Sixth Edition
-7E	7ED	Seventh Edition
-	8ED	Eighth Edition
-	9ED	Ninth Edition
-	10E	Tenth Edition
-	M10	Magic 2010
-	M11	Magic 2011
+1E	A	LEA	Limited Edition Alpha
+2E	B	LEB	Limited Edition Beta
+2U	U	2ED	Unlimited Edition
+3E	R	3ED	Revised Edition
+4E		4ED	Fourth Edition
+5E		5ED	Fifth Edition
+6E		6ED	Classic Sixth Edition
+7E		7ED	Seventh Edition
+	8E	8ED	Eighth Edition
+	9E	9ED	Ninth Edition
+		10E	Tenth Edition
+		M10	Magic 2010
+		M11	Magic 2011
 
 //Decks
-	EVG	Duel Decks: Elves vs. Goblins
-DD2	JVC	Duel Decks: Jace vs. Chandra
-DDC	DVD	Duel Decks: Divine vs. Demonic
-DDD	GVL	Duel Decks: Garruk vs. Liliana
-DDE	PVC	Duel Decks: Phyrexia vs. the Coalition
-H09	PDS	Premium Deck Series: Slivers
+		EVG	Duel Decks: Elves vs. Goblins
+DD2	JVC	JVC	Duel Decks: Jace vs. Chandra
+DDC	DVD	DVD	Duel Decks: Divine vs. Demonic
+DDD		GVL	Duel Decks: Garruk vs. Liliana
+DDE		PVC	Duel Decks: Phyrexia vs. the Coalition
+H09		PDS	Premium Deck Series: Slivers
 
 //Box Sets
-BR	BRB	Battle Royale Box Set
-BD	BTD	Beatdown Box Set
+BR		BRB	Battle Royale Box Set
+BD		BTD	Beatdown Box Set
 
 //From the Vault
-DRB	FVD	From the Vault: Dragons
-V09	FVE	From the Vault: Exiled
+DRB		FVD	From the Vault: Dragons
+V09		FVE	From the Vault: Exiled
 
 //Special Items
-VAN		Vanguard
-	HOP	Planechase
-ARC	TBA	Archenemy
+VAN			Vanguard
+		HOP	Planechase
+ARC		TBA	Archenemy
 
 //Promo-Sets
-PPR		Promo set for Gatherer
+PPR			Promo set for Gatherer
 
 //Un-Sets
-UG	UGL	Unglued
-	UNH	Unhinged
+UG		UGL	Unglued
+		UNH	Unhinged
 
 //Magic Online Masters Editon
-	MED	Masters Edition
-	ME2	Masters Edition II
-	ME3	Masters Edition III
+		MED	Masters Edition
+		ME2	Masters Edition II
+		ME3	Masters Edition III
 
 //Starter Sets
-PO	POR	Portal
-P2	P02	Portal Second Age
-PK	PTK	Portal Three Kingdoms
-P3	S99	Starter 1999
-P4	S00	Starter 2000
+PO	PT	POR	Portal
+P2		P02	Portal Second Age
+PK	P3	PTK	Portal Three Kingdoms
+P3	ST	S99	Starter 1999
+P4	S2K	S00	Starter 2000
 
-CH	CHR	Chronicles
+CH		CHR	Chronicles
 
 //Expansion sets
 
-AN	ARN	Arabian Nights
-AQ	ATQ	Antiquities
-LE	LEG	Legends
-DK	DRK	The Dark
-FE	FEM	Fallen Empires
+AN		ARN	Arabian Nights
+AQ		ATQ	Antiquities
+LE		LEG	Legends
+DK		DRK	The Dark
+FE		FEM	Fallen Empires
 
 //Ice Age Block
-IA	ICE	Ice Age
-AL	ALL	Alliances
-	CSP	Coldsnap
-	
+IA		ICE	Ice Age
+AL		ALL	Alliances
+	CS	CSP	Coldsnap
+
 //Homelands is not officially part of the ice age block
-HM	HML	Homelands
+HM	HL	HML	Homelands
 
 //Mirage Block
-MI	MIR	Mirage
-VI	VIS	Visions
-WL	WTH	Weatherlight
+MI		MIR	Mirage
+VI		VIS	Visions
+WL		WTH	Weatherlight
 
 //Tempest Block
-TE	TMP	Tempest
-ST	STH	Stronghold
-EX	EXO	Exodus
+TE		TMP	Tempest
+ST	SH	STH	Stronghold
+EX		EXO	Exodus
 
 //Urza Block
-UZ	USG	Urza's Saga
-GU	ULG	Urza's Legacy
-CG	UDS	Urza's Destiny
+UZ	US	USG	Urza's Saga
+GU	UL	ULG	Urza's Legacy
+CG	UD	UDS	Urza's Destiny
 
 //Masques Block
-MM	MMQ	Mercadian Masques
-NE	NMS	Nemesis
-PR	PCY	Prophecy
+MM		MMQ	Mercadian Masques
+NE		NMS	Nemesis
+PR	PY	PCY	Prophecy
 
 //Invasion Block
-IN	INV	Invasion
-PS	PLS	Planeshift
-AP	APC	Apocalypse
+IN		INV	Invasion
+PS		PLS	Planeshift
+AP		APC	Apocalypse
 
 //Odyssey Block
-OD	ODY	Odyssey
-	TOR	Torment
-	JUD	Judgment
+OD		ODY	Odyssey
+	TO	TOR	Torment
+	JU	JUD	Judgment
 
 //Onslaught Block
-	ONS	Onslaught
-	LGN	Legions
-	SCG	Scourge
+	ON	ONS	Onslaught
+	LE	LGN	Legions
+	SC	SCG	Scourge
 
 //Mirrodin Block
-	MRD	Mirrodin
-	DST	Darksteel
-	5DN	Fifth Dawn
+	MR	MRD	Mirrodin
+	DS	DST	Darksteel
+	FD	5DN	Fifth Dawn
 
 //Kamigawa Block
-	CHK	Champions of Kamigawa
-	BOK	Betrayers of Kamigawa
-	SOK	Saviors of Kamigawa
+		CHK	Champions of Kamigawa
+		BOK	Betrayers of Kamigawa
+		SOK	Saviors of Kamigawa
 
 //Ravnica Block
-	RAV	Ravnica: City of Guilds
-	GPT	Guildpact
-	DIS	Dissension
+		RAV	Ravnica: City of Guilds
+	GP	GPT	Guildpact
+		DIS	Dissension
 
 //Time Spiral Block
-	TSP	Time Spiral
-	TSB	Time Spiral "Timeshifted"
-	PLC	Planar Chaos
-	FUT	Future Sight
+		TSP	Time Spiral
+		TSB	Time Spiral "Timeshifted"
+		PLC	Planar Chaos
+		FUT	Future Sight
 
 //Lorwyn Block
-	LRW	Lorwyn
-	MOR	Morningtide
+		LRW	Lorwyn
+		MOR	Morningtide
 //Shadowmoor Block
-	SHM	Shadowmoor
-	EVE	Eventide
+		SHM	Shadowmoor
+		EVE	Eventide
 
 //Shards of Alara Block
-	ALA	Shards of Alara
-	CON	Conflux
-	ARB	Alara Reborn
+		ALA	Shards of Alara
+	CFX	CON	Conflux
+		ARB	Alara Reborn
 
 //Zendikar Block
-	ZEN	Zendikar
-	WWK	Worldwake
-	ROE	Rise of the Eldrazi
+		ZEN	Zendikar
+		WWK	Worldwake
+		ROE	Rise of the Eldrazi
 
 //Scars of Mirrodin
-	SOM	Scars of Mirrodin
+		SOM	Scars of Mirrodin

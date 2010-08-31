@@ -51,6 +51,7 @@ import net.slightlymagic.laterna.magica.player.impl.AbstractMagicActor;
 import net.slightlymagic.laterna.magica.turnStructure.PhaseStructure.Step;
 
 import org.jetlang.channels.Channel;
+import org.jetlang.core.Disposable;
 import org.jetlang.fibers.Fiber;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -64,7 +65,7 @@ import com.google.common.base.Predicate;
  * @version V0.0 10.04.2010
  * @author Clemens Koza
  */
-public class GuiMagicActor extends AbstractMagicActor {
+public class GuiMagicActor extends AbstractMagicActor implements Disposable {
     private static final Logger log      = LoggerFactory.getLogger(GuiMagicActor.class);
     
     public final GuiChannels    channels = new GuiChannels();
@@ -79,6 +80,11 @@ public class GuiMagicActor extends AbstractMagicActor {
     
     public Gui getGui() {
         return gui;
+    }
+    
+    @Override
+    public void dispose() {
+        channels.dispose();
     }
     
     private static <T> T getValue(Fiber f, Channel<T> ch, GuiActor a) {

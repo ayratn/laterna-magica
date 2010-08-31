@@ -12,6 +12,8 @@ import javax.swing.JPanel;
 import net.slightlymagic.laterna.magica.gui.Gui;
 import net.slightlymagic.laterna.magica.player.Player;
 
+import org.jetlang.core.Disposable;
+
 
 /**
  * The class PlayerPanel.
@@ -19,7 +21,7 @@ import net.slightlymagic.laterna.magica.player.Player;
  * @version V0.0 27.08.2010
  * @author Clemens Koza
  */
-public class PlayerPanel extends JPanel {
+public abstract class PlayerPanel extends JPanel implements Disposable {
     private static final long serialVersionUID = 4749888553786730209L;
     
     private final Gui         gui;

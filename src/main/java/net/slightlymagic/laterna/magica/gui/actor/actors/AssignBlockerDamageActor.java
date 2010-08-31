@@ -27,8 +27,9 @@ import net.slightlymagic.laterna.magica.card.CardObject;
 import net.slightlymagic.laterna.magica.gui.actor.GuiActor;
 import net.slightlymagic.laterna.magica.gui.actor.GuiMagicActor;
 import net.slightlymagic.laterna.magica.gui.card.CardPanel;
-import net.slightlymagic.laterna.magica.gui.zone.ZonePanelImpl;
+import net.slightlymagic.laterna.magica.gui.zone.ZoneCardsPanel;
 import net.slightlymagic.laterna.magica.impl.CombatUtil;
+import net.slightlymagic.laterna.magica.player.Player;
 import net.slightlymagic.laterna.magica.zone.Zone.Zones;
 
 import org.jetlang.core.Callback;
@@ -65,31 +66,32 @@ public class AssignBlockerDamageActor extends GuiActor {
     
     @Override
     public void start() {
-        disposables.add(actor.channels.objects.subscribe(actor.channels.fiber, new CardCallback()));
+        d.add(actor.channels.objects.subscribe(actor.channels.fiber, new CardCallback()));
         
-        disposables.add(setEnabled(false));
-        if(getGui().getZonePanel(Zones.BATTLEFIELD) instanceof ZonePanelImpl) {
-            ZonePanelImpl p = (ZonePanelImpl) getGui().getZonePanel(Zones.BATTLEFIELD);
-            
-            for(Entry<MagicObject, CardPanel> e:p.getShownCards().entrySet()) {
-                if(assignments.containsKey(e.getKey())) disposables.add(setBorder(e.getValue(), furtherAttacker));
-                else disposables.add(setBorder(e.getValue(), other));
-            }
+        for(Entry<MagicObject, CardPanel> e:getBattlefield().entrySet()) {
+            if(assignments.containsKey(e.getKey())) d.add(setBorder(e.getValue(), furtherAttacker));
+            else d.add(setBorder(e.getValue(), other));
         }
         update();
+        d.add(setEnabled(false));
     }
     
     private void update() {
-        disposables.add(setName(format("<html><center>Assign %s's damage to attackers<br/>"
+        d.add(setName(format("<html><center>Assign %s's damage to attackers<br/>"
                 + "%d damage left</center></html>", blocker, damageLeft)));
-        if(getGui().getZonePanel(Zones.BATTLEFIELD) instanceof ZonePanelImpl) {
-            ZonePanelImpl p = (ZonePanelImpl) getGui().getZonePanel(Zones.BATTLEFIELD);
-            Map<MagicObject, CardPanel> m = p.getShownCards();
-            for(CardObject c:order) {
-                m.get(c).setBorder(attacker);
-                if(!CombatUtil.isLethal(assignments.get(c).getBlocker())) break;
-            }
+        Map<MagicObject, CardPanel> m = getBattlefield();
+        for(CardObject c:order) {
+            m.get(c).setBorder(attacker);
+            if(!CombatUtil.isLethal(assignments.get(c).getBlocker())) break;
         }
+    }
+    
+    private Map<MagicObject, CardPanel> getBattlefield() {
+        Map<MagicObject, CardPanel> cards = new HashMap<MagicObject, CardPanel>();
+        for(Player p:getGui().getGame().getPlayers())
+            if(getGui().getZonePanel(p, Zones.BATTLEFIELD) instanceof ZoneCardsPanel) cards.putAll(((ZoneCardsPanel) getGui().getZonePanel(
+                    p, Zones.BATTLEFIELD)).getShownCards());
+        return cards;
     }
     
     private class CardCallback implements Callback<MagicObject> {
@@ -100,6 +102,7 @@ public class AssignBlockerDamageActor extends GuiActor {
             if(b != null) {
                 b.setBlockerAssignedDamage(b.getBlockerAssignedDamage() + 1);
                 damageLeft--;
+                update();
                 if(damageLeft == 0) actor.channels.actions.publish(null);
             }
         }

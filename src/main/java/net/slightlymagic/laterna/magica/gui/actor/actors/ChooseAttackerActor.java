@@ -22,7 +22,7 @@ import net.slightlymagic.laterna.magica.card.CardObject;
 import net.slightlymagic.laterna.magica.gui.actor.GuiActor;
 import net.slightlymagic.laterna.magica.gui.actor.GuiMagicActor;
 import net.slightlymagic.laterna.magica.gui.card.CardPanel;
-import net.slightlymagic.laterna.magica.gui.zone.ZonePanelImpl;
+import net.slightlymagic.laterna.magica.gui.zone.ZoneCardsPanel;
 import net.slightlymagic.laterna.magica.zone.Zone.Zones;
 
 import org.jetlang.core.Callback;
@@ -49,16 +49,16 @@ public class ChooseAttackerActor extends GuiActor {
     
     @Override
     public void start() {
-        disposables.add(actor.channels.objects.subscribe(actor.channels.fiber, new CardCallback()));
+        d.add(actor.channels.objects.subscribe(actor.channels.fiber, new CardCallback()));
         
-        disposables.add(setName("Choose attacker to assign damage for"));
-        disposables.add(setEnabled(false));
-        if(getGui().getZonePanel(Zones.BATTLEFIELD) instanceof ZonePanelImpl) {
-            ZonePanelImpl p = (ZonePanelImpl) getGui().getZonePanel(Zones.BATTLEFIELD);
+        d.add(setName("Choose attacker to assign damage for"));
+        d.add(setEnabled(false));
+        if(getGui().getZonePanel(Zones.BATTLEFIELD) instanceof ZoneCardsPanel) {
+            ZoneCardsPanel p = (ZoneCardsPanel) getGui().getZonePanel(Zones.BATTLEFIELD);
             
             for(Entry<MagicObject, CardPanel> e:p.getShownCards().entrySet()) {
-                if(choices.containsKey(e.getKey())) disposables.add(setBorder(e.getValue(), attacker));
-                else disposables.add(setBorder(e.getValue(), other));
+                if(choices.containsKey(e.getKey())) d.add(setBorder(e.getValue(), attacker));
+                else d.add(setBorder(e.getValue(), other));
             }
         }
     }

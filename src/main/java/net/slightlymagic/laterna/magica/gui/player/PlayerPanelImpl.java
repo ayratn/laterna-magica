@@ -14,6 +14,7 @@ import javax.swing.BorderFactory;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 
+import net.slightlymagic.laterna.magica.gui.DisposeSupport;
 import net.slightlymagic.laterna.magica.gui.Gui;
 import net.slightlymagic.laterna.magica.gui.mana.ManaPoolPanel;
 import net.slightlymagic.laterna.magica.player.Player;
@@ -27,7 +28,9 @@ import net.slightlymagic.laterna.magica.zone.Zone.Zones;
  * @author Clemens Koza
  */
 public class PlayerPanelImpl extends PlayerPanel {
-    private static final long serialVersionUID = -5284446908967592513L;
+    private static final long      serialVersionUID = -5284446908967592513L;
+    
+    protected final DisposeSupport d                = new DisposeSupport();
     
     public PlayerPanelImpl(Gui gui, Player player) {
         super(gui, player);
@@ -49,9 +52,15 @@ public class PlayerPanelImpl extends PlayerPanel {
         add(zones);
         JLabel life = new JLabel();
         life.setFont(life.getFont().deriveFont(24f));
-        new LifeTotalUpdater(life, getPlayer().getLifeTotal());
+        d.add(new LifeTotalUpdater(life, getPlayer().getLifeTotal()));
         add(life, BorderLayout.EAST);
         
-        add(new ManaPoolPanel(getPlayer().getManaPool()), BorderLayout.SOUTH);
+        ManaPoolPanel mp = new ManaPoolPanel(getPlayer().getManaPool());
+        d.add(mp);
+        add(mp, BorderLayout.SOUTH);
+    }
+    
+    public void dispose() {
+        d.dispose();
     }
 }

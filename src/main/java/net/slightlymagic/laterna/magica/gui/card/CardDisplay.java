@@ -11,6 +11,8 @@ import java.util.Observable;
 
 import net.slightlymagic.laterna.magica.characteristic.CharacteristicSnapshot;
 
+import org.jetlang.core.Disposable;
+
 
 /**
  * The class CardDisplay. A card display shows information from a {@link CharacteristicSnapshot} and will therefore
@@ -19,7 +21,7 @@ import net.slightlymagic.laterna.magica.characteristic.CharacteristicSnapshot;
  * @version V0.0 02.04.2010
  * @author Clemens Koza
  */
-public interface CardDisplay {
+public interface CardDisplay extends Disposable {
     /**
      * This method is optional. That is, it may throw an {@link UnsupportedOperationException}.
      */

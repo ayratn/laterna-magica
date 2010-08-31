@@ -56,6 +56,10 @@ public class CardTextButton extends CardPanel {
         setCard(c);
     }
     
+    public void dispose() {
+        setCard(null);
+    }
+    
     protected void fireActionPerformed() {
         // Guaranteed to return a non-null array
         Object[] listeners = listenerList.getListenerList();

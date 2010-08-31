@@ -17,7 +17,9 @@ import java.awt.FlowLayout;
 import java.beans.IndexedPropertyChangeEvent;
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 import javax.swing.BorderFactory;
@@ -26,6 +28,7 @@ import javax.swing.JComponent;
 import javax.swing.JPanel;
 
 import net.slightlymagic.laterna.magica.MagicObject;
+import net.slightlymagic.laterna.magica.gui.DisposeSupport;
 import net.slightlymagic.laterna.magica.gui.Gui;
 import net.slightlymagic.laterna.magica.gui.card.CardPanel;
 import net.slightlymagic.laterna.magica.player.Player;
@@ -35,6 +38,7 @@ import net.slightlymagic.laterna.magica.zone.Zone.Zones;
 
 import org.jdesktop.swingx.JXCollapsiblePane;
 import org.jdesktop.swingx.JXCollapsiblePane.Direction;
+import org.jetlang.core.Disposable;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -45,13 +49,15 @@ import org.slf4j.LoggerFactory;
  * @version V0.0 27.08.2010
  * @author Clemens Koza
  */
-public class ZonePanelImpl extends ZonePanel {
-    private static final long   serialVersionUID = -7801923077230254195L;
+public class ZonePanelImpl extends ZonePanel implements ZoneCardsPanel {
+    private static final long      serialVersionUID = -7801923077230254195L;
     
-    private static final Logger log              = LoggerFactory.getLogger(ZonePanelImpl.class);
+    private static final Logger    log              = LoggerFactory.getLogger(ZonePanelImpl.class);
+    
+    protected final DisposeSupport d                = new DisposeSupport();
     
     //if not null, only consider cards for which the player is "you"
-    private Player              you;
+    private Player                 you;
     private Map<MagicObject, CardPanel> cards, cardsView;
     
     protected Container                 pane;
@@ -82,20 +88,20 @@ public class ZonePanelImpl extends ZonePanel {
             this.pane = pane.getContentPane();
             this.pane.setLayout(new BoxLayout(this.pane, BoxLayout.Y_AXIS));
             //automatically expand/collapse the pane
-            zone.addPropertyChangeListener("cards", new PropertyChangeListener() {
-                public void propertyChange(PropertyChangeEvent evt) {
-                    pane.setCollapsed(getZone().isEmpty());
-                }
-            });
+            d.add(new CollapseListener(pane));
         }
         
 
         cards = new HashMap<MagicObject, CardPanel>();
         cardsView = unmodifiableMap(cards);
-        zone.addPropertyChangeListener("cards", l = new MoveCard());
+        d.add(l = new MoveCard());
         for(MagicObject o:zone.getCards()) {
             addCard(o);
         }
+    }
+    
+    public void dispose() {
+        d.dispose();
     }
     
     public Map<MagicObject, CardPanel> getShownCards() {
@@ -117,7 +123,7 @@ public class ZonePanelImpl extends ZonePanel {
      */
     protected void addCard(MagicObject card, int index) {
         if(you != null) {
-            card.addPropertyChangeListener(MagicObject.CONTROLLER, l);
+            l.add(card);
         }
         //this means the card should not be visible
         if(!shouldShowCard(card)) return;
@@ -131,7 +137,7 @@ public class ZonePanelImpl extends ZonePanel {
      */
     protected void removeCard(MagicObject card) {
         if(you != null) {
-            card.removePropertyChangeListener(MagicObject.CONTROLLER, l);
+            l.remove(card);
         }
         //this means the card should not be visible
         if(!shouldShowCard(card)) return;
@@ -158,7 +164,48 @@ public class ZonePanelImpl extends ZonePanel {
         pane.remove(c);
     }
     
-    private class MoveCard implements PropertyChangeListener {
+    private final class CollapseListener implements PropertyChangeListener, Disposable {
+        private final JXCollapsiblePane pane;
+        
+        private CollapseListener(JXCollapsiblePane pane) {
+            this.pane = pane;
+            getZone().addPropertyChangeListener("cards", this);
+        }
+        
+        @Override
+        public void dispose() {
+            getZone().removePropertyChangeListener("cards", this);
+        }
+        
+        public void propertyChange(PropertyChangeEvent evt) {
+            pane.setCollapsed(getZone().isEmpty());
+        }
+    }
+    
+    private final class MoveCard implements PropertyChangeListener, Disposable {
+        private List<MagicObject> l = new ArrayList<MagicObject>();
+        
+        public MoveCard() {
+            getZone().addPropertyChangeListener("cards", this);
+        }
+        
+        public void add(MagicObject card) {
+            l.add(card);
+            card.addPropertyChangeListener(MagicObject.CONTROLLER, this);
+        }
+        
+        public void remove(MagicObject card) {
+            l.remove(card);
+            card.removePropertyChangeListener(MagicObject.CONTROLLER, this);
+        }
+        
+        public void dispose() {
+            getZone().removePropertyChangeListener("cards", this);
+            for(MagicObject card:l)
+                card.removePropertyChangeListener(MagicObject.CONTROLLER, this);
+            l.clear();
+        }
+        
         public void propertyChange(PropertyChangeEvent evt) {
             if(evt.getSource() == getZone() && Zone.CARDS.equals(evt.getPropertyName())) {
                 log.debug(getZone()

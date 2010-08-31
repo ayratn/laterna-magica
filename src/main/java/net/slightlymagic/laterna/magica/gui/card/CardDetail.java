@@ -82,6 +82,10 @@ public class CardDetail extends CardPanel {
         setCard(c);
     }
     
+    public void dispose() {
+        setCard(null);
+    }
+    
     public void setUntappedDimension(int width, int height) {
         untapped = new Dimension(width, height);
         setTapped(isTapped);

@@ -24,7 +24,7 @@ import net.slightlymagic.laterna.magica.MagicObject;
 import net.slightlymagic.laterna.magica.card.CardObject;
 import net.slightlymagic.laterna.magica.gui.Gui;
 import net.slightlymagic.laterna.magica.gui.card.CardPanel;
-import net.slightlymagic.laterna.magica.gui.zone.ZonePanelImpl;
+import net.slightlymagic.laterna.magica.gui.zone.ZoneCardsPanel;
 import net.slightlymagic.laterna.magica.player.Player;
 import net.slightlymagic.laterna.magica.zone.Zone.Zones;
 
@@ -66,17 +66,17 @@ public class LegalCombatantUpdater implements PropertyChangeListener {
     }
     
     private void treat(Player pl) {
-        if(!(getGui().getZonePanel(pl, Zones.BATTLEFIELD) instanceof ZonePanelImpl)) return;
+        if(!(getGui().getZonePanel(pl, Zones.BATTLEFIELD) instanceof ZoneCardsPanel)) return;
         
-        ZonePanelImpl z = (ZonePanelImpl) getGui().getZonePanel(pl, Zones.BATTLEFIELD);
+        ZoneCardsPanel z = (ZoneCardsPanel) getGui().getZonePanel(pl, Zones.BATTLEFIELD);
         for(Entry<MagicObject, CardPanel> e:z.getShownCards().entrySet()) {
             treat((CardObject) e.getKey());
         }
     }
     
     private void treat(CardObject c) {
-        if(!(getGui().getZonePanel(c.getController(), Zones.BATTLEFIELD) instanceof ZonePanelImpl)) return;
-        ZonePanelImpl z = (ZonePanelImpl) getGui().getZonePanel(c.getController(), Zones.BATTLEFIELD);
+        if(!(getGui().getZonePanel(c.getController(), Zones.BATTLEFIELD) instanceof ZoneCardsPanel)) return;
+        ZoneCardsPanel z = (ZoneCardsPanel) getGui().getZonePanel(c.getController(), Zones.BATTLEFIELD);
         
         CardPanel p = z.getShownCards().get(c);
         

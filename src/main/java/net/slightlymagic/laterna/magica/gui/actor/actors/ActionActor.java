@@ -29,8 +29,8 @@ public class ActionActor extends GuiActor {
     
     @Override
     public void start() {
-        disposables.add(actor.channels.objects.subscribe(actor.channels.fiber, new CardCallback()));
-        disposables.add(actor.channels.passPriority.subscribe(actor.channels.fiber, new PassPriorityCallback()));
+        d.add(actor.channels.objects.subscribe(actor.channels.fiber, new CardCallback()));
+        d.add(actor.channels.passPriority.subscribe(actor.channels.fiber, new PassPriorityCallback()));
     }
     
     private class CardCallback implements Callback<MagicObject> {

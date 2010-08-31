@@ -179,7 +179,8 @@ public class DownloadJob extends AbstractLaternaBean {
             @Override
             public OutputStream open() throws IOException {
                 File parent = file.getAbsoluteFile().getParentFile();
-                if(!parent.exists() && !parent.mkdirs()) throw new IOException(parent
+                //Trying to create the directory before checking it exists makes it threadsafe
+                if(!parent.mkdirs() && !parent.exists()) throw new IOException(parent
                         + ": directory could not be created");
                 return new FileOutputStream(file);
             }

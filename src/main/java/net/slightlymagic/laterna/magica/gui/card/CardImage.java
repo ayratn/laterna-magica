@@ -37,6 +37,10 @@ public class CardImage extends CardPanel implements Observer {
         setCard(null);
     }
     
+    public void dispose() {
+        setCard(null);
+    }
+    
     public void setCard(CharacteristicSnapshot c) {
         if(this.c != null) this.c.deleteObserver(this);
         this.c = c;

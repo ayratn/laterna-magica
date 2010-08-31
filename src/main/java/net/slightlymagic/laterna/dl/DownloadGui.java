@@ -54,7 +54,7 @@ public class DownloadGui extends JPanel {
         
         final DownloadGui g = new DownloadGui(new Downloader());
         Iterable<DownloadJob> it = Iterables.concat(new GathererSymbols(), new GathererCardBack(),
-                new GathererCards());
+                new GathererCards()/* TODO , new ChutographyCardsHQ()*/);
         
         for(DownloadJob job:it)
             g.getDownloader().add(job);

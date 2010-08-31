@@ -39,8 +39,8 @@ public class BlockerActor extends GuiActor {
     public void start() {
         updateLabel();
         
-        disposables.add(actor.channels.objects.subscribe(actor.channels.fiber, new CardCallback()));
-        disposables.add(actor.channels.passPriority.subscribe(actor.channels.fiber, new PassPriorityCallback()));
+        d.add(actor.channels.objects.subscribe(actor.channels.fiber, new CardCallback()));
+        d.add(actor.channels.passPriority.subscribe(actor.channels.fiber, new PassPriorityCallback()));
     }
     
     private void updateLabel() {
@@ -52,7 +52,7 @@ public class BlockerActor extends GuiActor {
             s = format("<html><center>Declare blockers - Select an attacker to block, then the blockers<br/>"
                     + "Currently blocking %s<br/>" + "Click here to continue.</center></html>", attacker);
         }
-        disposables.add(setName(s));
+        d.add(setName(s));
     }
     
     private class CardCallback implements Callback<MagicObject> {
