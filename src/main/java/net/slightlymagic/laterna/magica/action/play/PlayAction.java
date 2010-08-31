@@ -114,6 +114,7 @@ public abstract class PlayAction extends AbstractGameAction {
             for(;;) {
                 ActivateAction a = getController().getActor().activateManaAbility(cost);
                 if(a == null) break;
+                if(!a.getObject().getAbility().isManaAbility()) continue;
                 a.execute();
             }
         }
