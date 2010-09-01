@@ -8,6 +8,7 @@ package net.slightlymagic.laterna.magica.player;
 
 
 import java.util.Iterator;
+import java.util.List;
 
 import net.slightlymagic.laterna.magica.GameContent;
 import net.slightlymagic.laterna.magica.counter.Counter;
@@ -26,6 +27,14 @@ import net.slightlymagic.laterna.magica.zone.Zone.Zones;
  * @author Clemens Koza
  */
 public interface Player extends GameContent {
+    /**
+     * The status of a player. When a player leaves the game, it is changed to one of {@link #LOST}, {@link #DRAWN}
+     * or {@link #WON}.
+     */
+    public static enum Status {
+        IN_GAME, LOST, DRAWN, WON;
+    }
+    
     /**
      * The {@code deck} property name
      */
@@ -87,9 +96,16 @@ public interface Player extends GameContent {
     public SortedZone getLibrary();
     
     /**
+     * Returns this player's opponents. Note that the meaning of this method depends on teams and range of
+     * influence.
+     */
+    public List<Player> getOpponents();
+    
+    /**
      * Returns a counter for the given name. Creates one if there's no such counter.
      */
     public Counter getCounter(String name);
+    
     
     /**
      * Draws a single card. Note that the return value does not necessarily mean if a card was put from library to
@@ -101,6 +117,14 @@ public interface Player extends GameContent {
      * Draws a number of cards. This is the same as repeatedly drawing a single card.
      */
     public void drawCards(int count);
+    
+    /**
+     * Returns the player's status. A player whose status is not {@link Status#IN_GAME} has left the game, and with
+     * him all cards, spells, abilities etc. he owns.
+     */
+    public Status getPlayerStatus();
+    
+    public boolean isInGame();
     
     /**
      * Lets the player win this game. In a multiplayer game with limited range of influence, this instead causes

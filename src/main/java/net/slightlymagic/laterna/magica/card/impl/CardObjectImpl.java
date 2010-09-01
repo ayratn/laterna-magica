@@ -191,7 +191,8 @@ public class CardObjectImpl extends MagicObjectImpl implements CardObject {
     
     private class MoveCard implements MoveCardListener.Internal {
         public void cardMoved(MoveCardEvent ev) {
-            state = ev.getTo().getType() == Zones.BATTLEFIELD? new StateImpl(CardObjectImpl.this):null;
+            state = ev.getTo() != null && ev.getTo().getType() == Zones.BATTLEFIELD? new StateImpl(
+                    CardObjectImpl.this):null;
         }
     }
 }

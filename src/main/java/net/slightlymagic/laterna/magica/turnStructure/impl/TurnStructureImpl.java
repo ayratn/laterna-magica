@@ -87,7 +87,8 @@ public class TurnStructureImpl extends AbstractGameContent implements TurnStruct
                 activePlayer.setValue(getGame().getPlayers().get(regularPlayer.getValue()));
             }
             //check skipped turns; move on if the new turn should be skipped
-        } while(skippedTurns.remove(activePlayer.getValue()));
+            //or if the player determined to be next has left the game
+        } while(skippedTurns.remove(activePlayer.getValue()) || !activePlayer.getValue().isInGame());
         
         Player newActive = getActivePlayer();
         fireNextActive(oldActive, newActive);

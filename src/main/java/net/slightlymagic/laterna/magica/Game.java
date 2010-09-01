@@ -90,11 +90,19 @@ public interface Game extends BoundBean {
     
     /**
      * <p>
-     * Returns the list of players in the game, in the normal order of their turns. The beginning player comes
-     * first.
+     * Returns the list of players, in the normal order of their turns. The beginning player comes first. After the
+     * game has started, this list must not be changed.
      * </p>
      */
     public List<Player> getPlayers();
+    
+    /**
+     * <p>
+     * Returns the list of players still in the game, in the normal order of their turns. The beginning player
+     * comes first.
+     * </p>
+     */
+    public List<Player> getPlayersInGame();
     
     /**
      * <p>

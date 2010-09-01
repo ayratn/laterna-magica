@@ -11,6 +11,7 @@ import static net.slightlymagic.laterna.magica.zone.Zone.Zones.*;
 
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
+import java.util.ArrayList;
 import java.util.EnumMap;
 import java.util.Iterator;
 import java.util.List;
@@ -123,6 +124,14 @@ public class GameImpl extends AbstractEditableBean implements Game {
     }
     
     public List<Player> getPlayers() {
+        return players;
+    }
+    
+    @Override
+    public List<Player> getPlayersInGame() {
+        List<Player> players = new ArrayList<Player>(getPlayers());
+        for(Iterator<Player> it = players.iterator(); it.hasNext();)
+            if(!it.next().isInGame()) it.remove();
         return players;
     }
     

@@ -64,10 +64,6 @@ public class TestCardPanel {
         Player her = g.getPlayers().get(1);
         her.setActor(new GuiMagicActor(gui, her));
         
-        JFrame jf = new JFrame();
-        jf.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        jf.add(gui.getTable());
-        
 
         JXMultiSplitPane overall = new JXMultiSplitPane(new MultiSplitLayout(getOverallLayout()));
         JXMultiSplitPane zones = new JXMultiSplitPane(new MultiSplitLayout(getZonesLayout()));
@@ -103,6 +99,12 @@ public class TestCardPanel {
         CardDetail de = new CardDetail(18);
         gui.add(de);
         overall.add(de, "detail");
+        
+
+        JFrame jf = new JFrame();
+        jf.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        
+        jf.add(gui.getTable());
         
         jf.setSize(700, 300);
         jf.setVisible(true);

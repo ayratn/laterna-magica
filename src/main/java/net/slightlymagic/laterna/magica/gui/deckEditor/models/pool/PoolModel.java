@@ -4,7 +4,7 @@
  * Created on 30.07.2010
  */
 
-package net.slightlymagic.laterna.magica.gui.deckEditor;
+package net.slightlymagic.laterna.magica.gui.deckEditor.models.pool;
 
 
 import java.util.ArrayList;
@@ -12,11 +12,10 @@ import java.util.Collection;
 import java.util.Collections;
 import java.util.List;
 
-import javax.swing.table.AbstractTableModel;
-
 import net.slightlymagic.laterna.magica.LaternaMagica;
 import net.slightlymagic.laterna.magica.card.CardTemplate;
 import net.slightlymagic.laterna.magica.card.Printing;
+import net.slightlymagic.laterna.magica.gui.deckEditor.models.TableColumns;
 
 import com.google.common.base.Function;
 import com.google.common.collect.Collections2;
@@ -29,32 +28,35 @@ import com.google.common.collect.Collections2;
  * @version V0.0 30.07.2010
  * @author Clemens Koza
  */
-public class PoolModel extends AbstractTableModel implements CardPoolModel {
+public class PoolModel extends AbstractCardPoolModel {
     private static final long       serialVersionUID = 4864856490229796392L;
     private static final Class<?>[] classes          = {String.class};
     private static final String[]   names            = {"Name"};
     
-    private List<Printing>          pool;
+    private final List<Printing>    pool;
     
-    public PoolModel() {
-        this(LaternaMagica.CARDS().getTemplates());
+    public PoolModel(TableColumns<? super Printing> columns) {
+        this(columns, LaternaMagica.CARDS().getTemplates());
     }
     
-    public PoolModel(Collection<CardTemplate> cards) {
+    public PoolModel(TableColumns<? super Printing> columns, Collection<CardTemplate> cards) {
+        super(columns);
         pool = new ArrayList<Printing>(Collections2.transform(cards, new Function<CardTemplate, Printing>() {
             public Printing apply(CardTemplate from) {
                 List<Printing> l = from.getPrintings();
                 return l.get(l.size() - 1);
             }
         }));
-        Collections.sort(pool, DeckModel.c);
+        Collections.sort(pool, PrintingComparators.COLOR_NAME_INSTANCE);
     }
     
-    public PoolModel(List<Printing> pool) {
+    public PoolModel(TableColumns<? super Printing> columns, List<Printing> pool) {
+        super(columns);
         this.pool = pool;
-        Collections.sort(pool, DeckModel.c);
+        Collections.sort(pool, PrintingComparators.COLOR_NAME_INSTANCE);
     }
     
+    @Override
     public int getColumnCount() {
         return names.length;
     }
@@ -69,10 +71,19 @@ public class PoolModel extends AbstractTableModel implements CardPoolModel {
         return names[column];
     }
     
+    public Printing getRow(int row) {
+        return pool.get(row);
+    }
+    
+    public int getCount(Printing p) {
+        return (Collections.binarySearch(pool, p, PrintingComparators.COLOR_NAME_INSTANCE) >= 0)? 1:0;
+    }
+    
     public int getRowCount() {
         return pool.size();
     }
     
+    @Override
     public Object getValueAt(int row, int column) {
         Printing p = pool.get(row);
         switch(column) {

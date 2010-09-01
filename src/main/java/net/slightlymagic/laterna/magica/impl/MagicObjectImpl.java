@@ -127,7 +127,7 @@ public abstract class MagicObjectImpl extends AbstractTimestamped implements Mag
                 + ev.getTo());
         
         zone.setValue(ev.getTo());
-        if(ev.getTo().getType() == Zones.BATTLEFIELD) {
+        if(ev.getTo() != null && ev.getTo().getType() == Zones.BATTLEFIELD) {
             getCounter("summoningSickness").reset();
             getCounter("summoningSickness").increase();
         }

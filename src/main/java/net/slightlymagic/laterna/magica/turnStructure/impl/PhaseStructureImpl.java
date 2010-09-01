@@ -8,13 +8,13 @@ package net.slightlymagic.laterna.magica.turnStructure.impl;
 
 
 import static java.util.Arrays.*;
+import static net.slightlymagic.laterna.magica.action.stateBased.StateBasedAction.Type.*;
+import static net.slightlymagic.laterna.magica.action.turnBased.TurnBasedAction.Type.*;
 
 import java.util.EnumMap;
-import java.util.HashSet;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
-import java.util.Set;
 
 import net.slightlymagic.beans.properties.Property;
 import net.slightlymagic.laterna.magica.Combat;
@@ -22,6 +22,7 @@ import net.slightlymagic.laterna.magica.Game;
 import net.slightlymagic.laterna.magica.MagicObject;
 import net.slightlymagic.laterna.magica.action.stateBased.LethalDamageAction;
 import net.slightlymagic.laterna.magica.action.stateBased.LoseOnDrawAction;
+import net.slightlymagic.laterna.magica.action.stateBased.LoseOnLifeAction;
 import net.slightlymagic.laterna.magica.action.stateBased.StateBasedAction;
 import net.slightlymagic.laterna.magica.action.turnBased.DamageAssignmentAction;
 import net.slightlymagic.laterna.magica.action.turnBased.DamageDealingAction;
@@ -35,6 +36,7 @@ import net.slightlymagic.laterna.magica.action.turnBased.OrderBlockersAction;
 import net.slightlymagic.laterna.magica.action.turnBased.TurnBasedAction;
 import net.slightlymagic.laterna.magica.action.turnBased.TurnBasedAction.Type;
 import net.slightlymagic.laterna.magica.action.turnBased.UntapAction;
+import net.slightlymagic.laterna.magica.action.turnBased.WearOffAction;
 import net.slightlymagic.laterna.magica.edit.CompoundEdit;
 import net.slightlymagic.laterna.magica.event.PhaseChangedListener;
 import net.slightlymagic.laterna.magica.event.PriorChangedListener;
@@ -57,7 +59,7 @@ public class PhaseStructureImpl extends AbstractGameContent implements PhaseStru
      * The index of the player that has priority. The index is stored because it is easier to determine the next
      * player this way.
      */
-    private Property<Integer>              prior;
+    private Property<Integer>                            prior;
     /**
      * Stores the player that last took an action, which is naturally the first player to pass priority in
      * sequence. If that player would again receive priority (from another player), all players have passed in
@@ -65,15 +67,15 @@ public class PhaseStructureImpl extends AbstractGameContent implements PhaseStru
      * 
      * The index is stored because it is easier to compare to prior.
      */
-    private Property<Integer>              firstPassed;
+    private Property<Integer>                            firstPassed;
     
-    private Property<Integer>              phase, step;
+    private Property<Integer>                            phase, step;
     
-    private Map<Type, TurnBasedAction>     turnBasedActions;
-    private Set<StateBasedAction>          stateBasedActions;
+    private Map<TurnBasedAction.Type, TurnBasedAction>   turnBasedActions;
+    private Map<StateBasedAction.Type, StateBasedAction> stateBasedActions;
     
-    private Property<Combat>               combat;
-    private Property<TurnBasedAction.Type> turnBasedAction;
+    private Property<Combat>                             combat;
+    private Property<TurnBasedAction.Type>               turnBasedAction;
     
     public PhaseStructureImpl(Game game) {
         super(game);
@@ -89,36 +91,47 @@ public class PhaseStructureImpl extends AbstractGameContent implements PhaseStru
             }
         });
         
-//        prior = properties.property("prior", -1);
-//        firstPassed = properties.property("firstPassed", 0);
-//        phase = properties.property("phase", -1);
-//        step = properties.property("step", -1);
         combat = properties.property("combat");
         turnBasedAction = properties.property("turnBasedAction");
         
         //no need for editable, since it's only created once
-        turnBasedActions = new EnumMap<Type, TurnBasedAction>(Type.class);
-        turnBasedActions.put(Type.PHASING, null);
-        turnBasedActions.put(Type.UNTAP, new UntapAction(getGame()));
-        turnBasedActions.put(Type.DRAW, new DrawAction(getGame()));
-        turnBasedActions.put(Type.SCHEME, null);
+        turnBasedActions = new EnumMap<TurnBasedAction.Type, TurnBasedAction>(TurnBasedAction.Type.class);
+        turnBasedActions.put(PHASING, null);
+        turnBasedActions.put(UNTAP, new UntapAction(getGame()));
+        turnBasedActions.put(DRAW, new DrawAction(getGame()));
+        turnBasedActions.put(SCHEME, null);
         
-        turnBasedActions.put(Type.DEFENDER, new DefenderAction(getGame()));
-        turnBasedActions.put(Type.DECLARE_ATTACKERS, new DeclareAttackersAction(getGame()));
-        turnBasedActions.put(Type.DECLARE_BLOCKERS, new DeclareBlockersAction(getGame()));
-        turnBasedActions.put(Type.ORDER_BLOCKERS, new OrderBlockersAction(getGame()));
-        turnBasedActions.put(Type.ORDER_ATTACKERS, new OrderAttackersAction(getGame()));
-        turnBasedActions.put(Type.DAMAGE_ASSIGNMENT, new DamageAssignmentAction(getGame()));
-        turnBasedActions.put(Type.DAMAGE_DEALING, new DamageDealingAction(getGame()));
+        turnBasedActions.put(DEFENDER, new DefenderAction(getGame()));
+        turnBasedActions.put(DECLARE_ATTACKERS, new DeclareAttackersAction(getGame()));
+        turnBasedActions.put(DECLARE_BLOCKERS, new DeclareBlockersAction(getGame()));
+        turnBasedActions.put(ORDER_BLOCKERS, new OrderBlockersAction(getGame()));
+        turnBasedActions.put(ORDER_ATTACKERS, new OrderAttackersAction(getGame()));
+        turnBasedActions.put(DAMAGE_ASSIGNMENT, new DamageAssignmentAction(getGame()));
+        turnBasedActions.put(DAMAGE_DEALING, new DamageDealingAction(getGame()));
         
-        turnBasedActions.put(Type.HAND_LIMIT, null);
-        turnBasedActions.put(Type.WEAR_OFF, null);
-        turnBasedActions.put(Type.EMPTY_POOLS, new EmptyPoolsAction(getGame()));
+        turnBasedActions.put(HAND_LIMIT, null);
+        turnBasedActions.put(WEAR_OFF, new WearOffAction(getGame()));
+        turnBasedActions.put(EMPTY_POOLS, new EmptyPoolsAction(getGame()));
         
         //no need for editable, since it's only created once
-        stateBasedActions = new HashSet<StateBasedAction>();
-        stateBasedActions.add(new LoseOnDrawAction(getGame()));
-        stateBasedActions.add(new LethalDamageAction(getGame()));
+        stateBasedActions = new EnumMap<StateBasedAction.Type, StateBasedAction>(StateBasedAction.Type.class);
+        stateBasedActions.put(LOSE_ON_LIFE, new LoseOnLifeAction(getGame()));
+        stateBasedActions.put(LOSE_ON_DRAW, new LoseOnDrawAction(getGame()));
+        stateBasedActions.put(LOSE_ON_POISON, null);
+        stateBasedActions.put(PHASED_TOKEN_CEASE, null);
+        stateBasedActions.put(COPY_CEASE, null);
+        stateBasedActions.put(CREATURE_TOUGHNESS, null);
+        stateBasedActions.put(LETHAL_DAMAGE, new LethalDamageAction(getGame()));
+        stateBasedActions.put(DEATHTOUCH_DAMAGE, null);
+        stateBasedActions.put(PLANESWALKER_LOYALTY, null);
+        stateBasedActions.put(PLANESWALKER_UNIQUENESS, null);
+        stateBasedActions.put(LEGENDARY_UNIQUENESS, null);
+        stateBasedActions.put(WORLD_UNIQUENESS, null);
+        stateBasedActions.put(AURA_ILLEGAL, null);
+        stateBasedActions.put(EQUIPMENT_ILLEGAL, null);
+        stateBasedActions.put(UNATTACH, null);
+        stateBasedActions.put(P1P1_M1M1_REMOVE, null);
+        stateBasedActions.put(COUNTER_LIMIT, null);
     }
     
     public Phase getPhase() {
@@ -163,7 +176,9 @@ public class PhaseStructureImpl extends AbstractGameContent implements PhaseStru
             //a player that took an action receives priority again
         } else {
             //the next player receives priority
-            prior = (prior + 1) % getGame().getPlayers().size();
+            do {
+                prior = (prior + 1) % getGame().getPlayers().size();
+            } while(!getGame().getPlayers().get(prior).isInGame());
             //All players passed, priority is back at the player who most recently did something
             if(prior == firstPassed.getValue().intValue()) {
                 passedInSuccession();
@@ -198,9 +213,10 @@ public class PhaseStructureImpl extends AbstractGameContent implements PhaseStru
                 //reset repeat at the beginning of every loop
                 repeat = false;
                 
-                //TODO handle state-based actions
-                for(StateBasedAction a:stateBasedActions) {
-                    repeat |= a.execute();
+                for(StateBasedAction.Type t:StateBasedAction.Type.values()) {
+                    StateBasedAction action = stateBasedActions.get(t);
+                    if(action != null) repeat |= action.execute();
+                    else log.warn("State based Action " + t + " does not exist");
                 }
             } while(repeat);
             

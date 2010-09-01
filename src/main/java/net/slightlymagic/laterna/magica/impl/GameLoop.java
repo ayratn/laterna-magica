@@ -7,8 +7,14 @@
 package net.slightlymagic.laterna.magica.impl;
 
 
+import static javax.swing.JOptionPane.*;
+
+import java.util.List;
+
 import net.slightlymagic.laterna.magica.Game;
 import net.slightlymagic.laterna.magica.action.play.PlayAction;
+import net.slightlymagic.laterna.magica.player.Player;
+import net.slightlymagic.laterna.magica.player.Player.Status;
 import net.slightlymagic.laterna.magica.turnStructure.PhaseStructure;
 
 
@@ -40,7 +46,7 @@ public class GameLoop extends AbstractGameContent implements Runnable {
      */
     public void run() {
         PhaseStructure ps = getGame().getPhaseStructure();
-        do {
+        loop: do {
             try {
                 PlayAction a = ps.getPriorPlayer().getActor().getAction();
                 if(!run) break;
@@ -49,10 +55,24 @@ public class GameLoop extends AbstractGameContent implements Runnable {
                     a.execute();
                     ps.takeAction(true);
                 }
-                //TODO break when the game has ended.
+                
+                //TODO this is a little dirty. see 104.2: not all other players, but all opponents must have left the game.
+                List<Player> p = getGame().getPlayersInGame();
+                switch(p.size()) {
+                    case 1:
+                        p.get(0).winGame();
+                    case 0:
+                    break loop;
+                }
             } catch(Exception ex) {
                 log.error(null, ex);
             }
         } while(run);
+        if(run) {
+            //the game ended regularly, praise the winner
+            for(Player p:getGame().getPlayers()) {
+                if(p.getPlayerStatus() == Status.WON) showMessageDialog(null, p + " has won the game!");
+            }
+        }
     }
 }
