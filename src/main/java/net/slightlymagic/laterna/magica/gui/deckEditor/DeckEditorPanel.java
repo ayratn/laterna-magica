@@ -7,9 +7,12 @@
 package net.slightlymagic.laterna.magica.gui.deckEditor;
 
 
+import static java.lang.String.*;
 import static java.util.Arrays.*;
 
 import java.awt.BorderLayout;
+import java.awt.Component;
+import java.awt.GridLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.io.IOException;
@@ -17,15 +20,23 @@ import java.io.PrintWriter;
 import java.io.StringWriter;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Map.Entry;
 
+import javax.swing.AbstractAction;
+import javax.swing.Action;
 import javax.swing.DefaultComboBoxModel;
+import javax.swing.DefaultListCellRenderer;
+import javax.swing.JButton;
 import javax.swing.JComboBox;
 import javax.swing.JFrame;
+import javax.swing.JList;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.ListSelectionModel;
 import javax.swing.event.ListSelectionEvent;
 import javax.swing.event.ListSelectionListener;
+import javax.swing.event.TableModelEvent;
+import javax.swing.event.TableModelListener;
 import javax.swing.table.DefaultTableCellRenderer;
 
 import net.slightlymagic.laterna.magica.LaternaMagica;
@@ -36,6 +47,7 @@ import net.slightlymagic.laterna.magica.gui.card.CardImage;
 import net.slightlymagic.laterna.magica.gui.card.CardPanel;
 import net.slightlymagic.laterna.magica.gui.deckEditor.models.PrintingColumns;
 import net.slightlymagic.laterna.magica.gui.deckEditor.models.TemplateColumns;
+import net.slightlymagic.laterna.magica.gui.deckEditor.models.pool.CardPoolModel;
 import net.slightlymagic.laterna.magica.gui.deckEditor.models.pool.DeckModel;
 import net.slightlymagic.laterna.magica.gui.deckEditor.models.pool.PoolModel;
 import net.slightlymagic.laterna.magica.gui.deckEditor.models.pool.PrintingComparators;
@@ -63,7 +75,7 @@ public class DeckEditorPanel extends JPanel {
         JFrame jf = new JFrame();
         jf.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         
-        jf.add(new DeckEditorPanel());
+        jf.add(new DeckEditorPanel(null, null));
         
         jf.pack();
         jf.setVisible(true);
@@ -74,8 +86,17 @@ public class DeckEditorPanel extends JPanel {
     private CardPanel         detail, image;
     private JComboBox         printings;
     
-    public DeckEditorPanel() {
+    private Action            add = new AddAction(), remove = new RemoveAction();
+    
+    public DeckEditorPanel(CardPoolModel pool, CardPoolModel deck) {
         super(new BorderLayout());
+        TemplateColumns c = new TemplateColumns();
+        
+        if(pool == null) pool = new PoolModel(new PrintingColumns());
+        mPool = new CardTemplateModel(c, pool instanceof PoolModel? -1:c.getColumnCount(), pool);
+        if(deck == null) deck = new DeckModel(new PrintingColumns(), new HashMap<Printing, Integer>(), -1);
+        mDeck = new CardTemplateModel(c, deck instanceof PoolModel? -1:c.getColumnCount(), pool);
+        
         setupComponents();
         
         Select l = new Select();
@@ -89,8 +110,7 @@ public class DeckEditorPanel extends JPanel {
         add(overall);
         
         { //pool
-            tPool = new JXTable(mPool = new CardTemplateModel(new TemplateColumns(), new PoolModel(
-                    new PrintingColumns())));
+            tPool = new JXTable(mPool);
             tPool.setDefaultRenderer(ManaSequence.class, new DefaultTableCellRenderer());
             overall.add(new JScrollPane(tPool), "pool");
         }
@@ -99,9 +119,12 @@ public class DeckEditorPanel extends JPanel {
             JPanel p = new JPanel(new BorderLayout());
             //add some navigation in north
             
-            PrintingColumns c = new PrintingColumns();
-            tDeck = new JXTable(mDeck = new CardTemplateModel(new TemplateColumns(), new DeckModel(c,
-                    new HashMap<Printing, Integer>(), c.getColumnCount())));
+            JPanel buttons = new JPanel(new GridLayout(1, 0));
+            p.add(buttons, BorderLayout.NORTH);
+            buttons.add(new JButton(add));
+            buttons.add(new JButton(remove));
+            
+            tDeck = new JXTable(mDeck);
             tDeck.setDefaultRenderer(ManaSequence.class, new DefaultTableCellRenderer());
             p.add(new JScrollPane(tDeck));
             overall.add(p, "deck");
@@ -111,6 +134,13 @@ public class DeckEditorPanel extends JPanel {
         image = new CardImage();
         p.add(image);
         p.add(printings = new JComboBox(), BorderLayout.SOUTH);
+        printings.setRenderer(new PrintingRenderer());
+        mDeck.addTableModelListener(new TableModelListener() {
+            @Override
+            public void tableChanged(TableModelEvent e) {
+                if(e.getType() == TableModelEvent.UPDATE) printings.repaint();
+            }
+        });
         overall.add(p, "picture");
         
         detail = new CardDetail(18);
@@ -141,7 +171,13 @@ public class DeckEditorPanel extends JPanel {
             Printing[] p = printings.keySet().toArray(new Printing[printings.keySet().size()]);
             sort(p, PrintingComparators.MULTIVERSE_INSTANCE);
             this.printings.setModel(new DefaultComboBoxModel(p));
-            this.printings.setSelectedIndex(printings.isEmpty()? -1:0);
+            Printing val = null;
+            for(Entry<Printing, Integer> e:printings.entrySet())
+                if(e.getValue() != null && e.getValue() > 0) {
+                    val = e.getKey();
+                    break;
+                }
+            this.printings.setSelectedItem(val);
         }
     }
     
@@ -183,8 +219,57 @@ public class DeckEditorPanel extends JPanel {
             } else {
                 int index = sm.getLeadSelectionIndex();
                 index = t.convertRowIndexToModel(index);
-                updatePrintings(tm.getPrintings(mPool.getRow(index)));
+                updatePrintings(tm.getPrintings(tm.getRow(index)));
             }
+        }
+    }
+    
+    private class AddAction extends AbstractAction {
+        private static final long serialVersionUID = 4503673134555310503L;
+        
+        public AddAction() {
+            super("\u25BC");
+        }
+        
+        @Override
+        public void actionPerformed(ActionEvent e) {
+            Printing p = (Printing) printings.getSelectedItem();
+            if(p != null && mPool.getPoolModel().getCount(p) > 0) {
+                mPool.getPoolModel().remove(p);
+                mDeck.getPoolModel().add(p);
+            }
+        }
+    }
+    
+    private class RemoveAction extends AbstractAction {
+        private static final long serialVersionUID = 5916550065818336693L;
+        
+        public RemoveAction() {
+            super("\u25B2");
+        }
+        
+        @Override
+        public void actionPerformed(ActionEvent e) {
+            Printing p = (Printing) printings.getSelectedItem();
+            if(p != null && mDeck.getPoolModel().getCount(p) > 0) {
+                mDeck.getPoolModel().remove(p);
+                mPool.getPoolModel().add(p);
+            }
+        }
+    }
+    
+    private class PrintingRenderer extends DefaultListCellRenderer {
+        private static final long serialVersionUID = 2099388301828978204L;
+        
+        @Override
+        public Component getListCellRendererComponent(JList list, Object value, int index, boolean isSelected, boolean cellHasFocus) {
+            super.getListCellRendererComponent(list, value, index, isSelected, cellHasFocus);
+            if(value instanceof Printing) {
+                Printing p = (Printing) value;
+                int count = mDeck.getPoolModel().getCount(p);
+                setText(format("%dx %s %s", count, p.getExpansion(), p.getRarity()));
+            }
+            return this;
         }
     }
 }

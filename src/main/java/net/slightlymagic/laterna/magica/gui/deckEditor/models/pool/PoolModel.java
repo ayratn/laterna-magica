@@ -13,12 +13,8 @@ import java.util.Collections;
 import java.util.List;
 
 import net.slightlymagic.laterna.magica.LaternaMagica;
-import net.slightlymagic.laterna.magica.card.CardTemplate;
 import net.slightlymagic.laterna.magica.card.Printing;
 import net.slightlymagic.laterna.magica.gui.deckEditor.models.TableColumns;
-
-import com.google.common.base.Function;
-import com.google.common.collect.Collections2;
 
 
 /**
@@ -36,24 +32,13 @@ public class PoolModel extends AbstractCardPoolModel {
     private final List<Printing>    pool;
     
     public PoolModel(TableColumns<? super Printing> columns) {
-        this(columns, LaternaMagica.CARDS().getTemplates());
+        this(columns, LaternaMagica.CARDS().getPrintings());
     }
     
-    public PoolModel(TableColumns<? super Printing> columns, Collection<CardTemplate> cards) {
+    public PoolModel(TableColumns<? super Printing> columns, Collection<Printing> pool) {
         super(columns);
-        pool = new ArrayList<Printing>(Collections2.transform(cards, new Function<CardTemplate, Printing>() {
-            public Printing apply(CardTemplate from) {
-                List<Printing> l = from.getPrintings();
-                return l.get(l.size() - 1);
-            }
-        }));
-        Collections.sort(pool, PrintingComparators.COLOR_NAME_INSTANCE);
-    }
-    
-    public PoolModel(TableColumns<? super Printing> columns, List<Printing> pool) {
-        super(columns);
-        this.pool = pool;
-        Collections.sort(pool, PrintingComparators.COLOR_NAME_INSTANCE);
+        this.pool = new ArrayList<Printing>(pool);
+        Collections.sort(this.pool, PrintingComparators.COLOR_NAME_INSTANCE);
     }
     
     @Override

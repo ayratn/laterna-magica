@@ -4,12 +4,14 @@
  * Created on 29.07.2010
  */
 
-package net.slightlymagic.laterna.magica.deck;
+package net.slightlymagic.laterna.magica.io.deck;
 
 
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
+
+import net.slightlymagic.laterna.magica.deck.Deck;
 
 
 /**

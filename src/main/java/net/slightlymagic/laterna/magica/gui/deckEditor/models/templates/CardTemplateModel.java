@@ -41,9 +41,15 @@ public class CardTemplateModel extends AbstractTableModel {
     private final CardPoolModel                      model;
     private final List<CardTemplate>                 keys;
     
+    private final int                                countColumn;
     private final TableColumns<? super CardTemplate> columns;
     
     public CardTemplateModel(TableColumns<? super CardTemplate> columns, CardPoolModel model) {
+        this(columns, -1, model);
+    }
+    
+    public CardTemplateModel(TableColumns<? super CardTemplate> columns, int countColumn, CardPoolModel model) {
+        this.countColumn = countColumn;
         this.columns = columns;
         this.model = model;
         keys = new ArrayList<CardTemplate>();
@@ -52,6 +58,13 @@ public class CardTemplateModel extends AbstractTableModel {
             @Override
             public void tableChanged(TableModelEvent e) {
                 if(e.getType() != TableModelEvent.UPDATE) refreshKeys();
+                else if(CardTemplateModel.this.countColumn != -1) {
+                    int first = e.getFirstRow(), last = e.getLastRow();
+                    if(first == TableModelEvent.HEADER_ROW) return;
+                    if(first != last) fireTableDataChanged();
+                    else fireTableCellUpdated(keys.indexOf(getPoolModel().getRow(first).getTemplate()),
+                            CardTemplateModel.this.countColumn);
+                }
             }
         });
     }
@@ -77,27 +90,42 @@ public class CardTemplateModel extends AbstractTableModel {
         return keys.size();
     }
     
+    @Override
     public int getColumnCount() {
-        return columns.getColumnCount();
+        if(countColumn == -1) return columns.getColumnCount();
+        else return columns.getColumnCount() + 1;
     }
     
     @Override
     public Class<?> getColumnClass(int column) {
-        return columns.getColumnClass(column);
+        if(countColumn == -1) return columns.getColumnClass(column);
+        else if(column == countColumn) return Integer.class;
+        else return columns.getColumnClass(column > countColumn? column - 1:column);
     }
     
     @Override
     public String getColumnName(int column) {
-        return columns.getColumnName(column);
+        if(countColumn == -1) return columns.getColumnName(column);
+        else if(column == countColumn) return "Count";
+        else return columns.getColumnName(column > countColumn? column - 1:column);
     }
     
     public Object getValueAt(CardTemplate t, int column) {
-        return columns.getValueAt(t, column);
+        if(countColumn == -1) return columns.getValueAt(t, column);
+        else if(column == countColumn) return getCount(t);
+        else return columns.getValueAt(t, column > countColumn? column - 1:column);
     }
     
     public Object getValueAt(int row, int column) {
         CardTemplate t = getRow(row);
         return getValueAt(t, column);
+    }
+    
+    public int getCount(CardTemplate template) {
+        int count = 0;
+        for(Printing p:template.getPrintings())
+            count += getPoolModel().getCount(p);
+        return count;
     }
     
     public Map<Printing, Integer> getPrintings(final CardTemplate template) {

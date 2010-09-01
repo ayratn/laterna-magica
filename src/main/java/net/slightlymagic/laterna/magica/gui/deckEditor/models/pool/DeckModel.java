@@ -59,12 +59,28 @@ public class DeckModel extends AbstractCardPoolModel {
     
     @Override
     public int getColumnCount() {
-        return super.getColumnCount() + 1;
+        if(countColumn == -1) return super.getColumnCount();
+        else return super.getColumnCount() + 1;
+    }
+    
+    @Override
+    public Class<?> getColumnClass(int column) {
+        if(countColumn == -1) return super.getColumnClass(column);
+        else if(column == countColumn) return Integer.class;
+        else return super.getColumnClass(column > countColumn? column - 1:column);
+    }
+    
+    @Override
+    public String getColumnName(int column) {
+        if(countColumn == -1) return super.getColumnName(column);
+        else if(column == countColumn) return "Count";
+        else return super.getColumnName(column > countColumn? column - 1:column);
     }
     
     @Override
     public Object getValueAt(Printing p, int column) {
-        if(column == countColumn) return getCount(p);
+        if(countColumn == -1) return super.getValueAt(p, column);
+        else if(column == countColumn) return getCount(p);
         else return super.getValueAt(p, column > countColumn? column - 1:column);
     }
     
@@ -78,6 +94,7 @@ public class DeckModel extends AbstractCardPoolModel {
     public void add(Printing p) {
         Integer count = pool.put(p, 1);
         int index = Collections.binarySearch(keys, p, PrintingComparators.COLOR_NAME_INSTANCE);
+        System.out.println(index);
         if(count == null) {
             //transform to the insertion
             index = -index - 1;

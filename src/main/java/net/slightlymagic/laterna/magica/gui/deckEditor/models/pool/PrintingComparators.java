@@ -21,7 +21,9 @@ public enum PrintingComparators implements Comparator<Printing> {
     },
     COLOR_NAME_INSTANCE {
         public int compare(Printing o1, Printing o2) {
-            return CardTemplateComparators.INSTANCE.compare(o1.getTemplate(), o2.getTemplate());
+            int i = CardTemplateComparators.INSTANCE.compare(o1.getTemplate(), o2.getTemplate());
+            if(i != 0) return i;
+            return MULTIVERSE_INSTANCE.compare(o1, o2);
         }
     };
 }
