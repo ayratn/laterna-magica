@@ -17,22 +17,26 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
-import java.util.Map;
 
 import javax.swing.DefaultComboBoxModel;
 import javax.swing.JComboBox;
+import javax.swing.JFileChooser;
 import javax.swing.JFrame;
+import javax.swing.JMenu;
+import javax.swing.JMenuBar;
 import javax.swing.JPanel;
 import javax.swing.JRootPane;
 
 import net.slightlymagic.laterna.magica.LaternaMagica;
 import net.slightlymagic.laterna.magica.card.Printing;
+import net.slightlymagic.laterna.magica.cards.AllCards;
 import net.slightlymagic.laterna.magica.deck.Deck;
 import net.slightlymagic.laterna.magica.deck.Deck.DeckType;
-import net.slightlymagic.laterna.magica.deck.impl.DeckImpl;
 import net.slightlymagic.laterna.magica.gui.deckEditor.models.pool.CardPoolModel;
 import net.slightlymagic.laterna.magica.gui.deckEditor.models.pool.DeckModel;
 import net.slightlymagic.laterna.magica.gui.deckEditor.models.pool.PoolModel;
+import net.slightlymagic.laterna.magica.io.deck.DeckPersister;
+import net.slightlymagic.laterna.magica.io.deck.DeckPersisterImpl;
 
 
 /**
@@ -50,39 +54,11 @@ public class DeckEditorPane extends JRootPane {
         JFrame jf = new JFrame();
         jf.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         
-        Deck d = new DeckImpl();
-        d.addPool(POOL);
-        d.addPool(MAIN_DECK);
-        put(d, POOL, "Forest", 20);
-        put(d, POOL, "Llanowar Elves", 4);
-        put(d, POOL, "Grizzly Bears", 4);
-        put(d, POOL, "Trained Armodon", 4);
-        put(d, POOL, "Enormous Baloth", 4);
-        
         DeckEditorPane p = new DeckEditorPane();
-        p.setUpperDeck(d);
-        p.setLowerDeck(d);
         jf.add(p);
         
         jf.pack();
         jf.setVisible(true);
-    }
-    
-    private static void put(Deck d, DeckType t, String name, int num) {
-        Map<Printing, Integer> pool = d.getPool(t);
-        List<Printing> list = LaternaMagica.CARDS().getCard(name).getPrintings();
-        for(int i = 0; i < num; i++)
-            put(pool, list);
-    }
-    
-    /**
-     * Randomly adds one of the printings to the pool
-     */
-    private static void put(Map<Printing, Integer> pool, List<Printing> list) {
-        Printing p = list.get((int) (Math.random() * list.size()));
-        Integer old = pool.put(p, 1);
-        //If there already were cards, add 1
-        if(old != null) pool.put(p, old + 1);
     }
     
     private DeckEditorPanel p;
@@ -111,6 +87,55 @@ public class DeckEditorPane extends JRootPane {
             nav.add(add);
             nav.add(lowerPool = new JComboBox());
         }
+        
+        JMenuBar bar = new JMenuBar();
+        setJMenuBar(bar);
+        JMenu file = new JMenu("File");
+        bar.add(file);
+        
+        DeckPersister p = new DeckPersisterImpl();
+        JFileChooser c = new JFileChooser(LaternaMagica.PROPS().getFile("/laterna/usr/decks"));
+        file.add(new OpenAction(this, p, c));
+        file.add(new SaveAction(this, p, c));
+        file.addSeparator();
+        file.add(new NewAction(this));
+        file.add(new NewFromPoolAction(this, p, c));
+        file.add(new NewPoolAction(this));
+    }
+    
+    
+    /**
+     * Convenience method for loading a deck. If the deck has a {@link DeckType#POOL POOL} card pool, it is loaded
+     * via {@link #openDeckWithPool(Deck)}. Otherwise, its opened via {@link #openDeck(Collection, Deck)} with
+     * {@linkplain AllCards#getPrintings() all printings}.
+     */
+    public void openDeck(Deck deck) {
+        if(deck.getPool(POOL) == null) openDeck(LaternaMagica.CARDS().getPrintings(), deck);
+        else openDeckWithPool(deck);
+    }
+    
+    /**
+     * Convenience method for loading a pool deck. A pool deck will always be opened with the whole card pool in
+     * the top region.
+     */
+    public void openPool(Deck deck) {
+        openDeck(LaternaMagica.CARDS().getPrintings(), deck);
+    }
+    
+    /**
+     * Convenience method for loading a deck containing a pool.
+     */
+    public void openDeckWithPool(Deck deck) {
+        setUpperDeck(deck);
+        setLowerDeck(deck);
+    }
+    
+    /**
+     * Convenience method for loading a deck with a specified unlimited card pool.
+     */
+    public void openDeck(Collection<Printing> pool, Deck deck) {
+        setUpperPool(pool);
+        setLowerDeck(deck);
     }
     
     
@@ -137,6 +162,10 @@ public class DeckEditorPane extends JRootPane {
         p.setUpperPool(m);
     }
     
+    public Deck getUpperDeck() {
+        return upperDeck;
+    }
+    
     
     public void setLowerDeck(Deck d) {
         lowerDeck = d;
@@ -149,6 +178,7 @@ public class DeckEditorPane extends JRootPane {
             
             lowerPool.setSelectedIndex(-1);
             if(pools.contains(MAIN_DECK)) lowerPool.setSelectedItem(MAIN_DECK);
+            else if(pools.contains(POOL)) lowerPool.setSelectedItem(POOL);
         }
     }
     
@@ -160,6 +190,11 @@ public class DeckEditorPane extends JRootPane {
     private void setLowerModel(CardPoolModel m) {
         p.setLowerPool(m);
     }
+    
+    public Deck getLowerDeck() {
+        return lowerDeck;
+    }
+    
     
     private class Select implements ActionListener {
         @Override

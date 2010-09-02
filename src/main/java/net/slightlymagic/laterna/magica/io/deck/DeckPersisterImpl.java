@@ -38,7 +38,7 @@ import net.slightlymagic.laterna.magica.deck.impl.DeckImpl;
 public class DeckPersisterImpl implements DeckPersister {
     public Deck readDeck(InputStream is) throws IOException {
         Pattern poolP = Pattern.compile("\\s*(\\w+):\\s*");
-        Pattern cardP = Pattern.compile("\\s*(\\d+)x\\s+(\\d+)\\s*(\\s.*)?");
+        Pattern cardP = Pattern.compile("\\s*(\\d+)\\s+(\\d+)\\s*(\\s.*)?");
         BufferedReader r = new BufferedReader(new InputStreamReader(is));
         
         Deck d = new DeckImpl();
@@ -58,6 +58,7 @@ public class DeckPersisterImpl implements DeckPersister {
                 d.getPool(t).put(LaternaMagica.CARDS().getCard(mid), num);
             }
         }
+        is.close();
         return d;
     }
     
@@ -68,11 +69,12 @@ public class DeckPersisterImpl implements DeckPersister {
             if(pool != null) {
                 w.write(format("%s:%n", t));
                 for(Entry<Printing, Integer> e:pool.entrySet())
-                    w.write(format("%2dx %5d #%s%n", e.getValue(), e.getKey().getMultiverseID(),
+                    w.write(format("%2d %6d #%s%n", e.getValue(), e.getKey().getMultiverseID(),
                             e.getKey().getTemplate()));
                 w.newLine();
             }
         }
+        w.close();
     }
     
 }
