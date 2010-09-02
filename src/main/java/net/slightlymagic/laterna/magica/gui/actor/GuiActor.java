@@ -60,13 +60,13 @@ public abstract class GuiActor implements Disposable {
             private String oldName;
             
             {
-                oldName = (String) actor.getGui().getPassPriorityAction().getValue(Action.NAME);
-                actor.getGui().getPassPriorityAction().putValue(Action.NAME, newName);
+                oldName = (String) getGui().getPassPriorityAction().getValue(Action.NAME);
+                getGui().getPassPriorityAction().putValue(Action.NAME, newName);
             }
             
             @Override
             public void dispose() {
-                actor.getGui().getPassPriorityAction().putValue(Action.NAME, oldName);
+                getGui().getPassPriorityAction().putValue(Action.NAME, oldName);
             }
         };
     }

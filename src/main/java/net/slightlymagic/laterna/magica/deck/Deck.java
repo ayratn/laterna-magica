@@ -24,6 +24,14 @@ public interface Deck {
     public static enum DeckType {
         /**
          * <p>
+         * A card pool meant for cards that are not really part of the deck. For example, if building a deck after
+         * a draft, this card pool contains all excess cards. This pool is also used by decks that don't really
+         * represent decks but only card pools.
+         * </p>
+         */
+        POOL,
+        /**
+         * <p>
          * The main deck is the card pool that becomes a player's library at the beginning of a game.
          * </p>
          */

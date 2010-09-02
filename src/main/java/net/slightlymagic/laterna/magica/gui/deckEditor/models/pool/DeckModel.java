@@ -38,6 +38,7 @@ public class DeckModel extends AbstractCardPoolModel {
     
     public DeckModel(TableColumns<? super Printing> columns, Map<Printing, Integer> pool, int countColumn) {
         super(columns);
+        if(pool == null) throw new IllegalArgumentException();
         this.countColumn = countColumn;
         this.pool = pool;
         keys = new ArrayList<Printing>();
@@ -94,7 +95,6 @@ public class DeckModel extends AbstractCardPoolModel {
     public void add(Printing p) {
         Integer count = pool.put(p, 1);
         int index = Collections.binarySearch(keys, p, PrintingComparators.COLOR_NAME_INSTANCE);
-        System.out.println(index);
         if(count == null) {
             //transform to the insertion
             index = -index - 1;

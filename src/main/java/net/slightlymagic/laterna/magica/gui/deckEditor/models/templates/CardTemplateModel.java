@@ -27,6 +27,7 @@ import net.slightlymagic.laterna.magica.gui.deckEditor.models.TableColumns;
 import net.slightlymagic.laterna.magica.gui.deckEditor.models.pool.CardPoolModel;
 
 import com.google.common.collect.AbstractIterator;
+import com.google.common.collect.Iterators;
 
 
 /**
@@ -36,25 +37,24 @@ import com.google.common.collect.AbstractIterator;
  * @author Clemens Koza
  */
 public class CardTemplateModel extends AbstractTableModel {
-    private static final long                        serialVersionUID = -1900903016161043459L;
+    private static final long                  serialVersionUID = -1900903016161043459L;
     
-    private final CardPoolModel                      model;
-    private final List<CardTemplate>                 keys;
+    private CardPoolModel                      model;
+    private TableColumns<? super CardTemplate> columns;
+    private int                                countColumn;
     
-    private final int                                countColumn;
-    private final TableColumns<? super CardTemplate> columns;
+    private final List<CardTemplate>           keys;
+    private final TableModelListener           l;
     
-    public CardTemplateModel(TableColumns<? super CardTemplate> columns, CardPoolModel model) {
-        this(columns, -1, model);
+    public CardTemplateModel(TableColumns<? super CardTemplate> columns) {
+        this(columns, -1);
     }
     
-    public CardTemplateModel(TableColumns<? super CardTemplate> columns, int countColumn, CardPoolModel model) {
+    public CardTemplateModel(TableColumns<? super CardTemplate> columns, int countColumn) {
         this.countColumn = countColumn;
         this.columns = columns;
-        this.model = model;
         keys = new ArrayList<CardTemplate>();
-        refreshKeys();
-        model.addTableModelListener(new TableModelListener() {
+        l = new TableModelListener() {
             @Override
             public void tableChanged(TableModelEvent e) {
                 if(e.getType() != TableModelEvent.UPDATE) refreshKeys();
@@ -66,7 +66,24 @@ public class CardTemplateModel extends AbstractTableModel {
                             CardTemplateModel.this.countColumn);
                 }
             }
-        });
+        };
+    }
+    
+    public void setColumns(TableColumns<? super CardTemplate> columns) {
+        setColumns(columns, -1);
+    }
+    
+    public void setColumns(TableColumns<? super CardTemplate> columns, int countColumn) {
+        this.columns = columns;
+        this.countColumn = countColumn;
+        fireTableStructureChanged();
+    }
+    
+    public void setPoolModel(CardPoolModel model) {
+        if(this.model != null) this.model.removeTableModelListener(l);
+        this.model = model;
+        if(this.model != null) this.model.addTableModelListener(l);
+        refreshKeys();
     }
     
     public CardPoolModel getPoolModel() {
@@ -136,11 +153,16 @@ public class CardTemplateModel extends AbstractTableModel {
                 entrySet = new AbstractSet<Entry<Printing, Integer>>() {
                     @Override
                     public int size() {
-                        return template.getPrintings().size();
+                        if(getPoolModel() == null) return 0;
+                        int count = 0;
+                        for(Printing p:template.getPrintings())
+                            if(getPoolModel().getPrintings().containsKey(p)) count++;
+                        return count;
                     }
                     
                     @Override
                     public Iterator<Entry<Printing, Integer>> iterator() {
+                        if(getPoolModel() == null) return Iterators.emptyIterator();
                         return new AbstractIterator<Entry<Printing, Integer>>() {
                             private Iterator<Printing> delegate = template.getPrintings().iterator();
                             
@@ -148,6 +170,7 @@ public class CardTemplateModel extends AbstractTableModel {
                             protected Entry<Printing, Integer> computeNext() {
                                 if(!delegate.hasNext()) return endOfData();
                                 final Printing p = delegate.next();
+                                if(!getPoolModel().getPrintings().containsKey(p)) return computeNext();
                                 return new Entry<Printing, Integer>() {
                                     public Printing getKey() {
                                         return p;
@@ -186,7 +209,8 @@ public class CardTemplateModel extends AbstractTableModel {
             
             @Override
             public Integer get(Object key) {
-                if(!(key instanceof Printing) || ((Printing) key).getTemplate() != template) return null;
+                if(getPoolModel() == null || !(key instanceof Printing)
+                        || ((Printing) key).getTemplate() != template) return null;
                 return getPoolModel().getCount((Printing) key);
             }
             
@@ -199,7 +223,7 @@ public class CardTemplateModel extends AbstractTableModel {
     
     private void refreshKeys() {
         HashSet<CardTemplate> set = new HashSet<CardTemplate>();
-        for(Printing p:getPoolModel().getPrintings().keySet())
+        if(getPoolModel() != null) for(Printing p:getPoolModel().getPrintings().keySet())
             set.add(p.getTemplate());
         keys.clear();
         keys.addAll(set);

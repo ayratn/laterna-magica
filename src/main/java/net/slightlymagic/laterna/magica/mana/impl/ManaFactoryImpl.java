@@ -93,7 +93,10 @@ public final class ManaFactoryImpl implements ManaFactory {
             case COLORED:
                 return valueOf(symbol.getColor().getShortChar());
             case HYBRID:
-                return Joiner.on('/').join(symbol.getParts());
+                String[] parts = new String[symbol.getParts().size()];
+                for(int i = 0; i < parts.length; i++)
+                    parts[i] = toString0(symbol.getParts().get(i));
+                return Joiner.on('/').join(parts);
             case NUMERAL:
                 return String.valueOf(symbol.getAmount());
             case SNOW:
