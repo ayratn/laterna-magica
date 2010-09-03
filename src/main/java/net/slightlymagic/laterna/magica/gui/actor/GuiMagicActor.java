@@ -50,6 +50,7 @@ import net.slightlymagic.laterna.magica.mana.Mana;
 import net.slightlymagic.laterna.magica.mana.ManaSequence;
 import net.slightlymagic.laterna.magica.mana.ManaSymbol;
 import net.slightlymagic.laterna.magica.mana.impl.ManaSequenceImpl;
+import net.slightlymagic.laterna.magica.player.ConcessionException;
 import net.slightlymagic.laterna.magica.player.Player;
 import net.slightlymagic.laterna.magica.player.impl.AbstractMagicActor;
 import net.slightlymagic.laterna.magica.turnStructure.PhaseStructure.Step;
@@ -91,12 +92,24 @@ public class GuiMagicActor extends AbstractMagicActor implements Disposable {
         channels.dispose();
     }
     
-    private static <T> T getValue(Fiber f, Channel<T> ch, GuiActor a) {
+    private boolean conceded;
+    
+    void setConceded() {
+        this.conceded = true;
+        getPlayer().loseGame();
+    }
+    
+    private <T> T getValue(Fiber f, Channel<T> ch, GuiActor a) {
         a.start();
         log.trace("Waiting for result...");
         T result = Parallel.getValue(f, ch);
         log.trace("received!");
         a.dispose();
+        if(conceded) {
+            conceded = false;
+            log.debug("throw concede");
+            throw new ConcessionException();
+        }
         return result;
     }
     

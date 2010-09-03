@@ -60,6 +60,11 @@ public class GuiChannels implements Disposable {
     public final Channel<Void>        passPriority = new MemoryChannel<Void>();
     
     /**
+     * Channel for publishing when the user concedes, or otherwise leaves the game
+     */
+    public final Channel<Void>        concede      = new MemoryChannel<Void>();
+    
+    /**
      * Using one fiber for all callbacks essentially means that they will be executed sequentially. Say, one user
      * input after another. This is not a problem, since none of the callbacks will block.
      */

@@ -34,6 +34,7 @@ public class ManaActor extends GuiActor {
     
     @Override
     public void start() {
+        super.start();
         StringBuilder sb = new StringBuilder();
         if(amounts[6] > 0) sb.append("{" + amounts[6] + "}");
         for(int i = 0; i < 5; i++)
@@ -45,6 +46,11 @@ public class ManaActor extends GuiActor {
         d.add(setName("Activate mana abilities, or press here to cancel. Mana left to pay: " + sb.toString()));
         d.add(actor.channels.objects.subscribe(actor.channels.fiber, new CardCallback()));
         d.add(actor.channels.passPriority.subscribe(actor.channels.fiber, new PassPriorityCallback()));
+    }
+    
+    @Override
+    protected void concede() {
+        actor.channels.actions.publish(null);
     }
     
     private class CardCallback implements Callback<MagicObject> {

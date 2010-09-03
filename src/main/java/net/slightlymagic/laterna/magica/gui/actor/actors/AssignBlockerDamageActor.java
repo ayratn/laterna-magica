@@ -66,6 +66,7 @@ public class AssignBlockerDamageActor extends GuiActor {
     
     @Override
     public void start() {
+        super.start();
         d.add(actor.channels.objects.subscribe(actor.channels.fiber, new CardCallback()));
         
         for(Entry<MagicObject, CardPanel> e:getBattlefield().entrySet()) {
@@ -74,6 +75,11 @@ public class AssignBlockerDamageActor extends GuiActor {
         }
         update();
         d.add(setEnabled(false));
+    }
+    
+    @Override
+    protected void concede() {
+        actor.channels.actions.publish(null);
     }
     
     private void update() {

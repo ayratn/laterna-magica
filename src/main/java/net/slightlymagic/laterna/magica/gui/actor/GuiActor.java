@@ -14,6 +14,7 @@ import javax.swing.border.Border;
 import net.slightlymagic.laterna.magica.gui.DisposeSupport;
 import net.slightlymagic.laterna.magica.gui.Gui;
 
+import org.jetlang.core.Callback;
 import org.jetlang.core.Disposable;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -43,8 +44,12 @@ public abstract class GuiActor implements Disposable {
     /**
      * This method should store all generated {@link Disposable}s in {@link #disposables}, so that they can
      * automatically handled in {@link #dispose()}.
+     * 
+     * subclass implementations MUST call {@code super.start()} to enable concession.
      */
-    public abstract void start();
+    public void start() {
+        d.add(actor.channels.concede.subscribe(actor.channels.fiber, new ConcedeCallback()));
+    }
     
     /**
      * Disposes all disposables in reverse order
@@ -54,6 +59,19 @@ public abstract class GuiActor implements Disposable {
     }
     
     //Utility methods
+    
+    private class ConcedeCallback implements Callback<Void> {
+        @Override
+        public void onMessage(Void message) {
+            actor.setConceded();
+            concede();
+        }
+    }
+    
+    /**
+     * This method should publish a message that ends the blocking of this actor.
+     */
+    protected abstract void concede();
     
     protected Disposable setName(final String newName) {
         return new Disposable() {

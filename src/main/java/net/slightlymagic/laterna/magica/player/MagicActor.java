@@ -8,6 +8,7 @@ package net.slightlymagic.laterna.magica.player;
 
 
 import java.util.Collection;
+import java.util.List;
 import java.util.Set;
 
 import net.slightlymagic.laterna.magica.Combat;
@@ -45,13 +46,13 @@ public interface MagicActor extends GameContent {
      * Returns the action to perform while a player has priority. Returns {@code null} if the player passes
      * priority.
      */
-    public PlayAction getAction();
+    public PlayAction getAction() throws IrregularActionException;
     
     /**
      * Returns an action to activate a mana ability when paying a cost, or {@code null} if no more abilities should
      * be played.
      */
-    public ActivateAction activateManaAbility(GameAction cost);
+    public ActivateAction activateManaAbility(GameAction cost) throws IrregularActionException;
     
     /**
      * Returns the Replacement effect chosen by the player to be applied to a {@link ReplaceableEvent}. The effect
@@ -60,7 +61,7 @@ public interface MagicActor extends GameContent {
      * @param event The event to replace
      * @param effects The applicable effects. Will be neither {@code null} nor empty.
      */
-    public ReplacementEffect getReplacementEffect(ReplaceableEvent event, Set<ReplacementEffect> effects);
+    public ReplacementEffect getReplacementEffect(ReplaceableEvent event, Set<ReplacementEffect> effects) throws IrregularActionException;
     
     /**
      * Resolves a cost to pay. The returned cost will have all variable and hybrid mana symbols replaced with
@@ -68,14 +69,14 @@ public interface MagicActor extends GameContent {
      * 
      * @param cost The cost to resolve
      */
-    public ManaSequence resolveCost(ManaSequence cost);
+    public ManaSequence resolveCost(ManaSequence cost) throws IrregularActionException;
     
     /**
      * Returns the mana which should be used to pay for the specified mana cost. The cost must not contain hybrid
      * or variable symbols, but may contain snow symbols. If the player can't pay the cost (or doesn't want to),
      * {@code null} is returned.
      */
-    public Set<Mana> getManaToPay(ManaCost cost);
+    public Set<Mana> getManaToPay(ManaCost cost) throws IrregularActionException;
     
     //Combat
     
@@ -85,7 +86,7 @@ public interface MagicActor extends GameContent {
      * @see Game#getCombat()
      * @see Combat#setDefendingPlayers(Set)
      */
-    public void setDefendingPlayers();
+    public void setDefendingPlayers() throws IrregularActionException;
     
     /**
      * Declares attackers for the game's combat object
@@ -94,7 +95,7 @@ public interface MagicActor extends GameContent {
      * @see Combat#declareAttacker(CardObject)
      * @see Combat#assignAttacker(Attacker, Defender)
      */
-    public void declareAttackers();
+    public void declareAttackers() throws IrregularActionException;
     
     /**
      * Declares blockers for the game's combat object
@@ -103,23 +104,23 @@ public interface MagicActor extends GameContent {
      * @see Combat#declareBlocker(CardObject)
      * @see Combat#assignBlocker(Blocker, Attacker)
      */
-    public void declareBlockers();
+    public void declareBlockers() throws IrregularActionException;
     
     /**
      * Sets the damage assignment order of blockers for all attacking creatures by this player
      * 
      * @see Game#getCombat()
-     * @see Attacker#setDamageAssignmentOrder(java.util.List)
+     * @see Attacker#setDamageAssignmentOrder(List)
      */
-    public void orderBlockers();
+    public void orderBlockers() throws IrregularActionException;
     
     /**
      * Sets the damage assignment order of attackers for all blocking creatures by this player
      * 
      * @see Game#getCombat()
-     * @see Blocker#setDamageAssignmentOrder(java.util.List)
+     * @see Blocker#setDamageAssignmentOrder(List)
      */
-    public void orderAttackers();
+    public void orderAttackers() throws IrregularActionException;
     
     /**
      * Returns the attacker for which the player wishes to assign damage. That creature's damage must be assigned
@@ -128,14 +129,14 @@ public interface MagicActor extends GameContent {
      * @param attackers The attackers for which damage was not assigned yet
      * @return an attacker from the collection
      */
-    public Attacker getAttackerToAssignDamage(Collection<? extends Attacker> attackers);
+    public Attacker getAttackerToAssignDamage(Collection<? extends Attacker> attackers) throws IrregularActionException;
     
     /**
      * Assigns all damage for the given attacker.
      * 
-     * @see Attacker#setDamageAssignmentOrder(java.util.List)
+     * @see Attacker#setDamageAssignmentOrder(List)
      */
-    public void assignDamage(Attacker attacker);
+    public void assignDamage(Attacker attacker) throws IrregularActionException;
     
     /**
      * Returns the blocker for which the player wishes to assign damage. That creature's damage must be assigned
@@ -144,12 +145,12 @@ public interface MagicActor extends GameContent {
      * @param blockers The blockers for which damage was not assigned yet
      * @return a blocker from the collection
      */
-    public Blocker getBlockerToAssignDamage(Collection<? extends Blocker> blockers);
+    public Blocker getBlockerToAssignDamage(Collection<? extends Blocker> blockers) throws IrregularActionException;
     
     /**
      * Assigns all damage for the given blocker.
      * 
-     * @see Blocker#setDamageAssignmentOrder(java.util.List)
+     * @see Blocker#setDamageAssignmentOrder(List)
      */
-    public void assignDamage(Blocker blocker);
+    public void assignDamage(Blocker blocker) throws IrregularActionException;
 }

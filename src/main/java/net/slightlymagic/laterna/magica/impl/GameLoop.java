@@ -13,6 +13,8 @@ import java.util.List;
 
 import net.slightlymagic.laterna.magica.Game;
 import net.slightlymagic.laterna.magica.action.play.PlayAction;
+import net.slightlymagic.laterna.magica.player.ConcessionException;
+import net.slightlymagic.laterna.magica.player.IrregularActionException;
 import net.slightlymagic.laterna.magica.player.Player;
 import net.slightlymagic.laterna.magica.player.Player.Status;
 import net.slightlymagic.laterna.magica.turnStructure.PhaseStructure;
@@ -48,12 +50,19 @@ public class GameLoop extends AbstractGameContent implements Runnable {
         PhaseStructure ps = getGame().getPhaseStructure();
         loop: do {
             try {
-                PlayAction a = ps.getPriorPlayer().getActor().getAction();
-                if(!run) break;
-                if(a == null) ps.takeAction(false);
-                else {
-                    a.execute();
-                    ps.takeAction(true);
+                try {
+                    PlayAction a = ps.getPriorPlayer().getActor().getAction();
+                    if(!run) break;
+                    if(a == null) ps.takeAction(false);
+                    else {
+                        a.execute();
+                        ps.takeAction(true);
+                    }
+                } catch(ConcessionException ex) {
+
+                } catch(IrregularActionException ex) {
+                    //there are no other IrregularActionExceptions
+                    throw new AssertionError(ex);
                 }
                 
                 //TODO this is a little dirty. see 104.2: not all other players, but all opponents must have left the game.

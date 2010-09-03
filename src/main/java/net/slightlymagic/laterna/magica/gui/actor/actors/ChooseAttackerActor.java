@@ -49,6 +49,7 @@ public class ChooseAttackerActor extends GuiActor {
     
     @Override
     public void start() {
+        super.start();
         d.add(actor.channels.objects.subscribe(actor.channels.fiber, new CardCallback()));
         
         d.add(setName("Choose attacker to assign damage for"));
@@ -61,6 +62,11 @@ public class ChooseAttackerActor extends GuiActor {
                 else d.add(setBorder(e.getValue(), other));
             }
         }
+    }
+    
+    @Override
+    protected void concede() {
+        actor.channels.attackers.publish(null);
     }
     
     private class CardCallback implements Callback<MagicObject> {

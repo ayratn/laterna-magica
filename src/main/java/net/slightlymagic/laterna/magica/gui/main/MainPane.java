@@ -14,6 +14,8 @@ import java.awt.Frame;
 import java.awt.GridLayout;
 import java.awt.Window;
 import java.awt.event.ActionEvent;
+import java.awt.event.WindowAdapter;
+import java.awt.event.WindowEvent;
 import java.io.File;
 import java.io.IOException;
 import java.io.PrintWriter;
@@ -288,7 +290,12 @@ public class MainPane extends JRootPane implements Disposable {
                     
                     JFrame jf = new JFrame("Game");
                     jf.setDefaultCloseOperation(JFrame.HIDE_ON_CLOSE);
-                    //TODO how will the game loop know if a player looses concurrently
+                    jf.addWindowListener(new WindowAdapter() {
+                        @Override
+                        public void windowClosing(WindowEvent e) {
+                            gui.publishConcede();
+                        }
+                    });
                     
                     jf.add(gui.getTable());
                     

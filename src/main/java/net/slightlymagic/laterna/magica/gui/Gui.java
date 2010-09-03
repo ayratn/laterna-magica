@@ -160,6 +160,11 @@ public class Gui implements Disposable {
             actor.channels.passPriority.publish(null);
     }
     
+    public void publishConcede() {
+        for(GuiMagicActor actor:actors)
+            actor.channels.concede.publish(null);
+    }
+    
     /**
      * Adds a CardDisplay that wants to be notified whenever a card is selected in this Gui.
      */

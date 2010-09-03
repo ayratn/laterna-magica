@@ -39,11 +39,17 @@ public class AttackerActor extends GuiActor {
     
     @Override
     public void start() {
+        super.start();
         updateLabel();
         
         d.add(actor.channels.objects.subscribe(actor.channels.fiber, new CardCallback()));
         d.add(actor.channels.players.subscribe(actor.channels.fiber, new PlayerCallback()));
         d.add(actor.channels.passPriority.subscribe(actor.channels.fiber, new PassPriorityCallback()));
+    }
+    
+    @Override
+    protected void concede() {
+        actor.channels.actions.publish(null);
     }
     
     private void updateLabel() {

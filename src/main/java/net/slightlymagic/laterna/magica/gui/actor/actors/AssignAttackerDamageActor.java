@@ -80,6 +80,7 @@ public class AssignAttackerDamageActor extends GuiActor {
     
     @Override
     public void start() {
+        super.start();
         d.add(actor.channels.objects.subscribe(actor.channels.fiber, new CardCallback()));
         d.add(actor.channels.players.subscribe(actor.channels.fiber, new PlayerCallback()));
         
@@ -95,6 +96,11 @@ public class AssignAttackerDamageActor extends GuiActor {
         
         update();
         d.add(setEnabled(false));
+    }
+    
+    @Override
+    protected void concede() {
+        actor.channels.actions.publish(null);
     }
     
     private void update() {
