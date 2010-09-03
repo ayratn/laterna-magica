@@ -20,7 +20,6 @@ import java.util.List;
 
 import javax.swing.DefaultComboBoxModel;
 import javax.swing.JComboBox;
-import javax.swing.JFileChooser;
 import javax.swing.JFrame;
 import javax.swing.JMenu;
 import javax.swing.JMenuBar;
@@ -35,8 +34,6 @@ import net.slightlymagic.laterna.magica.deck.Deck.DeckType;
 import net.slightlymagic.laterna.magica.gui.deckEditor.models.pool.CardPoolModel;
 import net.slightlymagic.laterna.magica.gui.deckEditor.models.pool.DeckModel;
 import net.slightlymagic.laterna.magica.gui.deckEditor.models.pool.PoolModel;
-import net.slightlymagic.laterna.magica.io.deck.DeckPersister;
-import net.slightlymagic.laterna.magica.io.deck.DeckPersisterImpl;
 
 
 /**
@@ -93,13 +90,12 @@ public class DeckEditorPane extends JRootPane {
         JMenu file = new JMenu("File");
         bar.add(file);
         
-        DeckPersister p = new DeckPersisterImpl();
-        JFileChooser c = new JFileChooser(LaternaMagica.PROPS().getFile("/laterna/usr/decks"));
-        file.add(new OpenAction(this, p, c));
-        file.add(new SaveAction(this, p, c));
+        DeckIO io = new DeckIO();
+        file.add(new OpenAction(this, io));
+        file.add(new SaveAction(this, io));
         file.addSeparator();
         file.add(new NewAction(this));
-        file.add(new NewFromPoolAction(this, p, c));
+        file.add(new NewFromPoolAction(this, io));
         file.add(new NewPoolAction(this));
     }
     

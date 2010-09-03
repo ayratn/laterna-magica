@@ -9,18 +9,10 @@ package net.slightlymagic.laterna.magica.gui.deckEditor;
 
 import java.awt.event.ActionEvent;
 import java.io.File;
-import java.io.FileInputStream;
-import java.io.IOException;
 
 import javax.swing.AbstractAction;
-import javax.swing.JFileChooser;
 
-import net.slightlymagic.laterna.magica.LaternaMagica;
 import net.slightlymagic.laterna.magica.deck.Deck;
-import net.slightlymagic.laterna.magica.io.deck.DeckPersister;
-
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
 
 /**
@@ -30,37 +22,24 @@ import org.slf4j.LoggerFactory;
  * @author Clemens Koza
  */
 public class OpenAction extends AbstractAction {
-    private static final long   serialVersionUID = 6972040349638780836L;
+    private static final long serialVersionUID = 6972040349638780836L;
     
-    private static final Logger log              = LoggerFactory.getLogger(OpenAction.class);
+    private DeckEditorPane    pane;
+    private DeckIO            io;
     
-    private DeckEditorPane      pane;
-    private DeckPersister       p;
-    private JFileChooser        c;
-    
-    public OpenAction(DeckEditorPane pane, DeckPersister p) {
-        this(pane, p, null);
-    }
-    
-    public OpenAction(DeckEditorPane pane, DeckPersister p, JFileChooser c) {
+    public OpenAction(DeckEditorPane pane, DeckIO io) {
         super("Open...");
         this.pane = pane;
-        this.p = p;
-        this.c = c;
+        this.io = io;
     }
     
     @Override
     public void actionPerformed(ActionEvent e) {
-        if(c == null) c = new JFileChooser(LaternaMagica.PROPS().getFile("/laterna/usr/decks"));
-        if(c.showOpenDialog(null) != JFileChooser.APPROVE_OPTION) return;
-        File f = c.getSelectedFile();
+        File f = io.open();
+        Deck d = io.open(f);
+        if(d == null) return;
         
-        try {
-            Deck d = p.readDeck(new FileInputStream(f));
-            if(f.getName().endsWith(".pool")) pane.openPool(d);
-            else pane.openDeck(d);
-        } catch(IOException ex) {
-            log.error("Could not open deck", ex);
-        }
+        if(f.getName().endsWith(".pool")) pane.openPool(d);
+        else pane.openDeck(d);
     }
 }

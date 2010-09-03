@@ -8,18 +8,8 @@ package net.slightlymagic.laterna.magica.gui.deckEditor;
 
 
 import java.awt.event.ActionEvent;
-import java.io.File;
-import java.io.FileOutputStream;
-import java.io.IOException;
 
 import javax.swing.AbstractAction;
-import javax.swing.JFileChooser;
-
-import net.slightlymagic.laterna.magica.LaternaMagica;
-import net.slightlymagic.laterna.magica.io.deck.DeckPersister;
-
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
 
 /**
@@ -29,35 +19,19 @@ import org.slf4j.LoggerFactory;
  * @author Clemens Koza
  */
 public class SaveAction extends AbstractAction {
-    private static final long   serialVersionUID = -47046556411079128L;
+    private static final long serialVersionUID = -47046556411079128L;
     
-    private static final Logger log              = LoggerFactory.getLogger(SaveAction.class);
+    private DeckEditorPane    pane;
+    private DeckIO            io;
     
-    private DeckEditorPane      pane;
-    private DeckPersister       p;
-    private JFileChooser        c;
-    
-    public SaveAction(DeckEditorPane pane, DeckPersister p) {
-        this(pane, p, null);
-    }
-    
-    public SaveAction(DeckEditorPane pane, DeckPersister p, JFileChooser c) {
+    public SaveAction(DeckEditorPane pane, DeckIO io) {
         super("Save As...");
         this.pane = pane;
-        this.p = p;
-        this.c = c;
+        this.io = io;
     }
     
     @Override
     public void actionPerformed(ActionEvent e) {
-        if(c == null) c = new JFileChooser(LaternaMagica.PROPS().getFile("/laterna/usr/decks"));
-        if(c.showSaveDialog(null) != JFileChooser.APPROVE_OPTION) return;
-        File f = c.getSelectedFile();
-        
-        try {
-            p.writeDeck(pane.getLowerDeck(), new FileOutputStream(f));
-        } catch(IOException ex) {
-            log.error("Could not open deck", ex);
-        }
+        io.save(io.save(), pane.getLowerDeck());
     }
 }
