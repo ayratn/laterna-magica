@@ -4,7 +4,7 @@
  <modelVersion>4.0.0</modelVersion>
  <groupId>net.slightlymagic.laterna</groupId>
  <artifactId>LaternaMagica</artifactId>
- <version>0.0.1-SNAPSHOT</version>
+ <version>20100904</version>
  <name>LaternaMagica</name>
  <description>An implementation of the Magic Trading Card Game, featuring Rules Enforcement, playing against human
   and computer, multiplayer games and more.</description>
@@ -19,6 +19,15 @@
 
  <build>
   <plugins>
+   <plugin>
+    <artifactId>maven-assembly-plugin</artifactId>
+    <version>2.2-beta-5</version>
+    <configuration>
+     <descriptorRefs>
+      <descriptorRef>assembly.xml</descriptorRef>
+     </descriptorRefs>
+    </configuration>
+   </plugin>
    <plugin>
     <artifactId>maven-compiler-plugin</artifactId>
     <configuration>

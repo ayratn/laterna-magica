@@ -1,0 +1,194 @@
+<project name="LaternaMagica" default="assemble">
+	<property name="lm.version" value="20100904" />
+	
+	<property name="repo" location="${user.home}/.m2/repository" />
+	<property name="build" location="${basedir}/target/lm${lm.version}" />
+	<property name="lib_name" value="lib" />
+	<property name="lib" location="${build}/${lib_name}" />
+	
+	<target name="pack">
+		<delete dir="src/main/resources" includes="*.zip" />
+		<zip destfile="src/main/resources/res.zip">
+			<fileset dir="props/res">
+				<exclude name="**/.svn" />
+				<exclude name="cards/cards.zip" />
+			</fileset>
+		</zip>
+		<zip destfile="src/main/resources/sharedRes.zip">
+			<fileset dir="props/sharedRes">
+				<exclude name="**/.svn" />
+				<exclude name="**/*.jpg" />
+				<exclude name="**/*.gif" />
+			</fileset>
+		</zip>
+		<zip destfile="src/main/resources/usr.zip">
+			<fileset dir="props/usr">
+				<exclude name="**/.svn" />
+				<exclude name="decks/*" />
+			</fileset>
+		</zip>
+	</target>
+
+	<target name="assemble" depends="copy-libs, copy-main">
+		<property name="lm" location="${build}/LaternaMagica-${lm.version}.jar" />
+		<chmod file="${lm}" perm="+x" />
+
+		<manifestclasspath property="cp" jarfile="${lm}">
+			<classpath>
+				<fileset dir="${build}" includes="lib/*.jar" />
+			</classpath>
+		</manifestclasspath>
+		
+		<manifest file="${build}/MANIFEST.MF">
+			<attribute name="Main-Class" value="net.slightlymagic.laterna.magica.gui.main.MainPane" />
+
+			<attribute name="Class-Path" value="${cp}" />
+		</manifest>
+	</target>
+
+	<target name="copy-libs">
+		<antcall target="copy-artifact">
+			<param name="todir" value="${lib}" />
+			<param name="groupID" value="org/jetlang" />
+			<param name="artifactID" value="jetlang" />
+			<param name="version" value="0.2.4" />
+		</antcall>
+		<antcall target="copy-artifact">
+			<param name="todir" value="${lib}" />
+			<param name="groupID" value="com/google/guava" />
+			<param name="artifactID" value="guava" />
+			<param name="version" value="r06" />
+		</antcall>
+		<antcall target="copy-artifact">
+			<param name="todir" value="${lib}" />
+			<param name="groupID" value="org/slf4j" />
+			<param name="artifactID" value="slf4j-api" />
+			<param name="version" value="1.6.1" />
+		</antcall>
+		<antcall target="copy-artifact">
+			<param name="todir" value="${lib}" />
+			<param name="groupID" value="org/slf4j" />
+			<param name="artifactID" value="slf4j-log4j12" />
+			<param name="version" value="1.6.1" />
+		</antcall>
+		<antcall target="copy-artifact">
+			<param name="todir" value="${lib}" />
+			<param name="groupID" value="log4j" />
+			<param name="artifactID" value="log4j" />
+			<param name="version" value="1.2.16" />
+		</antcall>
+		<antcall target="copy-artifact">
+			<param name="todir" value="${lib}" />
+			<param name="groupID" value="org/swinglabs" />
+			<param name="artifactID" value="swingx" />
+			<param name="version" value="1.6.1" />
+		</antcall>
+		<antcall target="copy-artifact">
+			<param name="todir" value="${lib}" />
+			<param name="groupID" value="com/jhlabs" />
+			<param name="artifactID" value="filters" />
+			<param name="version" value="2.0.235" />
+		</antcall>
+		<antcall target="copy-artifact">
+			<param name="todir" value="${lib}" />
+			<param name="groupID" value="org/swinglabs" />
+			<param name="artifactID" value="swing-worker" />
+			<param name="version" value="1.1" />
+		</antcall>
+		<antcall target="copy-artifact">
+			<param name="todir" value="${lib}" />
+			<param name="groupID" value="dom4j" />
+			<param name="artifactID" value="dom4j" />
+			<param name="version" value="1.6.1" />
+		</antcall>
+		<antcall target="copy-artifact">
+			<param name="todir" value="${lib}" />
+			<param name="groupID" value="xml-apis" />
+			<param name="artifactID" value="xml-apis" />
+			<param name="version" value="1.0.b2" />
+		</antcall>
+		<antcall target="copy-artifact">
+			<param name="todir" value="${lib}" />
+			<param name="groupID" value="jaxen" />
+			<param name="artifactID" value="jaxen" />
+			<param name="version" value="1.1.1" />
+		</antcall>
+		<antcall target="copy-artifact">
+			<param name="todir" value="${lib}" />
+			<param name="groupID" value="jdom" />
+			<param name="artifactID" value="jdom" />
+			<param name="version" value="1.0" />
+		</antcall>
+		<antcall target="copy-artifact">
+			<param name="todir" value="${lib}" />
+			<param name="groupID" value="xerces" />
+			<param name="artifactID" value="xercesImpl" />
+			<param name="version" value="2.6.2" />
+		</antcall>
+		<antcall target="copy-artifact">
+			<param name="todir" value="${lib}" />
+			<param name="groupID" value="xom" />
+			<param name="artifactID" value="xom" />
+			<param name="version" value="1.0" />
+		</antcall>
+		<antcall target="copy-artifact">
+			<param name="todir" value="${lib}" />
+			<param name="groupID" value="xerces" />
+			<param name="artifactID" value="xmlParserAPIs" />
+			<param name="version" value="2.6.2" />
+		</antcall>
+		<antcall target="copy-artifact">
+			<param name="todir" value="${lib}" />
+			<param name="groupID" value="xalan" />
+			<param name="artifactID" value="xalan" />
+			<param name="version" value="2.6.0" />
+		</antcall>
+		<antcall target="copy-artifact">
+			<param name="todir" value="${lib}" />
+			<param name="groupID" value="com/ibm/icu" />
+			<param name="artifactID" value="icu4j" />
+			<param name="version" value="2.6.1" />
+		</antcall>
+		<antcall target="copy-artifact">
+			<param name="todir" value="${lib}" />
+			<param name="groupID" value="net/slightlymagic/utils" />
+			<param name="artifactID" value="BeanUtils" />
+			<param name="version" value="0.0.2" />
+		</antcall>
+		<antcall target="copy-artifact">
+			<param name="todir" value="${lib}" />
+			<param name="groupID" value="net/slightlymagic/treeProperties" />
+			<param name="artifactID" value="TreeProperties" />
+			<param name="version" value="0.1.4" />
+		</antcall>
+		<antcall target="copy-artifact">
+			<param name="todir" value="${lib}" />
+			<param name="groupID" value="net/slightlymagic/utils" />
+			<param name="artifactID" value="Utils" />
+			<param name="version" value="0.0.3" />
+		</antcall>
+	</target>
+
+	<target name="copy-main">
+		<!--
+		<antcall target="copy-artifact">
+			<param name="todir" value="${build}" />
+			<param name="groupID" value="net/slightlymagic/laterna" />
+			<param name="artifactID" value="LaternaEditor" />
+			<param name="version" value="0.0.1-SNAPSHOT" />
+		</antcall>
+		  -->
+		<antcall target="copy-artifact">
+			<param name="todir" value="${build}" />
+			<param name="groupID" value="net/slightlymagic/laterna" />
+			<param name="artifactID" value="LaternaMagica" />
+			<param name="version" value="${lm.version}" />
+		</antcall>
+	</target>
+
+	<target name="copy-artifact">
+		<copy todir="${todir}">
+			<fileset file="${repo}/${groupID}/${artifactID}/${version}/${artifactID}-${version}.jar" />
+		</copy>
+	</target>
+</project>

@@ -7,8 +7,18 @@
 package net.slightlymagic.laterna.magica;
 
 
+import java.io.BufferedInputStream;
+import java.io.BufferedOutputStream;
+import java.io.File;
+import java.io.FileOutputStream;
 import java.io.IOException;
+import java.io.OutputStream;
+import java.net.URISyntaxException;
 import java.net.URL;
+import java.util.zip.ZipEntry;
+import java.util.zip.ZipInputStream;
+
+import javax.swing.JOptionPane;
 
 import net.slightlymagic.laterna.magica.cards.AllCards;
 import net.slightlymagic.treeProperties.PropertyTree;
@@ -32,6 +42,8 @@ public class LaternaMagica {
     private static AllCards     CARDS;
     
     public static void init() throws IOException {
+        preInit();
+        
         URL url = LaternaMagica.class.getResource("/config.properties");
         System.out.println("Configuring from Resource /config.properties");
         System.out.println("Resolved to " + url);
@@ -67,5 +79,73 @@ public class LaternaMagica {
     
     public static AllCards CARDS() {
         return CARDS;
+    }
+    
+    private static void preInit() throws IOException {
+        try {
+            URL url = LaternaMagica.class.getProtectionDomain().getCodeSource().getLocation();
+            File base = new File(url.toURI()).getAbsoluteFile();
+            
+            //only do this if running from a jar file, aka the deployed environment
+            if(!base.isFile()) return;
+            //running from jar file
+            base = base.getParentFile();
+            
+            if(!new File(base, "lib").exists()) {
+                JOptionPane.showMessageDialog(
+                        null,
+                        "The \"lib\" directory is missing. Please make sure to downlaod the libraries and place them next to Laterna Magica",
+                        "Libraries missing", JOptionPane.ERROR_MESSAGE);
+                System.exit(1);
+            }
+            
+            File res = new File(base, "res");
+            File sharedRes = new File(base, "../res");
+            File usr = new File(System.getProperty("user.home"), ".slightlymagic.net/laterna");
+            unpack(res, "/res.zip");
+            unpack(sharedRes, "/sharedRes.zip");
+            unpack(usr, "/usr.zip");
+        } catch(URISyntaxException ex) {
+            throw new IOException(ex);
+        }
+    }
+    
+    private static void unpack(File dest, String resource) throws IOException {
+        if(dest.exists()) return;
+        if(!dest.mkdirs()) throw new IOException("Directory could not be created: " + dest);
+        
+        ZipInputStream zis = new ZipInputStream(new BufferedInputStream(
+                LaternaMagica.class.getResourceAsStream(resource)));
+        try {
+            byte[] buf = new byte[8 * 1024];
+            
+            for(ZipEntry e; (e = zis.getNextEntry()) != null;) {
+                File f = new File(dest, e.getName());
+                if(e.isDirectory()) {
+                    if(!f.mkdirs() && !f.exists()) throw new IOException("Directory could not be created: " + dest);
+                } else {
+                    if(!f.getParentFile().mkdirs() && !f.getParentFile().exists()) throw new IOException(
+                            "Directory could not be created: " + dest);
+                    
+                    OutputStream os = new BufferedOutputStream(new FileOutputStream(f));
+                    try {
+                        for(int len; (len = zis.read(buf)) != -1;)
+                            os.write(buf, 0, len);
+                    } finally {
+                        try {
+                            os.close();
+                        } catch(IOException ex) {
+                            ex.printStackTrace();
+                        }
+                    }
+                }
+            }
+        } finally {
+            try {
+                zis.close();
+            } catch(IOException ex) {
+                ex.printStackTrace();
+            }
+        }
     }
 }

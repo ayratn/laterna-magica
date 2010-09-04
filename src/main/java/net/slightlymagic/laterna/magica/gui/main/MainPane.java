@@ -346,7 +346,7 @@ public class MainPane extends JRootPane implements Disposable {
             for(DownloadJob job:it)
                 g.getDownloader().add(job);
             
-            JDialog d = new JDialog((Frame) null, "DOwnload pictures", true);
+            JDialog d = new JDialog((Frame) null, "Download pictures", false);
             d.setDefaultCloseOperation(JDialog.DISPOSE_ON_CLOSE);
             d.addWindowListener(new WindowAdapter() {
                 @Override
