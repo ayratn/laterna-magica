@@ -9,15 +9,11 @@ package net.slightlymagic.laterna.dl;
 
 import java.awt.BorderLayout;
 import java.awt.Dimension;
-import java.awt.Frame;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.awt.event.WindowAdapter;
-import java.awt.event.WindowEvent;
 import java.beans.IndexedPropertyChangeEvent;
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
-import java.io.IOException;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -26,18 +22,11 @@ import javax.swing.BoundedRangeModel;
 import javax.swing.BoxLayout;
 import javax.swing.DefaultBoundedRangeModel;
 import javax.swing.JButton;
-import javax.swing.JDialog;
 import javax.swing.JPanel;
 import javax.swing.JProgressBar;
 import javax.swing.JScrollPane;
 
 import net.slightlymagic.laterna.dl.DownloadJob.State;
-import net.slightlymagic.laterna.dl.sources.GathererCardBack;
-import net.slightlymagic.laterna.dl.sources.GathererCards;
-import net.slightlymagic.laterna.dl.sources.GathererSymbols;
-import net.slightlymagic.laterna.magica.LaternaMagica;
-
-import com.google.common.collect.Iterables;
 
 
 /**
@@ -47,40 +36,15 @@ import com.google.common.collect.Iterables;
  * @author Clemens Koza
  */
 public class DownloadGui extends JPanel {
-    private static final long serialVersionUID = -7346572382493844327L;
-    
-    public static void main(String[] args) throws IOException {
-        LaternaMagica.init();
-        
-        final DownloadGui g = new DownloadGui(new Downloader());
-        Iterable<DownloadJob> it = Iterables.concat(new GathererSymbols(), new GathererCardBack(),
-                new GathererCards()/* TODO , new ChutographyCardsHQ()*/);
-        
-        for(DownloadJob job:it)
-            g.getDownloader().add(job);
-        
-        JDialog d = new JDialog((Frame) null, true);
-        d.setDefaultCloseOperation(JDialog.DISPOSE_ON_CLOSE);
-        d.addWindowListener(new WindowAdapter() {
-            @Override
-            public void windowClosing(WindowEvent e) {
-                g.getDownloader().dispose();
-            }
-        });
-        d.setLayout(new BorderLayout());
-        d.add(g);
-        d.pack();
-        d.setVisible(true);
-        
-    }
+    private static final long                     serialVersionUID = -7346572382493844327L;
     
     private final Downloader                      d;
-    private final DownloadListener                l          = new DownloadListener();
-    private final BoundedRangeModel               model      = new DefaultBoundedRangeModel(0, 0, 0, 0);
-    private final JProgressBar                    progress   = new JProgressBar(model);
+    private final DownloadListener                l                = new DownloadListener();
+    private final BoundedRangeModel               model            = new DefaultBoundedRangeModel(0, 0, 0, 0);
+    private final JProgressBar                    progress         = new JProgressBar(model);
     
-    private final Map<DownloadJob, DownloadPanel> progresses = new HashMap<DownloadJob, DownloadPanel>();
-    private final JPanel                          panel      = new JPanel();
+    private final Map<DownloadJob, DownloadPanel> progresses       = new HashMap<DownloadJob, DownloadPanel>();
+    private final JPanel                          panel            = new JPanel();
     
     public DownloadGui(Downloader d) {
         super(new BorderLayout());

@@ -28,11 +28,19 @@ import javax.swing.JButton;
 import javax.swing.JDialog;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
+import javax.swing.JMenu;
+import javax.swing.JMenuBar;
 import javax.swing.JPanel;
 import javax.swing.JRootPane;
 import javax.swing.JTextField;
 import javax.swing.SwingUtilities;
 
+import net.slightlymagic.laterna.dl.DownloadGui;
+import net.slightlymagic.laterna.dl.DownloadJob;
+import net.slightlymagic.laterna.dl.Downloader;
+import net.slightlymagic.laterna.dl.sources.GathererCardBack;
+import net.slightlymagic.laterna.dl.sources.GathererCards;
+import net.slightlymagic.laterna.dl.sources.GathererSymbols;
 import net.slightlymagic.laterna.magica.Game;
 import net.slightlymagic.laterna.magica.LaternaMagica;
 import net.slightlymagic.laterna.magica.deck.Deck;
@@ -59,6 +67,8 @@ import org.jetlang.core.Callback;
 import org.jetlang.core.Disposable;
 import org.jetlang.fibers.Fiber;
 import org.jetlang.fibers.PoolFiberFactory;
+
+import com.google.common.collect.Iterables;
 
 
 /**
@@ -103,6 +113,12 @@ public class MainPane extends JRootPane implements Disposable {
         d.add(f);
         
         setupComponents();
+        
+        JMenuBar bar = new JMenuBar();
+        setJMenuBar(bar);
+        JMenu file = new JMenu("File");
+        bar.add(file);
+        file.add(new DownloadAction());
     }
     
     @Override
@@ -312,6 +328,36 @@ public class MainPane extends JRootPane implements Disposable {
                     jf.dispose();
                 }
             });
+        }
+    }
+    
+    private class DownloadAction extends AbstractAction {
+        private static final long serialVersionUID = 6316980566384844529L;
+        
+        public DownloadAction() {
+            super("Download pictures");
+        }
+        
+        public void actionPerformed(ActionEvent e) {
+            final DownloadGui g = new DownloadGui(new Downloader());
+            Iterable<DownloadJob> it = Iterables.concat(new GathererSymbols(), new GathererCardBack(),
+                    new GathererCards()/* TODO , new ChutographyCardsHQ()*/);
+            
+            for(DownloadJob job:it)
+                g.getDownloader().add(job);
+            
+            JDialog d = new JDialog((Frame) null, "DOwnload pictures", true);
+            d.setDefaultCloseOperation(JDialog.DISPOSE_ON_CLOSE);
+            d.addWindowListener(new WindowAdapter() {
+                @Override
+                public void windowClosing(WindowEvent e) {
+                    g.getDownloader().dispose();
+                }
+            });
+            d.setLayout(new BorderLayout());
+            d.add(g);
+            d.pack();
+            d.setVisible(true);
         }
     }
 }
