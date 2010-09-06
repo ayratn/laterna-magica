@@ -7,6 +7,7 @@
 package net.slightlymagic.laterna.magica;
 
 
+import java.awt.Dimension;
 import java.io.BufferedInputStream;
 import java.io.BufferedOutputStream;
 import java.io.File;
@@ -18,9 +19,11 @@ import java.net.URL;
 import java.util.zip.ZipEntry;
 import java.util.zip.ZipInputStream;
 
-import javax.swing.JOptionPane;
+import javax.swing.JFrame;
 
 import net.slightlymagic.laterna.magica.cards.AllCards;
+import net.slightlymagic.laterna.magica.gui.main.MainPane;
+import net.slightlymagic.laterna.magica.util.DownloadLibs;
 import net.slightlymagic.treeProperties.PropertyTree;
 import net.slightlymagic.utils.Configurator;
 import net.slightlymagic.utils.PropertyTreeConfigurator;
@@ -40,6 +43,23 @@ public class LaternaMagica {
     
     private static PropertyTree PROPS;
     private static AllCards     CARDS;
+    
+    public static void main(String[] args) throws IOException {
+        LaternaMagica.init();
+        
+        JFrame jf = new JFrame();
+        jf.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        jf.setTitle("Laterna Magica");
+        
+        jf.add(new MainPane());
+        
+        jf.pack();
+        Dimension screen = jf.getToolkit().getScreenSize();
+        Dimension window = jf.getSize();
+        jf.setLocation((screen.width - window.width) / 2, (screen.height - window.height) / 2);
+        
+        jf.setVisible(true);
+    }
     
     public static void init() throws IOException {
         preInit();
@@ -91,13 +111,7 @@ public class LaternaMagica {
             //running from jar file
             base = base.getParentFile();
             
-            if(!new File(base, "lib").exists()) {
-                JOptionPane.showMessageDialog(
-                        null,
-                        "The \"lib\" directory is missing. Please make sure to downlaod the libraries and place them next to Laterna Magica",
-                        "Libraries missing", JOptionPane.ERROR_MESSAGE);
-                System.exit(1);
-            }
+            DownloadLibs.downloadLibs(new File(base, "../lib"), LaternaMagica.class.getResource("/libs.txt"));
             
             File res = new File(base, "res");
             File sharedRes = new File(base, "../res");

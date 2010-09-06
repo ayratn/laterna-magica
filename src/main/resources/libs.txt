@@ -1,0 +1,22 @@
+dom4j-1.6.1.jar						http://laterna-magica.googlecode.com/svn-history/r149/lib/dom4j-1.6.1.jar
+jetlang-0.2.4.jar					http://laterna-magica.googlecode.com/svn-history/r149/lib/jetlang-0.2.4.jar
+xalan-2.6.0.jar						http://laterna-magica.googlecode.com/svn-history/r149/lib/xalan-2.6.0.jar
+filters-2.0.235.jar					http://laterna-magica.googlecode.com/svn-history/r149/lib/filters-2.0.235.jar
+log4j-1.2.16.jar					http://laterna-magica.googlecode.com/svn-history/r149/lib/log4j-1.2.16.jar
+xercesImpl-2.6.2.jar				http://laterna-magica.googlecode.com/svn-history/r149/lib/xercesImpl-2.6.2.jar
+guava-r06.jar						http://laterna-magica.googlecode.com/svn-history/r149/lib/guava-r06.jar
+slf4j-api-1.6.1.jar					http://laterna-magica.googlecode.com/svn-history/r149/lib/slf4j-api-1.6.1.jar
+xml-apis-1.0.b2.jar					http://laterna-magica.googlecode.com/svn-history/r149/lib/xml-apis-1.0.b2.jar
+icu4j-2.6.1.jar						http://laterna-magica.googlecode.com/svn-history/r149/lib/icu4j-2.6.1.jar
+slf4j-log4j12-1.6.1.jar				http://laterna-magica.googlecode.com/svn-history/r149/lib/slf4j-log4j12-1.6.1.jar
+xmlParserAPIs-2.6.2.jar				http://laterna-magica.googlecode.com/svn-history/r149/lib/xmlParserAPIs-2.6.2.jar
+jaxen-1.1.1.jar						http://laterna-magica.googlecode.com/svn-history/r149/lib/jaxen-1.1.1.jar
+swing-worker-1.1.jar				http://laterna-magica.googlecode.com/svn-history/r149/lib/swing-worker-1.1.jar
+xom-1.0.jar							http://laterna-magica.googlecode.com/svn-history/r149/lib/xom-1.0.jar
+jdom-1.0.jar						http://laterna-magica.googlecode.com/svn-history/r149/lib/jdom-1.0.jar
+swingx-1.6.1.jar					http://laterna-magica.googlecode.com/svn-history/r149/lib/swingx-1.6.1.jar
+
+BeanUtils-0.0.2.jar					http://laterna-magica.googlecode.com/svn-history/r150/snapshots/BeanUtils-0.0.2.jar
+TreeProperties-0.1.5.jar			http://laterna-magica.googlecode.com/svn-history/r150/snapshots/TreeProperties-0.1.5.jar
+LaternaEditor-0.0.1-SNAPSHOT.jar	http://laterna-magica.googlecode.com/svn-history/r150/snapshots/LaternaEditor-0.0.1-SNAPSHOT.jar
+Utils-0.0.3.jar						http://laterna-magica.googlecode.com/svn-history/r150/snapshots/Utils-0.0.3.jar

@@ -2,7 +2,7 @@
 	<property name="lm.version" value="20100906" />
 	
 	<property name="repo" location="${user.home}/.m2/repository" />
-	<property name="build" location="${basedir}/target/lm${lm.version}" />
+	<property name="build" location="${basedir}/target/build" />
 	<property name="lib_name" value="lib" />
 	<property name="lib" location="${build}/${lib_name}" />
 	
@@ -29,23 +29,27 @@
 		</zip>
 	</target>
 
-	<target name="assemble" depends="copy-libs, copy-main">
-		<property name="lm" location="${build}/LaternaMagica-${lm.version}.jar" />
+	<target name="assemble" depends="clean, copy-libs, copy-main">
+		<property name="lm" location="${build}/lm${lm.version}/LaternaMagica-${lm.version}.jar" />
 		<chmod file="${lm}" perm="+x" />
 
 		<manifestclasspath property="cp" jarfile="${lm}">
 			<classpath>
-				<fileset dir="${build}" includes="lib/*.jar" />
+				<fileset dir="${build}" includes="${lib_name}/*.jar" />
 			</classpath>
 		</manifestclasspath>
 		
 		<manifest file="${build}/MANIFEST.MF">
-			<attribute name="Main-Class" value="net.slightlymagic.laterna.magica.gui.main.MainPane" />
+			<attribute name="Main-Class" value="net.slightlymagic.laterna.magica.LaternaMagica" />
 
 			<attribute name="Class-Path" value="${cp}" />
 		</manifest>
 	</target>
 
+	<target name="clean">
+		<delete dir="${build}" />
+	</target>
+	
 	<target name="copy-libs">
 		<antcall target="copy-artifact">
 			<param name="todir" value="${lib}" />
@@ -177,7 +181,7 @@
 
 	<target name="copy-main">
 		<antcall target="copy-artifact">
-			<param name="todir" value="${build}" />
+			<param name="todir" value="${build}/lm${lm.version}" />
 			<param name="groupID" value="net/slightlymagic/laterna" />
 			<param name="artifactID" value="LaternaMagica" />
 			<param name="version" value="${lm.version}" />

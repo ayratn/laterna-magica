@@ -17,7 +17,6 @@ import java.awt.event.ActionEvent;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
 import java.io.File;
-import java.io.IOException;
 import java.io.PrintWriter;
 import java.io.StringWriter;
 import java.util.concurrent.Executors;
@@ -42,7 +41,6 @@ import net.slightlymagic.laterna.dl.sources.GathererCardBack;
 import net.slightlymagic.laterna.dl.sources.GathererCards;
 import net.slightlymagic.laterna.dl.sources.GathererSymbols;
 import net.slightlymagic.laterna.magica.Game;
-import net.slightlymagic.laterna.magica.LaternaMagica;
 import net.slightlymagic.laterna.magica.deck.Deck;
 import net.slightlymagic.laterna.magica.gui.DisposeSupport;
 import net.slightlymagic.laterna.magica.gui.Gui;
@@ -78,31 +76,14 @@ import com.google.common.collect.Iterables;
  * @author Clemens Koza
  */
 public class MainPane extends JRootPane implements Disposable {
-    private static final long serialVersionUID = 1118746971534003442L;
-    
-    public static void main(String[] args) throws IOException {
-        LaternaMagica.init();
-        
-        JFrame jf = new JFrame();
-        jf.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        jf.setTitle("Laterna Magica");
-        
-        jf.add(new MainPane());
-        
-        jf.pack();
-        Dimension screen = jf.getToolkit().getScreenSize();
-        Dimension window = jf.getSize();
-        jf.setLocation((screen.width - window.width) / 2, (screen.height - window.height) / 2);
-        
-        jf.setVisible(true);
-    }
+    private static final long      serialVersionUID = 1118746971534003442L;
     
     private JTextField             name1, name2;
     private DeckAction             deck1, deck2;
     
-    private Channel<Runnable>      ch = new MemoryChannel<Runnable>();
+    private Channel<Runnable>      ch               = new MemoryChannel<Runnable>();
     
-    protected final DisposeSupport d  = new DisposeSupport();
+    protected final DisposeSupport d                = new DisposeSupport();
     
     public MainPane() {
         PoolFiberFactory f = new PoolFiberFactory(Executors.newCachedThreadPool());
