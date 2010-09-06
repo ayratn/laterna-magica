@@ -2,9 +2,14 @@
  xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
 
  <modelVersion>4.0.0</modelVersion>
+ <parent>
+  <artifactId>Laterna</artifactId>
+  <groupId>net.slightlymagic</groupId>
+  <version>0.0.1-SNAPSHOT</version>
+ </parent>
  <groupId>net.slightlymagic.laterna</groupId>
  <artifactId>LaternaMagica</artifactId>
- <version>20100904</version>
+ <version>20100906</version>
  <name>LaternaMagica</name>
  <description>An implementation of the Magic Trading Card Game, featuring Rules Enforcement, playing against human
   and computer, multiplayer games and more.</description>

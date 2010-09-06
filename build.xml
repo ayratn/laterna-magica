@@ -1,5 +1,5 @@
 <project name="LaternaMagica" default="assemble">
-	<property name="lm.version" value="20100904" />
+	<property name="lm.version" value="20100906" />
 	
 	<property name="repo" location="${user.home}/.m2/repository" />
 	<property name="build" location="${basedir}/target/lm${lm.version}" />
@@ -159,7 +159,7 @@
 			<param name="todir" value="${lib}" />
 			<param name="groupID" value="net/slightlymagic/treeProperties" />
 			<param name="artifactID" value="TreeProperties" />
-			<param name="version" value="0.1.4" />
+			<param name="version" value="0.1.5" />
 		</antcall>
 		<antcall target="copy-artifact">
 			<param name="todir" value="${lib}" />
@@ -167,17 +167,15 @@
 			<param name="artifactID" value="Utils" />
 			<param name="version" value="0.0.3" />
 		</antcall>
-	</target>
-
-	<target name="copy-main">
-		<!--
 		<antcall target="copy-artifact">
-			<param name="todir" value="${build}" />
+			<param name="todir" value="${lib}" />
 			<param name="groupID" value="net/slightlymagic/laterna" />
 			<param name="artifactID" value="LaternaEditor" />
 			<param name="version" value="0.0.1-SNAPSHOT" />
 		</antcall>
-		  -->
+	</target>
+
+	<target name="copy-main">
 		<antcall target="copy-artifact">
 			<param name="todir" value="${build}" />
 			<param name="groupID" value="net/slightlymagic/laterna" />
