@@ -1,0 +1,11 @@
+@date	2010-09-07
+@author	Silly Freak
+
+@ignore
+
+@set	LRW common 141802
+
+name	Shimmering Grotto
+type	land
+text	{T}: Add {1} to your mana pool.
+text	{1}, {T}: Add one mana of any color to your mana pool.

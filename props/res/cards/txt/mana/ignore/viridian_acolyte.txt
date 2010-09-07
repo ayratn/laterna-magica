@@ -1,0 +1,12 @@
+@date	2010-09-07
+@author	Silly Freak
+
+@ignore
+
+@set	DST common 15190
+
+name	Viridian Acolyte
+cost	{G}
+type	creature - elf shaman
+pt		1 / 1
+text	{1}, {T}: Add one mana of any color to your mana pool.

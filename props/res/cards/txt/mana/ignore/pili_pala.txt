@@ -1,0 +1,14 @@
+@date	2010-09-07
+@author	Silly Freak
+
+@ignore
+
+@set	SHM common 147381
+
+name	Pili-Pala
+cost	{2}
+type	artifact
+type	creature - scarecrow
+pt		1 / 1
+text	Flying
+text	{2}, {Q}: Add one mana of any color to your mana pool. ({Q} is the untap symbol.)

@@ -1,0 +1,12 @@
+@date	2010-09-07
+@author	Silly Freak
+
+@ignore
+
+@set	INV uncommon 23230
+@set	MRD common 46046
+
+name	Chromatic Sphere
+cost	{1}
+type	artifact
+text	{1}, {T}, Sacrifice ~: Add one mana of any color to your mana pool. Draw a card.

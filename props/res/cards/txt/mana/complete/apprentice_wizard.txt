@@ -1,0 +1,12 @@
+@date	2010-09-07
+@author	Silly Freak
+
+@set	DRK rare 1747
+@set	4ED common 2144
+@set	MED common 159087
+
+name	Apprentice Wizard
+cost	{1}{U}{U}
+type	creature - human wizard
+pt		0 / 1
+text	{U}, {T}: Add {3} to your mana pool.

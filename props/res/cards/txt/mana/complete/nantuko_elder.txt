@@ -1,0 +1,10 @@
+@date	2010-09-07
+@author	Silly Freak
+
+@set	ODY uncommon 29870
+
+name	Nantuko Elder
+cost	{2}{G}
+type	creature - insect druid
+pt		1 / 2
+text	{T}: Add {1}{G} to your mana pool.

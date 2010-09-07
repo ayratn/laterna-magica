@@ -1,0 +1,12 @@
+@date	2010-09-07
+@author	Silly Freak
+
+@set	LEG uncommon 1687
+@set	ME3 uncommon 201232
+
+name	Sunastian Falconer
+cost	{3}{R}{G}
+super	legendary
+type	creature - human shaman
+pt		4 / 4
+text	{T}: Add {2} to your mana pool.

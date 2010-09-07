@@ -1,0 +1,13 @@
+@date	2010-09-07
+@author	Silly Freak
+
+@ignore
+
+@set	INV uncommon 23244
+@set	8ED uncommon 45495
+@set	PVC uncommon 209112
+
+name	Elfhame Palace
+type	land
+text	~ enters the battlefield tapped.
+text	{T}: Add {G} or {W} to your mana pool.

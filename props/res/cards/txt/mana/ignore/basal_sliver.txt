@@ -1,0 +1,12 @@
+@date	2010-09-07
+@author	Silly Freak
+
+@ignore
+
+@set	TSP common 108792
+
+name	Basal Sliver
+cost	{2}{B}
+type	creature - sliver
+pt		2 / 2
+text	All Slivers have "Sacrifice this permanent: Add {B}{B} to your mana pool."

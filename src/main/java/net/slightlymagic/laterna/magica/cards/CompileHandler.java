@@ -93,7 +93,8 @@ public interface CompileHandler {
         }
         
         public void handleFail(Exception ex) {
-            log.warn("Compiling failed", ex);
+            if(ex instanceof IgnoredCardException) log.warn("Card ignored");
+            else log.warn("Compiling failed", ex);
         }
     }
     

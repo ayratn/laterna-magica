@@ -1,0 +1,14 @@
+@date	2010-09-07
+@author	Silly Freak
+
+@ignore
+
+@set	LEG common 1526
+@set	ME3 common 201186
+
+name	Fire Sprites
+cost	{1}{G}
+type	creature - faerie
+pt		1 / 1
+text	Flying
+text	{G}, {T}: Add {R} to your mana pool.

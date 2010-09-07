@@ -1,0 +1,16 @@
+@date	2010-09-07
+@author	Silly Freak
+
+@ignore
+
+@set	ICE rare 2759
+@set	5ED rare 4189
+@set	7ED rare 11519
+@set	6ED rare 14729
+@set	9ED rare 84550
+@set	10E rare 129751
+
+name	Sulfurous Springs
+type	land
+text	{T}: Add {1} to your mana pool.
+text	{T}: Add {B} or {R} to your mana pool. ~ deals 1 damage to you.

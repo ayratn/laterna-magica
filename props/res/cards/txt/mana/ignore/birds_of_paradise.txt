@@ -1,0 +1,25 @@
+@date	2010-09-07
+@author	Silly Freak
+
+@ignore
+
+@set	LEA rare 142
+@set	LEB rare 437
+@set	2ED rare 739
+@set	3ED rare 1236
+@set	4ED rare 2201
+@set	5ED rare 3963
+@set	7ED rare 11173
+@set	6ED rare 14719
+@set	8ED rare 45439
+@set	RAV rare 83688
+@set	10E rare 129906
+@set	M10 rare 191080
+@set	M11 rare 207334
+
+name	Birds of Paradise
+cost	{G}
+type	creature - bird
+pt		0 / 1
+text	Flying
+text	{T}: Add one mana of any color to your mana pool.

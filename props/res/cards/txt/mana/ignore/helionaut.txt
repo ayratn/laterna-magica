@@ -1,0 +1,13 @@
+@date	2010-09-07
+@author	Silly Freak
+
+@ignore
+
+@set	APC common 26854
+
+name	Helionaut
+cost	{2}{W}
+type	creature - human soldier
+pt		1 / 2
+text	Flying
+text	{1}, {T}: Add one mana of any color to your mana pool.

@@ -1,0 +1,11 @@
+@date	2010-09-07
+@author	Silly Freak
+
+@ignore
+
+@set	EVE rare 153481
+
+name	Flooded Grove
+type	land
+text	{T}: Add {1} to your mana pool.
+text	{G/U}, {T}: Add {G}{G}, {G}{U}, or {U}{U} to your mana pool.

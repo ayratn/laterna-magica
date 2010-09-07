@@ -1,0 +1,10 @@
+@date	2010-09-07
+@author	Silly Freak
+
+@set	STH common 5230
+
+name	Skyshroud Troopers
+cost	{3}{G}
+type	creature - elf druid warrior
+pt		3 / 3
+text	{T}: Add {G} to your mana pool.

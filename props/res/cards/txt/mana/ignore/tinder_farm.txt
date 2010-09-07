@@ -1,0 +1,12 @@
+@date	2010-09-07
+@author	Silly Freak
+
+@ignore
+
+@set	INV common 23239
+
+name	Tinder Farm
+type	land
+text	~ enters the battlefield tapped.
+text	{T}: Add {G} to your mana pool.
+text	{T}, Sacrifice ~: Add {R}{W} to your mana pool.

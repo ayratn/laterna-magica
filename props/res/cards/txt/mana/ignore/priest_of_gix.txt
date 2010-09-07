@@ -1,0 +1,13 @@
+@date	2010-09-07
+@author	Silly Freak
+
+@ignore
+
+@set	USG uncommon 9724
+@set	PVC uncommon 209130
+
+name	Priest of Gix
+cost	{2}{B}
+type	creature - human cleric minion
+pt		2 / 1
+text	When ~ enters the battlefield, add {B}{B}{B} to your mana pool.

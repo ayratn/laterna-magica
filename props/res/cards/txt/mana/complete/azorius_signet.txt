@@ -1,0 +1,10 @@
+@date	2010-09-07
+@author	Silly Freak
+
+@set	DIS common 97085
+@set	TBA common 220540
+
+name	Azorius Signet
+cost	{2}
+type	artifact
+text	{1}, {T}: Add {W}{U} to your mana pool.

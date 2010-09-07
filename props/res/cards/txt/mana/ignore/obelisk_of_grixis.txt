@@ -1,0 +1,11 @@
+@date	2010-09-07
+@author	Silly Freak
+
+@ignore
+
+@set	ALA common 174887
+
+name	Obelisk of Grixis
+cost	{3}
+type	artifact
+text	{T}: Add {U}, {B}, or {R} to your mana pool.

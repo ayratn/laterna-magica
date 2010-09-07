@@ -1,0 +1,11 @@
+@date	2010-09-07
+@author	Silly Freak
+
+@set	MRD common 46066
+@set	HOP common 205284
+
+name	Great Furnace
+type	artifact
+type	land
+text	(~ isn't a spell.)
+text	{T}: Add {R} to your mana pool.

@@ -1,0 +1,8 @@
+@date	2010-09-07
+@author	Silly Freak
+
+@set	ODY rare 29796
+
+name	Sungrass Prairie
+type	land
+text	{1}, {T}: Add {G}{W} to your mana pool.

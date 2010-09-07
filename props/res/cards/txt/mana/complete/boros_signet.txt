@@ -1,0 +1,10 @@
+@date	2010-09-07
+@author	Silly Freak
+
+@set	RAV common 95537
+@set	HOP common 205358
+
+name	Boros Signet
+cost	{2}
+type	artifact
+text	{1}, {T}: Add {R}{W} to your mana pool.

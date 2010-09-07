@@ -1,0 +1,13 @@
+@date	2010-09-07
+@author	Silly Freak
+
+@ignore
+
+@set	ZEN uncommon 189635
+@set	TBA uncommon 220470
+
+name	Kazandu Refuge
+type	land
+text	~ enters the battlefield tapped.
+text	When ~ enters the battlefield, you gain 1 life.
+text	{T}: Add {R} or {G} to your mana pool.

@@ -1,0 +1,11 @@
+@date	2010-09-07
+@author	Silly Freak
+
+@set	LEA rare 32
+@set	LEB rare 327
+@set	2ED rare 629
+
+name	Mox Emerald
+cost	{0}
+type	artifact
+text	{T}: Add {G} to your mana pool.

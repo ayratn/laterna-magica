@@ -1,0 +1,11 @@
+@date	2010-09-07
+@author	Silly Freak
+
+@ignore
+
+@set	FUT rare 130595
+
+name	Grove of the Burnwillows
+type	land
+text	{T}: Add {1} to your mana pool.
+text	{T}: Add {R} or {G} to your mana pool. Each opponent gains 1 life.

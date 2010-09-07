@@ -1,0 +1,11 @@
+@date	2010-09-07
+@author	Silly Freak
+
+@ignore
+
+@set	FEM rare 1834
+
+name	Implements of Sacrifice
+cost	{2}
+type	artifact
+text	{1}, {T}, Sacrifice ~: Add two mana of any one color to your mana pool.

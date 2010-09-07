@@ -1,0 +1,11 @@
+@date	2010-09-07
+@author	Silly Freak
+
+@set	MRD common 34945
+@set	9ED common 83377
+@set	TBA common 220561
+
+name	Seething Song
+cost	{2}{R}
+type	instant
+text	Add {R}{R}{R}{R}{R} to your mana pool.

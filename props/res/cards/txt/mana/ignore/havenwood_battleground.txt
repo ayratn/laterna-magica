@@ -1,0 +1,16 @@
+@date	2010-09-07
+@author	Silly Freak
+
+@ignore
+
+@set	FEM uncommon 2007
+@set	5ED uncommon 4182
+@set	6ED uncommon 14726
+@set	BTD uncommon 26652
+@set	ME2 uncommon 184486
+
+name	Havenwood Battleground
+type	land
+text	~ enters the battlefield tapped.
+text	{T}: Add {G} to your mana pool.
+text	{T}, Sacrifice ~: Add {G}{G} to your mana pool.

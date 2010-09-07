@@ -1,0 +1,11 @@
+@date	2010-09-07
+@author	Silly Freak
+
+@ignore
+
+@set	ODY rare 30015
+
+name	Tarnished Citadel
+type	land
+text	{T}: Add {1} to your mana pool.
+text	{T}: Add one mana of any color to your mana pool. ~ deals 3 damage to you.

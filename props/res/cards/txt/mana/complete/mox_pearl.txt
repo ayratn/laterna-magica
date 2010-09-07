@@ -1,0 +1,11 @@
+@date	2010-09-07
+@author	Silly Freak
+
+@set	LEA rare 34
+@set	LEB rare 329
+@set	2ED rare 631
+
+name	Mox Pearl
+cost	{0}
+type	artifact
+text	{T}: Add {W} to your mana pool.

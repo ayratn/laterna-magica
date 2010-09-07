@@ -1,0 +1,14 @@
+@date	2010-09-07
+@author	Silly Freak
+
+@ignore
+
+@set	ATQ uncommon 994
+@set	CHR common 2776
+@set	5ED uncommon 3761
+@set	6ED uncommon 11158
+
+name	Ashnod's Altar
+cost	{3}
+type	artifact
+text	Sacrifice a creature: Add {2} to your mana pool.

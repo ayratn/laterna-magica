@@ -1,0 +1,11 @@
+@date	2010-09-07
+@author	Silly Freak
+
+@ignore
+
+@set	USG uncommon 5612
+
+name	Blasted Landscape
+type	land
+text	{T}: Add {1} to your mana pool.
+text	Cycling {2} ({2}, Discard this card: Draw a card.)

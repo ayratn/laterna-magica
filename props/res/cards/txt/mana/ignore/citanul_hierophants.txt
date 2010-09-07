@@ -1,0 +1,12 @@
+@date	2010-09-07
+@author	Silly Freak
+
+@ignore
+
+@set	USG rare 5724
+
+name	Citanul Hierophants
+cost	{3}{G}
+type	creature - human druid
+pt		3 / 2
+text	Creatures you control have "{T}: Add {G} to your mana pool."

@@ -1,0 +1,13 @@
+@date	2010-09-07
+@author	Silly Freak
+
+@ignore
+
+@set	GPT common 96934
+
+name	Wild Cantor
+cost	{R/G}
+type	creature - human druid
+pt		1 / 1
+text	({R/G} can be paid with either {R} or {G}.)
+text	Sacrifice ~: Add one mana of any color to your mana pool.

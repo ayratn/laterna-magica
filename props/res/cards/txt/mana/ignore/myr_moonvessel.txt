@@ -1,0 +1,13 @@
+@date	2010-09-07
+@author	Silly Freak
+
+@ignore
+
+@set	DST common 46112
+
+name	Myr Moonvessel
+cost	{1}
+type	artifact
+type	creature - myr
+pt		1 / 1
+text	When ~ is put into a graveyard from the battlefield, add {1} to your mana pool.

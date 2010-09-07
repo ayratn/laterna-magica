@@ -1,0 +1,14 @@
+@date	2010-09-07
+@author	Silly Freak
+
+@ignore
+
+@set	ATQ uncommon 1022
+@set	MED rare 159119
+
+name	Su-Chi
+cost	{4}
+type	artifact
+type	creature - construct
+pt		4 / 4
+text	When ~ is put into a graveyard from the battlefield, add {4} to your mana pool.

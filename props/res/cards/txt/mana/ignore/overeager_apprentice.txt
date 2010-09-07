@@ -1,0 +1,13 @@
+@date	2010-09-07
+@author	Silly Freak
+
+@ignore
+
+@set	ODY common 29737
+@set	DVD common 197028
+
+name	Overeager Apprentice
+cost	{2}{B}
+type	creature - human minion
+pt		1 / 2
+text	Discard a card, Sacrifice ~: Add {B}{B}{B} to your mana pool.

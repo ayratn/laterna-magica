@@ -1,0 +1,13 @@
+@date	2010-09-07
+@author	Silly Freak
+
+@ignore
+
+@set	FUT uncommon 136196
+
+name	Dryad Arbor
+type	creature - dryad
+type	land - forest
+pt		1 / 1
+text	(~ isn't a spell, it's affected by summoning sickness, and it has "{T}: Add {G} to your mana pool.")
+text	~ is green.

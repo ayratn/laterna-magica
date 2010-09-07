@@ -1,0 +1,11 @@
+@date	2010-09-07
+@author	Silly Freak
+
+@ignore
+
+@set	MRD rare 48189
+
+name	Gilded Lotus
+cost	{5}
+type	artifact
+text	{T}: Add three mana of any one color to your mana pool.

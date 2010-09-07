@@ -1,0 +1,24 @@
+@date	2010-09-07
+@author	Silly Freak
+
+@set	LEA common 54
+@set	LEB common 349
+@set	2ED common 651
+@set	3ED common 1149
+@set	4ED common 2096
+@set	ICE common 2444
+@set	MIR common 3285
+@set	5ED common 3836
+@set	TMP common 4646
+@set	USG common 5626
+@set	MMQ common 19592
+@set	BRB common 21154
+@set	BTD common 26632
+@set	DVD common 197019
+@set	HOP common 205422
+@set	PVC common 209137
+
+name	Dark Ritual
+cost	{B}
+type	instant
+text	Add {B}{B}{B} to your mana pool.

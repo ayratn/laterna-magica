@@ -1,0 +1,12 @@
+@date	2010-09-07
+@author	Silly Freak
+
+@ignore
+
+@set	MIR uncommon 3571
+@set	6ED uncommon 15413
+
+name	Crystal Vein
+type	land
+text	{T}: Add {1} to your mana pool.
+text	{T}, Sacrifice ~: Add {2} to your mana pool.

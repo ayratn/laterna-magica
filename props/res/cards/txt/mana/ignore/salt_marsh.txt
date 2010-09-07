@@ -1,0 +1,12 @@
+@date	2010-09-07
+@author	Silly Freak
+
+@ignore
+
+@set	INV uncommon 23241
+@set	8ED uncommon 45492
+
+name	Salt Marsh
+type	land
+text	~ enters the battlefield tapped.
+text	{T}: Add {U} or {B} to your mana pool.

@@ -1,0 +1,11 @@
+@date	2010-09-07
+@author	Silly Freak
+
+@set	MRD common 46067
+@set	HOP common 205312
+
+name	Tree of Tales
+type	artifact
+type	land
+text	(~ isn't a spell.)
+text	{T}: Add {G} to your mana pool.

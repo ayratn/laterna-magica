@@ -1,0 +1,13 @@
+@date	2010-09-07
+@author	Silly Freak
+
+@ignore
+
+@set	TSP common 118922
+@set	PDS common 207905
+
+name	Gemhide Sliver
+cost	{1}{G}
+type	creature - sliver
+pt		1 / 1
+text	All Slivers have "{T}: Add one mana of any color to your mana pool."

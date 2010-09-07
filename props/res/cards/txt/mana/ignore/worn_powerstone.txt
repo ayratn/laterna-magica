@@ -1,0 +1,13 @@
+@date	2010-09-07
+@author	Silly Freak
+
+@ignore
+
+@set	USG uncommon 8876
+@set	PVC uncommon 210137
+
+name	Worn Powerstone
+cost	{3}
+type	artifact
+text	~ enters the battlefield tapped.
+text	{T}: Add {2} to your mana pool.

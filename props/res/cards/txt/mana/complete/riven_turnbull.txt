@@ -1,0 +1,12 @@
+@date	2010-09-07
+@author	Silly Freak
+
+@set	LEG uncommon 1680
+@set	ME3 uncommon 201225
+
+name	Riven Turnbull
+cost	{5}{U}{B}
+super	legendary
+type	creature - human advisor
+pt		5 / 7
+text	{T}: Add {B} to your mana pool.

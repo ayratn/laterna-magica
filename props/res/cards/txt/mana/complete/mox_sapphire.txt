@@ -1,0 +1,11 @@
+@date	2010-09-07
+@author	Silly Freak
+
+@set	LEA rare 36
+@set	LEB rare 331
+@set	2ED rare 633
+
+name	Mox Sapphire
+cost	{0}
+type	artifact
+text	{T}: Add {U} to your mana pool.

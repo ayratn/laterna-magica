@@ -1,0 +1,12 @@
+@date	2010-09-07
+@author	Silly Freak
+
+@ignore
+
+@set	USG common 5737
+
+name	Blood Vassal
+cost	{2}{B}
+type	creature - thrull
+pt		2 / 2
+text	Sacrifice ~: Add {B}{B} to your mana pool.

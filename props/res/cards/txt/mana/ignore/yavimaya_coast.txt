@@ -1,0 +1,13 @@
+@date	2010-09-07
+@author	Silly Freak
+
+@ignore
+
+@set	APC rare 23249
+@set	9ED rare 84474
+@set	10E rare 129810
+
+name	Yavimaya Coast
+type	land
+text	{T}: Add {1} to your mana pool.
+text	{T}: Add {G} or {U} to your mana pool. ~ deals 1 damage to you.

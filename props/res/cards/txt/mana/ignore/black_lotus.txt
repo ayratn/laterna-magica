@@ -1,0 +1,13 @@
+@date	2010-09-07
+@author	Silly Freak
+
+@ignore
+
+@set	LEA rare 3
+@set	LEB rare 298
+@set	2ED rare 600
+
+name	Black Lotus
+cost	{0}
+type	artifact
+text	{T}, Sacrifice ~: Add three mana of any one color to your mana pool.

@@ -1,0 +1,14 @@
+@date	2010-09-07
+@author	Silly Freak
+
+@ignore
+
+@set	TMP common 12342
+@set	6ED common 15400
+@set	7ED common 25625
+
+name	Blood Pet
+cost	{B}
+type	creature - thrull
+pt		1 / 1
+text	Sacrifice ~: Add {B} to your mana pool.

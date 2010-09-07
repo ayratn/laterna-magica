@@ -1,0 +1,12 @@
+@date	2010-09-07
+@author	Silly Freak
+
+@ignore
+
+@set	CSP uncommon 121189
+
+name	Boreal Shelf
+super	snow
+type	land
+text	~ enters the battlefield tapped.
+text	{T}: Add {W} or {U} to your mana pool.

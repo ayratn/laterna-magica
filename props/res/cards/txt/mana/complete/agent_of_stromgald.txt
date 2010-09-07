@@ -1,0 +1,11 @@
+@date	2010-09-07
+@author	Silly Freak
+
+@set	ALL common 3159
+@set	ALL common 3160
+
+name	Agent of Stromgald
+cost	{R}
+type	creature - human knight
+pt		1 / 1
+text	{R}: Add {B} to your mana pool.

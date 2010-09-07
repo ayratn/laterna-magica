@@ -1,0 +1,12 @@
+@date	2010-09-07
+@author	Silly Freak
+
+@set	MRD common 46048
+@set	HOP common 205285
+
+name	Iron Myr
+cost	{2}
+type	artifact
+type	creature - myr
+pt		1 / 1
+text	{T}: Add {R} to your mana pool.

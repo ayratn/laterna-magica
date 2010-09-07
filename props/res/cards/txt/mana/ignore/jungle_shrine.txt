@@ -1,0 +1,11 @@
+@date	2010-09-07
+@author	Silly Freak
+
+@ignore
+
+@set	ALA uncommon 175060
+
+name	Jungle Shrine
+type	land
+text	~ enters the battlefield tapped.
+text	{T}: Add {R}, {G}, or {W} to your mana pool.

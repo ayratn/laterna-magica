@@ -1,0 +1,13 @@
+@date	2010-09-07
+@author	Silly Freak
+
+@ignore
+
+@set	APC rare 23248
+@set	9ED rare 84440
+@set	10E rare 129627
+
+name	Llanowar Wastes
+type	land
+text	{T}: Add {1} to your mana pool.
+text	{T}: Add {B} or {G} to your mana pool. ~ deals 1 damage to you.

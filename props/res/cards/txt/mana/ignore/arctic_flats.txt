@@ -1,0 +1,12 @@
+@date	2010-09-07
+@author	Silly Freak
+
+@ignore
+
+@set	CSP uncommon 121158
+
+name	Arctic Flats
+super	snow
+type	land
+text	~ enters the battlefield tapped.
+text	{T}: Add {G} or {W} to your mana pool.

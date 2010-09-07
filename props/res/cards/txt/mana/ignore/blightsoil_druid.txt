@@ -1,0 +1,12 @@
+@date	2010-09-07
+@author	Silly Freak
+
+@ignore
+
+@set	MOR common 152705
+
+name	Blightsoil Druid
+cost	{1}{B}
+type	creature - elf druid
+pt		1 / 2
+text	{T}, Pay 1 life: Add {G} to your mana pool.

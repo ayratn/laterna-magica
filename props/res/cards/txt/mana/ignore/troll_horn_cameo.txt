@@ -1,0 +1,11 @@
+@date	2010-09-07
+@author	Silly Freak
+
+@ignore
+
+@set	INV uncommon 23220
+
+name	Troll-Horn Cameo
+cost	{3}
+type	artifact
+text	{T}: Add {R} or {G} to your mana pool.

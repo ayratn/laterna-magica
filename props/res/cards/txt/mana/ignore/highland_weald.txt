@@ -1,0 +1,12 @@
+@date	2010-09-07
+@author	Silly Freak
+
+@ignore
+
+@set	CSP uncommon 121259
+
+name	Highland Weald
+super	snow
+type	land
+text	~ enters the battlefield tapped.
+text	{T}: Add {R} or {G} to your mana pool.

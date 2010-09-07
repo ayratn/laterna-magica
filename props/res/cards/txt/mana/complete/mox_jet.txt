@@ -1,0 +1,11 @@
+@date	2010-09-07
+@author	Silly Freak
+
+@set	LEA rare 33
+@set	LEB rare 328
+@set	2ED rare 630
+
+name	Mox Jet
+cost	{0}
+type	artifact
+text	{T}: Add {B} to your mana pool.

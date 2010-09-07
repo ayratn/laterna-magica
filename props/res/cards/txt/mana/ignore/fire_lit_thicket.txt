@@ -1,0 +1,11 @@
+@date	2010-09-07
+@author	Silly Freak
+
+@ignore
+
+@set	SHM rare 146753
+
+name	Fire-Lit Thicket
+type	land
+text	{T}: Add {1} to your mana pool.
+text	{R/G}, {T}: Add {R}{R}, {R}{G}, or {G}{G} to your mana pool.

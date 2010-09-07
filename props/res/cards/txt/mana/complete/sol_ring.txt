@@ -1,0 +1,13 @@
+@date	2010-09-07
+@author	Silly Freak
+
+@set	LEA uncommon 40
+@set	LEB uncommon 335
+@set	2ED uncommon 637
+@set	3ED uncommon 1135
+@set	null mythic 212638
+
+name	Sol Ring
+cost	{1}
+type	artifact
+text	{T}: Add {2} to your mana pool.

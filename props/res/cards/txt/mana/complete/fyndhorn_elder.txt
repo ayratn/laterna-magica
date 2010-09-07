@@ -1,0 +1,14 @@
+@date	2010-09-07
+@author	Silly Freak
+
+@set	ICE uncommon 2567
+@set	5ED uncommon 3980
+@set	7ED uncommon 11296
+@set	6ED uncommon 14699
+@set	8ED uncommon 45423
+
+name	Fyndhorn Elder
+cost	{2}{G}
+type	creature - elf druid
+pt		1 / 1
+text	{T}: Add {G}{G} to your mana pool.

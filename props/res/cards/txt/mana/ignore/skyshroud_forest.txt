@@ -1,0 +1,12 @@
+@date	2010-09-07
+@author	Silly Freak
+
+@ignore
+
+@set	TMP rare 4940
+
+name	Skyshroud Forest
+type	land
+text	~ enters the battlefield tapped.
+text	{T}: Add {1} to your mana pool.
+text	{T}: Add {U} or {G} to your mana pool. ~ deals 1 damage to you.

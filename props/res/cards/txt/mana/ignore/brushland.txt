@@ -1,0 +1,16 @@
+@date	2010-09-07
+@author	Silly Freak
+
+@ignore
+
+@set	ICE rare 2751
+@set	5ED rare 4177
+@set	7ED rare 11191
+@set	6ED rare 14731
+@set	9ED rare 84600
+@set	10E rare 129496
+
+name	Brushland
+type	land
+text	{T}: Add {1} to your mana pool.
+text	{T}: Add {G} or {W} to your mana pool. ~ deals 1 damage to you.

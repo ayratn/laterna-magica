@@ -1,0 +1,14 @@
+@date	2010-09-07
+@author	Silly Freak
+
+@ignore
+
+@set	MIR uncommon 3250
+@set	6ED uncommon 15405
+@set	7ED uncommon 15853
+
+name	Fire Diamond
+cost	{2}
+type	artifact
+text	~ enters the battlefield tapped.
+text	{T}: Add {R} to your mana pool.

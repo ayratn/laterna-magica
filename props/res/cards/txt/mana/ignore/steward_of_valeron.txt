@@ -1,0 +1,13 @@
+@date	2010-09-07
+@author	Silly Freak
+
+@ignore
+
+@set	ALA common 175134
+
+name	Steward of Valeron
+cost	{G}{W}
+type	creature - human druid knight
+pt		2 / 2
+text	Vigilance
+text	{T}: Add {G} to your mana pool.

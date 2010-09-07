@@ -1,0 +1,11 @@
+@date	2010-09-07
+@author	Silly Freak
+
+@ignore
+
+@set	ALA uncommon 174877
+
+name	Savage Lands
+type	land
+text	~ enters the battlefield tapped.
+text	{T}: Add {B}, {R}, or {G} to your mana pool.

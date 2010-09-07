@@ -1,0 +1,12 @@
+@date	2010-09-07
+@author	Silly Freak
+
+@ignore
+
+@set	MMQ rare 19765
+
+name	Eye of Ramos
+cost	{3}
+type	artifact
+text	{T}: Add {U} to your mana pool.
+text	Sacrifice ~: Add {U} to your mana pool.

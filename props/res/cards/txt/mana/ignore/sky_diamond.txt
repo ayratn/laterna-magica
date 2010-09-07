@@ -1,0 +1,14 @@
+@date	2010-09-07
+@author	Silly Freak
+
+@ignore
+
+@set	MIR uncommon 3267
+@set	6ED uncommon 15443
+@set	7ED uncommon 15851
+
+name	Sky Diamond
+cost	{2}
+type	artifact
+text	~ enters the battlefield tapped.
+text	{T}: Add {U} to your mana pool.

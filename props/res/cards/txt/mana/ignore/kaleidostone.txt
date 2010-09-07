@@ -1,0 +1,12 @@
+@date	2010-09-07
+@author	Silly Freak
+
+@ignore
+
+@set	CON common 189272
+
+name	Kaleidostone
+cost	{2}
+type	artifact
+text	When ~ enters the battlefield, draw a card.
+text	{5}, {T}, Sacrifice ~: Add {W}{U}{B}{R}{G} to your mana pool.

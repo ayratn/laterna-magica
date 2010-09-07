@@ -1,0 +1,14 @@
+@date	2010-09-07
+@author	Silly Freak
+
+@ignore
+
+@set	USG uncommon 10659
+@set	MRD uncommon 48195
+
+name	Cathodion
+cost	{3}
+type	artifact
+type	creature - construct
+pt		3 / 3
+text	When ~ is put into a graveyard from the battlefield, add {3} to your mana pool.

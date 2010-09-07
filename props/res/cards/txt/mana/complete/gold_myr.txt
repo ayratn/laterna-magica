@@ -1,0 +1,12 @@
+@date	2010-09-07
+@author	Silly Freak
+
+@set	MRD common 46024
+@set	HOP common 205283
+
+name	Gold Myr
+cost	{2}
+type	artifact
+type	creature - myr
+pt		1 / 1
+text	{T}: Add {W} to your mana pool.

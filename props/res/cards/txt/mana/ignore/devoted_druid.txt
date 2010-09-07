@@ -1,0 +1,13 @@
+@date	2010-09-07
+@author	Silly Freak
+
+@ignore
+
+@set	SHM common 135500
+
+name	Devoted Druid
+cost	{1}{G}
+type	creature - elf druid
+pt		0 / 2
+text	{T}: Add {G} to your mana pool.
+text	Put a -1/-1 counter on ~: Untap ~.

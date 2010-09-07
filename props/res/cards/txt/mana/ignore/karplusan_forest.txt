@@ -1,0 +1,16 @@
+@date	2010-09-07
+@author	Silly Freak
+
+@ignore
+
+@set	ICE rare 2755
+@set	5ED rare 4186
+@set	7ED rare 11366
+@set	6ED rare 14730
+@set	9ED rare 84559
+@set	10E rare 129614
+
+name	Karplusan Forest
+type	land
+text	{T}: Add {1} to your mana pool.
+text	{T}: Add {R} or {G} to your mana pool. ~ deals 1 damage to you.

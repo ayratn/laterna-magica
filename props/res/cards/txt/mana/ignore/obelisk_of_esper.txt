@@ -1,0 +1,12 @@
+@date	2010-09-07
+@author	Silly Freak
+
+@ignore
+
+@set	ALA common 174906
+@set	TBA common 220461
+
+name	Obelisk of Esper
+cost	{3}
+type	artifact
+text	{T}: Add {W}, {U}, or {B} to your mana pool.

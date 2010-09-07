@@ -1,0 +1,12 @@
+@date	2010-09-07
+@author	Silly Freak
+
+@ignore
+
+@set	HML uncommon 3035
+
+name	An-Havva Township
+type	land
+text	{T}: Add {1} to your mana pool.
+text	{1}, {T}: Add {G} to your mana pool.
+text	{2}, {T}: Add {R} or {W} to your mana pool.

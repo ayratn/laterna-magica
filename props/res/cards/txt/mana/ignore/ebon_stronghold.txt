@@ -1,0 +1,16 @@
+@date	2010-09-07
+@author	Silly Freak
+
+@ignore
+
+@set	FEM uncommon 2006
+@set	5ED uncommon 4181
+@set	6ED uncommon 14724
+@set	BTD uncommon 26650
+@set	ME2 uncommon 184483
+
+name	Ebon Stronghold
+type	land
+text	~ enters the battlefield tapped.
+text	{T}: Add {B} to your mana pool.
+text	{T}, Sacrifice ~: Add {B}{B} to your mana pool.

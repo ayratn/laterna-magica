@@ -1,0 +1,11 @@
+@date	2010-09-07
+@author	Silly Freak
+
+@ignore
+
+@set	ALA common 175102
+
+name	Obelisk of Bant
+cost	{3}
+type	artifact
+text	{T}: Add {G}, {W}, or {U} to your mana pool.

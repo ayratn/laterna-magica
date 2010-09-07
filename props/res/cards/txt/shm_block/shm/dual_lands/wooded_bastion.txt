@@ -1,9 +1,0 @@
-@date	2010-07-30
-@author	Silly Freak
-
-@set	SHM rare 146747
-
-name	Wooded Bastion
-type	land
-text	{T}: Add {1} to your mana pool.
-text	{G}, {T}: Add {G}{G}, {G}{W}, or {W}{W} to your mana pool.

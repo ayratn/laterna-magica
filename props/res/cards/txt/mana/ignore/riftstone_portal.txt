@@ -1,0 +1,11 @@
+@date	2010-09-07
+@author	Silly Freak
+
+@ignore
+
+@set	JUD uncommon 34398
+
+name	Riftstone Portal
+type	land
+text	{T}: Add {1} to your mana pool.
+text	As long as ~ is in your graveyard, lands you control have "{T}: Add {G} or {W} to your mana pool."

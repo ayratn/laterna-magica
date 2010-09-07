@@ -1,0 +1,10 @@
+@date	2010-09-07
+@author	Silly Freak
+
+@ignore
+
+@set	TMP uncommon 4636
+
+name	Ancient Tomb
+type	land
+text	{T}: Add {2} to your mana pool. ~ deals 2 damage to you.

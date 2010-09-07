@@ -1,0 +1,12 @@
+@date	2010-09-07
+@author	Silly Freak
+
+@ignore
+
+@set	LGN common 44206
+
+name	Blood Celebrant
+cost	{B}
+type	creature - human cleric
+pt		1 / 1
+text	{B}, Pay 1 life: Add one mana of any color to your mana pool.

@@ -1,0 +1,8 @@
+@date	2010-09-07
+@author	Silly Freak
+
+@set	ODY rare 29795
+
+name	Mossfire Valley
+type	land
+text	{1}, {T}: Add {R}{G} to your mana pool.

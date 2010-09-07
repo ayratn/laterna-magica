@@ -1,0 +1,15 @@
+@date	2010-09-07
+@author	Silly Freak
+
+@ignore
+
+@set	MIR uncommon 3258
+@set	6ED uncommon 15441
+@set	7ED uncommon 15850
+@set	DVD uncommon 197005
+
+name	Marble Diamond
+cost	{2}
+type	artifact
+text	~ enters the battlefield tapped.
+text	{T}: Add {W} to your mana pool.

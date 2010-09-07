@@ -34,6 +34,7 @@ import net.slightlymagic.laterna.magica.card.impl.CardPartsImpl;
 import net.slightlymagic.laterna.magica.card.impl.CardTemplateImpl;
 import net.slightlymagic.laterna.magica.cards.CardCompiler;
 import net.slightlymagic.laterna.magica.cards.CompileHandler;
+import net.slightlymagic.laterna.magica.cards.IgnoredCardException;
 import net.slightlymagic.laterna.magica.cards.InvalidCardException;
 import net.slightlymagic.laterna.magica.characteristics.CardType;
 import net.slightlymagic.laterna.magica.characteristics.Expansion;
@@ -107,7 +108,7 @@ public class TextCardCompiler implements CardCompiler {
                     continue;
                 } else if(key.startsWith("@")) {
                     key = key.substring(1);
-                    if("ignore".equals(key)) throw new InvalidCardException("Card is ignored");
+                    if("ignore".equals(key)) throw new IgnoredCardException("Card is ignored");
                     else if("set".equals(key)) {
                         Matcher m = set.matcher(line.getValue());
                         if(m.matches()) {

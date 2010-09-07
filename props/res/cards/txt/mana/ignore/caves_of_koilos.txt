@@ -1,0 +1,13 @@
+@date	2010-09-07
+@author	Silly Freak
+
+@ignore
+
+@set	APC rare 23246
+@set	9ED rare 84467
+@set	10E rare 129497
+
+name	Caves of Koilos
+type	land
+text	{T}: Add {1} to your mana pool.
+text	{T}: Add {W} or {B} to your mana pool. ~ deals 1 damage to you.

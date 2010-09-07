@@ -1,0 +1,10 @@
+@date	2010-09-07
+@author	Silly Freak
+
+@set	RAV common 95535
+@set	TBA common 220548
+
+name	Dimir Signet
+cost	{2}
+type	artifact
+text	{1}, {T}: Add {U}{B} to your mana pool.

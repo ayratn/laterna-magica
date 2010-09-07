@@ -1,0 +1,14 @@
+@date	2010-09-07
+@author	Silly Freak
+
+@ignore
+
+@set	MIR uncommon 3260
+@set	6ED uncommon 15442
+@set	7ED uncommon 15854
+
+name	Moss Diamond
+cost	{2}
+type	artifact
+text	~ enters the battlefield tapped.
+text	{T}: Add {G} to your mana pool.

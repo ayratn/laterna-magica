@@ -1,0 +1,14 @@
+@date	2010-09-07
+@author	Silly Freak
+
+@ignore
+
+@set	WTH common 4436
+@set	10E uncommon 135280
+@set	JVC uncommon 189228
+
+name	Mind Stone
+cost	{2}
+type	artifact
+text	{T}: Add {1} to your mana pool.
+text	{1}, {T}, Sacrifice ~: Draw a card.

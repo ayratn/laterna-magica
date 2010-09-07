@@ -1,0 +1,11 @@
+@date	2010-09-07
+@author	Silly Freak
+
+@ignore
+
+@set	SHM rare 146729
+
+name	Sunken Ruins
+type	land
+text	{T}: Add {1} to your mana pool.
+text	{U/B}, {T}: Add {U}{U}, {U}{B}, or {B}{B} to your mana pool.

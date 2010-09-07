@@ -1,0 +1,12 @@
+@date	2010-09-07
+@author	Silly Freak
+
+@ignore
+
+@set	USG rare 10482
+
+name	Shivan Gorge
+super	legendary
+type	land
+text	{T}: Add {1} to your mana pool.
+text	{2}{R}, {T}: ~ deals 1 damage to each opponent.

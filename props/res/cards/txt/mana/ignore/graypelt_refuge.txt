@@ -1,0 +1,13 @@
+@date	2010-09-07
+@author	Silly Freak
+
+@ignore
+
+@set	ZEN uncommon 189631
+@set	TBA uncommon 220467
+
+name	Graypelt Refuge
+type	land
+text	~ enters the battlefield tapped.
+text	When ~ enters the battlefield, you gain 1 life.
+text	{T}: Add {G} or {W} to your mana pool.

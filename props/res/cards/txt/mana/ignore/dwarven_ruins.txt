@@ -1,0 +1,16 @@
+@date	2010-09-07
+@author	Silly Freak
+
+@ignore
+
+@set	FEM uncommon 2005
+@set	5ED uncommon 4180
+@set	6ED uncommon 14725
+@set	BTD uncommon 26651
+@set	ME2 uncommon 184478
+
+name	Dwarven Ruins
+type	land
+text	~ enters the battlefield tapped.
+text	{T}: Add {R} to your mana pool.
+text	{T}, Sacrifice ~: Add {R}{R} to your mana pool.

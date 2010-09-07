@@ -1,0 +1,13 @@
+@date	2010-09-07
+@author	Silly Freak
+
+@ignore
+
+@set	MIR uncommon 3256
+@set	6ED uncommon 15439
+
+name	Mana Prism
+cost	{3}
+type	artifact
+text	{T}: Add {1} to your mana pool.
+text	{1}, {T}: Add one mana of any color to your mana pool.

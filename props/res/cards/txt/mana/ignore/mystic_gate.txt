@@ -1,0 +1,11 @@
+@date	2010-09-07
+@author	Silly Freak
+
+@ignore
+
+@set	SHM rare 146746
+
+name	Mystic Gate
+type	land
+text	{T}: Add {1} to your mana pool.
+text	{W/U}, {T}: Add {W}{W}, {W}{U}, or {U}{U} to your mana pool.

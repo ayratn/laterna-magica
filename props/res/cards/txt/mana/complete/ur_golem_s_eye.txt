@@ -1,0 +1,10 @@
+@date	2010-09-07
+@author	Silly Freak
+
+@set	DST common 49110
+@set	9ED uncommon 83510
+
+name	Ur-Golem's Eye
+cost	{4}
+type	artifact
+text	{T}: Add {2} to your mana pool.

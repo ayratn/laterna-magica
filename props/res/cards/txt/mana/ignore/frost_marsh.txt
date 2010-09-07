@@ -1,0 +1,12 @@
+@date	2010-09-07
+@author	Silly Freak
+
+@ignore
+
+@set	CSP uncommon 121212
+
+name	Frost Marsh
+super	snow
+type	land
+text	~ enters the battlefield tapped.
+text	{T}: Add {U} or {B} to your mana pool.

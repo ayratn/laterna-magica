@@ -1,0 +1,12 @@
+@date	2010-09-07
+@author	Silly Freak
+
+@ignore
+
+@set	CHK common 50319
+
+name	Orochi Leafcaller
+cost	{G}
+type	creature - snake shaman
+pt		1 / 1
+text	{G}: Add one mana of any color to your mana pool.

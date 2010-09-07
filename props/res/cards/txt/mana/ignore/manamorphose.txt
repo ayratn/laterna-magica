@@ -1,0 +1,12 @@
+@date	2010-09-07
+@author	Silly Freak
+
+@ignore
+
+@set	SHM common 153968
+
+name	Manamorphose
+cost	{1}{R/G}
+type	instant
+text	Add two mana in any combination of colors to your mana pool.
+text	Draw a card.

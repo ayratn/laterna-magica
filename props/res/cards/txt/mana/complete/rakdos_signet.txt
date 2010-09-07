@@ -1,0 +1,10 @@
+@date	2010-09-07
+@author	Silly Freak
+
+@set	DIS common 97098
+@set	TBA common 220543
+
+name	Rakdos Signet
+cost	{2}
+type	artifact
+text	{1}, {T}: Add {B}{R} to your mana pool.
