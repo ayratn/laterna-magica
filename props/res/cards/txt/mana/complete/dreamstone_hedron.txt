@@ -1,8 +1,6 @@
 @date	2010-09-07
 @author	Silly Freak
 
-@ignore
-
 @set	ROE uncommon 193501
 @set	TBA uncommon 220554
 
@@ -10,4 +8,4 @@ name	Dreamstone Hedron
 cost	{6}
 type	artifact
 text	{T}: Add {3} to your mana pool.
-text	{3}, {T}, Sacrifice ~: Draw three cards.
+text	{3}, {T}, Sacrifice ~: Draw 3 cards.

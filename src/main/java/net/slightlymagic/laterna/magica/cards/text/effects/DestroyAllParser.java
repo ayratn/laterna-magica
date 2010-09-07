@@ -31,7 +31,7 @@ import com.google.common.base.Predicate;
 
 
 public class DestroyAllParser implements EffectParser {
-    private static final Pattern p = Pattern.compile("Destroy all (.*)\\.( They can't be regenerated\\.)?");
+    private static final Pattern p = Pattern.compile("Destroy all (.*)(\\. They can't be regenerated)?");
     
     public Function<? super PlayAction, ? extends PlayInformation> parseEffect(String text) {
         Matcher m = p.matcher(text);

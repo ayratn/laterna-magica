@@ -54,7 +54,7 @@ public class EffectParsers {
     }
     
     public static List<Function<? super PlayAction, ? extends PlayInformation>> getEffects(String text) {
-        String[] texts = text.split(",\\s*");
+        String[] texts = text.split("[,\\.]\\s*");
         List<Function<? super PlayAction, ? extends PlayInformation>> result = new ArrayList<Function<? super PlayAction, ? extends PlayInformation>>();
         for(String effect:texts) {
             for(EffectParser parser:effectParsers) {

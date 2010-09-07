@@ -25,7 +25,7 @@ import com.google.common.base.Function;
 
 
 public class AddManaParser implements EffectParser {
-    private static final Pattern p = Pattern.compile("[Aa]dd (.*) to your mana pool\\.");
+    private static final Pattern p = Pattern.compile("[Aa]dd (.*) to your mana pool");
     
     public Function<? super PlayAction, ? extends PlayInformation> parseEffect(String text) {
         Matcher m = p.matcher(text);

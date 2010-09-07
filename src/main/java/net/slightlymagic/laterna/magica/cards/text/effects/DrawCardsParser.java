@@ -31,7 +31,7 @@ import com.google.common.base.Function;
 public class DrawCardsParser implements EffectParser {
     private static final Logger  log = LoggerFactory.getLogger(DrawCardsParser.class);
     
-    private static final Pattern p   = Pattern.compile("[Dd]raw (a card|(\\d+) cards|(.*?) cards)\\.");
+    private static final Pattern p   = Pattern.compile("[Dd]raw (a card|(\\d+) cards|(.*?) cards)");
     
     public Function<? super PlayAction, ? extends PlayInformation> parseEffect(String text) {
         Matcher m = p.matcher(text);

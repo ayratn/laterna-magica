@@ -35,7 +35,7 @@ import com.google.common.base.Predicate;
 
 
 public class DamageAllParser implements EffectParser {
-    private static final Pattern p = Pattern.compile("~ deals (\\d+) damage to all (.*)\\.");
+    private static final Pattern p = Pattern.compile("~ deals (\\d+) damage to all (.*)");
     
     public Function<? super PlayAction, ? extends PlayInformation> parseEffect(String text) {
         Matcher m = p.matcher(text);
