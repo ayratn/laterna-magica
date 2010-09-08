@@ -7,13 +7,21 @@
 package net.slightlymagic.laterna.magica.effect.replacement;
 
 
+import java.util.Collection;
 import java.util.HashSet;
 import java.util.Set;
 
 import net.slightlymagic.laterna.magica.Game;
+import net.slightlymagic.laterna.magica.MagicObject;
+import net.slightlymagic.laterna.magica.ability.Ability;
+import net.slightlymagic.laterna.magica.ability.TriggeredAbility;
+import net.slightlymagic.laterna.magica.action.play.TriggerAction;
+import net.slightlymagic.laterna.magica.characteristic.ObjectCharacteristics;
 import net.slightlymagic.laterna.magica.effect.replacement.ReplacementEffect.ReplacementType;
 import net.slightlymagic.laterna.magica.impl.AbstractGameContent;
+import net.slightlymagic.laterna.magica.player.Player;
 import net.slightlymagic.laterna.magica.util.MagicaCollections;
+import net.slightlymagic.laterna.magica.util.MagicaUtils;
 
 
 /**
@@ -55,14 +63,17 @@ public class ReplacementEngine extends AbstractGameContent {
     }
     
     /**
-     * Replaces the replacement effect by applying all applicable replacement effects in the right order.
+     * Replaces the replacement effect by applying all applicable replacement effects in the right order. If this
+     * results in an actual event, it is executed and abilities trigger from it.
      * 
-     * See {@magic.ruleRef 20100716/R616}
+     * @see {@magic.ruleRef 20100716/R616}
      */
     public boolean execute(ReplaceableEvent event) {
         event = replace(event);
         if(event == null) return false;
-        else return event.execute0();
+        
+        trigger(event);
+        return event.execute0();
     }
     
     private ReplaceableEvent replace(ReplaceableEvent event) {
@@ -100,5 +111,23 @@ public class ReplacementEngine extends AbstractGameContent {
             event = ef.replace(event);
         }
         return event;
+    }
+    
+    private void trigger(ReplaceableEvent event) {
+        Set<Ability> ab = new HashSet<Ability>();
+        Collection<TriggerAction> triggeredAbilities = getGame().getTriggeredAbilities();
+        for(MagicObject o:MagicaUtils.getAllCards(getGame())) {
+            Player p = MagicaUtils.you(o);
+            
+            for(ObjectCharacteristics c:o.getCharacteristics()) {
+                boolean b = c.getAbilityCharacteristic().isAdding(ab);
+                assert b;
+                for(Ability a:ab)
+                    if(a instanceof TriggeredAbility) {
+                        TriggeredAbility tr = ((TriggeredAbility) a);
+                        if(tr.triggersFrom(event)) triggeredAbilities.add(new TriggerAction(p, o, tr, event));
+                    }
+            }
+        }
     }
 }

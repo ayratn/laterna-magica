@@ -21,6 +21,7 @@ import net.slightlymagic.laterna.magica.ability.TriggeredAbility;
 import net.slightlymagic.laterna.magica.action.play.ActivateAction;
 import net.slightlymagic.laterna.magica.action.play.PlayAction;
 import net.slightlymagic.laterna.magica.action.play.PlayInformation;
+import net.slightlymagic.laterna.magica.action.play.TriggerAction;
 import net.slightlymagic.laterna.magica.characteristic.AbilityCharacteristics;
 import net.slightlymagic.laterna.magica.characteristic.impl.AbilityCharacteristicsImpl;
 import net.slightlymagic.laterna.magica.impl.MagicObjectImpl;
@@ -72,7 +73,7 @@ public class AbilityObjectImpl extends MagicObjectImpl implements AbilityObject 
         NonStaticAbility ab = getCharacteristics().get(0).getAbility();
         //triggered abilities can't be played, so return false here
         if(ab instanceof TriggeredAbility) return false;
-        //other wise must be an activated ability
+        //otherwise must be an activated ability
         if(!(a instanceof ActivateAction)) {
             throw new IllegalArgumentException("An ability can only be activated using an ActivateAction");
         }
@@ -83,24 +84,24 @@ public class AbilityObjectImpl extends MagicObjectImpl implements AbilityObject 
     public void play(PlayAction a) {
         NonStaticAbility ab = getCharacteristics().get(0).getAbility();
         
-        if((ab instanceof ActivatedAbility) && !(a instanceof ActivateAction)) {
-            throw new IllegalArgumentException("An ability can only be activated using an ActivateAction");
-        }
-        //TODO implement triggered abilities
-//        if((ab instanceof TriggeredAbility) && !(a instanceof TriggerAction)) {
-//            throw new IllegalArgumentException("An ability can only be triggered using a TriggerAction");
-//        }
-        
         //Create the info before changing the zones so that listeners see the PlayInformation
         PlayInformation info;
-        if(ab instanceof ActivatedAbility) info = ((ActivatedAbility) ab).getPlayInformation((ActivateAction) a);
-//        else ((TriggeredAbility) ab).getPlayInformation((TriggerAction) a);
-        else throw new UnsupportedOperationException("triggered not implemented");
+        if(ab instanceof ActivatedAbility) {
+            if(!(a instanceof ActivateAction)) {
+                throw new IllegalArgumentException("An ability can only be activated using an ActivateAction");
+            }
+            info = ((ActivatedAbility) ab).getPlayInformation((ActivateAction) a);
+        } else if(ab instanceof TriggeredAbility) {
+            if(!(a instanceof TriggerAction)) {
+                throw new IllegalArgumentException("An ability can only be triggered using a TriggerAction");
+            }
+            info = ((TriggeredAbility) ab).getPlayInformation((TriggerAction) a);
+        } else throw new AssertionError(ab);
+        
         this.info.setValue(info);
         
         if(!ab.isManaAbility()) setZone(getGame().getStack());
     }
-    
     
     public PlayInformation getPlayInformation() {
         PlayInformation info = this.info.getValue();

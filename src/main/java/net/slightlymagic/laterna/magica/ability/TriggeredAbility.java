@@ -7,6 +7,11 @@
 package net.slightlymagic.laterna.magica.ability;
 
 
+import net.slightlymagic.laterna.magica.action.play.PlayInformation;
+import net.slightlymagic.laterna.magica.action.play.TriggerAction;
+import net.slightlymagic.laterna.magica.effect.replacement.ReplaceableEvent;
+
+
 /**
  * The class TriggeredAbility.
  * 
@@ -14,5 +19,10 @@ package net.slightlymagic.laterna.magica.ability;
  * @author Clemens Koza
  */
 public interface TriggeredAbility extends NonStaticAbility {
-    //TODO implement triggers
+    /**
+     * Returns whether the triggered ability triggers from the given event
+     */
+    public boolean triggersFrom(ReplaceableEvent trigger);
+    
+    public PlayInformation getPlayInformation(TriggerAction a);
 }

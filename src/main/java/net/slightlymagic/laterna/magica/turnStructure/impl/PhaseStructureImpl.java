@@ -15,11 +15,13 @@ import java.util.EnumMap;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 
 import net.slightlymagic.beans.properties.Property;
 import net.slightlymagic.laterna.magica.Combat;
 import net.slightlymagic.laterna.magica.Game;
 import net.slightlymagic.laterna.magica.MagicObject;
+import net.slightlymagic.laterna.magica.action.play.TriggerAction;
 import net.slightlymagic.laterna.magica.action.stateBased.LethalDamageAction;
 import net.slightlymagic.laterna.magica.action.stateBased.LoseOnDrawAction;
 import net.slightlymagic.laterna.magica.action.stateBased.LoseOnLifeAction;
@@ -75,6 +77,7 @@ public class PhaseStructureImpl extends AbstractGameContent implements PhaseStru
     private Map<StateBasedAction.Type, StateBasedAction> stateBasedActions;
     
     private Property<Combat>                             combat;
+    private Set<TriggerAction>                           triggeredAbilities;
     private Property<TurnBasedAction.Type>               turnBasedAction;
     
     public PhaseStructureImpl(Game game) {
@@ -92,6 +95,7 @@ public class PhaseStructureImpl extends AbstractGameContent implements PhaseStru
         });
         
         combat = properties.property("combat");
+        triggeredAbilities = properties.set("triggeredAbilities");
         turnBasedAction = properties.property("turnBasedAction");
         
         //no need for editable, since it's only created once
@@ -202,6 +206,10 @@ public class PhaseStructureImpl extends AbstractGameContent implements PhaseStru
         return combat.getValue();
     }
     
+    public Set<TriggerAction> getTriggeredAbilities() {
+        return triggeredAbilities;
+    }
+    
     /**
      * Does everything that happens before a player receives priority, namely checking state-based actions and
      * putting triggered abilities on the stack as needed, repeated as long as needed.
@@ -220,7 +228,14 @@ public class PhaseStructureImpl extends AbstractGameContent implements PhaseStru
                 }
             } while(repeat);
             
-            //TODO handle triggered abilities
+            //TODO sort triggered abilities
+            
+            if(!triggeredAbilities.isEmpty()) repeat = true;
+            
+            for(TriggerAction t:triggeredAbilities)
+                t.execute();
+            
+            triggeredAbilities.clear();
         } while(repeat);
     }
     

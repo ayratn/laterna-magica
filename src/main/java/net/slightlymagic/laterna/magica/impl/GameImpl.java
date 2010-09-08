@@ -17,9 +17,11 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 import java.util.Random;
+import java.util.Set;
 
 import net.slightlymagic.laterna.magica.Combat;
 import net.slightlymagic.laterna.magica.Game;
+import net.slightlymagic.laterna.magica.action.play.TriggerAction;
 import net.slightlymagic.laterna.magica.counter.EditableCounter;
 import net.slightlymagic.laterna.magica.counter.EditableCounterImpl;
 import net.slightlymagic.laterna.magica.edit.CompoundEdit;
@@ -80,12 +82,14 @@ public class GameImpl extends AbstractEditableBean implements Game {
         replacementEngine = new ReplacementEngine(this);
         turnStructure = new TurnStructureImpl(this);
         phaseStructure = new PhaseStructureImpl(this);
-        phaseStructure.addPropertyChangeListener("combat", new PropertyChangeListener() {
+        PropertyChangeListener delegator = new PropertyChangeListener() {
             @Override
             public void propertyChange(PropertyChangeEvent evt) {
                 s.firePropertyChange(evt.getPropertyName(), evt.getOldValue(), evt.getNewValue());
             }
-        });
+        };
+        phaseStructure.addPropertyChangeListener("combat", delegator);
+        phaseStructure.addPropertyChangeListener("triggeredAbilities", delegator);
         
         addGameStartListener(new GameInitializer());
         edit.end();
@@ -121,6 +125,11 @@ public class GameImpl extends AbstractEditableBean implements Game {
     
     public Combat getCombat() {
         return phaseStructure.getCombat();
+    }
+    
+    @Override
+    public Set<TriggerAction> getTriggeredAbilities() {
+        return phaseStructure.getTriggeredAbilities();
     }
     
     public List<Player> getPlayers() {

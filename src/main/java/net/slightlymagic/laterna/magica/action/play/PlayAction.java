@@ -23,7 +23,7 @@ import net.slightlymagic.laterna.magica.turnStructure.PhaseStructure;
 
 /**
  * The class PlayAction. A play action is an action a player can begin by himself when he has priority, for example
- * playing a spell or ability, or taking one of the special actions
+ * playing a spell or ability, or taking one of the special actions.
  * 
  * @version V0.0 30.03.2010
  * @author Clemens Koza
@@ -39,7 +39,7 @@ public abstract class PlayAction extends AbstractGameAction {
     public PlayAction(Player controller, MagicObject ob) {
         super(controller.getGame());
         this.controller = controller;
-        this.ob = ob;
+        setObject(ob);
     }
     
     protected void setObject(MagicObject ob) {
@@ -76,8 +76,12 @@ public abstract class PlayAction extends AbstractGameAction {
      */
     @Override
     public boolean execute() {
-        //triggered abilities return false, but can trigger any time
-        if(!(ob instanceof TriggeredAbility || isLegal())) return false;
+        if(!isLegal()) {
+            if(!(ob instanceof AbilityObject)) return false;
+            AbilityObject ab = (AbilityObject) ob;
+            //triggered abilities return false for isLegal(), but can trigger any time
+            if(!(ab.getAbility() instanceof TriggeredAbility)) return false;
+        }
         if(!execute0()) return false;
         getGame().getPhaseStructure().takeAction(true);
         return true;
@@ -110,13 +114,11 @@ public abstract class PlayAction extends AbstractGameAction {
         GameAction cost = info.getCost();
         
         //If the cost contains mana, activate mana abilities
-        if(isManaCost(cost)) {
-            for(;;) {
-                ActivateAction a = getController().getActor().activateManaAbility(cost);
-                if(a == null) break;
-                if(!a.getObject().getAbility().isManaAbility()) continue;
-                a.execute();
-            }
+        if(isManaCost(cost)) for(;;) {
+            ActivateAction a = getController().getActor().activateManaAbility(cost);
+            if(a == null) break;
+            if(!a.getObject().getAbility().isManaAbility()) continue;
+            a.execute();
         }
         
         //Pay the cost

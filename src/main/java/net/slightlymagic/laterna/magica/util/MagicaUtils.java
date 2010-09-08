@@ -7,6 +7,10 @@
 package net.slightlymagic.laterna.magica.util;
 
 
+import java.util.Iterator;
+import java.util.List;
+
+import net.slightlymagic.laterna.magica.Game;
 import net.slightlymagic.laterna.magica.MagicObject;
 import net.slightlymagic.laterna.magica.mana.ManaPool;
 import net.slightlymagic.laterna.magica.mana.ManaSequence;
@@ -14,6 +18,10 @@ import net.slightlymagic.laterna.magica.mana.ManaSymbol;
 import net.slightlymagic.laterna.magica.mana.impl.ManaImpl;
 import net.slightlymagic.laterna.magica.player.Player;
 import net.slightlymagic.laterna.magica.turnStructure.PhaseStructure.Step;
+import net.slightlymagic.laterna.magica.zone.Zone;
+import net.slightlymagic.laterna.magica.zone.Zone.Zones;
+
+import com.google.common.collect.AbstractIterator;
 
 
 /**
@@ -83,5 +91,43 @@ public final class MagicaUtils {
                     throw new AssertionError(s.getType());
             }
         }
+    }
+    
+    public static Iterable<MagicObject> getAllCards(final Game game) {
+        return new Iterable<MagicObject>() {
+            @Override
+            public Iterator<MagicObject> iterator() {
+                return new AbstractIterator<MagicObject>() {
+                    private final Zones[]         types   = Zones.values();
+                    private final List<Player>    players = game.getPlayers();
+                    private int                   type    = 0;
+                    private int                   player  = 0;
+                    
+                    private Iterator<MagicObject> zone;
+                    
+                    @Override
+                    protected MagicObject computeNext() {
+                        if(zone != null && zone.hasNext()) return zone.next();
+                        
+                        if(type == types.length) return endOfData();
+                        
+                        Zones t = types[type];
+                        if(!t.isOwnedZone()) {
+                            Zone z = game.getZone(t);
+                            zone = z.getCards().iterator();
+                            type++;
+                        } else if(player < players.size()) {
+                            Zone z = players.get(player).getZone(t);
+                            zone = z.getCards().iterator();
+                            player++;
+                        } else {
+                            type++;
+                            player = 0;
+                        }
+                        return computeNext();
+                    }
+                };
+            }
+        };
     }
 }

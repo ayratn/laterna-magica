@@ -7,10 +7,12 @@
 package net.slightlymagic.laterna.magica;
 
 
+import java.util.Collection;
 import java.util.List;
 import java.util.Random;
 
 import net.slightlymagic.beans.BoundBean;
+import net.slightlymagic.laterna.magica.action.play.TriggerAction;
 import net.slightlymagic.laterna.magica.counter.Counter;
 import net.slightlymagic.laterna.magica.edit.GameState;
 import net.slightlymagic.laterna.magica.effect.GlobalEffects;
@@ -87,6 +89,11 @@ public interface Game extends BoundBean {
      * Returns the current combat. The combat is only set during the combat phase.
      */
     public Combat getCombat();
+    
+    /**
+     * Returns the collection of abilities that wait to be put onto the stack.
+     */
+    public Collection<TriggerAction> getTriggeredAbilities();
     
     /**
      * <p>
