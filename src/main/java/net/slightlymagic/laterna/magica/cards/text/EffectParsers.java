@@ -73,11 +73,11 @@ public class EffectParsers {
     }
     
     public static boolean isManaEffect(String text) {
-        String[] texts = text.split(",\\s*");
+        String[] texts = text.split("[,\\.]\\s*");
         for(String effect:texts)
             for(EffectParser parser:effectParsers)
                 //TODO optimize
-                if(parser.parseEffect(text) != null && parser.isManaEffect(effect)) return true;
+                if(parser.parseEffect(effect) != null && parser.isManaEffect(effect)) return true;
         return false;
     }
     
