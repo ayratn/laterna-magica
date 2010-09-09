@@ -18,7 +18,6 @@ import net.slightlymagic.laterna.magica.action.GameAction;
 import net.slightlymagic.laterna.magica.cost.ManaCost;
 import net.slightlymagic.laterna.magica.edit.Edit;
 import net.slightlymagic.laterna.magica.player.Player;
-import net.slightlymagic.laterna.magica.turnStructure.PhaseStructure;
 
 
 /**
@@ -71,8 +70,7 @@ public abstract class PlayAction extends AbstractGameAction {
     /**
      * Play actions check if execution is legal and return false if not.
      * 
-     * Otherwise, {@link #execute0()} is called. Afterwards, {@link PhaseStructure#takeAction(boolean)
-     * PhaseStructure.takeAction(true)} is called. Then {@link #execute0()}'s return value is returned.
+     * Otherwise, {@link #execute0()} is called, then {@link #execute0()}'s return value is returned.
      */
     @Override
     public boolean execute() {
@@ -83,7 +81,6 @@ public abstract class PlayAction extends AbstractGameAction {
             if(!(ab.getAbility() instanceof TriggeredAbility)) return false;
         }
         if(!execute0()) return false;
-        getGame().getPhaseStructure().takeAction(true);
         return true;
     }
     

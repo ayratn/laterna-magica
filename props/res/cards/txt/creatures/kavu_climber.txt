@@ -1,0 +1,12 @@
+@date	2010-09-09
+@author	Silly Freak
+
+@set	INV common 23109
+@set	9ED common 83175
+@set	10E common 129511
+
+name	Kavu Climber
+cost	{3}{G}{G}
+type	creature - kavu
+pt		3 / 3
+text	When ~ enters the battlefield, draw a card.

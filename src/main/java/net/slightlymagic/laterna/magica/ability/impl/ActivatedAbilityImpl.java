@@ -34,7 +34,7 @@ public class ActivatedAbilityImpl extends NonStaticAbilityImpl implements Activa
     }
     
     /**
-     * Returns if casting the spell using the specified CastAction is legal.
+     * Returns if activating the ability using the specified ActivateAction is legal.
      */
     public boolean isLegal(ActivateAction a) {
         return legal.apply(a);

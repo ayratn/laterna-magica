@@ -40,6 +40,7 @@ public class DrawCardsParser implements EffectParser {
             //e.g. "Draw two cards" instead of "Draw 2 cards"
             log.error(format("Ability uses the text \"%s\"; convert it to a number, e.g. \"two\" --> 2",
                     m.group(3)));
+            return null;
         }
         
         DrawCardsConfiguration c = new DrawCardsConfiguration();

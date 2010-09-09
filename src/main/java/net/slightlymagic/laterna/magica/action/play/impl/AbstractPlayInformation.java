@@ -19,6 +19,7 @@ import net.slightlymagic.laterna.magica.action.play.PlayAction;
 import net.slightlymagic.laterna.magica.action.play.PlayInformation;
 import net.slightlymagic.laterna.magica.characteristic.ObjectCharacteristics;
 import net.slightlymagic.laterna.magica.characteristics.CardType;
+import net.slightlymagic.laterna.magica.cost.impl.DummyCostFunction;
 import net.slightlymagic.laterna.magica.impl.AbstractGameContent;
 import net.slightlymagic.laterna.magica.zone.Zone;
 
@@ -86,7 +87,8 @@ public class AbstractPlayInformation extends AbstractGameContent implements Play
             GameAction cost = delegate.getCost();
             if(cost != null) actions.add(cost);
         }
-        return new CompoundActionImpl(actions);
+        if(actions.isEmpty()) return DummyCostFunction.EMPTY.apply(getGame());
+        else return new CompoundActionImpl(actions);
     }
     
     public GameAction getEffect() {
@@ -110,6 +112,7 @@ public class AbstractPlayInformation extends AbstractGameContent implements Play
             }
         });
         
-        return new CompoundActionImpl(actions);
+        if(actions.isEmpty()) return DummyCostFunction.EMPTY.apply(getGame());
+        else return new CompoundActionImpl(actions);
     }
 }

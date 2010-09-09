@@ -125,7 +125,8 @@ public class ReplacementEngine extends AbstractGameContent {
                 for(Ability a:ab)
                     if(a instanceof TriggeredAbility) {
                         TriggeredAbility tr = ((TriggeredAbility) a);
-                        if(tr.triggersFrom(event)) triggeredAbilities.add(new TriggerAction(p, o, tr, event));
+                        TriggerAction ac = new TriggerAction(p, o, tr, event);
+                        if(tr.triggersFrom(ac)) triggeredAbilities.add(ac);
                     }
             }
         }

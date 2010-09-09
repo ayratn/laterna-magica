@@ -16,6 +16,7 @@ import java.util.regex.Pattern;
 import net.slightlymagic.laterna.magica.ability.ActivatedAbility;
 import net.slightlymagic.laterna.magica.ability.impl.ActivatedAbilityImpl;
 import net.slightlymagic.laterna.magica.action.play.ActivateAction;
+import net.slightlymagic.laterna.magica.action.play.PlayAction;
 import net.slightlymagic.laterna.magica.action.play.PlayInformation;
 import net.slightlymagic.laterna.magica.action.play.impl.PlayInformationFunction;
 import net.slightlymagic.laterna.magica.cards.InvalidCardException;
@@ -48,9 +49,9 @@ public class ActivatedAbilityParser implements AbilityParser {
         if(!m.matches()) throw new IllegalArgumentException("Not an activated ability");
         
         log.debug("Found activated ability: \"" + text + "\"");
-        List<? extends Function<? super ActivateAction, ? extends PlayInformation>> costs = CostParsers.getCosts(m.group(1));
+        List<Function<? super ActivateAction, ? extends PlayInformation>> costs = CostParsers.getCosts(m.group(1));
         if(costs == null) throw new IllegalArgumentException("Cost could not be parsed");
-        List<? extends Function<? super ActivateAction, ? extends PlayInformation>> effects = EffectParsers.getEffects(m.group(2));
+        List<Function<? super PlayAction, ? extends PlayInformation>> effects = EffectParsers.getEffects(m.group(2));
         if(effects == null) throw new IllegalArgumentException("Effect could not be parsed");
         boolean manaAbility = EffectParsers.isManaEffect(m.group(2));
         

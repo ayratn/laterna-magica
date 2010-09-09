@@ -1,0 +1,10 @@
+@date	2010-09-09
+@author	Silly Freak
+
+@ignore
+
+name	Venerable Monk
+cost	{2}{W}
+type	creature - human monk cleric
+pt		2 / 2
+text	When ~ enters the battlefield, you gain 2 life.

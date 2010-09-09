@@ -9,7 +9,6 @@ package net.slightlymagic.laterna.magica.ability;
 
 import net.slightlymagic.laterna.magica.action.play.PlayInformation;
 import net.slightlymagic.laterna.magica.action.play.TriggerAction;
-import net.slightlymagic.laterna.magica.effect.replacement.ReplaceableEvent;
 
 
 /**
@@ -22,7 +21,7 @@ public interface TriggeredAbility extends NonStaticAbility {
     /**
      * Returns whether the triggered ability triggers from the given event
      */
-    public boolean triggersFrom(ReplaceableEvent trigger);
+    public boolean triggersFrom(TriggerAction trigger);
     
     public PlayInformation getPlayInformation(TriggerAction a);
 }
