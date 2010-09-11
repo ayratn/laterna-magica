@@ -41,28 +41,14 @@
     </configuration>
    </plugin>
    <plugin>
-    <groupId>org.scala-tools</groupId>
-    <artifactId>maven-scala-plugin</artifactId>
-    <version>2.13.1</version>
+    <groupId>org.antlr</groupId>
+    <artifactId>antlr3-maven-plugin</artifactId>
+    <version>3.2</version>
     <executions>
      <execution>
-      <id>compile</id>
+      <phase>generate-sources</phase>
       <goals>
-       <goal>compile</goal>
-      </goals>
-      <phase>compile</phase>
-     </execution>
-     <execution>
-      <id>test-compile</id>
-      <goals>
-       <goal>testCompile</goal>
-      </goals>
-      <phase>test-compile</phase>
-     </execution>
-     <execution>
-      <phase>process-resources</phase>
-      <goals>
-       <goal>compile</goal>
+       <goal>antlr</goal>
       </goals>
      </execution>
     </executions>
@@ -84,6 +70,11 @@
      </tagletArtifact>
      <overview>src/main/java/overview.html</overview>
     </configuration>
+   </plugin>
+   <plugin>
+    <groupId>org.antlr</groupId>
+    <artifactId>antlr3-maven-plugin</artifactId>
+    <version>3.2</version>
    </plugin>
   </plugins>
  </build>
@@ -144,6 +135,12 @@
    <groupId>net.slightlymagic.utils</groupId>
    <artifactId>BeanUtils</artifactId>
    <version>0.0.2</version>
+   <scope>compile</scope>
+  </dependency>
+  <dependency>
+   <groupId>org.antlr</groupId>
+   <artifactId>antlr</artifactId>
+   <version>3.2</version>
    <scope>compile</scope>
   </dependency>
  </dependencies>

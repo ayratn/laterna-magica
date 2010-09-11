@@ -50,6 +50,16 @@ public class GameLoop extends AbstractGameContent implements Runnable {
         PhaseStructure ps = getGame().getPhaseStructure();
         loop: do {
             try {
+                //TODO this is a little dirty. see 104.2: not all other players, but all opponents must have left the game.
+                List<Player> p = getGame().getPlayersInGame();
+                switch(p.size()) {
+                    case 1:
+                        p.get(0).winGame();
+                        //fallthrough
+                    case 0:
+                    break loop;
+                }
+                
                 try {
                     PlayAction a = ps.getPriorPlayer().getActor().getAction();
                     if(!run) break;
@@ -63,15 +73,6 @@ public class GameLoop extends AbstractGameContent implements Runnable {
                 } catch(IrregularActionException ex) {
                     //there are no other IrregularActionExceptions
                     throw new AssertionError(ex);
-                }
-                
-                //TODO this is a little dirty. see 104.2: not all other players, but all opponents must have left the game.
-                List<Player> p = getGame().getPlayersInGame();
-                switch(p.size()) {
-                    case 1:
-                        p.get(0).winGame();
-                    case 0:
-                    break loop;
                 }
             } catch(Exception ex) {
                 log.error(null, ex);

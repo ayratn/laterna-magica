@@ -27,6 +27,7 @@ import net.slightlymagic.laterna.magica.gui.actor.GuiMagicActor;
 import net.slightlymagic.laterna.magica.gui.card.CardDisplay;
 import net.slightlymagic.laterna.magica.gui.card.CardPanel;
 import net.slightlymagic.laterna.magica.gui.card.CardTextButton;
+import net.slightlymagic.laterna.magica.gui.card.DamagePainter;
 import net.slightlymagic.laterna.magica.gui.combat.LegalCombatantUpdater;
 import net.slightlymagic.laterna.magica.gui.player.PlayerPanel;
 import net.slightlymagic.laterna.magica.gui.player.PlayerPanelImpl;
@@ -190,6 +191,7 @@ public class Gui implements Disposable {
         CardTextButton p = new CardTextButton(s);
         p.addActionListener(cardListener);
         p.addMouseListener(cardMouseListener);
+        p.setPainter(new DamagePainter());
         return p;
     }
     

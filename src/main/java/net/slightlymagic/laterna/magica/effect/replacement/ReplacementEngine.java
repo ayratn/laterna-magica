@@ -66,7 +66,7 @@ public class ReplacementEngine extends AbstractGameContent {
      * Replaces the replacement effect by applying all applicable replacement effects in the right order. If this
      * results in an actual event, it is executed and abilities trigger from it.
      * 
-     * @see {@magic.ruleRef 20100716/R616}
+     * See {@magic.ruleRef 20100716/R616}
      */
     public boolean execute(ReplaceableEvent event) {
         event = replace(event);

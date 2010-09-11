@@ -7,6 +7,7 @@
 package net.slightlymagic.laterna.magica.gui.combat;
 
 
+import static java.awt.Color.*;
 import static net.slightlymagic.laterna.magica.impl.CombatUtil.*;
 
 import java.awt.Color;
@@ -38,14 +39,44 @@ import net.slightlymagic.laterna.magica.zone.Zone.Zones;
 public class LegalCombatantUpdater implements PropertyChangeListener {
     private final Gui gui;
     private Border    normal;
-    private Border    nonCombatant, legalCombatant, actualCombatant;
+    
+    private static final int ILLEGAL = 0x01, LEGAL = 0x02, ACTUAL = 0x04;
+    private static final int ATTACKER = 0x10, BLOCKER = 0x20, DEFENDER = 0x40;
+    
+    private static Border getBorder(int key) {
+        int thickness;
+        switch(key & 0x0F) {
+            case ILLEGAL:
+                return BorderFactory.createLineBorder(LIGHT_GRAY, 2);
+            case LEGAL:
+                thickness = 2;
+            break;
+            case ACTUAL:
+                thickness = 4;
+            break;
+            default:
+                throw new IllegalArgumentException("" + key);
+        }
+        Color color;
+        switch(key & 0xF0) {
+            case ATTACKER:
+                color = RED;
+            break;
+            case BLOCKER:
+                color = GREEN;
+            break;
+            case DEFENDER:
+                color = BLUE;
+            break;
+            default:
+                throw new IllegalArgumentException("" + key);
+        }
+        return BorderFactory.createLineBorder(color, thickness);
+    }
     
     public LegalCombatantUpdater(Gui gui) {
         this.gui = gui;
         normal = BorderFactory.createLineBorder(Color.BLACK, 2);
-        nonCombatant = BorderFactory.createLineBorder(Color.LIGHT_GRAY, 2);
-        legalCombatant = BorderFactory.createLineBorder(Color.RED, 2);
-        actualCombatant = BorderFactory.createLineBorder(Color.RED, 4);
         getGui().getGame().addPropertyChangeListener("combat", this);
         updateCombatants();
     }
@@ -84,14 +115,16 @@ public class LegalCombatantUpdater implements PropertyChangeListener {
         if(combat == null) {
             p.setBorder(normal);
         } else {
-            Boolean b = null;
-            if(isLegalAttacker(c)) b = combat.getAttacker(c) != null;
-            else if(isLegalBlocker(c)) b = combat.getBlocker(c) != null;
-            else if(isLegalDefendingPlaneswalker(c)) b = combat.getDefender(c) != null;
+            int key;
+            if(isLegalAttacker(c)) {
+                key = ATTACKER | (combat.getAttacker(c) != null? ACTUAL:LEGAL);
+            } else if(isLegalBlocker(c)) {
+                key = BLOCKER | (combat.getBlocker(c) != null? ACTUAL:LEGAL);
+            } else if(isLegalDefendingPlaneswalker(c)) {
+                key = DEFENDER | (combat.getDefender(c) != null? ACTUAL:LEGAL);
+            } else key = ILLEGAL;
             
-            if(b == null) p.setBorder(nonCombatant);
-            else if(b) p.setBorder(actualCombatant);
-            else p.setBorder(legalCombatant);
+            p.setBorder(getBorder(key));
         }
     }
     

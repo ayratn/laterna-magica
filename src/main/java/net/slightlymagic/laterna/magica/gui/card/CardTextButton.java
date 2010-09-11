@@ -9,6 +9,8 @@ package net.slightlymagic.laterna.magica.gui.card;
 
 import java.awt.BorderLayout;
 import java.awt.Color;
+import java.awt.Graphics;
+import java.awt.Graphics2D;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
@@ -58,6 +60,12 @@ public class CardTextButton extends CardPanel {
     
     public void dispose() {
         setCard(null);
+    }
+    
+    @Override
+    protected void paintComponent(Graphics g) {
+        super.paintComponent(g);
+        if(getPainter() != null) getPainter().paint((Graphics2D) g, getCard(), getWidth(), getHeight());
     }
     
     protected void fireActionPerformed() {
