@@ -64,7 +64,7 @@ public class LaternaMagica {
     public static void init() throws IOException {
         preInit();
         
-        URL url = LaternaMagica.class.getResource("/config.properties");
+        URL url = Thread.currentThread().getContextClassLoader().getResource("config.properties");
         System.out.println("Configuring from Resource /config.properties");
         System.out.println("Resolved to " + url);
         Configurator c = new Configurator().configure(url).execute();
@@ -111,14 +111,15 @@ public class LaternaMagica {
             //running from jar file
             base = base.getParentFile();
             
-            DownloadLibs.downloadLibs(new File(base, "../lib"), LaternaMagica.class.getResource("/libs.txt"));
+            DownloadLibs.downloadLibs(new File(base, "../lib"),
+                    Thread.currentThread().getContextClassLoader().getResource("libs.txt"));
             
             File res = new File(base, "res");
             File sharedRes = new File(base, "../res");
             File usr = new File(System.getProperty("user.home"), ".slightlymagic.net/laterna");
-            unpack(res, "/res.zip");
-            unpack(sharedRes, "/sharedRes.zip");
-            unpack(usr, "/usr.zip");
+            unpack(res, "res.zip");
+            unpack(sharedRes, "sharedRes.zip");
+            unpack(usr, "usr.zip");
         } catch(URISyntaxException ex) {
             throw new IOException(ex);
         }
@@ -129,7 +130,7 @@ public class LaternaMagica {
         if(!dest.mkdirs()) throw new IOException("Directory could not be created: " + dest);
         
         ZipInputStream zis = new ZipInputStream(new BufferedInputStream(
-                LaternaMagica.class.getResourceAsStream(resource)));
+                Thread.currentThread().getContextClassLoader().getResourceAsStream(resource)));
         try {
             byte[] buf = new byte[8 * 1024];
             
