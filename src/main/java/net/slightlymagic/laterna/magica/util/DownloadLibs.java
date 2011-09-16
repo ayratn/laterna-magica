@@ -59,7 +59,7 @@ public class DownloadLibs {
         
         for(String line; (line = r.readLine()) != null;) {
             line = line.trim();
-            if(line.isEmpty() || line.startsWith("#")) continue;
+            if(line.length() == 0 || line.startsWith("#")) continue;
             String[] parts = line.split("\\s+");
             assert parts.length == 2;
             if(new File(libDir, parts[0]).exists()) continue;
