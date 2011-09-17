@@ -8,7 +8,7 @@ package net.slightlymagic.laterna.magica.cards.text.triggers;
 
 
 import net.slightlymagic.laterna.magica.action.play.TriggerAction;
-import net.slightlymagic.laterna.magica.cards.text.TriggerParsers.TriggerParser;
+import net.slightlymagic.laterna.magica.cards.text.TriggerParser;
 import net.slightlymagic.laterna.magica.impl.MoveCardEvent;
 import net.slightlymagic.laterna.magica.zone.Zone.Zones;
 

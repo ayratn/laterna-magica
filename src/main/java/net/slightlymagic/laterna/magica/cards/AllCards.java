@@ -33,8 +33,6 @@ import net.slightlymagic.laterna.magica.cards.CompileHandler.ZipHandler;
  * @author Clemens Koza
  */
 public class AllCards {
-    private static final String             COMPILED        = "/laterna/res/cards/compiled";
-    
     private final Map<String, CardTemplate> templates       = new HashMap<String, CardTemplate>();
     private final Map<Integer, Printing>    printings       = new HashMap<Integer, Printing>();
     private final Set<CardTemplate>         uniqueTemplates = new HashSet<CardTemplate>();
@@ -57,7 +55,7 @@ public class AllCards {
     public void compile() throws IOException {
         templates.clear();
         
-        ZipHandler h = new ZipHandler(PROPS().getFile(COMPILED));
+        ZipHandler h = new ZipHandler(PROPS().getCards().getCompiled());
         CompileAll ca = new CompileAll();
         ca.add(new LogHandler());
         ca.add(h);
@@ -72,7 +70,7 @@ public class AllCards {
     public void load() throws IOException {
         templates.clear();
         
-        ZipFile f = new ZipFile(PROPS().getFile(COMPILED));
+        ZipFile f = new ZipFile(PROPS().getCards().getCompiled());
         try {
             Enumeration<? extends ZipEntry> entries = f.entries();
             while(entries.hasMoreElements()) {

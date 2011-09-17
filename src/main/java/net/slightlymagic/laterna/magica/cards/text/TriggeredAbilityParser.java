@@ -7,6 +7,8 @@
 package net.slightlymagic.laterna.magica.cards.text;
 
 
+import static net.slightlymagic.laterna.magica.cards.text.TextHandler.*;
+
 import java.util.ArrayList;
 import java.util.List;
 import java.util.regex.Matcher;
@@ -45,11 +47,12 @@ public class TriggeredAbilityParser implements AbilityParser {
         if(!m.matches()) throw new IllegalArgumentException("Not a triggered ability");
         
         log.debug("Found triggered ability: \"" + text + "\"");
-        Predicate<? super TriggerAction> trigger = TriggerParsers.getTrigger(m.group(1));
+        Predicate<? super TriggerAction> trigger = textHandler().getTrigger(m.group(1));
         if(trigger == null) throw new IllegalArgumentException("Trigger could not be parsed");
-        List<Function<? super PlayAction, ? extends PlayInformation>> effects = EffectParsers.getEffects(m.group(2));
+        List<Function<? super PlayAction, ? extends PlayInformation>> effects = textHandler().getEffects(
+                m.group(2));
         if(effects == null) throw new IllegalArgumentException("Effect could not be parsed");
-        boolean manaAbility = EffectParsers.isManaEffect(m.group(2));
+        boolean manaAbility = textHandler().isManaEffect(m.group(2));
         
         List<Function<? super TriggerAction, ? extends PlayInformation>> all = new ArrayList<Function<? super TriggerAction, ? extends PlayInformation>>();
         all.addAll(effects);

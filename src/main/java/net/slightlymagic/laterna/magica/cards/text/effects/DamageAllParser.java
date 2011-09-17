@@ -23,7 +23,7 @@ import net.slightlymagic.laterna.magica.action.play.PlayAction;
 import net.slightlymagic.laterna.magica.action.play.PlayInformation;
 import net.slightlymagic.laterna.magica.action.play.impl.AbstractPlayInformation;
 import net.slightlymagic.laterna.magica.card.CardObject;
-import net.slightlymagic.laterna.magica.cards.text.EffectParsers.EffectParser;
+import net.slightlymagic.laterna.magica.cards.text.EffectParser;
 import net.slightlymagic.laterna.magica.characteristics.CardType;
 import net.slightlymagic.laterna.magica.edit.CompoundEdit;
 import net.slightlymagic.laterna.magica.effects.damage.DamagePermanentEvent;

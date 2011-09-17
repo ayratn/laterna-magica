@@ -30,7 +30,7 @@ public class TestAllCards {
         try {
             LaternaMagica.init();
             cards = new AllCards();
-        } catch(IOException ex) {
+        } catch(Exception ex) {
             throw new ExceptionInInitializerError(ex);
         }
     }

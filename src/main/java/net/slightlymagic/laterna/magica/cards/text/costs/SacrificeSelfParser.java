@@ -15,7 +15,7 @@ import net.slightlymagic.laterna.magica.action.GameAction;
 import net.slightlymagic.laterna.magica.action.play.ActivateAction;
 import net.slightlymagic.laterna.magica.action.play.PlayInformation;
 import net.slightlymagic.laterna.magica.action.play.impl.AbstractPlayInformation;
-import net.slightlymagic.laterna.magica.cards.text.CostParsers.CostParser;
+import net.slightlymagic.laterna.magica.cards.text.CostParser;
 import net.slightlymagic.laterna.magica.effects.SacrificePermanentEvent;
 import net.slightlymagic.laterna.magica.util.FactoryFunction;
 

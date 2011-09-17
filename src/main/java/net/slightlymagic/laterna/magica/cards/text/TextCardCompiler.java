@@ -8,11 +8,13 @@ package net.slightlymagic.laterna.magica.cards.text;
 
 
 import static java.lang.Integer.*;
-import static net.slightlymagic.laterna.magica.LaternaMagica.*;
 
+import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.Serializable;
+import java.net.URISyntaxException;
+import java.net.URL;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -47,12 +49,8 @@ import net.slightlymagic.laterna.magica.mana.ManaSequence;
 import net.slightlymagic.laterna.magica.mana.impl.ManaFactoryImpl;
 import net.slightlymagic.laterna.magica.util.FactoryFunction;
 import net.slightlymagic.laterna.magica.util.MagicaUtils;
-import net.slightlymagic.treeProperties.TreeProperty;
 import net.slightlymagic.treeProperties.plain.PlainProperties;
 import net.slightlymagic.treeProperties.plain.PlainProperties.LogicalLine;
-
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
 import com.google.common.base.Predicate;
 
@@ -64,30 +62,27 @@ import com.google.common.base.Predicate;
  * @author Clemens Koza
  */
 public class TextCardCompiler implements CardCompiler {
-    private static final Logger                   log                = LoggerFactory.getLogger(TextCardCompiler.class);
+//    private static final Logger            log          = LoggerFactory.getLogger(TextCardCompiler.class);
     
-    private static final Pattern                  set                = Pattern.compile("(\\w+) (land|common|uncommon|rare|mythic) (\\d+)");
+    private static final Pattern           set          = Pattern.compile("(\\w+) (land|common|uncommon|rare|mythic) (\\d+)");
     
-    private static final String                   LINE_HANDLER_CLASS = "/laterna/res/cards/uncompiled/text/lines/class";
-    private static final Map<String, LineHandler> lineHandlers;
+    private final Map<String, LineHandler> lineHandlers = new HashMap<String, LineHandler>();
+    private File                           path;
     
-    static {
-        lineHandlers = new HashMap<String, LineHandler>();
-        
-        List<TreeProperty> classes = PROPS().getAllProperty(LINE_HANDLER_CLASS);
-        //loop through each class
-        for(TreeProperty pr:classes) {
-            //get an object of the compiler class
-            String clazz = (String) pr.getValue();
-            LineHandler parser;
-            try {
-                parser = (LineHandler) Class.forName(clazz).newInstance();
-            } catch(Exception ex) {
-                log.warn(clazz + " couldn't be instantiated", ex);
-                continue;
-            }
-            lineHandlers.put(parser.getKey(), parser);
+    public void setLine(String key, LineHandler line) {
+        lineHandlers.put(key, line);
+    }
+    
+    public void setPath(URL path) {
+        try {
+            this.path = new File(path.toURI());
+        } catch(URISyntaxException ex) {
+            throw new IllegalArgumentException("Supplied URL must belong to a file: " + path, ex);
         }
+    }
+    
+    public File getPath() {
+        return path;
     }
     
     public CardTemplate compile(InputStream is, List<? extends CompileHandler> handlers) throws IOException, InvalidCardException {
@@ -277,35 +272,18 @@ public class TextCardCompiler implements CardCompiler {
     
     public static interface LineHandler {
         /**
-         * Returns the key if this line handler. the handler will be used for lines with that key.
-         */
-        public String getKey();
-        
-        /**
          * Modifies the ParseContext as applicable.
          */
         public void apply(LineContext context) throws InvalidCardException;
     }
     
-    static class NameHandler implements LineHandler {
-        
-        public String getKey() {
-            return "name";
-        }
-        
-        
+    public static class NameHandler implements LineHandler {
         public void apply(LineContext from) {
             from.getContext().getPart().setName(from.getValue());
         }
     }
     
-    static class CostHandler implements LineHandler {
-        
-        public String getKey() {
-            return "cost";
-        }
-        
-        
+    public static class CostHandler implements LineHandler {
         public void apply(LineContext from) {
             ManaSequence cost = ManaFactoryImpl.INSTANCE.parseSequence(from.getValue());
             from.getContext().getPart().setManaCost(cost);
@@ -316,13 +294,7 @@ public class TextCardCompiler implements CardCompiler {
         }
     }
     
-    static class ColorHandler implements LineHandler {
-        
-        public String getKey() {
-            return "color";
-        }
-        
-        
+    public static class ColorHandler implements LineHandler {
         public void apply(LineContext from) {
             from.getContext().getPart().getColors().clear();
             
@@ -332,13 +304,7 @@ public class TextCardCompiler implements CardCompiler {
         }
     }
     
-    static class SuperHandler implements LineHandler {
-        
-        public String getKey() {
-            return "super";
-        }
-        
-        
+    public static class SuperHandler implements LineHandler {
         public void apply(LineContext from) {
             from.getContext().getPart().getSuperTypes().clear();
             
@@ -348,14 +314,14 @@ public class TextCardCompiler implements CardCompiler {
         }
     }
     
-    static class TypeHandler implements LineHandler {
-        private static final Map<SubType, ActivatedAbility> manaAbilities;
+    public static class TypeHandler implements LineHandler {
+        private Map<SubType, ActivatedAbility> manaAbilities;
         
-        static {
+        private void init() {
+            if(manaAbilities != null) return;
+            
             manaAbilities = new HashMap<SubType, ActivatedAbility>();
-            
             ActivatedAbilityParser p = new ActivatedAbilityParser();
-            
             String[] subtypes = {"plains", "island", "swamp", "mountain", "forest"};
             for(int i = 0; i < subtypes.length; i++) {
                 SubType subtype = SubType.getSubtype(CardType.LAND, subtypes[i]);
@@ -365,13 +331,9 @@ public class TextCardCompiler implements CardCompiler {
             }
         }
         
-        
-        public String getKey() {
-            return "type";
-        }
-        
-        
         public void apply(LineContext from) throws InvalidCardException {
+            init();
+            
             String[] parts = from.getValue().trim().split("\\s*-\\s*");
             if(parts.length < 1 || parts.length > 2) throw new InvalidCardException(
                     "type must be either \"<type>\" or \"<type> - <subtypes> ...\"", from.getLine());
@@ -389,13 +351,7 @@ public class TextCardCompiler implements CardCompiler {
         }
     }
     
-    static class PTHandler implements LineHandler {
-        
-        public String getKey() {
-            return "pt";
-        }
-        
-        
+    public static class PTHandler implements LineHandler {
         public void apply(LineContext from) throws InvalidCardException {
             String[] parts = from.getValue().trim().split("\\s*/\\s*");
             if(parts.length != 2) throw new InvalidCardException("pt must be \"<power> / <toughness>\"",
@@ -413,13 +369,7 @@ public class TextCardCompiler implements CardCompiler {
         }
     }
     
-    static class LHandler implements LineHandler {
-        
-        public String getKey() {
-            return "l";
-        }
-        
-        
+    public static class LHandler implements LineHandler {
         public void apply(LineContext from) throws InvalidCardException {
             String value = from.getValue().trim();
             

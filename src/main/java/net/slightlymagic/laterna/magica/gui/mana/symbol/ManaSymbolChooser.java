@@ -24,6 +24,7 @@ import net.slightlymagic.laterna.magica.LaternaMagica;
 import net.slightlymagic.laterna.magica.mana.ManaSymbol;
 import net.slightlymagic.laterna.magica.mana.impl.ManaFactoryImpl;
 import net.slightlymagic.laterna.magica.mana.impl.NumeralManaSymbol;
+import disbotics.config.configuration.ConfigurationException;
 
 
 /**
@@ -35,7 +36,7 @@ import net.slightlymagic.laterna.magica.mana.impl.NumeralManaSymbol;
 public class ManaSymbolChooser extends JPanel {
     private static final long serialVersionUID = -8874747444802143417L;
     
-    public static void main(String[] args) throws IOException {
+    public static void main(String[] args) throws IOException, ConfigurationException {
         LaternaMagica.init();
         
         JFrame jf = new JFrame();

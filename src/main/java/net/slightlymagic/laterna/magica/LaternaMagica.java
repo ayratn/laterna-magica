@@ -22,14 +22,19 @@ import java.util.zip.ZipInputStream;
 import javax.swing.JFrame;
 
 import net.slightlymagic.laterna.magica.cards.AllCards;
+import net.slightlymagic.laterna.magica.config.LaternaConfig;
 import net.slightlymagic.laterna.magica.gui.main.MainPane;
 import net.slightlymagic.laterna.magica.util.DownloadLibs;
-import net.slightlymagic.treeProperties.PropertyTree;
 import net.slightlymagic.utils.Configurator;
-import net.slightlymagic.utils.PropertyTreeConfigurator;
+import net.slightlymagic.utils.configurators.ConfigConfigurator;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+
+import disbotics.config.configuration.Configuration;
+import disbotics.config.configuration.ConfigurationException;
+import disbotics.config.configuration.Node;
+import disbotics.config.converter.Converter;
 
 
 /**
@@ -39,12 +44,12 @@ import org.slf4j.LoggerFactory;
  * @author Clemens Koza
  */
 public class LaternaMagica {
-    private static final Logger log = LoggerFactory.getLogger(LaternaMagica.class);
+    private static final Logger  log = LoggerFactory.getLogger(LaternaMagica.class);
     
-    private static PropertyTree PROPS;
-    private static AllCards     CARDS;
+    private static LaternaConfig PROPS;
+    private static AllCards      CARDS;
     
-    public static void main(String[] args) throws IOException {
+    public static void main(String[] args) throws IOException, ConfigurationException {
         LaternaMagica.init();
         
         JFrame jf = new JFrame();
@@ -61,19 +66,24 @@ public class LaternaMagica {
         jf.setVisible(true);
     }
     
-    public static void init() throws IOException {
+    public static void init() throws IOException, ConfigurationException {
         preInit();
         
-        URL url = Thread.currentThread().getContextClassLoader().getResource("config.properties");
-        System.out.println("Configuring from Resource /config.properties");
-        System.out.println("Resolved to " + url);
+        String res = "utils.config";
+        URL url = Thread.currentThread().getContextClassLoader().getResource(res);
+        System.out.printf("Configuring from Resource %s%nResolved to %s%n", res, url);
         Configurator c = new Configurator().configure(url).execute();
         
-        PROPS = c.getConfigurator(PropertyTreeConfigurator.class).getTree();
-//        System.out.println(PROPS.getAllProperty(Predicates.alwaysTrue()).toString().replaceAll(",", "\n"));
+        Configuration conf = c.getConfigurator(ConfigConfigurator.class).getConfig();
+        Node laterna = conf.getNode("/laterna");
+        laterna.setType(LaternaConfig.class.getName());
+//        System.out.println(conf);
+        PROPS = (LaternaConfig) new Converter().read(laterna);
+//        System.exit(0);
+        
         CARDS = new AllCards();
         
-        boolean compile = PROPS().getBoolean("/laterna/res/cards/compileOnStart", false);
+        boolean compile = false;//PROPS().getBoolean("/laterna/res/cards/compileOnStart", false);
         if(!compile) {
             try {
                 log.info("Loading...");
@@ -93,7 +103,7 @@ public class LaternaMagica {
         }
     }
     
-    public static PropertyTree PROPS() {
+    public static LaternaConfig PROPS() {
         return PROPS;
     }
     
