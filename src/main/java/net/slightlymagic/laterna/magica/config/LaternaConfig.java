@@ -30,10 +30,6 @@ public class LaternaConfig {
         this.languages = languages;
     }
     
-    public void setPreferredLanguage(String preferred) {
-        languages.setPreferred(preferred);
-    }
-    
     public LanguageConfig getLanguages() {
         return languages;
     }

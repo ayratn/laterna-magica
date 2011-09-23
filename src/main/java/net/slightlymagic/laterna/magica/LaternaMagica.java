@@ -77,7 +77,7 @@ public class LaternaMagica {
         Configuration conf = c.getConfigurator(ConfigConfigurator.class).getConfig();
         Node laterna = conf.getNode("/laterna");
         laterna.setType(LaternaConfig.class.getName());
-//        System.out.println(conf);
+        System.out.println(conf);
         PROPS = (LaternaConfig) new Converter().read(laterna);
 //        System.exit(0);
         
