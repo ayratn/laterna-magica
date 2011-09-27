@@ -29,7 +29,7 @@ import com.google.common.collect.AbstractIterator;
  * @author Clemens Koza
  */
 public class ChutographyCardsHQ implements Iterable<DownloadJob> {
-    private static final File   outDir = PROPS().getFile("/laterna/res/pics/cardsHQ");
+    private static final File   outDir = PROPS().getPics().getCardsHQ();
     private static final String urlFmt = "http://mtgpics.chutography.com/%s/%s.full.jpg";
     
     @Override

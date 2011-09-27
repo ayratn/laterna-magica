@@ -15,7 +15,7 @@ import net.slightlymagic.laterna.magica.action.GameAction;
 import net.slightlymagic.laterna.magica.action.play.PlayAction;
 import net.slightlymagic.laterna.magica.action.play.PlayInformation;
 import net.slightlymagic.laterna.magica.action.play.impl.AbstractPlayInformation;
-import net.slightlymagic.laterna.magica.cards.text.EffectParsers.EffectParser;
+import net.slightlymagic.laterna.magica.cards.text.EffectParser;
 import net.slightlymagic.laterna.magica.mana.ManaSequence;
 import net.slightlymagic.laterna.magica.mana.impl.ManaFactoryImpl;
 import net.slightlymagic.laterna.magica.util.FactoryFunction;

@@ -7,6 +7,8 @@
 package net.slightlymagic.laterna.magica.cards.text;
 
 
+import static net.slightlymagic.laterna.magica.cards.text.TextHandler.*;
+
 import java.util.List;
 
 import net.slightlymagic.laterna.magica.action.play.PlayAction;
@@ -32,7 +34,8 @@ public class SpellEffectParser implements AbilityParser {
     
     public List<? extends Function<? super PlayAction, ? extends PlayInformation>> getEffects(String text) {
         log.debug("Found spell effect: \"" + text + "\"");
-        List<? extends Function<? super PlayAction, ? extends PlayInformation>> effects = EffectParsers.getEffects(text);
+        List<? extends Function<? super PlayAction, ? extends PlayInformation>> effects = textHandler().getEffects(
+                text);
         if(effects == null) throw new IllegalArgumentException("Effect could not be parsed");
         
         return effects;

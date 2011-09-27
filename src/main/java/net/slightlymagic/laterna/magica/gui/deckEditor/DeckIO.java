@@ -7,6 +7,8 @@
 package net.slightlymagic.laterna.magica.gui.deckEditor;
 
 
+import static net.slightlymagic.laterna.magica.LaternaMagica.*;
+
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
@@ -14,7 +16,6 @@ import java.io.IOException;
 
 import javax.swing.JFileChooser;
 
-import net.slightlymagic.laterna.magica.LaternaMagica;
 import net.slightlymagic.laterna.magica.deck.Deck;
 import net.slightlymagic.laterna.magica.io.deck.DeckPersister;
 import net.slightlymagic.laterna.magica.io.deck.DeckPersisterImpl;
@@ -44,7 +45,7 @@ public class DeckIO {
     }
     
     private JFileChooser getFileChooser() {
-        if(c == null) c = new JFileChooser(LaternaMagica.PROPS().getFile("/laterna/usr/decks"));
+        if(c == null) c = new JFileChooser(PROPS().getDecksFolder());
         return c;
     }
     

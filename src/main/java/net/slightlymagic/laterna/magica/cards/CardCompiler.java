@@ -7,6 +7,7 @@
 package net.slightlymagic.laterna.magica.cards;
 
 
+import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.List;
@@ -22,6 +23,8 @@ import net.slightlymagic.laterna.magica.card.CardTemplate;
  * @author Clemens Koza
  */
 public interface CardCompiler {
+    public File getPath();
+    
     /**
      * Creates a card template from the given input stream. The returned template must not be null.
      * 

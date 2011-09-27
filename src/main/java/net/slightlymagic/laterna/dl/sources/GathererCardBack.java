@@ -25,7 +25,7 @@ import com.google.common.collect.Iterators;
  * @author Clemens Koza
  */
 public class GathererCardBack implements Iterable<DownloadJob> {
-    private static final File   out = new File(PROPS().getFile("/laterna/res/pics/cards"), "0.jpg");
+    private static final File   out = new File(PROPS().getPics().getCards(), "0.jpg");
     private static final String url = "http://gatherer.wizards.com/Handlers/Image.ashx?multiverseid=0&type=card";
     
     @Override

@@ -34,6 +34,7 @@ import net.slightlymagic.laterna.magica.deck.Deck.DeckType;
 import net.slightlymagic.laterna.magica.gui.deckEditor.models.pool.CardPoolModel;
 import net.slightlymagic.laterna.magica.gui.deckEditor.models.pool.DeckModel;
 import net.slightlymagic.laterna.magica.gui.deckEditor.models.pool.PoolModel;
+import disbotics.config.configuration.ConfigurationException;
 
 
 /**
@@ -45,7 +46,7 @@ import net.slightlymagic.laterna.magica.gui.deckEditor.models.pool.PoolModel;
 public class DeckEditorPane extends JRootPane {
     private static final long serialVersionUID = 2798376461471841461L;
     
-    public static void main(String[] args) throws IOException {
+    public static void main(String[] args) throws IOException, ConfigurationException {
         LaternaMagica.init();
         
         JFrame jf = new JFrame();

@@ -82,7 +82,7 @@ public final class ImageCache {
     
     public URI getSymbolURI(String symbol, String size) {
         checkSize(size);
-        File f = PROPS().getFile("/laterna/res/pics/symbols");
+        File f = PROPS().getPics().getSymbols();
         f = new File(f, size);
         f = new File(f, symbol.replaceAll("[{}/]", "") + ".gif");
         return f.toURI();
@@ -110,7 +110,7 @@ public final class ImageCache {
     }
     
     public URI getCardURI(int multiverseID) {
-        File f = PROPS().getFile("/laterna/res/pics/cards");
+        File f = PROPS().getPics().getCards();
         f = new File(f, multiverseID + ".jpg");
         return f.toURI();
     }

@@ -10,7 +10,6 @@ package net.slightlymagic.laterna.magica.test;
 import static java.util.Arrays.*;
 import static org.junit.Assert.*;
 
-import java.io.IOException;
 import java.util.HashSet;
 import java.util.Iterator;
 import java.util.Set;
@@ -40,7 +39,7 @@ public class TestEditableSet {
     static {
         try {
             LaternaMagica.init();
-        } catch(IOException ex) {
+        } catch(Exception ex) {
             throw new ExceptionInInitializerError(ex);
         }
     }

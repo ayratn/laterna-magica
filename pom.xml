@@ -110,7 +110,7 @@
   <dependency>
    <groupId>net.slightlymagic.utils</groupId>
    <artifactId>Utils</artifactId>
-   <version>0.0.3</version>
+   <version>0.0.3-SNAPSHOT</version>
   </dependency>
   <dependency>
    <groupId>org.scala-lang</groupId>
@@ -128,8 +128,13 @@
   <dependency>
    <groupId>org.antlr</groupId>
    <artifactId>antlr</artifactId>
-   <version>3.2</version>
+   <version>3.3</version>
    <scope>compile</scope>
+  </dependency>
+  <dependency>
+   <groupId>net.slightlymagic.treeProperties</groupId>
+   <artifactId>TreeProperties</artifactId>
+   <version>0.1.5</version>
   </dependency>
  </dependencies>
 </project>

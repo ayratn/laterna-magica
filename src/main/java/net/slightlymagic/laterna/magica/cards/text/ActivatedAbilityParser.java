@@ -7,6 +7,8 @@
 package net.slightlymagic.laterna.magica.cards.text;
 
 
+import static net.slightlymagic.laterna.magica.cards.text.TextHandler.*;
+
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
@@ -49,11 +51,13 @@ public class ActivatedAbilityParser implements AbilityParser {
         if(!m.matches()) throw new IllegalArgumentException("Not an activated ability");
         
         log.debug("Found activated ability: \"" + text + "\"");
-        List<Function<? super ActivateAction, ? extends PlayInformation>> costs = CostParsers.getCosts(m.group(1));
+        List<Function<? super ActivateAction, ? extends PlayInformation>> costs = textHandler().getCosts(
+                m.group(1));
         if(costs == null) throw new IllegalArgumentException("Cost could not be parsed");
-        List<Function<? super PlayAction, ? extends PlayInformation>> effects = EffectParsers.getEffects(m.group(2));
+        List<Function<? super PlayAction, ? extends PlayInformation>> effects = textHandler().getEffects(
+                m.group(2));
         if(effects == null) throw new IllegalArgumentException("Effect could not be parsed");
-        boolean manaAbility = EffectParsers.isManaEffect(m.group(2));
+        boolean manaAbility = textHandler().isManaEffect(m.group(2));
         
         List<Function<? super ActivateAction, ? extends PlayInformation>> all = new ArrayList<Function<? super ActivateAction, ? extends PlayInformation>>();
         all.addAll(costs);
