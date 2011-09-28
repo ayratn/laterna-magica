@@ -10,7 +10,7 @@ package net.slightlymagic.laterna.magica.gui.actor.actors;
 import net.slightlymagic.laterna.magica.MagicObject;
 import net.slightlymagic.laterna.magica.action.play.ActivateAction;
 import net.slightlymagic.laterna.magica.action.play.PlayAction;
-import net.slightlymagic.laterna.magica.characteristics.MagicColor;
+import net.slightlymagic.laterna.magica.characteristic.MagicColor;
 import net.slightlymagic.laterna.magica.gui.actor.GuiActor;
 import net.slightlymagic.laterna.magica.gui.actor.GuiMagicActor;
 import net.slightlymagic.laterna.magica.gui.util.GuiUtil;
@@ -37,9 +37,10 @@ public class ManaActor extends GuiActor {
         super.start();
         StringBuilder sb = new StringBuilder();
         if(amounts[6] > 0) sb.append("{" + amounts[6] + "}");
+        MagicColor[] colors = MagicColor.values();
         for(int i = 0; i < 5; i++)
             for(int j = 0; j < amounts[i]; j++)
-                sb.append("{" + MagicColor.values()[i].getShortChar() + "}");
+                sb.append("{" + colors[i].getShortChar() + "}");
         for(int i = 0; i < amounts[5]; i++)
             sb.append("{S}");
         

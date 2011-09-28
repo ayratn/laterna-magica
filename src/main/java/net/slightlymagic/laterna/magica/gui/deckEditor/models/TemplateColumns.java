@@ -7,8 +7,8 @@
 package net.slightlymagic.laterna.magica.gui.deckEditor.models;
 
 
-import net.slightlymagic.laterna.magica.card.CardParts;
-import net.slightlymagic.laterna.magica.card.CardTemplate;
+import net.slightlymagic.laterna.magica.card.Card;
+import net.slightlymagic.laterna.magica.card.SimpleCardParts;
 
 
 /**
@@ -17,14 +17,14 @@ import net.slightlymagic.laterna.magica.card.CardTemplate;
  * @version V0.0 01.09.2010
  * @author Clemens Koza
  */
-public class TemplateColumns implements TableColumns<CardTemplate> {
-    private final TableColumns<? super CardParts> columns;
+public class TemplateColumns implements TableColumns<Card> {
+    private final TableColumns<? super SimpleCardParts> columns;
     
     public TemplateColumns() {
         this(new DefaultPartsColumns());
     }
     
-    public TemplateColumns(TableColumns<? super CardParts> columns) {
+    public TemplateColumns(TableColumns<? super SimpleCardParts> columns) {
         this.columns = columns;
     }
     
@@ -40,7 +40,7 @@ public class TemplateColumns implements TableColumns<CardTemplate> {
         return columns.getColumnName(column);
     }
     
-    public Object getValueAt(CardTemplate value, int column) {
-        return columns.getValueAt(value.getCardParts().get(0), column);
+    public Object getValueAt(Card value, int column) {
+        return columns.getValueAt(value.getSimpleCardParts().get(0), column);
     }
 }

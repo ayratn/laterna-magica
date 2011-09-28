@@ -45,7 +45,7 @@ public class DeckIO {
     }
     
     private JFileChooser getFileChooser() {
-        if(c == null) c = new JFileChooser(PROPS().getDecksFolder());
+        if(c == null) c = new JFileChooser(MAGICA_CONFIG().getDecksFolder());
         return c;
     }
     

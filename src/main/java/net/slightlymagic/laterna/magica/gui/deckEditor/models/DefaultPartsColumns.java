@@ -7,8 +7,8 @@
 package net.slightlymagic.laterna.magica.gui.deckEditor.models;
 
 
-import static net.slightlymagic.laterna.magica.characteristics.CardType.*;
-import net.slightlymagic.laterna.magica.card.CardParts;
+import static net.slightlymagic.laterna.magica.characteristic.CardType.*;
+import net.slightlymagic.laterna.magica.card.SimpleCardParts;
 import net.slightlymagic.laterna.magica.mana.ManaSequence;
 
 import com.google.common.base.Joiner;
@@ -20,7 +20,7 @@ import com.google.common.base.Joiner;
  * @version V0.0 01.09.2010
  * @author Clemens Koza
  */
-public class DefaultPartsColumns implements TableColumns<CardParts> {
+public class DefaultPartsColumns implements TableColumns<SimpleCardParts> {
     private static final String[]   names   = {"Name", "Cost", "Type", "P/T/L"};
     private static final Class<?>[] classes = {String.class, ManaSequence.class, String.class, String.class};
     
@@ -38,7 +38,7 @@ public class DefaultPartsColumns implements TableColumns<CardParts> {
         return classes.length;
     }
     
-    public Object getValueAt(CardParts value, int column) {
+    public Object getValueAt(SimpleCardParts value, int column) {
         switch(column) {
             case 0: //name
                 return value.getName();

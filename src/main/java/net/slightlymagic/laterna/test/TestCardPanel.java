@@ -7,6 +7,8 @@
 package net.slightlymagic.laterna.test;
 
 
+import static net.slightlymagic.laterna.magica.deck.DeckType.*;
+
 import java.awt.BorderLayout;
 import java.awt.Container;
 import java.io.IOException;
@@ -24,12 +26,10 @@ import javax.swing.JPanel;
 import net.slightlymagic.laterna.magica.Game;
 import net.slightlymagic.laterna.magica.LaternaMagica;
 import net.slightlymagic.laterna.magica.MagicObject;
+import net.slightlymagic.laterna.magica.card.Card;
 import net.slightlymagic.laterna.magica.card.CardObject;
-import net.slightlymagic.laterna.magica.card.CardTemplate;
 import net.slightlymagic.laterna.magica.card.Printing;
 import net.slightlymagic.laterna.magica.deck.Deck;
-import net.slightlymagic.laterna.magica.deck.Deck.DeckType;
-import net.slightlymagic.laterna.magica.deck.impl.DeckImpl;
 import net.slightlymagic.laterna.magica.gui.Gui;
 import net.slightlymagic.laterna.magica.gui.TurnProgressUpdater;
 import net.slightlymagic.laterna.magica.gui.actor.GuiMagicActor;
@@ -119,7 +119,7 @@ public class TestCardPanel {
     }
     
     private static void putIntoPlay(Game game, String name, int num) {
-        CardTemplate grizzly = LaternaMagica.CARDS().getCard(name);
+        Card grizzly = LaternaMagica.CARDS().getCard(name);
         List<MagicObject> grizzlies = new ArrayList<MagicObject>();
         
         for(Player p:game.getPlayers()) {
@@ -171,8 +171,8 @@ public class TestCardPanel {
 //        AllCards c = LaternaMagica.CARDS();
 //        c.compile();
         
-        Deck d = new DeckImpl();
-        d.addPool(DeckType.MAIN_DECK);
+        Deck d = new Deck();
+        d.addPool(MAIN_DECK);
         
 //        put(d, "Island", 20);
 //        put(d, "Courier's Capsule", 12);
@@ -196,7 +196,7 @@ public class TestCardPanel {
     }
     
     private static void put(Deck d, String name, int num) {
-        Map<Printing, Integer> pool = d.getPool(DeckType.MAIN_DECK);
+        Map<Printing, Integer> pool = d.getPool(MAIN_DECK);
         List<Printing> list = LaternaMagica.CARDS().getCard(name).getPrintings();
         for(int i = 0; i < num; i++)
             put(pool, list);

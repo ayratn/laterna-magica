@@ -7,6 +7,8 @@
 package net.slightlymagic.laterna.magica.gui.util;
 
 
+import static net.slightlymagic.laterna.magica.characteristic.CardType.*;
+
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.Iterator;
@@ -14,7 +16,6 @@ import java.util.List;
 import java.util.Set;
 
 import net.slightlymagic.laterna.magica.MagicObject;
-import net.slightlymagic.laterna.magica.ability.Ability;
 import net.slightlymagic.laterna.magica.ability.ActivatedAbility;
 import net.slightlymagic.laterna.magica.action.GameAction;
 import net.slightlymagic.laterna.magica.action.play.ActivateAction;
@@ -22,8 +23,8 @@ import net.slightlymagic.laterna.magica.action.play.CastAction;
 import net.slightlymagic.laterna.magica.action.play.PlayAction;
 import net.slightlymagic.laterna.magica.action.special.LandDropAction;
 import net.slightlymagic.laterna.magica.card.CardObject;
+import net.slightlymagic.laterna.magica.characteristic.AbilityCharacteristic;
 import net.slightlymagic.laterna.magica.characteristic.ObjectCharacteristics;
-import net.slightlymagic.laterna.magica.characteristics.CardType;
 import net.slightlymagic.laterna.magica.player.Player;
 
 
@@ -48,7 +49,7 @@ public class GuiUtil {
         List<PlayAction> list = new ArrayList<PlayAction>();
         
         if(card instanceof CardObject) {
-            if(card.getCharacteristics().get(0).hasType(CardType.LAND)) {
+            if(card.getCharacteristics().get(0).hasType(LAND)) {
                 list.add(new LandDropAction((CardObject) card));
             } else {
                 list.add(new CastAction(player, (CardObject) card));
@@ -56,13 +57,13 @@ public class GuiUtil {
         }
         
         for(ObjectCharacteristics c:card.getCharacteristics()) {
-            Set<Ability> abilities = new HashSet<Ability>();
+            Set<AbilityCharacteristic> abilities = new HashSet<AbilityCharacteristic>();
             boolean b = c.getAbilityCharacteristic().isAdding(abilities);
             //abilities can't be "all but"
             assert b;
-            for(Ability ability:abilities)
-                if(ability instanceof ActivatedAbility) {
-                    list.add(new ActivateAction(player, card, (ActivatedAbility) ability));
+            for(AbilityCharacteristic ability:abilities)
+                if(ability.getAbility() instanceof ActivatedAbility) {
+                    list.add(new ActivateAction(player, card, (ActivatedAbility) ability.getAbility()));
                 }
         }
         

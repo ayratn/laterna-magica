@@ -24,10 +24,10 @@ import java.util.regex.Pattern;
 
 import javax.imageio.ImageIO;
 
+import net.slightlymagic.laterna.magica.card.Card;
 import net.slightlymagic.laterna.magica.card.CardObject;
-import net.slightlymagic.laterna.magica.card.CardTemplate;
 import net.slightlymagic.laterna.magica.card.Printing;
-import net.slightlymagic.laterna.magica.characteristics.MagicColor;
+import net.slightlymagic.laterna.magica.characteristic.MagicColor;
 import net.slightlymagic.laterna.magica.mana.ManaSymbol;
 
 import org.slf4j.Logger;
@@ -82,7 +82,7 @@ public final class ImageCache {
     
     public URI getSymbolURI(String symbol, String size) {
         checkSize(size);
-        File f = PROPS().getPics().getSymbols();
+        File f = MAGICA_CONFIG().getPics().getSymbols();
         f = new File(f, size);
         f = new File(f, symbol.replaceAll("[{}/]", "") + ".gif");
         return f.toURI();
@@ -101,7 +101,7 @@ public final class ImageCache {
         return getCardURI(card.getPrinting());
     }
     
-    public URI getCardURI(CardTemplate card) {
+    public URI getCardURI(Card card) {
         return getCardURI(card.getPrintings().get(card.getPrintings().size() - 1));
     }
     
@@ -110,7 +110,7 @@ public final class ImageCache {
     }
     
     public URI getCardURI(int multiverseID) {
-        File f = PROPS().getPics().getCards();
+        File f = MAGICA_CONFIG().getPics().getCards();
         f = new File(f, multiverseID + ".jpg");
         return f.toURI();
     }

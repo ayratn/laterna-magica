@@ -30,8 +30,8 @@ import net.slightlymagic.laterna.magica.action.CompoundActionImpl;
 import net.slightlymagic.laterna.magica.action.GameAction;
 import net.slightlymagic.laterna.magica.action.play.ActivateAction;
 import net.slightlymagic.laterna.magica.action.play.PlayAction;
-import net.slightlymagic.laterna.magica.characteristics.MagicColor;
-import net.slightlymagic.laterna.magica.characteristics.SuperType;
+import net.slightlymagic.laterna.magica.characteristic.MagicColor;
+import net.slightlymagic.laterna.magica.characteristic.SuperType;
 import net.slightlymagic.laterna.magica.cost.ManaCost;
 import net.slightlymagic.laterna.magica.effect.replacement.ReplaceableEvent;
 import net.slightlymagic.laterna.magica.effect.replacement.ReplacementEffect;
@@ -49,7 +49,6 @@ import net.slightlymagic.laterna.magica.gui.util.ListChooser;
 import net.slightlymagic.laterna.magica.mana.Mana;
 import net.slightlymagic.laterna.magica.mana.ManaSequence;
 import net.slightlymagic.laterna.magica.mana.ManaSymbol;
-import net.slightlymagic.laterna.magica.mana.impl.ManaSequenceImpl;
 import net.slightlymagic.laterna.magica.player.ConcessionException;
 import net.slightlymagic.laterna.magica.player.Player;
 import net.slightlymagic.laterna.magica.player.impl.AbstractMagicActor;
@@ -165,7 +164,7 @@ public class GuiMagicActor extends AbstractMagicActor implements Disposable {
             symbols.add(chooser.getCurrent());
         }
         
-        return new ManaSequenceImpl(symbols);
+        return new ManaSequence(symbols);
     }
     
     private static int[] getManaCost(int[] amounts, GameAction cost) {

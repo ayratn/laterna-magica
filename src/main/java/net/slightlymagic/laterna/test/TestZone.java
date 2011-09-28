@@ -9,9 +9,9 @@ package net.slightlymagic.laterna.test;
 
 import net.slightlymagic.laterna.magica.Game;
 import net.slightlymagic.laterna.magica.LaternaMagica;
+import net.slightlymagic.laterna.magica.card.Card;
 import net.slightlymagic.laterna.magica.card.CardObject;
 import net.slightlymagic.laterna.magica.card.impl.CardObjectImpl;
-import net.slightlymagic.laterna.magica.card.impl.CardTemplateImpl;
 import net.slightlymagic.laterna.magica.impl.GameImpl;
 import net.slightlymagic.laterna.magica.player.Player;
 import net.slightlymagic.laterna.magica.player.impl.PlayerImpl;
@@ -30,7 +30,7 @@ public class TestZone {
         Game g = new GameImpl();
         Player p = new PlayerImpl(g, "Clemens");
         g.getPlayers().add(p);
-        CardObject c = new CardObjectImpl(g, new CardTemplateImpl());
+        CardObject c = new CardObjectImpl(g, new Card());
         c.setOwner(p);
         
         System.out.println(p.getLibrary().getCards());

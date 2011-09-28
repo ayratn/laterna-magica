@@ -7,7 +7,7 @@
 package net.slightlymagic.laterna.magica.gui.deckEditor;
 
 
-import static net.slightlymagic.laterna.magica.deck.Deck.DeckType.*;
+import static net.slightlymagic.laterna.magica.deck.DeckType.*;
 
 import java.awt.Component;
 import java.awt.GridLayout;
@@ -30,7 +30,7 @@ import net.slightlymagic.laterna.magica.LaternaMagica;
 import net.slightlymagic.laterna.magica.card.Printing;
 import net.slightlymagic.laterna.magica.cards.AllCards;
 import net.slightlymagic.laterna.magica.deck.Deck;
-import net.slightlymagic.laterna.magica.deck.Deck.DeckType;
+import net.slightlymagic.laterna.magica.deck.DeckType;
 import net.slightlymagic.laterna.magica.gui.deckEditor.models.pool.CardPoolModel;
 import net.slightlymagic.laterna.magica.gui.deckEditor.models.pool.DeckModel;
 import net.slightlymagic.laterna.magica.gui.deckEditor.models.pool.PoolModel;

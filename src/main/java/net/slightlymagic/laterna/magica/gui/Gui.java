@@ -22,7 +22,8 @@ import javax.swing.JRootPane;
 
 import net.slightlymagic.laterna.magica.Game;
 import net.slightlymagic.laterna.magica.MagicObject;
-import net.slightlymagic.laterna.magica.characteristic.CharacteristicSnapshot;
+import net.slightlymagic.laterna.magica.characteristic.CardSnapshot;
+import net.slightlymagic.laterna.magica.characteristic.impl.CardCharacteristicsSnapshot;
 import net.slightlymagic.laterna.magica.gui.actor.GuiMagicActor;
 import net.slightlymagic.laterna.magica.gui.card.CardDisplay;
 import net.slightlymagic.laterna.magica.gui.card.CardPanel;
@@ -177,7 +178,7 @@ public class Gui implements Disposable {
         cards.remove(card);
     }
     
-    public void showCard(CharacteristicSnapshot sn) {
+    public void showCard(CardSnapshot sn) {
         for(CardDisplay c:cards)
             c.setCard(sn);
     }
@@ -186,8 +187,7 @@ public class Gui implements Disposable {
      * Returns a component for displaying the specified card.
      */
     public CardPanel createCardPanel(MagicObject card) {
-        CharacteristicSnapshot s = card.getCharacteristics().get(0).getCharacteristics(
-                new CharacteristicSnapshot());
+        CardSnapshot s = card.getCharacteristics().get(0).getCharacteristics(null);
         CardTextButton p = new CardTextButton(s);
         p.addActionListener(cardListener);
         p.addMouseListener(cardMouseListener);
@@ -201,7 +201,8 @@ public class Gui implements Disposable {
     private final class CardListener implements ActionListener {
         public void actionPerformed(ActionEvent e) {
             CardTextButton p = (CardTextButton) e.getSource();
-            MagicObject c = p.getCard().getCard();
+            if(!(p.getCard() instanceof CardCharacteristicsSnapshot)) return;
+            MagicObject c = ((CardCharacteristicsSnapshot) p.getCard()).getCardObject();
             
             for(GuiMagicActor actor:actors)
                 actor.channels.objects.publish(c);
@@ -225,7 +226,7 @@ public class Gui implements Disposable {
         @Override
         public void mouseEntered(MouseEvent e) {
             if(!(e.getSource() instanceof CardDisplay)) return;
-            CharacteristicSnapshot sn = ((CardDisplay) e.getSource()).getCard();
+            CardSnapshot sn = ((CardDisplay) e.getSource()).getCard();
             showCard(sn);
         }
         

@@ -12,11 +12,11 @@ import java.awt.Image;
 import javax.swing.ImageIcon;
 import javax.swing.JLabel;
 
-import net.slightlymagic.laterna.magica.characteristics.MagicColor;
+import net.slightlymagic.laterna.magica.characteristic.MagicColor;
 import net.slightlymagic.laterna.magica.gui.util.ImageCache;
+import net.slightlymagic.laterna.magica.mana.ColoredManaSymbol;
 import net.slightlymagic.laterna.magica.mana.ManaSymbol;
-import net.slightlymagic.laterna.magica.mana.impl.ColoredManaSymbol;
-import net.slightlymagic.laterna.magica.mana.impl.VariableManaSymbol;
+import net.slightlymagic.laterna.magica.mana.VariableManaSymbol;
 
 
 /**

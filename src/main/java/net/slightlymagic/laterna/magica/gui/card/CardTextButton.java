@@ -17,7 +17,7 @@ import java.awt.event.ActionListener;
 import javax.swing.BorderFactory;
 import javax.swing.JButton;
 
-import net.slightlymagic.laterna.magica.characteristic.CharacteristicSnapshot;
+import net.slightlymagic.laterna.magica.characteristic.CardSnapshot;
 
 
 /**
@@ -33,10 +33,10 @@ public class CardTextButton extends CardPanel {
     private CardDetail        d;
     
     public CardTextButton() {
-        this(new CharacteristicSnapshot());
+        this(null);
     }
     
-    public CardTextButton(CharacteristicSnapshot c) {
+    public CardTextButton(CardSnapshot c) {
         setBorder(BorderFactory.createLineBorder(Color.BLACK, 2));
         setLayout(new BorderLayout());
         add(b = new JButton());
@@ -89,11 +89,11 @@ public class CardTextButton extends CardPanel {
         listenerList.remove(ActionListener.class, l);
     }
     
-    public void setCard(CharacteristicSnapshot c) {
+    public void setCard(CardSnapshot c) {
         d.setCard(c);
     }
     
-    public CharacteristicSnapshot getCard() {
+    public CardSnapshot getCard() {
         return d.getCard();
     }
 }

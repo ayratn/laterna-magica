@@ -36,9 +36,9 @@ import javax.swing.event.TableModelEvent;
 import javax.swing.event.TableModelListener;
 import javax.swing.table.DefaultTableCellRenderer;
 
-import net.slightlymagic.laterna.magica.card.CardTemplate;
+import net.slightlymagic.laterna.magica.card.Card;
 import net.slightlymagic.laterna.magica.card.Printing;
-import net.slightlymagic.laterna.magica.characteristic.CharacteristicSnapshot;
+import net.slightlymagic.laterna.magica.characteristic.CardSnapshot;
 import net.slightlymagic.laterna.magica.gui.card.CardDetail;
 import net.slightlymagic.laterna.magica.gui.card.CardImage;
 import net.slightlymagic.laterna.magica.gui.card.CardPanel;
@@ -161,7 +161,7 @@ public class DeckEditorPanel extends JPanel {
         return MultiSplitLayout.parseModel(sw.toString());
     }
     
-    private void updatePrintings(CardTemplate t, CardTemplateModel source) {
+    private void updatePrintings(Card t, CardTemplateModel source) {
         if(t == null) {
             printings.setModel(new DefaultComboBoxModel());
             printings.setSelectedIndex(-1);
@@ -186,11 +186,9 @@ public class DeckEditorPanel extends JPanel {
     }
     
     private void showCard(Printing p) {
-        CharacteristicSnapshot sn;
-        if(p == null) sn = null;
-        else {
-            sn = new CharacteristicSnapshot();
-            sn.setParts(p.getTemplate().getCardParts().get(0), p);
+        CardSnapshot sn = null;
+        if(p != null) {
+            p.getCharacteristics(sn, 0);
         }
         image.setCard(sn);
         detail.setCard(sn);

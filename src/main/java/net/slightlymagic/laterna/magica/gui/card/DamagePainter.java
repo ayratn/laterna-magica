@@ -9,6 +9,7 @@ package net.slightlymagic.laterna.magica.gui.card;
 
 import static com.google.common.base.Suppliers.*;
 import static java.lang.String.*;
+import static net.slightlymagic.laterna.magica.characteristic.CardType.*;
 import static net.slightlymagic.laterna.magica.util.MagicaPredicates.*;
 import static net.slightlymagic.laterna.magica.zone.Zone.Zones.*;
 
@@ -23,8 +24,8 @@ import net.slightlymagic.laterna.magica.Combat.Blocker;
 import net.slightlymagic.laterna.magica.Combat.Defender;
 import net.slightlymagic.laterna.magica.MagicObject;
 import net.slightlymagic.laterna.magica.card.CardObject;
-import net.slightlymagic.laterna.magica.characteristic.CharacteristicSnapshot;
-import net.slightlymagic.laterna.magica.characteristics.CardType;
+import net.slightlymagic.laterna.magica.characteristic.CardSnapshot;
+import net.slightlymagic.laterna.magica.characteristic.impl.CardCharacteristicsSnapshot;
 
 import org.jdesktop.swingx.painter.Painter;
 
@@ -37,16 +38,19 @@ import com.google.common.base.Predicate;
  * @version V0.0 11.09.2010
  * @author Clemens Koza
  */
-public class DamagePainter implements Painter<CharacteristicSnapshot> {
+public class DamagePainter implements Painter<CardSnapshot> {
     private static final Predicate<MagicObject> isOnBattlefield = isIn(ofInstance(BATTLEFIELD));
     
     @Override
-    public void paint(Graphics2D g, CharacteristicSnapshot object, int width, int height) {
+    public void paint(Graphics2D g, CardSnapshot object, int width, int height) {
         if(object == null) return;
-        if(!(object.getCard() instanceof CardObject)) return;
-        CardObject c = (CardObject) object.getCard();
+        if(!(object instanceof CardCharacteristicsSnapshot)) return;
+        MagicObject o = ((CardCharacteristicsSnapshot) object).getCardObject();
+        if(!(o instanceof CardObject)) return;
+        CardObject c = (CardObject) o;
+        
         if(!isOnBattlefield.apply(c)) return;
-        if(!object.getTypes().hasValue(CardType.CREATURE)) return;
+        if(!object.getTypes().hasValue(CREATURE)) return;
         
         if(true) return;
         //TODO this code seems to cause a NullPointerException

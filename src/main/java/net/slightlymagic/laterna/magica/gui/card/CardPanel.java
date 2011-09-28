@@ -9,7 +9,7 @@ package net.slightlymagic.laterna.magica.gui.card;
 
 import javax.swing.JPanel;
 
-import net.slightlymagic.laterna.magica.characteristic.CharacteristicSnapshot;
+import net.slightlymagic.laterna.magica.characteristic.CardSnapshot;
 
 import org.jdesktop.swingx.painter.Painter;
 
@@ -22,15 +22,15 @@ import org.jdesktop.swingx.painter.Painter;
  * @author Clemens Koza
  */
 public abstract class CardPanel extends JPanel implements CardDisplay {
-    private static final long               serialVersionUID = -8076890635020744259L;
+    private static final long     serialVersionUID = -8076890635020744259L;
     
-    private Painter<CharacteristicSnapshot> painter;
+    private Painter<CardSnapshot> painter;
     
-    public void setPainter(Painter<CharacteristicSnapshot> painter) {
+    public void setPainter(Painter<CardSnapshot> painter) {
         this.painter = painter;
     }
     
-    public Painter<CharacteristicSnapshot> getPainter() {
+    public Painter<CardSnapshot> getPainter() {
         return painter;
     }
 }

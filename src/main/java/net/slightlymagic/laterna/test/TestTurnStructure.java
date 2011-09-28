@@ -7,12 +7,11 @@
 package net.slightlymagic.laterna.test;
 
 
+import static net.slightlymagic.laterna.magica.deck.DeckType.*;
 import net.slightlymagic.laterna.magica.Game;
 import net.slightlymagic.laterna.magica.LaternaMagica;
 import net.slightlymagic.laterna.magica.cards.AllCards;
 import net.slightlymagic.laterna.magica.deck.Deck;
-import net.slightlymagic.laterna.magica.deck.Deck.DeckType;
-import net.slightlymagic.laterna.magica.deck.impl.DeckImpl;
 import net.slightlymagic.laterna.magica.impl.GameImpl;
 import net.slightlymagic.laterna.magica.player.Player;
 import net.slightlymagic.laterna.magica.player.impl.PlayerImpl;
@@ -31,10 +30,10 @@ public class TestTurnStructure {
         AllCards c = new AllCards();
         c.load();
         
-        Deck d = new DeckImpl();
-        d.addPool(DeckType.MAIN_DECK);
+        Deck d = new Deck();
+        d.addPool(MAIN_DECK);
         
-        d.getPool(DeckType.MAIN_DECK).put(c.getCard("Plains").getPrintings().get(0), 9);
+        d.getPool(MAIN_DECK).put(c.getCard("Plains").getPrintings().get(0), 9);
         
         Game g = new GameImpl();
         
