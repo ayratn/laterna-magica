@@ -57,6 +57,7 @@ public class LaternaMagica {
     
     
     public static void init() throws Exception {
+        MAGICA_CONFIG = LaternaTools.CONFIG().getConfig("magica");
         CARDS = CardFormats.getAllCards();
     }
     
@@ -68,7 +69,7 @@ public class LaternaMagica {
         return CARDS;
     }
     
-    private static void preInit() throws IOException {
+    public static void preInit() throws IOException {
         try {
             URL url = LaternaMagica.class.getProtectionDomain().getCodeSource().getLocation();
             File base = new File(url.toURI()).getAbsoluteFile();

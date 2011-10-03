@@ -13,7 +13,6 @@ import java.awt.GridLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.MouseWheelEvent;
 import java.awt.event.MouseWheelListener;
-import java.io.IOException;
 import java.io.Serializable;
 
 import javax.swing.AbstractAction;
@@ -22,10 +21,10 @@ import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 
+import net.slightlymagic.laterna.magica.LaternaInit;
 import net.slightlymagic.laterna.magica.LaternaMagica;
 import net.slightlymagic.laterna.magica.mana.ManaSymbol;
 import net.slightlymagic.laterna.magica.mana.NumeralManaSymbol;
-import disbotics.config.configuration.ConfigurationException;
 
 
 /**
@@ -37,9 +36,11 @@ import disbotics.config.configuration.ConfigurationException;
 public class ManaSymbolChooser extends JPanel {
     private static final long serialVersionUID = -8874747444802143417L;
     
-    public static void main(String[] args) throws IOException, ConfigurationException {
-        LaternaMagica.init();
+    public static void main(String[] args) throws Exception {
+        LaternaMagica.preInit();
+        LaternaInit.init();
         
+
         JFrame jf = new JFrame();
         jf.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         
