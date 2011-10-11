@@ -7,4 +7,3 @@
 name	Snow-Covered Forest
 super	basic snow
 type	land - forest
-text	G

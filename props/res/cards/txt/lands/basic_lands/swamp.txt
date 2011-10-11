@@ -173,4 +173,3 @@
 name	Swamp
 super	basic
 type	land - swamp
-text	B

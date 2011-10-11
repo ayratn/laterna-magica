@@ -7,4 +7,3 @@
 name	Snow-Covered Mountain
 super	basic snow
 type	land - mountain
-text	R
