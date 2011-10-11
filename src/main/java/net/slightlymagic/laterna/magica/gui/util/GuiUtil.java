@@ -49,6 +49,7 @@ public class GuiUtil {
         List<PlayAction> list = new ArrayList<PlayAction>();
         
         if(card instanceof CardObject) {
+            //TODO be multipart compatible
             if(card.getCharacteristics().get(0).hasType(LAND)) {
                 list.add(new LandDropAction((CardObject) card));
             } else {

@@ -187,6 +187,7 @@ public class Gui implements Disposable {
      * Returns a component for displaying the specified card.
      */
     public CardPanel createCardPanel(MagicObject card) {
+        //TODO be multipart compatible
         CardSnapshot s = card.getCharacteristics().get(0).getCharacteristics(null);
         CardTextButton p = new CardTextButton(s);
         p.addActionListener(cardListener);
