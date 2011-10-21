@@ -22,7 +22,6 @@ import javax.swing.JLabel;
 import javax.swing.JPanel;
 
 import net.slightlymagic.laterna.magica.LaternaInit;
-import net.slightlymagic.laterna.magica.LaternaMagica;
 import net.slightlymagic.laterna.magica.mana.ManaSymbol;
 import net.slightlymagic.laterna.magica.mana.NumeralManaSymbol;
 
@@ -37,7 +36,6 @@ public class ManaSymbolChooser extends JPanel {
     private static final long serialVersionUID = -8874747444802143417L;
     
     public static void main(String[] args) throws Exception {
-        LaternaMagica.preInit();
         LaternaInit.init();
         
 

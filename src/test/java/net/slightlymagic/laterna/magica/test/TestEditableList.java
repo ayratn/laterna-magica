@@ -17,7 +17,7 @@ import java.util.List;
 import java.util.ListIterator;
 
 import net.slightlymagic.laterna.magica.Game;
-import net.slightlymagic.laterna.magica.LaternaMagica;
+import net.slightlymagic.laterna.magica.LaternaInit;
 import net.slightlymagic.laterna.magica.edit.Edit;
 import net.slightlymagic.laterna.magica.impl.GameImpl;
 import net.slightlymagic.laterna.magica.util.MagicaCollections;
@@ -42,7 +42,7 @@ public class TestEditableList {
     
     static {
         try {
-            LaternaMagica.init();
+            LaternaInit.init();
         } catch(Exception ex) {
             throw new ExceptionInInitializerError(ex);
         }

@@ -46,7 +46,6 @@ public class DeckEditorPane extends JRootPane {
     private static final long serialVersionUID = 2798376461471841461L;
     
     public static void main(String[] args) throws Exception {
-        LaternaMagica.preInit();
         LaternaInit.init();
         
         JFrame jf = new JFrame();

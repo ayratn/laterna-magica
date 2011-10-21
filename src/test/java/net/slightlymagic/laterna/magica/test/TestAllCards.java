@@ -9,7 +9,7 @@ package net.slightlymagic.laterna.magica.test;
 
 import java.io.IOException;
 
-import net.slightlymagic.laterna.magica.LaternaMagica;
+import net.slightlymagic.laterna.magica.LaternaInit;
 import net.slightlymagic.laterna.magica.card.Card;
 import net.slightlymagic.laterna.magica.cards.AllCards;
 import net.slightlymagic.laterna.magica.characteristic.CardSnapshot;
@@ -28,7 +28,7 @@ public class TestAllCards {
     
     static {
         try {
-            LaternaMagica.init();
+            LaternaInit.init();
             cards = new AllCards();
         } catch(Exception ex) {
             throw new ExceptionInInitializerError(ex);
