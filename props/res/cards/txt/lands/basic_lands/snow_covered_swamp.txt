@@ -7,4 +7,3 @@
 name	Snow-Covered Swamp
 super	basic snow
 type	land - swamp
-text	B

@@ -25,8 +25,7 @@ import java.util.regex.Pattern;
 import net.slightlymagic.laterna.magica.LaternaMagica;
 import net.slightlymagic.laterna.magica.card.Printing;
 import net.slightlymagic.laterna.magica.deck.Deck;
-import net.slightlymagic.laterna.magica.deck.Deck.DeckType;
-import net.slightlymagic.laterna.magica.deck.impl.DeckImpl;
+import net.slightlymagic.laterna.magica.deck.DeckType;
 
 
 /**
@@ -41,7 +40,7 @@ public class DeckPersisterImpl implements DeckPersister {
         Pattern cardP = Pattern.compile("\\s*(\\d+)\\s+(\\d+)\\s*(\\s.*)?");
         BufferedReader r = new BufferedReader(new InputStreamReader(is));
         
-        Deck d = new DeckImpl();
+        Deck d = new Deck();
         
         DeckType t = null;
         String s;

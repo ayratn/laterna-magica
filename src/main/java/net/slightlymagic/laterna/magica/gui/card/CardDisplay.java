@@ -9,7 +9,7 @@ package net.slightlymagic.laterna.magica.gui.card;
 
 import java.util.Observable;
 
-import net.slightlymagic.laterna.magica.characteristic.CharacteristicSnapshot;
+import net.slightlymagic.laterna.magica.characteristic.CardSnapshot;
 
 import org.jetlang.core.Disposable;
 
@@ -25,7 +25,7 @@ public interface CardDisplay extends Disposable {
     /**
      * This method is optional. That is, it may throw an {@link UnsupportedOperationException}.
      */
-    public void setCard(CharacteristicSnapshot c);
+    public void setCard(CardSnapshot c);
     
-    public CharacteristicSnapshot getCard();
+    public CardSnapshot getCard();
 }

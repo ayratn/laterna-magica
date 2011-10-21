@@ -7,7 +7,7 @@
 package net.slightlymagic.laterna.magica.gui.mana;
 
 
-import static net.slightlymagic.laterna.magica.characteristics.MagicColor.*;
+import static net.slightlymagic.laterna.magica.characteristic.MagicColor.*;
 
 import java.awt.GridLayout;
 
@@ -15,7 +15,7 @@ import javax.swing.BorderFactory;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 
-import net.slightlymagic.laterna.magica.characteristics.MagicColor;
+import net.slightlymagic.laterna.magica.characteristic.MagicColor;
 import net.slightlymagic.laterna.magica.event.ManaPoolListener;
 import net.slightlymagic.laterna.magica.gui.DisposeSupport;
 import net.slightlymagic.laterna.magica.gui.mana.symbol.ManaSymbolLabel;

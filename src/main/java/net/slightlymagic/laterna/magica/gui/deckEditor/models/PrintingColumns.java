@@ -7,7 +7,7 @@
 package net.slightlymagic.laterna.magica.gui.deckEditor.models;
 
 
-import net.slightlymagic.laterna.magica.card.CardTemplate;
+import net.slightlymagic.laterna.magica.card.Card;
 import net.slightlymagic.laterna.magica.card.Printing;
 
 
@@ -18,13 +18,13 @@ import net.slightlymagic.laterna.magica.card.Printing;
  * @author Clemens Koza
  */
 public class PrintingColumns implements TableColumns<Printing> {
-    private final TableColumns<? super CardTemplate> columns;
+    private final TableColumns<? super Card> columns;
     
     public PrintingColumns() {
         this(new TemplateColumns());
     }
     
-    public PrintingColumns(TableColumns<? super CardTemplate> columns) {
+    public PrintingColumns(TableColumns<? super Card> columns) {
         this.columns = columns;
     }
     

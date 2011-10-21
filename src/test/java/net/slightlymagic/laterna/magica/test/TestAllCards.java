@@ -9,10 +9,10 @@ package net.slightlymagic.laterna.magica.test;
 
 import java.io.IOException;
 
-import net.slightlymagic.laterna.magica.LaternaMagica;
-import net.slightlymagic.laterna.magica.card.CardTemplate;
+import net.slightlymagic.laterna.magica.LaternaInit;
+import net.slightlymagic.laterna.magica.card.Card;
 import net.slightlymagic.laterna.magica.cards.AllCards;
-import net.slightlymagic.laterna.magica.characteristic.CharacteristicSnapshot;
+import net.slightlymagic.laterna.magica.characteristic.CardSnapshot;
 
 import org.junit.Test;
 
@@ -28,7 +28,7 @@ public class TestAllCards {
     
     static {
         try {
-            LaternaMagica.init();
+            LaternaInit.init();
             cards = new AllCards();
         } catch(Exception ex) {
             throw new ExceptionInInitializerError(ex);
@@ -42,11 +42,12 @@ public class TestAllCards {
     
     @Test
     public void testRead() {
-        for(CardTemplate t:cards.getTemplates())
-            t.getCardParts().get(0).getCharacteristics(new CharacteristicSnapshot());
+        CardSnapshot s = null;
+        for(Card c:cards.getTemplates())
+            s = c.getSimpleCardParts().get(0).getCharacteristics(s);
     }
     
-    public static void print(CharacteristicSnapshot c) {
+    public static void print(CardSnapshot c) {
         System.out.printf("%s - %s%n", c.getName(), c.getManaCost());
         System.out.println(c.getColors().valueString());
         System.out.printf("%s %s - %s%n", c.getSuperTypes().valueString(), c.getTypes().valueString(),

@@ -176,4 +176,3 @@
 name	Forest
 super	basic
 type	land - forest
-text	G

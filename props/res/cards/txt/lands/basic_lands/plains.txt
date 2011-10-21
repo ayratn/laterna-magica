@@ -167,4 +167,3 @@
 name	Plains
 super	basic
 type	land - plains
-text	W

@@ -28,12 +28,12 @@ import javax.swing.SwingConstants;
 import javax.swing.text.BadLocationException;
 
 import net.slightlymagic.laterna.magica.MagicObject;
-import net.slightlymagic.laterna.magica.ability.Ability;
 import net.slightlymagic.laterna.magica.card.CardObject;
-import net.slightlymagic.laterna.magica.card.State;
 import net.slightlymagic.laterna.magica.card.State.StateType;
-import net.slightlymagic.laterna.magica.characteristic.CharacteristicSnapshot;
-import net.slightlymagic.laterna.magica.characteristics.CardType;
+import net.slightlymagic.laterna.magica.characteristic.AbilityCharacteristic;
+import net.slightlymagic.laterna.magica.characteristic.CardSnapshot;
+import net.slightlymagic.laterna.magica.characteristic.CardType;
+import net.slightlymagic.laterna.magica.characteristic.impl.CardCharacteristicsSnapshot;
 import net.slightlymagic.laterna.magica.gui.util.SymbolTextCreator;
 import net.slightlymagic.laterna.magica.zone.Zone.Zones;
 
@@ -45,36 +45,36 @@ import net.slightlymagic.laterna.magica.zone.Zone.Zones;
  * @author Clemens Koza
  */
 public class CardDetail extends CardPanel {
-    private static final long      serialVersionUID = 831660638002643394L;
+    private static final long serialVersionUID = 831660638002643394L;
     
-    private boolean                isTapped;
-    private Dimension              untapped;
-    private Dimension              tapped;
+    private boolean           isTapped;
+    private Dimension         untapped;
+    private Dimension         tapped;
     
-    private CharacteristicSnapshot c;
-    private CardListener           l                = new CardListener();
+    private CardSnapshot      c;
+    private CardListener      l                = new CardListener();
     
-    private float                  textSize         = 16;
+    private float             textSize         = 16;
     
-    protected JLabel               name;
-    protected JTextPane            mana;
-    protected JLabel               types;
-    protected JTextPane            text;
-    protected JLabel               pt;
+    protected JLabel          name;
+    protected JTextPane       mana;
+    protected JLabel          types;
+    protected JTextPane       text;
+    protected JLabel          pt;
     
     public CardDetail() {
-        this(new CharacteristicSnapshot());
+        this(null);
     }
     
     public CardDetail(float textSize) {
-        this(new CharacteristicSnapshot(), textSize);
+        this(null, textSize);
     }
     
-    public CardDetail(CharacteristicSnapshot c) {
+    public CardDetail(CardSnapshot c) {
         this(c, 14);
     }
     
-    public CardDetail(CharacteristicSnapshot c, float textSize) {
+    public CardDetail(CardSnapshot c, float textSize) {
         this.textSize = textSize;
         setTappedDimension(300, 200);
         setUntappedDimension(300, 200);
@@ -146,27 +146,38 @@ public class CardDetail extends CardPanel {
         add(south, BorderLayout.SOUTH);
     }
     
-    public void setCard(CharacteristicSnapshot c) {
+    public void setCard(CardSnapshot c) {
         if(getCard() != null) {
             getCard().deleteObserver(l);
-            if(getCard().getCard() instanceof CardObject && ((CardObject) getCard().getCard()).getState() != null) {
-                State s = ((CardObject) getCard().getCard()).getState();
-                s.removePropertyChangeListener(StateType.TAPPED.name(), l);
+            CardObject card = getCardObject();
+            if(card != null && card.getState() != null) {
+                card.getState().removePropertyChangeListener(StateType.TAPPED.name(), l);
             }
         }
         this.c = c;
         if(getCard() != null) {
             getCard().addObserver(l);
             l.update(getCard(), null);
-            if(getCard().getCard() instanceof CardObject && ((CardObject) getCard().getCard()).getState() != null) {
-                State s = ((CardObject) getCard().getCard()).getState();
-                s.addPropertyChangeListener(StateType.TAPPED.name(), l);
+            CardObject card = getCardObject();
+            if(card != null && card.getState() != null) {
+                card.getState().addPropertyChangeListener(StateType.TAPPED.name(), l);
             }
         }
     }
     
-    public CharacteristicSnapshot getCard() {
+    public CardSnapshot getCard() {
         return c;
+    }
+    
+    private MagicObject getMagicObject() {
+        if(c instanceof CardCharacteristicsSnapshot) return ((CardCharacteristicsSnapshot) c).getCardObject();
+        else return null;
+    }
+    
+    private CardObject getCardObject() {
+        MagicObject c = getMagicObject();
+        if(c instanceof CardObject) return (CardObject) c;
+        return null;
     }
     
     private class CardListener implements PropertyChangeListener, Observer {
@@ -182,9 +193,9 @@ public class CardDetail extends CardPanel {
             SymbolTextCreator.formatRulesText(valueOf(getCard().getManaCost()), mana, (int) textSize);
             
             text.setText("");
-            for(Iterator<Ability> it = getCard().getAbilities().getValues().iterator(); it.hasNext();) {
-                Ability ab = it.next();
-                SymbolTextCreator.formatRulesText(ab.toString(), text, (int) textSize);
+            for(Iterator<AbilityCharacteristic> it = getCard().getAbilities().getValues().iterator(); it.hasNext();) {
+                AbilityCharacteristic ab = it.next();
+                SymbolTextCreator.formatRulesText(ab.getOracle(), text, (int) textSize);
                 if(it.hasNext()) try {
                     text.getDocument().insertString(text.getDocument().getLength(), "\n", null);
                 } catch(BadLocationException ex) {
@@ -208,9 +219,9 @@ public class CardDetail extends CardPanel {
             } else pt.setText("");
             
 
-            MagicObject card = getCard().getCard();
-            if(card instanceof CardObject && card.getZone().getType() == Zones.BATTLEFIELD) {
-                setTapped(((CardObject) card).getState().getState(StateType.TAPPED));
+            CardObject card = getCardObject();
+            if(card != null && card.getZone().getType() == Zones.BATTLEFIELD) {
+                setTapped(card.getState().getState(StateType.TAPPED));
             }
         }
     }

@@ -15,7 +15,7 @@ import java.util.Observer;
 import javax.swing.ImageIcon;
 import javax.swing.JLabel;
 
-import net.slightlymagic.laterna.magica.characteristic.CharacteristicSnapshot;
+import net.slightlymagic.laterna.magica.characteristic.CardSnapshot;
 import net.slightlymagic.laterna.magica.gui.util.ImageCache;
 
 
@@ -26,10 +26,10 @@ import net.slightlymagic.laterna.magica.gui.util.ImageCache;
  * @author Clemens Koza
  */
 public class CardImage extends CardPanel implements Observer {
-    private static final long      serialVersionUID = -4234267342253070966L;
+    private static final long serialVersionUID = -4234267342253070966L;
     
-    private JLabel                 l;
-    private CharacteristicSnapshot c;
+    private JLabel            l;
+    private CardSnapshot      c;
     
     public CardImage() {
         setLayout(new BorderLayout());
@@ -41,14 +41,14 @@ public class CardImage extends CardPanel implements Observer {
         setCard(null);
     }
     
-    public void setCard(CharacteristicSnapshot c) {
+    public void setCard(CardSnapshot c) {
         if(this.c != null) this.c.deleteObserver(this);
         this.c = c;
         if(this.c != null) this.c.addObserver(this);
         update(c, null);
     }
     
-    public CharacteristicSnapshot getCard() {
+    public CardSnapshot getCard() {
         return c;
     }
     

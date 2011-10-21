@@ -7,18 +7,19 @@
 package net.slightlymagic.laterna.test;
 
 
-import static net.slightlymagic.laterna.magica.characteristics.CardType.*;
-import static net.slightlymagic.laterna.magica.characteristics.Characteristics.*;
-import static net.slightlymagic.laterna.magica.characteristics.MagicColor.*;
+import static net.slightlymagic.laterna.magica.characteristic.CardType.*;
+import static net.slightlymagic.laterna.magica.characteristic.Characteristics.*;
+import static net.slightlymagic.laterna.magica.characteristic.MagicColor.*;
 import static net.slightlymagic.laterna.magica.effect.ContinuousEffect.Layer.*;
 import static net.slightlymagic.laterna.magica.effect.characteristic.SetCharacteristicEffect.Mode.*;
+import static net.slightlymagic.laterna.magica.mana.ManaFactory.*;
 import static net.slightlymagic.laterna.magica.util.MagicaPredicates.*;
 import net.slightlymagic.laterna.magica.Game;
 import net.slightlymagic.laterna.magica.LaternaMagica;
 import net.slightlymagic.laterna.magica.MagicObject;
 import net.slightlymagic.laterna.magica.card.CardObject;
 import net.slightlymagic.laterna.magica.card.impl.CardObjectImpl;
-import net.slightlymagic.laterna.magica.characteristic.CharacteristicSnapshot;
+import net.slightlymagic.laterna.magica.characteristic.CardSnapshot;
 import net.slightlymagic.laterna.magica.characteristic.ObjectCharacteristics;
 import net.slightlymagic.laterna.magica.effect.characteristic.CharacteristicEffect;
 import net.slightlymagic.laterna.magica.effect.characteristic.impl.ColorChangingEffectImpl;
@@ -28,7 +29,6 @@ import net.slightlymagic.laterna.magica.effect.characteristic.impl.PTSwitchingEf
 import net.slightlymagic.laterna.magica.effect.characteristic.impl.TypeChangingEffectImpl;
 import net.slightlymagic.laterna.magica.impl.GameImpl;
 import net.slightlymagic.laterna.magica.mana.ManaSequence;
-import net.slightlymagic.laterna.magica.mana.impl.ManaFactoryImpl;
 
 import com.google.common.base.Predicate;
 
@@ -62,10 +62,10 @@ public class TestCharacteristicEffects {
         CharacteristicEffect e4 = new TypeChangingEffectImpl(g, SETTING, ENCHANTMENT);
         //mana cost is {R/W}
         CharacteristicEffect e5 = new OverridingCharacteristicEffectImpl<ManaSequence>(g, L3, MANA_COST,
-                ManaFactoryImpl.INSTANCE.parseSequence("{R/W}"));
+                ManaFactory.parseSequence("{R/W}"));
         
         ObjectCharacteristics ch = card.getCharacteristics().get(0);
-        CharacteristicSnapshot cs = new CharacteristicSnapshot();
+        CardSnapshot cs = null;
         
         print(ch.getCharacteristics(cs));
         
@@ -89,7 +89,7 @@ public class TestCharacteristicEffects {
         System.out.printf("%d/%d%n", c.getPower(), c.getToughness());
     }
     
-    public static void print(CharacteristicSnapshot c) {
+    public static void print(CardSnapshot c) {
         System.out.printf("%s - %s%n", c.getName(), c.getManaCost());
         System.out.println(c.getColors().valueString());
         System.out.printf("%s %s - %s%n", c.getSuperTypes().valueString(), c.getTypes().valueString(),

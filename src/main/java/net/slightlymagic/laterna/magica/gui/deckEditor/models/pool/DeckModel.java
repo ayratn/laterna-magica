@@ -14,7 +14,7 @@ import java.util.Map;
 
 import net.slightlymagic.laterna.magica.card.Printing;
 import net.slightlymagic.laterna.magica.deck.Deck;
-import net.slightlymagic.laterna.magica.deck.Deck.DeckType;
+import net.slightlymagic.laterna.magica.deck.DeckType;
 import net.slightlymagic.laterna.magica.gui.deckEditor.models.TableColumns;
 
 

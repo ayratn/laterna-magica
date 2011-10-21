@@ -180,4 +180,3 @@
 name	Mountain
 super	basic
 type	land - mountain
-text	R

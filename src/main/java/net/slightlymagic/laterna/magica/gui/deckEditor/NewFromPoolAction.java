@@ -7,13 +7,14 @@
 package net.slightlymagic.laterna.magica.gui.deckEditor;
 
 
+import static net.slightlymagic.laterna.magica.deck.DeckType.*;
+
 import java.awt.event.ActionEvent;
 
 import javax.swing.AbstractAction;
 
 import net.slightlymagic.laterna.magica.deck.Deck;
-import net.slightlymagic.laterna.magica.deck.Deck.DeckType;
-import net.slightlymagic.laterna.magica.deck.impl.DeckImpl;
+import net.slightlymagic.laterna.magica.deck.DeckType;
 
 
 /**
@@ -39,8 +40,8 @@ public class NewFromPoolAction extends AbstractAction {
         Deck pool = io.open(io.open());
         if(pool == null) return;
         
-        Deck d = new DeckImpl();
-        d.addPool(DeckType.MAIN_DECK);
+        Deck d = new Deck();
+        d.addPool(MAIN_DECK);
         for(DeckType t:DeckType.values())
             if(pool.getPool(t) != null) {
                 d.addPool(t);

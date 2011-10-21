@@ -7,4 +7,3 @@
 name	Snow-Covered Plains
 super	basic snow
 type	land - plains
-text	W

@@ -8,33 +8,12 @@ package net.slightlymagic.laterna.magica;
 
 
 import java.awt.Dimension;
-import java.io.BufferedInputStream;
-import java.io.BufferedOutputStream;
-import java.io.File;
-import java.io.FileOutputStream;
-import java.io.IOException;
-import java.io.OutputStream;
-import java.net.URISyntaxException;
-import java.net.URL;
-import java.util.zip.ZipEntry;
-import java.util.zip.ZipInputStream;
 
 import javax.swing.JFrame;
 
 import net.slightlymagic.laterna.magica.cards.AllCards;
-import net.slightlymagic.laterna.magica.config.LaternaConfig;
+import net.slightlymagic.laterna.magica.config.MagicaConfig;
 import net.slightlymagic.laterna.magica.gui.main.MainPane;
-import net.slightlymagic.laterna.magica.util.DownloadLibs;
-import net.slightlymagic.utils.Configurator;
-import net.slightlymagic.utils.configurators.ConfigConfigurator;
-
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-
-import disbotics.config.configuration.Configuration;
-import disbotics.config.configuration.ConfigurationException;
-import disbotics.config.configuration.Node;
-import disbotics.config.converter.Converter;
 
 
 /**
@@ -44,13 +23,11 @@ import disbotics.config.converter.Converter;
  * @author Clemens Koza
  */
 public class LaternaMagica {
-    private static final Logger  log = LoggerFactory.getLogger(LaternaMagica.class);
+    private static MagicaConfig MAGICA_CONFIG;
+    private static AllCards     CARDS;
     
-    private static LaternaConfig PROPS;
-    private static AllCards      CARDS;
-    
-    public static void main(String[] args) throws IOException, ConfigurationException {
-        LaternaMagica.init();
+    public static void main(String[] args) throws Exception {
+        LaternaInit.init();
         
         JFrame jf = new JFrame();
         jf.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
@@ -66,111 +43,17 @@ public class LaternaMagica {
         jf.setVisible(true);
     }
     
-    public static void init() throws IOException, ConfigurationException {
-        preInit();
-        
-        String res = "utils.config";
-        URL url = Thread.currentThread().getContextClassLoader().getResource(res);
-        System.out.printf("Configuring from Resource %s%nResolved to %s%n", res, url);
-        Configurator c = new Configurator().configure(url).execute();
-        
-        Configuration conf = c.getConfigurator(ConfigConfigurator.class).getConfig();
-        Node laterna = conf.getNode("/laterna");
-        laterna.setType(LaternaConfig.class.getName());
-        System.out.println(conf);
-        PROPS = (LaternaConfig) new Converter().read(laterna);
-//        System.exit(0);
-        
-        CARDS = new AllCards();
-        
-        boolean compile = false;//PROPS().getBoolean("/laterna/res/cards/compileOnStart", false);
-        if(!compile) {
-            try {
-                log.info("Loading...");
-                CARDS.load();
-                log.info("ok");
-            } catch(Exception ex) {
-                log.error("Error loading compiled cards; cards were not completely loaded.\n"
-                        + "LaternaMagica will now try to recreate the cards.\n"
-                        + "Below is the reason why loading failed", ex);
-                compile = true;
-            }
-        }
-        if(compile) {
-            log.info("Compiling...");
-            CARDS.compile();
-            log.info("ok");
-        }
+    
+    public static void init() throws Exception {
+        MAGICA_CONFIG = LaternaTools.CONFIG().getConfig("magica");
+        CARDS = CardFormats.getAllCards();
     }
     
-    public static LaternaConfig PROPS() {
-        return PROPS;
+    public static MagicaConfig MAGICA_CONFIG() {
+        return MAGICA_CONFIG;
     }
     
     public static AllCards CARDS() {
         return CARDS;
-    }
-    
-    private static void preInit() throws IOException {
-        try {
-            URL url = LaternaMagica.class.getProtectionDomain().getCodeSource().getLocation();
-            File base = new File(url.toURI()).getAbsoluteFile();
-            
-            //only do this if running from a jar file, aka the deployed environment
-            if(!base.isFile()) return;
-            //running from jar file
-            base = base.getParentFile();
-            
-            DownloadLibs.downloadLibs(new File(base, "../lib"),
-                    Thread.currentThread().getContextClassLoader().getResource("libs.txt"));
-            
-            File res = new File(base, "res");
-            File sharedRes = new File(base, "../res");
-            File usr = new File(System.getProperty("user.home"), ".slightlymagic.net/laterna");
-            unpack(res, "res.zip");
-            unpack(sharedRes, "sharedRes.zip");
-            unpack(usr, "usr.zip");
-        } catch(URISyntaxException ex) {
-            throw new IOException(ex);
-        }
-    }
-    
-    private static void unpack(File dest, String resource) throws IOException {
-        if(dest.exists()) return;
-        if(!dest.mkdirs()) throw new IOException("Directory could not be created: " + dest);
-        
-        ZipInputStream zis = new ZipInputStream(new BufferedInputStream(
-                Thread.currentThread().getContextClassLoader().getResourceAsStream(resource)));
-        try {
-            byte[] buf = new byte[8 * 1024];
-            
-            for(ZipEntry e; (e = zis.getNextEntry()) != null;) {
-                File f = new File(dest, e.getName());
-                if(e.isDirectory()) {
-                    if(!f.mkdirs() && !f.exists()) throw new IOException("Directory could not be created: " + dest);
-                } else {
-                    if(!f.getParentFile().mkdirs() && !f.getParentFile().exists()) throw new IOException(
-                            "Directory could not be created: " + dest);
-                    
-                    OutputStream os = new BufferedOutputStream(new FileOutputStream(f));
-                    try {
-                        for(int len; (len = zis.read(buf)) != -1;)
-                            os.write(buf, 0, len);
-                    } finally {
-                        try {
-                            os.close();
-                        } catch(IOException ex) {
-                            ex.printStackTrace();
-                        }
-                    }
-                }
-            }
-        } finally {
-            try {
-                zis.close();
-            } catch(IOException ex) {
-                ex.printStackTrace();
-            }
-        }
     }
 }

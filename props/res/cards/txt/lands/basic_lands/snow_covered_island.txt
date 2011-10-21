@@ -7,4 +7,3 @@
 name	Snow-Covered Island
 super	basic snow
 type	land - island
-text	U

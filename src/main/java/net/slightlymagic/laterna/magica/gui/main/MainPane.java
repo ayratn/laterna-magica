@@ -34,12 +34,9 @@ import javax.swing.JRootPane;
 import javax.swing.JTextField;
 import javax.swing.SwingUtilities;
 
-import net.slightlymagic.laterna.dl.DownloadGui;
-import net.slightlymagic.laterna.dl.DownloadJob;
-import net.slightlymagic.laterna.dl.Downloader;
-import net.slightlymagic.laterna.dl.sources.GathererCardBack;
-import net.slightlymagic.laterna.dl.sources.GathererCards;
-import net.slightlymagic.laterna.dl.sources.GathererSymbols;
+import net.slightlymagic.laterna.downloader.sources.GathererCardBack;
+import net.slightlymagic.laterna.downloader.sources.GathererCards;
+import net.slightlymagic.laterna.downloader.sources.GathererSymbols;
 import net.slightlymagic.laterna.magica.Game;
 import net.slightlymagic.laterna.magica.deck.Deck;
 import net.slightlymagic.laterna.magica.gui.DisposeSupport;
@@ -55,6 +52,9 @@ import net.slightlymagic.laterna.magica.impl.GameLoop;
 import net.slightlymagic.laterna.magica.player.Player;
 import net.slightlymagic.laterna.magica.player.impl.PlayerImpl;
 import net.slightlymagic.laterna.magica.zone.Zone.Zones;
+import net.slightlymagic.utils.downloader.DownloadGui;
+import net.slightlymagic.utils.downloader.DownloadJob;
+import net.slightlymagic.utils.downloader.Downloader;
 
 import org.jdesktop.swingx.JXMultiSplitPane;
 import org.jdesktop.swingx.MultiSplitLayout;
