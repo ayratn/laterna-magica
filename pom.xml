@@ -7,64 +7,77 @@
   <version>0.0.2-SNAPSHOT</version>
  </parent>
  <artifactId>LaternaMagica</artifactId>
- <version>0.0.2-SNAPSHOT</version>
  <name>LaternaMagica</name>
  <description>
   An implementation of the Magic Trading Card Game, featuring Rules Enforcement, playing against human and
   computer, multiplayer games and more.
  </description>
+ <url>${google.project.home}</url>
+
+ <build>
+  <pluginManagement>
+   <plugins>
+    <plugin>
+     <groupId>org.apache.maven.plugins</groupId>
+     <artifactId>maven-compiler-plugin</artifactId>
+     <configuration>
+      <source>1.6</source>
+      <target>1.6</target>
+     </configuration>
+    </plugin>
+   </plugins>
+  </pluginManagement>
+ </build>
 
  <dependencies>
   <dependency>
+   <groupId>org.slf4j</groupId>
+   <artifactId>slf4j-log4j12</artifactId>
+  </dependency>
+  <dependency>
+   <groupId>junit</groupId>
+   <artifactId>junit</artifactId>
+  </dependency>
+  
+  <dependency>
    <groupId>net.slightlymagic.laterna</groupId>
    <artifactId>GameModel</artifactId>
-   <version>${GameModel.dependency.version}</version>
   </dependency>
   <dependency>
    <groupId>net.slightlymagic.laterna</groupId>
    <artifactId>CardFormats</artifactId>
-   <version>${CardFormats.dependency.version}</version>
   </dependency>
   
   <dependency>
    <groupId>net.slightlymagic.laterna</groupId>
    <artifactId>OracleAbilityScript</artifactId>
-   <version>${OracleAbilityScript.dependency.version}</version>
   </dependency>
   <dependency>
    <groupId>net.slightlymagic.laterna</groupId>
    <artifactId>TextCardFormat</artifactId>
-   <version>${TextCardFormat.dependency.version}</version>
   </dependency>
   <dependency>
    <groupId>net.slightlymagic.laterna</groupId>
    <artifactId>ConfigCardFormat</artifactId>
-   <version>${ConfigCardFormat.dependency.version}</version>
   </dependency>
 
   <dependency>
    <groupId>org.swinglabs</groupId>
    <artifactId>swingx</artifactId>
-   <version>${swingx.dependency.version}</version>
   </dependency>
   <dependency>
    <groupId>org.scala-lang</groupId>
    <artifactId>scala-library</artifactId>
-   <version>${scala.dependency.version}</version>
-   <type>jar</type>
-   <scope>compile</scope>
-  </dependency>
-  <dependency>
-   <groupId>org.slf4j</groupId>
-   <artifactId>slf4j-log4j12</artifactId>
-   <version>${slf4j.dependency.version}</version>
-   <scope>runtime</scope>
-  </dependency>
-  <dependency>
-   <groupId>junit</groupId>
-   <artifactId>junit</artifactId>
-   <version>${junit.dependency.version}</version>
-   <scope>test</scope>
   </dependency>
  </dependencies>
+
+ <properties>
+  <google.project.scm.repo>child</google.project.scm.repo>
+ </properties>
+
+ <scm>
+  <connection>${scm.connection}</connection>
+  <developerConnection>${scm.connection}</developerConnection>
+  <url>${scm.browse}</url>
+ </scm>
 </project>
