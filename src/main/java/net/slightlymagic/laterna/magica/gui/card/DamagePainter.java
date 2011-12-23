@@ -41,7 +41,6 @@ import com.google.common.base.Predicate;
 public class DamagePainter implements Painter<CardSnapshot> {
     private static final Predicate<MagicObject> isOnBattlefield = isIn(ofInstance(BATTLEFIELD));
     
-    @Override
     public void paint(Graphics2D g, CardSnapshot object, int width, int height) {
         if(object == null) return;
         if(!(object instanceof CardCharacteristicsSnapshot)) return;

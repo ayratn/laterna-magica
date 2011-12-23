@@ -60,7 +60,6 @@ public class AttackerActor extends GuiActor {
     }
     
     private class CardCallback implements Callback<MagicObject> {
-        @Override
         public void onMessage(MagicObject c) {
             log.debug("Received: " + c);
             if(!(c instanceof CardObject)) return;
@@ -80,7 +79,6 @@ public class AttackerActor extends GuiActor {
     }
     
     private class PlayerCallback implements Callback<Player> {
-        @Override
         public void onMessage(Player p) {
             log.debug("Received: " + p);
             try {
@@ -91,7 +89,6 @@ public class AttackerActor extends GuiActor {
     }
     
     private class PassPriorityCallback implements Callback<Void> {
-        @Override
         public void onMessage(Void v) {
             log.debug("Received pass priority");
             actor.channels.actions.publish(null);

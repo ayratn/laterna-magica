@@ -53,7 +53,7 @@ public class AssignAttackerDamageActor extends GuiActor {
     private Map<CardObject, BlockAssignment> assignments;
     private Map<Object, AttackAssignment>    assignment;
     
-
+    
     private static final Border              blocker        = BorderFactory.createLineBorder(Color.RED, 4);
     private static final Border              furtherBlocker = BorderFactory.createLineBorder(Color.RED, 2);
     private static final Border              other          = BorderFactory.createLineBorder(Color.LIGHT_GRAY, 2);
@@ -134,7 +134,6 @@ public class AssignAttackerDamageActor extends GuiActor {
     }
     
     private class CardCallback implements Callback<MagicObject> {
-        @Override
         public void onMessage(MagicObject c) {
             log.debug("Received: " + c);
             BlockAssignment b = assignments.get(c);
@@ -157,7 +156,6 @@ public class AssignAttackerDamageActor extends GuiActor {
     }
     
     private class PlayerCallback implements Callback<Player> {
-        @Override
         public void onMessage(Player p) {
             log.debug("Received: " + p);
             AttackAssignment a = assignment.get(p);

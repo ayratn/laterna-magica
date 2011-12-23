@@ -28,7 +28,6 @@ public class GathererCardBack implements Iterable<DownloadJob> {
     private static final File   out = new File(MAGICA_CONFIG().getPics().getCards(), "0.jpg");
     private static final String url = "http://gatherer.wizards.com/Handlers/Image.ashx?multiverseid=0&type=card";
     
-    @Override
     public Iterator<DownloadJob> iterator() {
         return Iterators.singletonIterator(new DownloadJob("0 Card Back", fromURL(url), toFile(out)));
     }

@@ -61,7 +61,6 @@ public abstract class GuiActor implements Disposable {
     //Utility methods
     
     private class ConcedeCallback implements Callback<Void> {
-        @Override
         public void onMessage(Void message) {
             actor.setConceded();
             concede();
@@ -82,7 +81,6 @@ public abstract class GuiActor implements Disposable {
                 getGui().getPassPriorityAction().putValue(Action.NAME, newName);
             }
             
-            @Override
             public void dispose() {
                 getGui().getPassPriorityAction().putValue(Action.NAME, oldName);
             }
@@ -98,7 +96,6 @@ public abstract class GuiActor implements Disposable {
                 getGui().getPassPriorityAction().setEnabled(newEnabled);
             }
             
-            @Override
             public void dispose() {
                 getGui().getPassPriorityAction().setEnabled(oldEnabled);
             }
@@ -116,7 +113,6 @@ public abstract class GuiActor implements Disposable {
                 log.debug("set border: " + newBorder);
             }
             
-            @Override
             public void dispose() {
                 p.setBorder(oldBorder);
                 log.debug("reset border: " + oldBorder);

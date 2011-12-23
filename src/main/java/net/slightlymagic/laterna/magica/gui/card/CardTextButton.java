@@ -41,7 +41,6 @@ public class CardTextButton extends CardPanel {
         setLayout(new BorderLayout());
         add(b = new JButton());
         b.addActionListener(new ActionListener() {
-            @Override
             public void actionPerformed(ActionEvent e) {
                 fireActionPerformed();
             }

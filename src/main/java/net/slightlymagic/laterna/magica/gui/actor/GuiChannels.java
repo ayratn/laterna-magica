@@ -77,7 +77,6 @@ public class GuiChannels implements Disposable {
         fiber = start(f.create());
     }
     
-    @Override
     public void dispose() {
         fiber.dispose();
         f.dispose();

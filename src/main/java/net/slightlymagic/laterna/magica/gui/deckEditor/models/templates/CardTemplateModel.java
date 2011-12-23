@@ -55,7 +55,6 @@ public class CardTemplateModel extends AbstractTableModel {
         this.columns = columns;
         keys = new ArrayList<Card>();
         l = new TableModelListener() {
-            @Override
             public void tableChanged(TableModelEvent e) {
                 if(e.getType() != TableModelEvent.UPDATE) refreshKeys();
                 else if(CardTemplateModel.this.countColumn != -1) {
@@ -102,12 +101,10 @@ public class CardTemplateModel extends AbstractTableModel {
         return keys.get(row);
     }
     
-    @Override
     public int getRowCount() {
         return keys.size();
     }
     
-    @Override
     public int getColumnCount() {
         if(countColumn == -1) return columns.getColumnCount();
         else return columns.getColumnCount() + 1;

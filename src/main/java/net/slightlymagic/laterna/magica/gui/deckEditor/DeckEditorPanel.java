@@ -134,7 +134,6 @@ public class DeckEditorPanel extends JPanel {
         p.add(printings = new JComboBox(), BorderLayout.SOUTH);
         printings.setRenderer(new PrintingRenderer());
         mLower.addTableModelListener(new TableModelListener() {
-            @Override
             public void tableChanged(TableModelEvent e) {
                 if(e.getType() == TableModelEvent.UPDATE) printings.repaint();
             }
@@ -195,7 +194,6 @@ public class DeckEditorPanel extends JPanel {
     }
     
     private class Select implements ListSelectionListener, ActionListener {
-        @Override
         public void actionPerformed(ActionEvent e) {
             if(printings.getSelectedIndex() == -1) showCard(null);
             else {
@@ -203,7 +201,6 @@ public class DeckEditorPanel extends JPanel {
             }
         }
         
-        @Override
         public void valueChanged(ListSelectionEvent e) {
             ListSelectionModel sm = (ListSelectionModel) e.getSource();
             JXTable t;
@@ -233,7 +230,6 @@ public class DeckEditorPanel extends JPanel {
             super("\u25BC");
         }
         
-        @Override
         public void actionPerformed(ActionEvent e) {
             Printing p = (Printing) printings.getSelectedItem();
             if(p != null && mUpper.getPoolModel().getCount(p) > 0) {
@@ -250,7 +246,6 @@ public class DeckEditorPanel extends JPanel {
             super("\u25B2");
         }
         
-        @Override
         public void actionPerformed(ActionEvent e) {
             Printing p = (Printing) printings.getSelectedItem();
             if(p != null && mLower.getPoolModel().getCount(p) > 0) {

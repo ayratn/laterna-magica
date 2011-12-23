@@ -32,7 +32,6 @@ public class ChutographyCardsHQ implements Iterable<DownloadJob> {
     private static final File   outDir = MAGICA_CONFIG().getPics().getCardsHQ();
     private static final String urlFmt = "http://mtgpics.chutography.com/%s/%s.full.jpg";
     
-    @Override
     public Iterator<DownloadJob> iterator() {
         return new AbstractIterator<DownloadJob>() {
             private Iterator<Printing> it = CARDS().getPrintings().iterator();

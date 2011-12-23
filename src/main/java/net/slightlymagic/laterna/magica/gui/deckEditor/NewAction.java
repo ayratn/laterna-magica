@@ -32,7 +32,6 @@ public class NewAction extends AbstractAction {
         this.pane = pane;
     }
     
-    @Override
     public void actionPerformed(ActionEvent e) {
         Deck d = new Deck();
         d.addPool(MAIN_DECK);

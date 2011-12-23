@@ -56,7 +56,6 @@ public class Gui implements Disposable {
     private final List<GuiMagicActor>         actors  = new ArrayList<GuiMagicActor>();
     private final List<CardDisplay>           cards   = new ArrayList<CardDisplay>();
     private final Map<Player, PlayerPanel>    players = new MapMaker().makeComputingMap(new Function<Player, PlayerPanel>() {
-                                                          @Override
                                                           public PlayerPanel apply(Player from) {
                                                               PlayerPanel p = new PlayerPanelImpl(Gui.this, from);
                                                               p.getButton().addActionListener(
@@ -89,7 +88,6 @@ public class Gui implements Disposable {
     private final Action                      pass    = new AbstractAction("Pass Priority") {
                                                           private static final long serialVersionUID = -5885737484288302672L;
                                                           
-                                                          @Override
                                                           public void actionPerformed(ActionEvent e) {
                                                               publishPassPriority();
                                                           }

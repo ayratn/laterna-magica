@@ -101,7 +101,6 @@ public class AssignBlockerDamageActor extends GuiActor {
     }
     
     private class CardCallback implements Callback<MagicObject> {
-        @Override
         public void onMessage(MagicObject c) {
             log.debug("Received: " + c);
             BlockAssignment b = assignments.get(c);

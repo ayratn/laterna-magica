@@ -33,7 +33,6 @@ public class OpenAction extends AbstractAction {
         this.io = io;
     }
     
-    @Override
     public void actionPerformed(ActionEvent e) {
         File f = io.open();
         Deck d = io.open(f);

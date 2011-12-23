@@ -59,7 +59,6 @@ public abstract class AbstractCardPoolModel extends AbstractTableModel implement
         return getValueAt(p, column);
     }
     
-    @Override
     public Map<Printing, Integer> getPrintings() {
         return new AbstractMap<Printing, Integer>() {
             private final Set<Entry<Printing, Integer>> entrySet;

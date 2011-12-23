@@ -70,7 +70,6 @@ public class ChooseBlockerActor extends GuiActor {
     }
     
     private class CardCallback implements Callback<MagicObject> {
-        @Override
         public void onMessage(MagicObject c) {
             log.debug("Received: " + c);
             Blocker b = choices.get(c);

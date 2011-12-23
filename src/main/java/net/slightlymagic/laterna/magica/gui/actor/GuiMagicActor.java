@@ -86,7 +86,6 @@ public class GuiMagicActor extends AbstractMagicActor implements Disposable {
         return gui;
     }
     
-    @Override
     public void dispose() {
         channels.dispose();
     }
@@ -266,25 +265,21 @@ public class GuiMagicActor extends AbstractMagicActor implements Disposable {
     
     //TODO implement combat
     
-    @Override
     public void setDefendingPlayers() {
         //TODO implement
         //this method has to make a default choice
     }
     
-    @Override
     public void declareAttackers() {
         //use getValue to block until assignments are finished
         getValue(channels.fiber, channels.actions, new AttackerActor(this));
     }
     
-    @Override
     public void declareBlockers() {
         //use getValue to block until assignments are finished
         getValue(channels.fiber, channels.actions, new BlockerActor(this));
     }
     
-    @Override
     public void orderAttackers() {
         for(Blocker b:getGame().getCombat().getBlockers()) {
             if(b.getBlocker().getController() != getPlayer()) continue;
@@ -297,7 +292,6 @@ public class GuiMagicActor extends AbstractMagicActor implements Disposable {
         }
     }
     
-    @Override
     public void orderBlockers() {
         for(Attacker a:getGame().getCombat().getAttackers()) {
             if(a.getAttacker().getController() != getPlayer()) continue;
@@ -310,7 +304,6 @@ public class GuiMagicActor extends AbstractMagicActor implements Disposable {
         }
     }
     
-    @Override
     public Attacker getAttackerToAssignDamage(Collection<? extends Attacker> attackers) {
         if(attackers.size() == 1) return attackers.iterator().next();
         for(Attacker a:attackers) {
@@ -323,7 +316,6 @@ public class GuiMagicActor extends AbstractMagicActor implements Disposable {
         return getValue(channels.fiber, channels.attackers, new ChooseAttackerActor(this, attackers));
     }
     
-    @Override
     public void assignDamage(Attacker attacker) {
         if(attacker.getBlockers().isEmpty()) {
             attacker.getAttackerAssignment().setAttackerAssignedDamage(getAmmount(attacker));
@@ -335,7 +327,6 @@ public class GuiMagicActor extends AbstractMagicActor implements Disposable {
         }
     }
     
-    @Override
     public Blocker getBlockerToAssignDamage(Collection<? extends Blocker> blockers) {
         if(blockers.size() == 1) return blockers.iterator().next();
         for(Blocker b:blockers) {
@@ -346,7 +337,6 @@ public class GuiMagicActor extends AbstractMagicActor implements Disposable {
         return getValue(channels.fiber, channels.blockers, new ChooseBlockerActor(this, blockers));
     }
     
-    @Override
     public void assignDamage(Blocker blocker) {
         if(blocker.getAttackers().size() == 1) {
             blocker.getAttackers().values().iterator().next().setBlockerAssignedDamage(getAmmount(blocker));

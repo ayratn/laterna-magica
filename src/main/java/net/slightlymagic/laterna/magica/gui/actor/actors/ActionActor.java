@@ -40,7 +40,6 @@ public class ActionActor extends GuiActor {
     }
     
     private class CardCallback implements Callback<MagicObject> {
-        @Override
         public void onMessage(MagicObject c) {
             log.debug("Received: " + c);
             PlayAction a = GuiUtil.getActionOptional(actor.getPlayer(), c);
@@ -49,7 +48,6 @@ public class ActionActor extends GuiActor {
     }
     
     private class PassPriorityCallback implements Callback<Void> {
-        @Override
         public void onMessage(Void v) {
             log.debug("Received pass priority");
             actor.channels.actions.publish(null);

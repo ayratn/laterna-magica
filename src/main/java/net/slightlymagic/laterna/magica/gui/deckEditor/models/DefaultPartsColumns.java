@@ -24,7 +24,6 @@ public class DefaultPartsColumns implements TableColumns<SimpleCardParts> {
     private static final String[]   names   = {"Name", "Cost", "Type", "P/T/L"};
     private static final Class<?>[] classes = {String.class, ManaSequence.class, String.class, String.class};
     
-    @Override
     public String getColumnName(int column) {
         return names[column];
     }
@@ -33,7 +32,6 @@ public class DefaultPartsColumns implements TableColumns<SimpleCardParts> {
         return classes[column];
     }
     
-    @Override
     public int getColumnCount() {
         return classes.length;
     }

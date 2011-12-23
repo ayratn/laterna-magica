@@ -102,7 +102,6 @@ public class MainPane extends JRootPane implements Disposable {
         file.add(new DownloadAction());
     }
     
-    @Override
     public void dispose() {
         d.dispose();
     }
@@ -162,7 +161,7 @@ public class MainPane extends JRootPane implements Disposable {
             overall.add(p, "center");
         }
         
-
+        
         CardImage im = new CardImage();
         gui.add(im);
         overall.add(im, "picture");

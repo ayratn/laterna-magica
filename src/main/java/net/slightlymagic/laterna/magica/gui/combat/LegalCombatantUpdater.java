@@ -128,7 +128,6 @@ public class LegalCombatantUpdater implements PropertyChangeListener {
         }
     }
     
-    @Override
     public void propertyChange(PropertyChangeEvent evt) {
         if(evt.getSource() instanceof Game) updateCombatants();
         else if(evt.getSource() instanceof Combat) {

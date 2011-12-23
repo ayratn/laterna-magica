@@ -35,7 +35,6 @@ public class NewFromPoolAction extends AbstractAction {
         this.io = io;
     }
     
-    @Override
     public void actionPerformed(ActionEvent e) {
         Deck pool = io.open(io.open());
         if(pool == null) return;

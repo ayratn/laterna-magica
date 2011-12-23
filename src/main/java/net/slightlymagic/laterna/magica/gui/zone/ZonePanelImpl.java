@@ -91,7 +91,7 @@ public class ZonePanelImpl extends ZonePanel implements ZoneCardsPanel {
             d.add(new CollapseListener(pane));
         }
         
-
+        
         cards = new HashMap<MagicObject, CardPanel>();
         cardsView = unmodifiableMap(cards);
         d.add(l = new MoveCard());
@@ -172,7 +172,6 @@ public class ZonePanelImpl extends ZonePanel implements ZoneCardsPanel {
             getZone().addPropertyChangeListener("cards", this);
         }
         
-        @Override
         public void dispose() {
             getZone().removePropertyChangeListener("cards", this);
         }

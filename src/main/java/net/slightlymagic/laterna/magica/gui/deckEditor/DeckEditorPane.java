@@ -193,7 +193,6 @@ public class DeckEditorPane extends JRootPane {
     
     
     private class Select implements ActionListener {
-        @Override
         public void actionPerformed(ActionEvent e) {
             if(e.getSource() == upperPool) {
                 if(upperDeck == null) return;
