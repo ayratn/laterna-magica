@@ -72,12 +72,12 @@
  </dependencies>
 
  <properties>
-  <google.project.scm.repo>child</google.project.scm.repo>
+  <google.project.scm.repo>default</google.project.scm.repo>
  </properties>
 
  <scm>
-  <connection>${scm.connection}</connection>
-  <developerConnection>${scm.connection}</developerConnection>
-  <url>${scm.browse}</url>
+  <connection>${scm.default.connection}</connection>
+  <developerConnection>${scm.default.connection}</developerConnection>
+  <url>${scm.default.browse}</url>
  </scm>
 </project>
