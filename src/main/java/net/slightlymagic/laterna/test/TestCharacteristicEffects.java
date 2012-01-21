@@ -14,6 +14,9 @@ import static net.slightlymagic.laterna.magica.effect.ContinuousEffect.Layer.*;
 import static net.slightlymagic.laterna.magica.effect.characteristic.SetCharacteristicEffect.Mode.*;
 import static net.slightlymagic.laterna.magica.mana.ManaFactory.*;
 import static net.slightlymagic.laterna.magica.util.MagicaPredicates.*;
+
+import java.util.UUID;
+
 import net.slightlymagic.laterna.magica.Game;
 import net.slightlymagic.laterna.magica.LaternaMagica;
 import net.slightlymagic.laterna.magica.MagicObject;
@@ -29,6 +32,8 @@ import net.slightlymagic.laterna.magica.effect.characteristic.impl.PTSwitchingEf
 import net.slightlymagic.laterna.magica.effect.characteristic.impl.TypeChangingEffectImpl;
 import net.slightlymagic.laterna.magica.impl.GameImpl;
 import net.slightlymagic.laterna.magica.mana.ManaSequence;
+import net.slightlymagic.objectTransactions.History;
+import net.slightlymagic.objectTransactions.modifications.Creation;
 
 import com.google.common.base.Predicate;
 
@@ -43,41 +48,46 @@ public class TestCharacteristicEffects {
     public static void main(String[] args) throws Exception {
         LaternaMagica.init();
         
-        Game g = new GameImpl();
-        Predicate<MagicObject> m1 = card(has(ENCHANTMENT));
-        //all enchantments are green
-        g.getGlobalEffects().put(new ColorChangingEffectImpl(g, ADDING, GREEN), m1);
-        
-
-        CardObject card = new CardObjectImpl(g, LaternaMagica.CARDS().getCard("Llanowar Elves"));
-        
-
-        //switch power and toughness
-        CharacteristicEffect e1 = new PTSwitchingEffectImpl(g);
-        //becomes 0/2
-        CharacteristicEffect e2 = new PTChangingEffectImpl(g, 0, 2);
-        //is an artifact in addition to its other types
-        CharacteristicEffect e3 = new TypeChangingEffectImpl(g, ADDING, ARTIFACT);
-        //is an enchantment
-        CharacteristicEffect e4 = new TypeChangingEffectImpl(g, SETTING, ENCHANTMENT);
-        //mana cost is {R/W}
-        CharacteristicEffect e5 = new OverridingCharacteristicEffectImpl<ManaSequence>(g, L3, MANA_COST,
-                ManaFactory.parseSequence("{R/W}"));
-        
-        ObjectCharacteristics ch = card.getCharacteristics().get(0);
-        CardSnapshot cs = null;
-        
-        print(ch.getCharacteristics(cs));
-        
-        card.getEffects().add(e1);
-        card.getEffects().add(e2);
-        card.getEffects().add(e3);
-        card.getEffects().add(e4);
-        card.getEffects().add(e5);
-        
-        print(ch.getCharacteristics(cs));
-        
-        System.out.println(g.getGameState());
+        History h = History.createHistory(UUID.randomUUID());
+        h.pushHistoryForThread();
+        try {
+            final Game g = Creation.createObject(new GameImpl()).init();
+            Predicate<MagicObject> m1 = card(has(ENCHANTMENT));
+            //all enchantments are green
+            g.getGlobalEffects().put(new ColorChangingEffectImpl(ADDING, GREEN), m1);
+            
+            
+            CardObject card = new CardObjectImpl(LaternaMagica.CARDS().getCard("Llanowar Elves"));
+            
+            
+            //switch power and toughness
+            CharacteristicEffect e1 = new PTSwitchingEffectImpl();
+            //becomes 0/2
+            CharacteristicEffect e2 = new PTChangingEffectImpl(0, 2);
+            //is an artifact in addition to its other types
+            CharacteristicEffect e3 = new TypeChangingEffectImpl(ADDING, ARTIFACT);
+            //is an enchantment
+            CharacteristicEffect e4 = new TypeChangingEffectImpl(SETTING, ENCHANTMENT);
+            //mana cost is {R/W}
+            CharacteristicEffect e5 = new OverridingCharacteristicEffectImpl<ManaSequence>(L3, MANA_COST,
+                    ManaFactory.parseSequence("{R/W}"));
+            
+            ObjectCharacteristics ch = card.getCharacteristics().get(0);
+            CardSnapshot cs = null;
+            
+            print(ch.getCharacteristics(cs));
+            
+            card.getEffects().add(e1);
+            card.getEffects().add(e2);
+            card.getEffects().add(e3);
+            card.getEffects().add(e4);
+            card.getEffects().add(e5);
+            
+            print(ch.getCharacteristics(cs));
+//            System.out.println(g.getGameState());
+        } finally {
+            h.popHistoryForThread();
+        }
     }
     
     public static void print(ObjectCharacteristics c) {

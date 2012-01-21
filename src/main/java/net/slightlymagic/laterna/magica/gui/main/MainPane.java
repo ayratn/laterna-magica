@@ -19,6 +19,7 @@ import java.awt.event.WindowEvent;
 import java.io.File;
 import java.io.PrintWriter;
 import java.io.StringWriter;
+import java.util.UUID;
 import java.util.concurrent.Executors;
 
 import javax.swing.AbstractAction;
@@ -52,6 +53,8 @@ import net.slightlymagic.laterna.magica.impl.GameLoop;
 import net.slightlymagic.laterna.magica.player.Player;
 import net.slightlymagic.laterna.magica.player.impl.PlayerImpl;
 import net.slightlymagic.laterna.magica.zone.Zone.Zones;
+import net.slightlymagic.objectTransactions.History;
+import net.slightlymagic.objectTransactions.modifications.Creation;
 import net.slightlymagic.utils.downloader.DownloadGui;
 import net.slightlymagic.utils.downloader.DownloadJob;
 import net.slightlymagic.utils.downloader.Downloader;
@@ -269,43 +272,49 @@ public class MainPane extends JRootPane implements Disposable {
             
             ch.publish(new Runnable() {
                 public void run() {
-                    final Game g = new GameImpl();
-                    final Gui gui = new Gui(g);
-                    
-                    String[] names = {name1.getText(), name2.getText()};
-                    Deck[] decks = {deck1.getDeck(), deck2.getDeck()};
-                    
-                    for(int i = 0; i < names.length; i++) {
-                        Player p = new PlayerImpl(g, names[i]);
-                        p.setActor(new GuiMagicActor(gui, p));
-                        p.setDeck(decks[i]);
-                        g.getPlayers().add(p);
-                    }
-                    
-                    setupGui(gui);
-                    
-                    JFrame jf = new JFrame("Game");
-                    jf.setDefaultCloseOperation(JFrame.HIDE_ON_CLOSE);
-                    jf.addWindowListener(new WindowAdapter() {
-                        @Override
-                        public void windowClosing(WindowEvent e) {
-                            gui.publishConcede();
+                    History h = History.createHistory(UUID.randomUUID());
+                    h.pushHistoryForThread();
+                    try {
+                        final Game g = Creation.createObject(new GameImpl()).init();
+                        final Gui gui = new Gui(g);
+                        
+                        String[] names = {name1.getText(), name2.getText()};
+                        Deck[] decks = {deck1.getDeck(), deck2.getDeck()};
+                        
+                        for(int i = 0; i < names.length; i++) {
+                            Player p = new PlayerImpl(g, names[i]);
+                            p.setActor(new GuiMagicActor(gui, p));
+                            p.setDeck(decks[i]);
+                            g.getPlayers().add(p);
                         }
-                    });
-                    
-                    jf.add(gui.getTable());
-                    
-                    jf.setSize(1000, 800);
-                    Dimension screen = jf.getToolkit().getScreenSize();
-                    Dimension window = jf.getSize();
-                    jf.setLocation((screen.width - window.width) / 2, (screen.height - window.height) / 2);
-                    
-                    jf.setVisible(true);
-                    
-                    g.startGame();
-                    new GameLoop(g).run();
-                    
-                    jf.dispose();
+                        
+                        setupGui(gui);
+                        
+                        JFrame jf = new JFrame("Game");
+                        jf.setDefaultCloseOperation(JFrame.HIDE_ON_CLOSE);
+                        jf.addWindowListener(new WindowAdapter() {
+                            @Override
+                            public void windowClosing(WindowEvent e) {
+                                gui.publishConcede();
+                            }
+                        });
+                        
+                        jf.add(gui.getTable());
+                        
+                        jf.setSize(1000, 800);
+                        Dimension screen = jf.getToolkit().getScreenSize();
+                        Dimension window = jf.getSize();
+                        jf.setLocation((screen.width - window.width) / 2, (screen.height - window.height) / 2);
+                        
+                        jf.setVisible(true);
+                        
+                        g.startGame();
+                        new GameLoop().run();
+                        
+                        jf.dispose();
+                    } finally {
+                        h.popHistoryForThread();
+                    }
                 }
             });
         }

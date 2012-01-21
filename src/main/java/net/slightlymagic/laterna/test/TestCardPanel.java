@@ -17,6 +17,7 @@ import java.io.StringWriter;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
+import java.util.UUID;
 
 import javax.swing.JButton;
 import javax.swing.JFrame;
@@ -40,6 +41,8 @@ import net.slightlymagic.laterna.magica.impl.GameLoop;
 import net.slightlymagic.laterna.magica.player.Player;
 import net.slightlymagic.laterna.magica.player.impl.PlayerImpl;
 import net.slightlymagic.laterna.magica.zone.Zone.Zones;
+import net.slightlymagic.objectTransactions.History;
+import net.slightlymagic.objectTransactions.modifications.Creation;
 
 import org.jdesktop.swingx.JXMultiSplitPane;
 import org.jdesktop.swingx.MultiSplitLayout;
@@ -56,66 +59,72 @@ public class TestCardPanel {
     public static void main(String[] args) throws Exception {
         LaternaMagica.init();
         
-        final Game g = initGame();
-        final Gui gui = new Gui(g);
-        
-        Player me = g.getPlayers().get(0);
-        me.setActor(new GuiMagicActor(gui, me));
-        Player her = g.getPlayers().get(1);
-        her.setActor(new GuiMagicActor(gui, her));
-        
-
-        JXMultiSplitPane overall = new JXMultiSplitPane(new MultiSplitLayout(getOverallLayout()));
-        JXMultiSplitPane zones = new JXMultiSplitPane(new MultiSplitLayout(getZonesLayout()));
-        
-        JLabel turnProgress = new JLabel();
-        new TurnProgressUpdater(turnProgress, g);
-        
-        Container c = gui.getTable().getContentPane();
-        c.add(turnProgress, BorderLayout.NORTH);
-        c.add(overall);
-        c.add(new JButton(gui.getPassPriorityAction()), BorderLayout.SOUTH);
-        
-        for(int i = 0; i < g.getPlayers().size(); i++) {
-            Player pl = g.getPlayers().get(i);
-            overall.add(gui.getPlayerPanel(pl), "player" + i);
+        History h = History.createHistory(UUID.randomUUID());
+        h.pushHistoryForThread();
+        try {
+            final Game g = initGame();
+            final Gui gui = new Gui(g);
             
-            zones.add(gui.getZonePanel(pl, Zones.HAND), "hand" + i);
-            zones.add(gui.getZonePanel(pl, Zones.BATTLEFIELD), "play" + i);
+            Player me = g.getPlayers().get(0);
+            me.setActor(new GuiMagicActor(gui, me));
+            Player her = g.getPlayers().get(1);
+            her.setActor(new GuiMagicActor(gui, her));
+            
+            
+            JXMultiSplitPane overall = new JXMultiSplitPane(new MultiSplitLayout(getOverallLayout()));
+            JXMultiSplitPane zones = new JXMultiSplitPane(new MultiSplitLayout(getZonesLayout()));
+            
+            JLabel turnProgress = new JLabel();
+            new TurnProgressUpdater(turnProgress, g);
+            
+            Container c = gui.getTable().getContentPane();
+            c.add(turnProgress, BorderLayout.NORTH);
+            c.add(overall);
+            c.add(new JButton(gui.getPassPriorityAction()), BorderLayout.SOUTH);
+            
+            for(int i = 0; i < g.getPlayers().size(); i++) {
+                Player pl = g.getPlayers().get(i);
+                overall.add(gui.getPlayerPanel(pl), "player" + i);
+                
+                zones.add(gui.getZonePanel(pl, Zones.HAND), "hand" + i);
+                zones.add(gui.getZonePanel(pl, Zones.BATTLEFIELD), "play" + i);
+            }
+            
+            {
+                JPanel p = new JPanel(new BorderLayout());
+                p.add(zones);
+                p.add(gui.getZonePanel(Zones.STACK), BorderLayout.EAST);
+                overall.add(p, "center");
+            }
+            
+            
+            CardImage im = new CardImage();
+            gui.add(im);
+            overall.add(im, "picture");
+            
+            CardDetail de = new CardDetail(18);
+            gui.add(de);
+            overall.add(de, "detail");
+            
+            
+            JFrame jf = new JFrame();
+            jf.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+            
+            jf.add(gui.getTable());
+            
+            jf.setSize(700, 300);
+            jf.setVisible(true);
+            
+            g.startGame();
+            putIntoPlay(g, "Trained Armodon", 2);
+            putIntoPlay(g, "Grizzly Bears", 2);
+            putIntoPlay(g, "Llanowar Elves", 2);
+            
+            //run in the main thread
+            new GameLoop().run();
+        } finally {
+            h.popHistoryForThread();
         }
-        
-        {
-            JPanel p = new JPanel(new BorderLayout());
-            p.add(zones);
-            p.add(gui.getZonePanel(Zones.STACK), BorderLayout.EAST);
-            overall.add(p, "center");
-        }
-        
-
-        CardImage im = new CardImage();
-        gui.add(im);
-        overall.add(im, "picture");
-        
-        CardDetail de = new CardDetail(18);
-        gui.add(de);
-        overall.add(de, "detail");
-        
-
-        JFrame jf = new JFrame();
-        jf.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        
-        jf.add(gui.getTable());
-        
-        jf.setSize(700, 300);
-        jf.setVisible(true);
-        
-        g.startGame();
-        putIntoPlay(g, "Trained Armodon", 2);
-        putIntoPlay(g, "Grizzly Bears", 2);
-        putIntoPlay(g, "Llanowar Elves", 2);
-        
-        //run in the main thread
-        new GameLoop(g).run();
     }
     
     private static void putIntoPlay(Game game, String name, int num) {
@@ -182,8 +191,8 @@ public class TestCardPanel {
         put(d, "Grizzly Bears", 5);
         put(d, "Trained Armodon", 5);
         
-
-        final Game g = new GameImpl();
+        
+        final Game g = Creation.createObject(new GameImpl()).init();
         
         String[] names = {"Freak", "Foxal"};
         for(String name:names) {
