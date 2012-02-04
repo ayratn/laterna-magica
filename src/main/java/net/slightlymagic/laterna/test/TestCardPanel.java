@@ -8,6 +8,9 @@ package net.slightlymagic.laterna.test;
 
 
 import static net.slightlymagic.laterna.magica.deck.DeckType.*;
+import static net.slightlymagic.laterna.magica.impl.GameImpl.*;
+import static net.slightlymagic.laterna.magica.impl.GameLoop.*;
+import static net.slightlymagic.laterna.magica.player.impl.PlayerImpl.*;
 
 import java.awt.BorderLayout;
 import java.awt.Container;
@@ -36,13 +39,9 @@ import net.slightlymagic.laterna.magica.gui.TurnProgressUpdater;
 import net.slightlymagic.laterna.magica.gui.actor.GuiMagicActor;
 import net.slightlymagic.laterna.magica.gui.card.CardDetail;
 import net.slightlymagic.laterna.magica.gui.card.CardImage;
-import net.slightlymagic.laterna.magica.impl.GameImpl;
-import net.slightlymagic.laterna.magica.impl.GameLoop;
 import net.slightlymagic.laterna.magica.player.Player;
-import net.slightlymagic.laterna.magica.player.impl.PlayerImpl;
 import net.slightlymagic.laterna.magica.zone.Zone.Zones;
 import net.slightlymagic.objectTransactions.History;
-import net.slightlymagic.objectTransactions.modifications.Creation;
 
 import org.jdesktop.swingx.JXMultiSplitPane;
 import org.jdesktop.swingx.MultiSplitLayout;
@@ -121,7 +120,7 @@ public class TestCardPanel {
             putIntoPlay(g, "Llanowar Elves", 2);
             
             //run in the main thread
-            new GameLoop().run();
+            newGameLoop().run();
         } finally {
             h.popHistoryForThread();
         }
@@ -192,11 +191,11 @@ public class TestCardPanel {
         put(d, "Trained Armodon", 5);
         
         
-        final Game g = Creation.createObject(new GameImpl()).init();
+        final Game g = newGameImpl();
         
         String[] names = {"Freak", "Foxal"};
         for(String name:names) {
-            Player p = new PlayerImpl(g, name);
+            Player p = newPlayerImpl(name);
             p.setDeck(d);
             g.getPlayers().add(p);
         }

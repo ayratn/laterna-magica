@@ -70,9 +70,11 @@ import com.google.common.base.Predicate;
  * @author Clemens Koza
  */
 public class GuiMagicActor extends AbstractMagicActor implements Disposable {
-    private static final Logger log      = LoggerFactory.getLogger(GuiMagicActor.class);
+    private static final long   serialVersionUID = 6607798700010375126L;
     
-    public final GuiChannels    channels = new GuiChannels();
+    private static final Logger log              = LoggerFactory.getLogger(GuiMagicActor.class);
+    
+    public final GuiChannels    channels         = new GuiChannels();
     
     private final Gui           gui;
     

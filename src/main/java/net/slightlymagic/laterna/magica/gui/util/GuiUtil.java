@@ -7,6 +7,9 @@
 package net.slightlymagic.laterna.magica.gui.util;
 
 
+import static net.slightlymagic.laterna.magica.action.play.ActivateAction.*;
+import static net.slightlymagic.laterna.magica.action.play.CastAction.*;
+import static net.slightlymagic.laterna.magica.action.special.LandDropAction.*;
 import static net.slightlymagic.laterna.magica.characteristic.CardType.*;
 
 import java.util.ArrayList;
@@ -18,10 +21,7 @@ import java.util.Set;
 import net.slightlymagic.laterna.magica.MagicObject;
 import net.slightlymagic.laterna.magica.ability.ActivatedAbility;
 import net.slightlymagic.laterna.magica.action.GameAction;
-import net.slightlymagic.laterna.magica.action.play.ActivateAction;
-import net.slightlymagic.laterna.magica.action.play.CastAction;
 import net.slightlymagic.laterna.magica.action.play.PlayAction;
-import net.slightlymagic.laterna.magica.action.special.LandDropAction;
 import net.slightlymagic.laterna.magica.card.CardObject;
 import net.slightlymagic.laterna.magica.characteristic.AbilityCharacteristic;
 import net.slightlymagic.laterna.magica.characteristic.ObjectCharacteristics;
@@ -51,9 +51,9 @@ public class GuiUtil {
         if(card instanceof CardObject) {
             //TODO be multipart compatible
             if(card.getCharacteristics().get(0).hasType(LAND)) {
-                list.add(new LandDropAction((CardObject) card));
+                list.add(newLandDropAction((CardObject) card));
             } else {
-                list.add(new CastAction(player, (CardObject) card));
+                list.add(newCastAction(player, (CardObject) card));
             }
         }
         
@@ -64,7 +64,7 @@ public class GuiUtil {
             assert b;
             for(AbilityCharacteristic ability:abilities)
                 if(ability.getAbility() instanceof ActivatedAbility) {
-                    list.add(new ActivateAction(player, card, (ActivatedAbility) ability.getAbility()));
+                    list.add(newActivateAction(player, card, (ActivatedAbility) ability.getAbility()));
                 }
         }
         

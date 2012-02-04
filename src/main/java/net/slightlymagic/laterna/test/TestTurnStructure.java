@@ -8,6 +8,8 @@ package net.slightlymagic.laterna.test;
 
 
 import static net.slightlymagic.laterna.magica.deck.DeckType.*;
+import static net.slightlymagic.laterna.magica.impl.GameImpl.*;
+import static net.slightlymagic.laterna.magica.player.impl.PlayerImpl.*;
 
 import java.util.UUID;
 
@@ -15,11 +17,8 @@ import net.slightlymagic.laterna.magica.Game;
 import net.slightlymagic.laterna.magica.LaternaMagica;
 import net.slightlymagic.laterna.magica.cards.AllCards;
 import net.slightlymagic.laterna.magica.deck.Deck;
-import net.slightlymagic.laterna.magica.impl.GameImpl;
 import net.slightlymagic.laterna.magica.player.Player;
-import net.slightlymagic.laterna.magica.player.impl.PlayerImpl;
 import net.slightlymagic.objectTransactions.History;
-import net.slightlymagic.objectTransactions.modifications.Creation;
 
 
 /**
@@ -43,11 +42,11 @@ public class TestTurnStructure {
         History h = History.createHistory(UUID.randomUUID());
         h.pushHistoryForThread();
         try {
-            final Game g = Creation.createObject(new GameImpl()).init();
+            final Game g = newGameImpl();
             
             String[] names = {"Clemens", "Berni", "Roman"};
             for(String name:names) {
-                Player p = new PlayerImpl(g, name);
+                Player p = newPlayerImpl(name);
                 g.getPlayers().add(p);
                 p.setDeck(d);
             }

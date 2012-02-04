@@ -7,18 +7,19 @@
 package net.slightlymagic.laterna.test;
 
 
+import static net.slightlymagic.laterna.magica.impl.GameImpl.*;
+import static net.slightlymagic.laterna.magica.player.impl.LifeEvent.*;
+import static net.slightlymagic.laterna.magica.player.impl.PlayerImpl.*;
+
 import java.util.UUID;
 
 import net.slightlymagic.laterna.magica.Game;
 import net.slightlymagic.laterna.magica.effect.replacement.ReplaceableEvent;
 import net.slightlymagic.laterna.magica.effect.replacement.ReplacementEffect.ReplacementType;
 import net.slightlymagic.laterna.magica.effect.replacement.impl.AbstractReplacementEffect;
-import net.slightlymagic.laterna.magica.impl.GameImpl;
 import net.slightlymagic.laterna.magica.player.Player;
 import net.slightlymagic.laterna.magica.player.impl.LifeEvent;
-import net.slightlymagic.laterna.magica.player.impl.PlayerImpl;
 import net.slightlymagic.objectTransactions.History;
-import net.slightlymagic.objectTransactions.modifications.Creation;
 
 
 /**
@@ -32,15 +33,15 @@ public class TestReplacementEffects {
         History h = History.createHistory(UUID.randomUUID());
         h.pushHistoryForThread();
         try {
-            final Game g = Creation.createObject(new GameImpl()).init();
-            Player p = new PlayerImpl(g, "Clemens");
+            final Game g = newGameImpl();
+            Player p = newPlayerImpl("Clemens");
             p.getLifeTotal().setLifeTotal(20);
             
             g.getReplacementEngine().add(
                     new AbstractReplacementEffect<LifeEvent>(LifeEvent.class, ReplacementType.OTHER) {
                         @Override
                         protected ReplaceableEvent replace0(LifeEvent e) {
-                            return new LifeEvent(e.getPlayer(), e.getAmount(), !e.isGained());
+                            return newLifeEvent(e.getAffectedPlayer(), e.getAmount(), !e.isGained());
                         }
                     });
             

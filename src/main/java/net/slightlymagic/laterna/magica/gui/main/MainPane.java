@@ -7,6 +7,10 @@
 package net.slightlymagic.laterna.magica.gui.main;
 
 
+import static net.slightlymagic.laterna.magica.impl.GameImpl.*;
+import static net.slightlymagic.laterna.magica.impl.GameLoop.*;
+import static net.slightlymagic.laterna.magica.player.impl.PlayerImpl.*;
+
 import java.awt.BorderLayout;
 import java.awt.Container;
 import java.awt.Dimension;
@@ -48,13 +52,9 @@ import net.slightlymagic.laterna.magica.gui.card.CardDetail;
 import net.slightlymagic.laterna.magica.gui.card.CardImage;
 import net.slightlymagic.laterna.magica.gui.deckEditor.DeckEditorPane;
 import net.slightlymagic.laterna.magica.gui.deckEditor.DeckIO;
-import net.slightlymagic.laterna.magica.impl.GameImpl;
-import net.slightlymagic.laterna.magica.impl.GameLoop;
 import net.slightlymagic.laterna.magica.player.Player;
-import net.slightlymagic.laterna.magica.player.impl.PlayerImpl;
 import net.slightlymagic.laterna.magica.zone.Zone.Zones;
 import net.slightlymagic.objectTransactions.History;
-import net.slightlymagic.objectTransactions.modifications.Creation;
 import net.slightlymagic.utils.downloader.DownloadGui;
 import net.slightlymagic.utils.downloader.DownloadJob;
 import net.slightlymagic.utils.downloader.Downloader;
@@ -275,14 +275,14 @@ public class MainPane extends JRootPane implements Disposable {
                     History h = History.createHistory(UUID.randomUUID());
                     h.pushHistoryForThread();
                     try {
-                        final Game g = Creation.createObject(new GameImpl()).init();
+                        final Game g = newGameImpl();
                         final Gui gui = new Gui(g);
                         
                         String[] names = {name1.getText(), name2.getText()};
                         Deck[] decks = {deck1.getDeck(), deck2.getDeck()};
                         
                         for(int i = 0; i < names.length; i++) {
-                            Player p = new PlayerImpl(g, names[i]);
+                            Player p = newPlayerImpl(names[i]);
                             p.setActor(new GuiMagicActor(gui, p));
                             p.setDeck(decks[i]);
                             g.getPlayers().add(p);
@@ -309,7 +309,7 @@ public class MainPane extends JRootPane implements Disposable {
                         jf.setVisible(true);
                         
                         g.startGame();
-                        new GameLoop().run();
+                        newGameLoop().run();
                         
                         jf.dispose();
                     } finally {

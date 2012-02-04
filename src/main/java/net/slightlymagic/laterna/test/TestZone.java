@@ -7,18 +7,18 @@
 package net.slightlymagic.laterna.test;
 
 
+import static net.slightlymagic.laterna.magica.card.impl.CardObjectImpl.*;
+import static net.slightlymagic.laterna.magica.impl.GameImpl.*;
+import static net.slightlymagic.laterna.magica.player.impl.PlayerImpl.*;
+
 import java.util.UUID;
 
 import net.slightlymagic.laterna.magica.Game;
 import net.slightlymagic.laterna.magica.LaternaMagica;
 import net.slightlymagic.laterna.magica.card.Card;
 import net.slightlymagic.laterna.magica.card.CardObject;
-import net.slightlymagic.laterna.magica.card.impl.CardObjectImpl;
-import net.slightlymagic.laterna.magica.impl.GameImpl;
 import net.slightlymagic.laterna.magica.player.Player;
-import net.slightlymagic.laterna.magica.player.impl.PlayerImpl;
 import net.slightlymagic.objectTransactions.History;
-import net.slightlymagic.objectTransactions.modifications.Creation;
 
 
 /**
@@ -34,10 +34,10 @@ public class TestZone {
         History h = History.createHistory(UUID.randomUUID());
         h.pushHistoryForThread();
         try {
-            final Game g = Creation.createObject(new GameImpl()).init();
-            Player p = new PlayerImpl(g, "Clemens");
+            final Game g = newGameImpl();
+            Player p = newPlayerImpl("Clemens");
             g.getPlayers().add(p);
-            CardObject c = new CardObjectImpl(new Card());
+            CardObject c = newCardObjectImpl(new Card());
             c.setOwner(p);
             
             System.out.println(p.getLibrary().getCards());

@@ -11,6 +11,7 @@ import static com.google.common.base.Suppliers.*;
 import static java.lang.String.*;
 import static net.slightlymagic.laterna.magica.characteristic.CardType.*;
 import static net.slightlymagic.laterna.magica.util.MagicaPredicates.*;
+import static net.slightlymagic.laterna.magica.util.MagicaUtils.*;
 import static net.slightlymagic.laterna.magica.zone.Zone.Zones.*;
 
 import java.awt.FontMetrics;
@@ -57,8 +58,8 @@ public class DamagePainter implements Painter<CardSnapshot> {
         
         int marked = c.getMarkedDamage();
         int assigned = 0;
-        if(c.getGame().getCombat() != null) {
-            Combat combat = c.getGame().getCombat();
+        if(getGame().getCombat() != null) {
+            Combat combat = getGame().getCombat();
             try {
                 Attacker a = combat.getAttacker(c);
                 if(a != null) for(BlockAssignment b:a.getBlockers().values())
