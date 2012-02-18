@@ -16,6 +16,7 @@ import java.awt.Dimension;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
 import java.io.File;
+import java.util.Map.Entry;
 import java.util.UUID;
 
 import javax.swing.JFrame;
@@ -28,6 +29,9 @@ import net.slightlymagic.laterna.magica.gui.main.MainPane;
 import net.slightlymagic.laterna.magica.player.Player;
 import net.slightlymagic.objectTransactions.History;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 
 /**
  * <p>
@@ -38,6 +42,8 @@ import net.slightlymagic.objectTransactions.History;
  * @author Clemens Koza
  */
 public class FastTest {
+    private static final Logger log = LoggerFactory.getLogger(FastTest.class);
+    
     public static void main(String[] args) throws Exception {
         LaternaInit.init();
         
@@ -83,8 +89,21 @@ public class FastTest {
             newGameLoop().run();
             
             jf.dispose();
+            
+            for(Player p:g.getPlayers())
+                if(p.getActor() instanceof GuiMagicActor) ((GuiMagicActor) p.getActor()).dispose();
+            gui.dispose();
         } finally {
             h.popHistoryForThread();
         }
+        
+        for(Entry<Thread, StackTraceElement[]> e:Thread.getAllStackTraces().entrySet()) {
+            Thread t = e.getKey();
+            log.debug(t.getName() + ": " + t.getState());
+            for(StackTraceElement el:e.getValue())
+                log.debug("\t" + el);
+        }
+        
+        System.exit(0);
     }
 }
