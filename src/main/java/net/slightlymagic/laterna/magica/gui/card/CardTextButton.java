@@ -63,8 +63,13 @@ public class CardTextButton extends CardPanel {
     
     @Override
     protected void paintComponent(Graphics g) {
-        super.paintComponent(g);
-        if(getPainter() != null) getPainter().paint((Graphics2D) g, getCard(), getWidth(), getHeight());
+        d.getCard().pushHistory();
+        try {
+            super.paintComponent(g);
+            if(getPainter() != null) getPainter().paint((Graphics2D) g, getCard(), getWidth(), getHeight());
+        } finally {
+            d.getCard().popHistory();
+        }
     }
     
     protected void fireActionPerformed() {
@@ -73,10 +78,15 @@ public class CardTextButton extends CardPanel {
         ActionEvent e = new ActionEvent(this, ActionEvent.ACTION_PERFORMED, "");
         // Process the listeners last to first, notifying
         // those that are interested in this event
-        for(int i = listeners.length - 2; i >= 0; i -= 2) {
-            if(listeners[i] == ActionListener.class) {
-                ((ActionListener) listeners[i + 1]).actionPerformed(e);
+        d.getCard().pushHistory();
+        try {
+            for(int i = listeners.length - 2; i >= 0; i -= 2) {
+                if(listeners[i] == ActionListener.class) {
+                    ((ActionListener) listeners[i + 1]).actionPerformed(e);
+                }
             }
+        } finally {
+            d.getCard().popHistory();
         }
     }
     
