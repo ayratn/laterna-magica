@@ -24,6 +24,7 @@ import net.slightlymagic.laterna.magica.Game;
 import net.slightlymagic.laterna.magica.MagicObject;
 import net.slightlymagic.laterna.magica.characteristic.CardSnapshot;
 import net.slightlymagic.laterna.magica.characteristic.impl.CardCharacteristicsSnapshot;
+import net.slightlymagic.laterna.magica.gui.actor.GameMessage;
 import net.slightlymagic.laterna.magica.gui.actor.GuiMagicActor;
 import net.slightlymagic.laterna.magica.gui.card.CardDisplay;
 import net.slightlymagic.laterna.magica.gui.card.CardPanel;
@@ -177,8 +178,13 @@ public class Gui implements Disposable {
     }
     
     public void showCard(CardSnapshot sn) {
-        for(CardDisplay c:cards)
-            c.setCard(sn);
+        if(sn != null) sn.pushHistory();
+        try {
+            for(CardDisplay c:cards)
+                c.setCard(sn);
+        } finally {
+            if(sn != null) sn.popHistory();
+        }
     }
     
     /**
@@ -202,9 +208,9 @@ public class Gui implements Disposable {
             CardTextButton p = (CardTextButton) e.getSource();
             if(!(p.getCard() instanceof CardCharacteristicsSnapshot)) return;
             MagicObject c = ((CardCharacteristicsSnapshot) p.getCard()).getCardObject();
-            
+            GameMessage<MagicObject> m = new GameMessage<MagicObject>(c);
             for(GuiMagicActor actor:actors)
-                actor.channels.objects.publish(c);
+                actor.channels.objects.publish(m);
         }
     }
     
@@ -216,8 +222,9 @@ public class Gui implements Disposable {
         }
         
         public void actionPerformed(ActionEvent e) {
+            GameMessage<Player> m = new GameMessage<Player>(p);
             for(GuiMagicActor actor:actors)
-                actor.channels.players.publish(p);
+                actor.channels.players.publish(m);
         }
     }
     

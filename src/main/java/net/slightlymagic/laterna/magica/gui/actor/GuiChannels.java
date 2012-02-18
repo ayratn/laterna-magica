@@ -32,45 +32,45 @@ public class GuiChannels implements Disposable {
     /**
      * Channel for receiving {@link PlayAction}s to execute when the player has priority
      */
-    public final Channel<PlayAction>  actions      = new MemoryChannel<PlayAction>();
+    public final Channel<GameMessage<PlayAction>>  actions      = new MemoryChannel<GameMessage<PlayAction>>();
     
     /**
      * Channel for receiving {@link Attacker}s
      */
-    public final Channel<Attacker>    attackers    = new MemoryChannel<Attacker>();
+    public final Channel<GameMessage<Attacker>>    attackers    = new MemoryChannel<GameMessage<Attacker>>();
     
     /**
      * Channel for receiving {@link Blocker}s
      */
-    public final Channel<Blocker>     blockers     = new MemoryChannel<Blocker>();
+    public final Channel<GameMessage<Blocker>>     blockers     = new MemoryChannel<GameMessage<Blocker>>();
     
     /**
      * Channel for publishing {@link MagicObject}s when the user clicks on them
      */
-    public final Channel<MagicObject> objects      = new MemoryChannel<MagicObject>();
+    public final Channel<GameMessage<MagicObject>> objects      = new MemoryChannel<GameMessage<MagicObject>>();
     
     /**
      * Channel for publishing {@link Player}s when the user clicks on them
      */
-    public final Channel<Player>      players      = new MemoryChannel<Player>();
+    public final Channel<GameMessage<Player>>      players      = new MemoryChannel<GameMessage<Player>>();
     
     /**
      * Channel for publishing when the user clicks "pass priority"
      */
-    public final Channel<Void>        passPriority = new MemoryChannel<Void>();
+    public final Channel<Void>                     passPriority = new MemoryChannel<Void>();
     
     /**
      * Channel for publishing when the user concedes, or otherwise leaves the game
      */
-    public final Channel<Void>        concede      = new MemoryChannel<Void>();
+    public final Channel<Void>                     concede      = new MemoryChannel<Void>();
     
     /**
      * Using one fiber for all callbacks essentially means that they will be executed sequentially. Say, one user
      * input after another. This is not a problem, since none of the callbacks will block.
      */
-    public final Fiber                fiber;
+    public final Fiber                             fiber;
     
-    private final PoolFiberFactory    f;
+    private final PoolFiberFactory                 f;
     
     public GuiChannels() {
         f = new PoolFiberFactory(Executors.newCachedThreadPool());

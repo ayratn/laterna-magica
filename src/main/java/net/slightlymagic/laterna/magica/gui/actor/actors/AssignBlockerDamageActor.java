@@ -25,14 +25,13 @@ import net.slightlymagic.laterna.magica.Combat.Blocker;
 import net.slightlymagic.laterna.magica.MagicObject;
 import net.slightlymagic.laterna.magica.card.CardObject;
 import net.slightlymagic.laterna.magica.gui.actor.GuiActor;
+import net.slightlymagic.laterna.magica.gui.actor.GuiCallback;
 import net.slightlymagic.laterna.magica.gui.actor.GuiMagicActor;
 import net.slightlymagic.laterna.magica.gui.card.CardPanel;
 import net.slightlymagic.laterna.magica.gui.zone.ZoneCardsPanel;
 import net.slightlymagic.laterna.magica.impl.CombatUtil;
 import net.slightlymagic.laterna.magica.player.Player;
 import net.slightlymagic.laterna.magica.zone.Zone.Zones;
-
-import org.jetlang.core.Callback;
 
 
 /**
@@ -100,8 +99,9 @@ public class AssignBlockerDamageActor extends GuiActor {
         return cards;
     }
     
-    private class CardCallback implements Callback<MagicObject> {
-        public void onMessage(MagicObject c) {
+    private class CardCallback extends GuiCallback<MagicObject> {
+        @Override
+        public void onMessage0(MagicObject c) {
             log.debug("Received: " + c);
             BlockAssignment b = assignments.get(c);
             if(b != null) {

@@ -9,7 +9,9 @@ package net.slightlymagic.laterna.magica.gui.actor.actors;
 
 import net.slightlymagic.laterna.magica.MagicObject;
 import net.slightlymagic.laterna.magica.action.play.PlayAction;
+import net.slightlymagic.laterna.magica.gui.actor.GameMessage;
 import net.slightlymagic.laterna.magica.gui.actor.GuiActor;
+import net.slightlymagic.laterna.magica.gui.actor.GuiCallback;
 import net.slightlymagic.laterna.magica.gui.actor.GuiMagicActor;
 import net.slightlymagic.laterna.magica.gui.util.GuiUtil;
 
@@ -39,11 +41,12 @@ public class ActionActor extends GuiActor {
         actor.channels.actions.publish(null);
     }
     
-    private class CardCallback implements Callback<MagicObject> {
-        public void onMessage(MagicObject c) {
+    private class CardCallback extends GuiCallback<MagicObject> {
+        @Override
+        public void onMessage0(MagicObject c) {
             log.debug("Received: " + c);
             PlayAction a = GuiUtil.getActionOptional(actor.getPlayer(), c);
-            if(a != null) actor.channels.actions.publish(a);
+            if(a != null) actor.channels.actions.publish(new GameMessage<PlayAction>(a));
         }
     }
     

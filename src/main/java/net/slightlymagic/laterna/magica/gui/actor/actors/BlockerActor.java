@@ -14,6 +14,7 @@ import net.slightlymagic.laterna.magica.Combat.Blocker;
 import net.slightlymagic.laterna.magica.MagicObject;
 import net.slightlymagic.laterna.magica.card.CardObject;
 import net.slightlymagic.laterna.magica.gui.actor.GuiActor;
+import net.slightlymagic.laterna.magica.gui.actor.GuiCallback;
 import net.slightlymagic.laterna.magica.gui.actor.GuiMagicActor;
 
 import org.jetlang.core.Callback;
@@ -61,8 +62,9 @@ public class BlockerActor extends GuiActor {
         d.add(setName(s));
     }
     
-    private class CardCallback implements Callback<MagicObject> {
-        public void onMessage(MagicObject c) {
+    private class CardCallback extends GuiCallback<MagicObject> {
+        @Override
+        public void onMessage0(MagicObject c) {
             log.debug("Received: " + c);
             if(!(c instanceof CardObject)) return;
             CardObject card = (CardObject) c;

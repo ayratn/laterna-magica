@@ -19,13 +19,13 @@ import javax.swing.border.Border;
 import net.slightlymagic.laterna.magica.Combat.Blocker;
 import net.slightlymagic.laterna.magica.MagicObject;
 import net.slightlymagic.laterna.magica.card.CardObject;
+import net.slightlymagic.laterna.magica.gui.actor.GameMessage;
 import net.slightlymagic.laterna.magica.gui.actor.GuiActor;
+import net.slightlymagic.laterna.magica.gui.actor.GuiCallback;
 import net.slightlymagic.laterna.magica.gui.actor.GuiMagicActor;
 import net.slightlymagic.laterna.magica.gui.card.CardPanel;
 import net.slightlymagic.laterna.magica.gui.zone.ZoneCardsPanel;
 import net.slightlymagic.laterna.magica.zone.Zone.Zones;
-
-import org.jetlang.core.Callback;
 
 
 /**
@@ -69,11 +69,12 @@ public class ChooseBlockerActor extends GuiActor {
         actor.channels.blockers.publish(null);
     }
     
-    private class CardCallback implements Callback<MagicObject> {
-        public void onMessage(MagicObject c) {
+    private class CardCallback extends GuiCallback<MagicObject> {
+        @Override
+        public void onMessage0(MagicObject c) {
             log.debug("Received: " + c);
             Blocker b = choices.get(c);
-            if(b != null) actor.channels.blockers.publish(b);
+            if(b != null) actor.channels.blockers.publish(new GameMessage<Blocker>(b));
         }
     }
 }

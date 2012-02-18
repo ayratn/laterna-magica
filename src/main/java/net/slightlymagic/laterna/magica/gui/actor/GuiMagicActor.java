@@ -10,6 +10,7 @@ package net.slightlymagic.laterna.magica.gui.actor;
 import static javax.swing.JOptionPane.*;
 import static net.slightlymagic.laterna.magica.impl.CombatUtil.*;
 import static net.slightlymagic.laterna.magica.util.MagicaPredicates.*;
+import static net.slightlymagic.objectTransactions.History.*;
 
 import java.awt.BorderLayout;
 import java.awt.GridLayout;
@@ -18,6 +19,7 @@ import java.util.Collection;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
+import java.util.UUID;
 
 import javax.swing.JLabel;
 import javax.swing.JPanel;
@@ -53,6 +55,7 @@ import net.slightlymagic.laterna.magica.player.ConcessionException;
 import net.slightlymagic.laterna.magica.player.Player;
 import net.slightlymagic.laterna.magica.player.impl.AbstractMagicActor;
 import net.slightlymagic.laterna.magica.turnStructure.PhaseStructure.Step;
+import net.slightlymagic.objectTransactions.History;
 
 import org.jetlang.channels.Channel;
 import org.jetlang.core.Disposable;
@@ -77,10 +80,12 @@ public class GuiMagicActor extends AbstractMagicActor implements Disposable {
     public final GuiChannels    channels         = new GuiChannels();
     
     private final Gui           gui;
+    private final UUID          history;
     
     public GuiMagicActor(Gui gui, Player player) {
         super(player);
         this.gui = gui;
+        history = getHistoryForThread().getId();
         getGui().add(this);
     }
     
@@ -96,10 +101,25 @@ public class GuiMagicActor extends AbstractMagicActor implements Disposable {
     
     void setConceded() {
         this.conceded = true;
-        getPlayer().loseGame();
+        History history = getHistory(this.history);
+        history.pushHistoryForThread();
+        try {
+            getPlayer().loseGame();
+        } finally {
+            history.popHistoryForThread();
+        }
     }
     
-    private <T> T getValue(Fiber f, Channel<T> ch, GuiActor a) {
+    private <T> T getValue(Fiber f, Channel<GameMessage<T>> ch, GuiActor a) {
+        GameMessage<T> m = getValue0(f, ch, a);
+        return m == null? null:m.getValue();
+    }
+    
+    private void block(Fiber f, Channel<?> ch, GuiActor a) {
+        getValue0(f, ch, a);
+    }
+    
+    private <T> T getValue0(Fiber f, Channel<T> ch, GuiActor a) {
         a.start();
         log.trace("Waiting for result...");
         T result = Parallel.getValue(f, ch);
@@ -273,13 +293,11 @@ public class GuiMagicActor extends AbstractMagicActor implements Disposable {
     }
     
     public void declareAttackers() {
-        //use getValue to block until assignments are finished
-        getValue(channels.fiber, channels.actions, new AttackerActor(this));
+        block(channels.fiber, channels.actions, new AttackerActor(this));
     }
     
     public void declareBlockers() {
-        //use getValue to block until assignments are finished
-        getValue(channels.fiber, channels.actions, new BlockerActor(this));
+        block(channels.fiber, channels.actions, new BlockerActor(this));
     }
     
     public void orderAttackers() {
@@ -324,8 +342,7 @@ public class GuiMagicActor extends AbstractMagicActor implements Disposable {
         } else if(attacker.getBlockers().size() == 1 && !hasTrample(attacker)) {
             attacker.getBlockers().values().iterator().next().setAttackerAssignedDamage(getAmmount(attacker));
         } else {
-            //use getValue to block until assignments are finished
-            getValue(channels.fiber, channels.actions, new AssignAttackerDamageActor(this, attacker));
+            block(channels.fiber, channels.actions, new AssignAttackerDamageActor(this, attacker));
         }
     }
     
@@ -343,8 +360,7 @@ public class GuiMagicActor extends AbstractMagicActor implements Disposable {
         if(blocker.getAttackers().size() == 1) {
             blocker.getAttackers().values().iterator().next().setBlockerAssignedDamage(getAmmount(blocker));
         } else {
-            //use getValue to block until assignments are finished
-            getValue(channels.fiber, channels.actions, new AssignBlockerDamageActor(this, blocker));
+            block(channels.fiber, channels.actions, new AssignBlockerDamageActor(this, blocker));
         }
     }
 }
