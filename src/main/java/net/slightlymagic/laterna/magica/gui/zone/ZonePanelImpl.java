@@ -17,9 +17,7 @@ import java.awt.FlowLayout;
 import java.beans.IndexedPropertyChangeEvent;
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
-import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 
 import javax.swing.BorderFactory;
@@ -122,9 +120,7 @@ public class ZonePanelImpl extends ZonePanel implements ZoneCardsPanel {
      * {@link #showCard(MagicObject, int) shown}.
      */
     protected void addCard(MagicObject card, int index) {
-        if(you != null) {
-            l.add(card);
-        }
+        l.add(card);
         //this means the card should not be visible
         if(!shouldShowCard(card)) return;
         showCard(card, index);
@@ -136,9 +132,7 @@ public class ZonePanelImpl extends ZonePanel implements ZoneCardsPanel {
      * {@link #hideCard(MagicObject) hidden}.
      */
     protected void removeCard(MagicObject card) {
-        if(you != null) {
-            l.remove(card);
-        }
+        l.remove(card);
         //this means the card should not be visible
         if(!shouldShowCard(card)) return;
         hideCard(card);
@@ -182,62 +176,54 @@ public class ZonePanelImpl extends ZonePanel implements ZoneCardsPanel {
     }
     
     private final class MoveCard implements PropertyChangeListener, Disposable {
-        private List<MagicObject> l = new ArrayList<MagicObject>();
-        
         public MoveCard() {
-            getZone().addPropertyChangeListener("cards", this);
+            getZone().addPropertyChangeListener(Zone.CARDS, this);
         }
         
         public void add(MagicObject card) {
-            l.add(card);
-            card.addPropertyChangeListener(MagicObject.CONTROLLER, this);
+            if(you != null) card.addPropertyChangeListener(MagicObject.CONTROLLER, this);
         }
         
         public void remove(MagicObject card) {
-            l.remove(card);
-            card.removePropertyChangeListener(MagicObject.CONTROLLER, this);
+            if(you != null) card.removePropertyChangeListener(MagicObject.CONTROLLER, this);
         }
         
         public void dispose() {
-            getZone().removePropertyChangeListener("cards", this);
-            for(MagicObject card:l)
+            getZone().removePropertyChangeListener(Zone.CARDS, this);
+            if(you != null) for(MagicObject card:getZone().getCards()) {
                 card.removePropertyChangeListener(MagicObject.CONTROLLER, this);
-            l.clear();
+            }
         }
         
         public void propertyChange(PropertyChangeEvent evt) {
             if(evt.getSource() == getZone() && Zone.CARDS.equals(evt.getPropertyName())) {
-                log.debug(getZone()
-                        + " Panel: "
-                        + format("[source=%s, old=%s, new=%s]", evt.getSource(), evt.getOldValue(),
-                                evt.getNewValue()));
+                if(!(evt instanceof IndexedPropertyChangeEvent)) throw new AssertionError();
+                
+                log.debug(format("%s Panel: [source=%s, old=%s, new=%s]", getZone(), evt.getSource(),
+                        evt.getOldValue(), evt.getNewValue()));
                 log.trace(null, new Exception());
-                if("cards".equals(evt.getPropertyName())) {
-                    if(evt.getSource() != getZone()) throw new AssertionError();
-                    if(!(evt instanceof IndexedPropertyChangeEvent)) throw new AssertionError();
-                    
-                    MagicObject oldValue = (MagicObject) evt.getOldValue();
-                    MagicObject newValue = (MagicObject) evt.getNewValue();
-                    
-                    if(oldValue != null) {
-                        log.debug("remove");
-                        removeCard(oldValue);
+                
+                MagicObject oldValue = (MagicObject) evt.getOldValue();
+                MagicObject newValue = (MagicObject) evt.getNewValue();
+                
+                if(oldValue != null) {
+                    log.debug("remove");
+                    removeCard(oldValue);
+                }
+                if(newValue != null) {
+                    log.debug("add");
+                    int i = 0;
+                    //count the number of cards before the new one
+                    for(MagicObject c:getZone().getCards()) {
+                        if(c == newValue) break;
+                        if(shouldShowCard(c)) i++;
                     }
-                    if(newValue != null) {
-                        log.debug("add");
-                        int i = 0;
-                        //count the number of cards before the new one
-                        for(MagicObject c:getZone().getCards()) {
-                            if(c == newValue) break;
-                            if(shouldShowCard(c)) i++;
-                        }
-                        //add the card with the actual index
-                        addCard(newValue, i);
-                    }
-                    
-                    validate();
-                    repaint();
-                } else throw new AssertionError();
+                    //add the card with the actual index
+                    addCard(newValue, i);
+                }
+                
+                validate();
+                repaint();
             } else if(evt.getSource() instanceof MagicObject
                     && MagicObject.CONTROLLER.equals(evt.getPropertyName())) {
                 MagicObject card = (MagicObject) evt.getSource();
